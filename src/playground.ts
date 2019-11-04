@@ -23,7 +23,6 @@ map.universe.fleets["f1"].orders.push({
 
 map.currentTimestamp = clock.getTimestamp();
 
-map.currentTimestamp = clock.getTimestamp() + 1000;
 
 const game = new Game(clock, map);
 

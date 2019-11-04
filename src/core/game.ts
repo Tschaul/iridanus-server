@@ -21,7 +21,7 @@ export class Game {
   public gameEnded$ = new Subject<State>();
 
 
-  constructor(private clock: Clock, worldMap: State) {
+  constructor(private clock: Clock, worldMap: State, private log = (msg: any) => console.log(msg)) {
 
     this.gameEndTimestamp = worldMap.gameEndTimestamp;
 
@@ -90,8 +90,10 @@ export class Game {
     const actions = event.happen();
     for (const action of actions) {
       this.store.dispatch(action);
+      this.log(action);
     }
     this.store.dispatch(new SetTimestampAction(event.timestamp))
+    this.log("new timestamp: "+event.timestamp);
     this.store.commit();
   }
 }

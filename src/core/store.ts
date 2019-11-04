@@ -20,7 +20,6 @@ export class Store {
       startWith(initialState),
       sample(this.commits$$),
       tap(state => {
-        console.log(state);
         this.lastState = state
       }),
       shareReplay(1),
@@ -29,12 +28,10 @@ export class Store {
   }
 
   public dispatch(action: Action) {
-    console.log(action);
     this.actions$$.next(action);
   }
 
   public commit() {
-    console.log("commited")
     this.commits$$.next();
   }
 
