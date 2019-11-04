@@ -1,6 +1,14 @@
 import { FleetOrder } from "./fleet-orders";
 
-export type Fleet = LostFleet | ReadyFleet | WaitingFleet | LeavingFleet | WarpingFleet | ArrivingFleet | LoadingMetalFleet | DropingMetalFleet | LoadingShipsFleet | DropingShipsFleet;
+export type Fleet =
+    LostFleet
+    | ReadyFleet 
+    | WaitingFleet 
+    | LeavingFleet 
+    | WarpingFleet 
+    | ArrivingFleet 
+    | TransferingMetalFleet 
+    | TransferingShipsFleet;
 
 export function baseFleet(fleet: Fleet): BaseFleet {
     return {
@@ -59,34 +67,18 @@ export interface ArrivingFleet extends BaseFleet {
     ownerId: string;
 }
 
-export interface LoadingMetalFleet extends BaseFleet {
-    status: 'LOADING_METAL'
+export interface TransferingMetalFleet extends BaseFleet {
+    status: 'TRANSFERING_METAL'
     currentWorldId: string;
-    metalAmount: number;
+    transferAmount: number;
     readyTimestamp: number;
     ownerId: string;
 }
 
-export interface DropingMetalFleet extends BaseFleet {
-    status: 'DROPING_METAL'
+export interface TransferingShipsFleet extends BaseFleet {
+    status: 'TRANSFERING_SHIPS'
     currentWorldId: string;
-    metalAmount: number;
-    readyTimestamp: number;
-    ownerId: string;
-}
-
-export interface LoadingShipsFleet extends BaseFleet {
-    status: 'LOADING_SHIPS'
-    currentWorldId: string;
-    shipAmount: number;
-    readyTimestamp: number;
-    ownerId: string;
-}
-
-export interface DropingShipsFleet extends BaseFleet {
-    status: 'DROPING_SHIPS'
-    currentWorldId: string;
-    shipAmount: number;
+    transferAmount: number;
     readyTimestamp: number;
     ownerId: string;
 }

@@ -2,23 +2,32 @@ import { Game } from "./core/game";
 import { Clock } from "./core/clock";
 import { simpleMap } from "./core/maps/simple-map";
 
-const clock = new Clock(new Date().getTime() - 3333);
+const clock = new Clock(new Date().getTime() - 10000);
 
 const map = simpleMap;
 
-simpleMap.universe.fleets["f1"].orders.push({
+map.universe.fleets["f1"].orders.push({
   type: 'WARP',
   targetWorld: "w2"
 })
 
-simpleMap.universe.fleets["f1"].orders.push({
+map.universe.fleets["f1"].orders.push({
+  type: 'TRANSFER_METAL',
+  amount: -100,
+})
+
+map.universe.fleets["f1"].orders.push({
   type: 'WARP',
   targetWorld: "w3"
 })
 
-simpleMap.currentTimestamp = clock.getTimestamp();
+map.currentTimestamp = clock.getTimestamp();
+
+map.currentTimestamp = clock.getTimestamp() + 1000;
 
 const game = new Game(clock, map);
+
+game.gameEnded$.subscribe(console.log);
 
 // const store = new Store(simpleMap);
 

@@ -1,6 +1,6 @@
 export interface World {
     id: string;
-    owner: string;
+    ownerId: string | null;
     metal: number;
     ships: number;
     industry: number;

@@ -1,23 +1,30 @@
 import { Store } from "./store";
-import { Observable, combineLatest } from "rxjs";
+import { Observable, combineLatest, Subject } from "rxjs";
 import { GameEvent } from "./events/event";
-import { upcomingTickEvent } from "./events/tick";
 import { Clock } from "./clock";
 import { State } from "./state";
 import { SetTimestampAction } from "./actions/set-timestamp";
-import { withLatestFrom, map, distinctUntilChanged } from "rxjs/operators";
+import { map, distinctUntilChanged, take } from "rxjs/operators";
 import { upcomingLeaveEvent } from "./events/warping/leave-world";
 import { upcomingEndWarpEvent } from "./events/warping/end-warp";
 import { upcomingBeginWarpEvent } from "./events/warping/begin-warp";
 import { upcomingArriveWorldEvent } from "./events/warping/arrive-world";
+import { upcomingBeginTransferMetalEvent } from "./events/transfer/begin-transfer-metal";
+import { upcomingEndTransferMetalEvent } from "./events/transfer/end-transfer-metal";
 
 export class Game {
 
   private store: Store;
-  private upcomingEvent$: Observable<GameEvent>;
   private timeout: number | undefined;
+  private gameEndTimestamp: number;
+
+  public gameEnded$ = new Subject<State>();
+
 
   constructor(private clock: Clock, worldMap: State) {
+
+    this.gameEndTimestamp =worldMap.gameEndTimestamp;
+
     this.store = new Store(worldMap)
 
     const nextEvent$ = combineLatest(
@@ -25,7 +32,10 @@ export class Game {
       upcomingLeaveEvent(this.store.state$),
       upcomingBeginWarpEvent(this.store.state$),
       upcomingEndWarpEvent(this.store.state$),
-      upcomingArriveWorldEvent(this.store.state$)
+      upcomingArriveWorldEvent(this.store.state$),
+      upcomingBeginTransferMetalEvent(this.store.state$),
+      upcomingEndTransferMetalEvent(this.store.state$),
+
     ).pipe(
       map((events) => {
         return events.reduce((acc, event) => {
@@ -46,7 +56,10 @@ export class Game {
       distinctUntilChanged(),
     ).subscribe((event) => {
 
-      if (event === null) {
+      if (event === null || event.timestamp > this.gameEndTimestamp) {
+        this.store.state$.pipe(take(1)).subscribe(
+          state => this.gameEnded$.next(state)
+        )
         return;
       }
 

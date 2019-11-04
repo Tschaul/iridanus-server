@@ -31,6 +31,7 @@ export class Store {
   }
 
   public commit() {
+    console.log("commited")
     this.commits$$.next();
   }
 }
