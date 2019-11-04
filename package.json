@@ -4,7 +4,7 @@
   "description": "Server for Eridanus",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsc && mocha 'build/src/core/tests/**/*.test.js'",
     "run:playground": "tsc && node build/playground.js"
   },
   "repository": {
@@ -18,8 +18,12 @@
   },
   "homepage": "https://github.com/Tschaul/eridanus-server#readme",
   "dependencies": {
+    "@types/chai": "^4.2.4",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
     "immer": "^5.0.0",
     "inversify": "^5.0.1",
+    "mocha": "^6.2.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3"
   }

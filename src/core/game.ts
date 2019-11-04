@@ -4,7 +4,7 @@ import { GameEvent } from "./events/event";
 import { Clock } from "./clock";
 import { State } from "./state";
 import { SetTimestampAction } from "./actions/set-timestamp";
-import { map, distinctUntilChanged, take } from "rxjs/operators";
+import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
 import { upcomingLeaveEvent } from "./events/warping/leave-world";
 import { upcomingEndWarpEvent } from "./events/warping/end-warp";
 import { upcomingBeginWarpEvent } from "./events/warping/begin-warp";
@@ -23,62 +23,67 @@ export class Game {
 
   constructor(private clock: Clock, worldMap: State) {
 
-    this.gameEndTimestamp =worldMap.gameEndTimestamp;
+    this.gameEndTimestamp = worldMap.gameEndTimestamp;
 
     this.store = new Store(worldMap)
 
-    const nextEvent$ = combineLatest(
-      // upcomingTickEvent(this.store.state$),
-      upcomingLeaveEvent(this.store.state$),
-      upcomingBeginWarpEvent(this.store.state$),
-      upcomingEndWarpEvent(this.store.state$),
-      upcomingArriveWorldEvent(this.store.state$),
-      upcomingBeginTransferMetalEvent(this.store.state$),
-      upcomingEndTransferMetalEvent(this.store.state$),
 
-    ).pipe(
-      map((events) => {
-        return events.reduce((acc, event) => {
-          if (event === null) {
-            return acc;
-          } else if (acc === null) {
-            return event;
-          } else if (event.timestamp < acc.timestamp) {
-            return event;
-          } else {
-            return acc;
-          }
-        }, null as GameEvent | null)
-      })
-    )
+  }
 
-    nextEvent$.pipe(
-      distinctUntilChanged(),
-    ).subscribe((event) => {
+  public startGameLoop(): Promise<State> {
+    return new Promise<State>((resolve, reject) => {
+      const nextEvent$ = combineLatest(
+        // upcomingTickEvent(this.store.state$),
+        upcomingLeaveEvent(this.store.state$),
+        upcomingBeginWarpEvent(this.store.state$),
+        upcomingEndWarpEvent(this.store.state$),
+        upcomingArriveWorldEvent(this.store.state$),
+        upcomingBeginTransferMetalEvent(this.store.state$),
+        upcomingEndTransferMetalEvent(this.store.state$),
 
-      if (event === null || event.timestamp > this.gameEndTimestamp) {
-        this.store.state$.pipe(take(1)).subscribe(
-          state => this.gameEnded$.next(state)
-        )
-        return;
-      }
+      ).pipe(
+        map((events) => {
+          return events.reduce((acc, event) => {
+            if (event === null) {
+              return acc;
+            } else if (acc === null) {
+              return event;
+            } else if (event.timestamp < acc.timestamp) {
+              return event;
+            } else {
+              return acc;
+            }
+          }, null as GameEvent | null)
+        }),
+      )
 
-      clearTimeout(this.timeout);
-      this.timeout = undefined;
+      nextEvent$.pipe(
+        distinctUntilChanged(),
+        debounceTime(0),
+      ).subscribe((event) => {
 
-      const now = this.clock.getTimestamp()
+        if (event === null || event.timestamp > this.gameEndTimestamp) {
+          resolve(this.store.finalize() as State)
+          return;
+        }
 
-      if (now < event.timestamp) {
-        this.timeout = setTimeout(() => {
+        clearTimeout(this.timeout);
+        this.timeout = undefined;
+
+        const now = this.clock.getTimestamp()
+
+        if (now < event.timestamp) {
+          this.timeout = setTimeout(() => {
+            this.handleEvent(event);
+          }, event.timestamp - now)
+
+        } else {
           this.handleEvent(event);
-        }, event.timestamp - now)
+        }
+      })
 
-      } else {
-        this.handleEvent(event);
-      }
+      this.store.commit();
     })
-
-    this.store.commit();
   }
 
   private handleEvent(event: GameEvent) {

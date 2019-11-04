@@ -6,6 +6,7 @@ import { State } from './state';
 export class Store {
   private actions$$: Subject<Action> = new Subject();
   private commits$$: Subject<void> = new Subject();
+  private lastState: State | null = null;
   public state$: Observable<State>;
 
   constructor(initialState: State) {
@@ -18,7 +19,9 @@ export class Store {
       }, initialState),
       startWith(initialState),
       sample(this.commits$$),
-      tap(_ => {
+      tap(state => {
+        console.log(state);
+        this.lastState = state
       }),
       shareReplay(1),
     )
@@ -33,5 +36,11 @@ export class Store {
   public commit() {
     console.log("commited")
     this.commits$$.next();
+  }
+
+  public finalize() {
+    this.commits$$.complete();
+    this.actions$$.complete();
+    return this.lastState;
   }
 }
