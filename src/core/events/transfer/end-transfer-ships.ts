@@ -1,18 +1,18 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { TransferingMetalFleet } from "../../model/fleet";
+import { TransferingShipsFleet } from "../../model/fleet";
 import { FleetReadyAction } from "../../actions/fleet/ready";
-import { GiveOrTakeFleetMetalAction } from "../../actions/fleet/give-or-take-metal";
+import { GiveOrTakeFleetShipsAction } from "../../actions/fleet/give-or-take-ships";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
 
 @injectable()
-export class EndTransferMetalEventQueue implements GameEventQueue {
+export class EndTransferShipsEventQueue implements GameEventQueue {
 
-  public upcomingEvent$: Observable<GameEvent | null>;
-  constructor(public fleets: FleetProjector) {
-    this.upcomingEvent$ = this.fleets.firstByStatus<TransferingMetalFleet>('TRANSFERING_METAL').pipe(
+    public upcomingEvent$: Observable<GameEvent | null>;
+    constructor(public fleets: FleetProjector) {
+    this.upcomingEvent$ = this.fleets.firstByStatus<TransferingShipsFleet>('TRANSFERING_SHIPS').pipe(
       map((fleet) => {
         if (!fleet) {
           return null
@@ -21,7 +21,7 @@ export class EndTransferMetalEventQueue implements GameEventQueue {
             timestamp: fleet.readyTimestamp,
             happen: () => {
               return [
-                new GiveOrTakeFleetMetalAction(fleet.id, fleet.transferAmount),
+                new GiveOrTakeFleetShipsAction(fleet.id, fleet.transferAmount),
                 new FleetReadyAction(fleet.id),
               ];
             }

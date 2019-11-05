@@ -1,48 +1,30 @@
-import { GameEvent } from "../event";
-import { State } from "../../state";
+import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ArrivingFleet } from "../../model/fleet";
 import { FleetReadyAction } from "../../actions/fleet/ready";
+import { FleetProjector } from "../../projectors/fleet-projector";
+import { injectable } from "inversify";
+import 'reflect-metadata'
 
-export function upcomingArriveWorldEvent(state$: Observable<State>): Observable<GameEvent | null> {
-  const leavingFleet$ = state$.pipe(
-    map(state => {
-      return state.universe.fleets
-    }),
-    // distinctUntilChanged(),
-    map(fleets => {
-      const fleet = Object.values(fleets).find(fleet => fleet.status === 'ARRIVING');
-      return fleet as ArrivingFleet | null;
-    }));
-
-  return leavingFleet$.pipe(
-    map((fleet) => {
-      if (!fleet) {
-        return null
-      } else {
-        return new ArriveAtWorldEvent(
-          fleet,
-          fleet.readyTimestamp,
-        )
-      }
-    }
-    ));
-
-}
-
-export class ArriveAtWorldEvent implements GameEvent {
-
-  constructor(
-    private readonly fleet: ArrivingFleet,
-    public readonly timestamp: number,
-  ) { }
-
-  happen() {
-
-    return [
-      new FleetReadyAction(this.fleet.id),
-    ];
+@injectable()
+export class ArriveAtWorldEventQueue implements GameEventQueue {
+  public upcomingEvent$: Observable<GameEvent | null>;
+  constructor(public fleets: FleetProjector) {
+    this.upcomingEvent$ = this.fleets.firstByStatus<ArrivingFleet>('ARRIVING').pipe(
+      map((fleet) => {
+        if (!fleet) {
+          return null
+        } else {
+          return {
+            timestamp: fleet.readyTimestamp,
+            happen: () => {
+              return [
+                new FleetReadyAction(fleet.id),
+              ];
+            }
+          }
+        }
+      }))
   }
-
 }

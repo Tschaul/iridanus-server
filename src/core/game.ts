@@ -1,46 +1,35 @@
 import { Store } from "./store";
-import { Observable, combineLatest, Subject } from "rxjs";
+import { combineLatest, Subject } from "rxjs";
+import {injectable } from 'inversify'
+import 'reflect-metadata';
 import { GameEvent } from "./events/event";
-import { Clock } from "./clock";
+import { Clock } from "./infrastructure/clock";
 import { State } from "./state";
 import { SetTimestampAction } from "./actions/set-timestamp";
 import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
-import { upcomingLeaveEvent } from "./events/warping/leave-world";
-import { upcomingEndWarpEvent } from "./events/warping/end-warp";
-import { upcomingBeginWarpEvent } from "./events/warping/begin-warp";
-import { upcomingArriveWorldEvent } from "./events/warping/arrive-world";
-import { upcomingBeginTransferMetalEvent } from "./events/transfer/begin-transfer-metal";
-import { upcomingEndTransferMetalEvent } from "./events/transfer/end-transfer-metal";
+import { Logger } from "./infrastructure/logger";
+import { CompleteEventQueue } from "./events/complete-event-queue";
 
+@injectable()
 export class Game {
 
-  private store: Store;
   private timeout: number | undefined;
-  private gameEndTimestamp: number;
 
   public gameEnded$ = new Subject<State>();
 
-
-  constructor(private clock: Clock, worldMap: State, private log = (msg: any) => console.log(msg)) {
-
-    this.gameEndTimestamp = worldMap.gameEndTimestamp;
-
-    this.store = new Store(worldMap)
-
+  constructor(
+    private clock: Clock, 
+    private store: Store, 
+    private logger: Logger,
+    private completeEventQueue: CompleteEventQueue
+    ) {
 
   }
 
   public startGameLoop(): Promise<State> {
     return new Promise<State>((resolve, reject) => {
       const nextEvent$ = combineLatest(
-        // upcomingTickEvent(this.store.state$),
-        upcomingLeaveEvent(this.store.state$),
-        upcomingBeginWarpEvent(this.store.state$),
-        upcomingEndWarpEvent(this.store.state$),
-        upcomingArriveWorldEvent(this.store.state$),
-        upcomingBeginTransferMetalEvent(this.store.state$),
-        upcomingEndTransferMetalEvent(this.store.state$),
-
+        this.completeEventQueue.upcomingEvent$,
       ).pipe(
         map((events) => {
           return events.reduce((acc, event) => {
@@ -62,7 +51,7 @@ export class Game {
         debounceTime(0),
       ).subscribe((event) => {
 
-        if (event === null || event.timestamp > this.gameEndTimestamp) {
+        if (event === null) {
           resolve(this.store.finalize() as State)
           return;
         }
@@ -90,10 +79,10 @@ export class Game {
     const actions = event.happen();
     for (const action of actions) {
       this.store.dispatch(action);
-      this.log(action);
+      this.logger.log(action);
     }
     this.store.dispatch(new SetTimestampAction(event.timestamp))
-    this.log("new timestamp: "+event.timestamp);
+    this.logger.log("new timestamp: "+event.timestamp);
     this.store.commit();
   }
 }

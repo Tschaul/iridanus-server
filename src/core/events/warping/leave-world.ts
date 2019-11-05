@@ -1,66 +1,40 @@
-import { GameEvent } from "../event";
-import { State } from "../../state";
-import { PopOrderAction } from "../../actions/fleet/pop-order";
-import { LeaveWorldAction } from "../../actions/fleet/leave-world";
+import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
+import { WarpingFleet, ReadyFleet } from "../../model/fleet";
+import { FleetProjector } from "../../projectors/fleet-projector";
+import { inject } from "inversify";
+import { GameConfig, CONFIG } from "../../config";
+import { ArriveAtWorldAction } from "../../actions/fleet/arrive-at-world";
 import { WarpOrder } from "../../model/fleet-orders";
-import { ReadyFleet, Fleet } from "../../model/fleet";
-import { Universe } from "../../model/universe";
-import { universeHasGate } from "../../model/gate-helper";
+import { TimeProjector } from "../../projectors/time-projector";
+import { injectable } from "inversify";
+import 'reflect-metadata'
+import { LeaveWorldAction } from "../../actions/fleet/leave-world";
+import { PopOrderAction } from "../../actions/fleet/pop-order";
 
-export const LEAVE_WORLD_DELAY = 1000;
+@injectable()
+export class LeaveWorldEventQueue implements GameEventQueue {
 
-export function upcomingLeaveEvent(state$: Observable<State>): Observable<GameEvent | null> {
-  const readyFleetWithWarpOrder$ = state$.pipe(
-    map(state => {
-      return state.universe.fleets
-    }),
-    // distinctUntilChanged(),
-    map(fleets => {
-      const fleet = Object.values(fleets).find(fleet => fleet.status === 'READY'
-        && fleet.orders.length
-        && fleet.orders[0].type === 'WARP');
-      return fleet as ReadyFleet | null;
-    }));
+  public upcomingEvent$: Observable<GameEvent | null>;
 
-  return readyFleetWithWarpOrder$.pipe(
-    withLatestFrom(state$),
-    map(([fleet, state]) => {
-      if (!fleet) {
-        return null
-      } else {
-        return new LeaveWorldEvent(
-          fleet,
-          fleet.orders[0] as WarpOrder,
-          state.currentTimestamp,
-          state.universe
-        )
-      }
-    }
-    ));
-}
-
-export class LeaveWorldEvent implements GameEvent {
-
-  constructor(
-    private readonly fleet: ReadyFleet,
-    private readonly order: WarpOrder,
-    public readonly timestamp: number,
-    private readonly universe: Universe,
-  ) { }
-
-  happen() {
-
-    if (!universeHasGate(this.universe, this.order.targetWorld, this.fleet.currentWorldId)) {
-      console.log("no gate found")
-      return [new PopOrderAction(this.fleet.id)];
-    }
-
-    return [
-      new LeaveWorldAction(this.fleet.id, this.order.targetWorld, this.timestamp + LEAVE_WORLD_DELAY),
-      new PopOrderAction(this.fleet.id)
-    ];
+  constructor(public fleets: FleetProjector, public time: TimeProjector, @inject(CONFIG) config: GameConfig) {
+    this.upcomingEvent$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, WarpOrder>('READY', 'WARP').pipe(
+      withLatestFrom(this.time.currentTimestamp$),
+      map(([[fleet, order], timestamp]) => {
+        if (!fleet || !order) {
+          return null
+        } else {
+          return {
+            timestamp,
+            happen: () => {
+              return [
+                new LeaveWorldAction(fleet.id, order.targetWorldId, timestamp + config.leaveWorldDelay),
+                new PopOrderAction(fleet.id)
+              ];
+            }
+          }
+        }
+      }))
   }
-
 }

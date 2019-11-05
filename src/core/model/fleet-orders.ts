@@ -11,7 +11,7 @@ export interface WaitOrder {
 
 export interface WarpOrder {
   type: 'WARP',
-  targetWorld: string;
+  targetWorldId: string;
 }
 
 export interface TransferMetalOrder {

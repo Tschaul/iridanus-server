@@ -1,50 +1,34 @@
-import { GameEvent } from "../event";
-import { State } from "../../state";
+import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { WarpingFleet } from "../../model/fleet";
+import { FleetProjector } from "../../projectors/fleet-projector";
+import { inject } from "inversify";
+import { GameConfig, CONFIG } from "../../config";
 import { ArriveAtWorldAction } from "../../actions/fleet/arrive-at-world";
+import { injectable } from "inversify";
+import 'reflect-metadata'
 
-export const ARRIVE_DELAY = 1000;
+@injectable()
+export class EndWarpEventQueue implements GameEventQueue {
 
-export function upcomingEndWarpEvent(state$: Observable<State>): Observable<GameEvent | null> {
-  const leavingFleet$ = state$.pipe(
-    map(state => {
-      return state.universe.fleets
-    }),
-    // distinctUntilChanged(),
-    map(fleets => {
-      const fleet = Object.values(fleets).find(fleet => fleet.status === 'WARPING');
-      return fleet as WarpingFleet | null;
-    }));
+  public upcomingEvent$: Observable<GameEvent | null>;
 
-  return leavingFleet$.pipe(
-    map((fleet) => {
-      if (!fleet) {
-        return null
-      } else {
-        return new EndWarpEvent(
-          fleet,
-          fleet.arrivingTimestamp,
-        )
-      }
-    }
-    ));
-
-}
-
-export class EndWarpEvent implements GameEvent {
-
-  constructor(
-    private readonly fleet: WarpingFleet,
-    public readonly timestamp: number,
-  ) { }
-
-  happen() {
-
-    return [
-      new ArriveAtWorldAction(this.fleet.id, this.timestamp + ARRIVE_DELAY),
-    ];
+  constructor(public fleets: FleetProjector, @inject(CONFIG) config: GameConfig) {
+    this.upcomingEvent$ = this.fleets.firstByStatus<WarpingFleet>('WARPING').pipe(
+      map((fleet) => {
+        if (!fleet) {
+          return null
+        } else {
+          return {
+            timestamp: fleet.arrivingTimestamp,
+            happen: () => {
+              return [
+                new ArriveAtWorldAction(fleet.id, fleet.arrivingTimestamp + config.arriveWorldDelay),
+              ];
+            }
+          }
+        }
+      }))
   }
-
 }
