@@ -7,7 +7,7 @@ export function fleetReady(
   fleetId: string,
 ): Action {
   return {
-    describe: () => `Ready ${JSON.stringify({ fleetId })}`,
+    describe: () => `FleetReady ${JSON.stringify({ fleetId })}`,
     apply: (state: State) => {
 
       return updateFleet<FleetAtWorld, ReadyFleet>(state, fleetId, (oldFleet) => {

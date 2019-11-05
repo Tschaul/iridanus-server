@@ -17,13 +17,15 @@ export const warpTestMap: State = {
     },
     worlds: {
       "w1": {
+        status: 'READY',
         id: "w1",
         industry: 5,
         metal: 40,
         mines: 1,
         ownerId: "p1",
         population: 25,
-        ships: 5
+        ships: 5,
+        orders: [],
       }
     },
     gates: {

@@ -10,7 +10,7 @@ import { TimeProjector } from "../../projectors/time-projector";
 import { injectable } from "inversify";
 import 'reflect-metadata'
 import { leaveWorld } from "../../actions/fleet/leave-world";
-import { popOrder } from "../../actions/fleet/pop-order";
+import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 
 @injectable()
 export class LeaveWorldEventQueue implements GameEventQueue {
@@ -29,7 +29,7 @@ export class LeaveWorldEventQueue implements GameEventQueue {
             happen: () => {
               return [
                 leaveWorld(fleet.id, order.targetWorldId, timestamp + config.leaveWorldDelay),
-                popOrder(fleet.id)
+                popFleetOrder(fleet.id)
               ];
             }
           }

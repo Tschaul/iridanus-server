@@ -10,7 +10,7 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { CONFIG, GameConfig } from "../../config";
 import { TransferShipsOrder } from "../../model/fleet-orders";
-import { popOrder } from "../../actions/fleet/pop-order";
+import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 import { transferShips } from "../../actions/fleet/transfer-ships";
 
@@ -34,9 +34,9 @@ export class BeginTransferShipsEventQueue implements GameEventQueue {
             happen: () => {
               const world = worlds[fleet.currentWorldId];
 
-              if (fleet.ownerId !== world.ownerId) {
+              if (world.status === 'LOST' || fleet.ownerId !== world.ownerId) {
                 return [
-                  popOrder(fleet.id)
+                  popFleetOrder(fleet.id)
                 ]
               }
           
@@ -44,14 +44,14 @@ export class BeginTransferShipsEventQueue implements GameEventQueue {
           
               if (trueAmount === 0) {
                 return [
-                  popOrder(fleet.id)
+                  popFleetOrder(fleet.id)
                 ]
               }
           
               return [
                 transferShips(fleet.id, trueAmount, timestamp + config.transferShipsDelay),
                 giveOrTakeWorldShips(world.id, -1 * trueAmount),
-                popOrder(fleet.id)
+                popFleetOrder(fleet.id)
               ];
             }
           }

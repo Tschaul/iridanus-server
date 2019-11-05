@@ -8,6 +8,8 @@ import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
 import { LeaveWorldEventQueue } from "./warping/leave-world";
+import { BeginBuildingShipEventQueue } from "./build/begin-building-ship";
+import { EndBuildShipsEventQueue } from "./build/end-build-ship";
 
 export function registerEventQueues(container: Container) {
 
@@ -20,6 +22,9 @@ export function registerEventQueues(container: Container) {
   container.bind(BeginWarpEventQueue).toSelf();
   container.bind(EndWarpEventQueue).toSelf();
   container.bind(LeaveWorldEventQueue).toSelf();
+
+  container.bind(BeginBuildingShipEventQueue).toSelf();
+  container.bind(EndBuildShipsEventQueue).toSelf();
 
   container.bind(CompleteEventQueue).toSelf();
 

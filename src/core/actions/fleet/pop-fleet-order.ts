@@ -2,11 +2,11 @@ import { Action } from "../action";
 import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
 
-export function popOrder(
+export function popFleetOrder(
   fleetId: string,
 ): Action {
   return {
-    describe: () => `PopOrder ${JSON.stringify({fleetId})}`,
+    describe: () => `PopFleetOrder ${JSON.stringify({fleetId})}`,
     apply: (state: State) => {
 
       return updateFleet(state, fleetId, (oldFleet) => {

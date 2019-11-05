@@ -20,8 +20,8 @@ export class Store {
         // console.log(nextState);
         return nextState;
       }, initialState),
-      startWith(initialState),
       sample(this.commits$$),
+      startWith(initialState),
       tap(state => {
         this.lastState = state
       }),

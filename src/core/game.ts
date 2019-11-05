@@ -73,6 +73,7 @@ export class Game {
 
       this.store.commit();
     })
+
   }
 
   private handleEvent(event: GameEvent) {

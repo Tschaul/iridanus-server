@@ -11,6 +11,8 @@ import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
 import { LeaveWorldEventQueue } from "./warping/leave-world";
+import { BeginBuildingShipEventQueue } from "./build/begin-building-ship";
+import { EndBuildShipsEventQueue } from "./build/end-build-ship";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -22,10 +24,12 @@ export class CompleteEventQueue implements GameEventQueue {
     beginTransferShips: BeginTransferShipsEventQueue,
     endTransferMetal: EndTransferMetalEventQueue,
     endTransfertShips: EndTransferShipsEventQueue,
-    arriveAtWorldEventQueue: ArriveAtWorldEventQueue,
-    beginWarpEventQueue: BeginWarpEventQueue,
-    endWarpEventQueue: EndWarpEventQueue,
-    leaveWorldEventQueue: LeaveWorldEventQueue,
+    arriveAtWorld: ArriveAtWorldEventQueue,
+    beginWarp: BeginWarpEventQueue,
+    endWarp: EndWarpEventQueue,
+    leaveWorld: LeaveWorldEventQueue,
+    beginBuildShips: BeginBuildingShipEventQueue,
+    endBuildShips: EndBuildShipsEventQueue
   ) {
 
     const allEventQueues = [
@@ -33,10 +37,12 @@ export class CompleteEventQueue implements GameEventQueue {
       beginTransferShips,
       endTransferMetal,
       endTransfertShips,
-      arriveAtWorldEventQueue,
-      beginWarpEventQueue,
-      endWarpEventQueue,
-      leaveWorldEventQueue,
+      arriveAtWorld,
+      beginWarp,
+      endWarp,
+      leaveWorld,
+      beginBuildShips,
+      endBuildShips,
     ]
 
     this.upcomingEvent$ = combineLatest(

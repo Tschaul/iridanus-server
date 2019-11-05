@@ -17,6 +17,8 @@ export const warpTestMap: State = {
     },
     worlds: {
       "w1": {
+        status: 'READY',
+        orders: [],
         id: "w1",
         industry: 5,
         metal: 40,
@@ -26,6 +28,8 @@ export const warpTestMap: State = {
         ships: 5
       },
       "w2": {
+        status: 'READY',
+        orders: [],
         id: "w2",
         industry: 5,
         metal: 40,
@@ -35,6 +39,8 @@ export const warpTestMap: State = {
         ships: 5
       },
       "w3": {
+        status: 'READY',
+        orders: [],
         id: "w3",
         industry: 5,
         metal: 40,

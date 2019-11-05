@@ -5,7 +5,7 @@ import { ArrivingFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
 import 'reflect-metadata'
-import { fleetReady } from "../../actions/fleet/ready";
+import { fleetReady } from "../../actions/fleet/fleet-ready";
 
 @injectable()
 export class ArriveAtWorldEventQueue implements GameEventQueue {

@@ -5,7 +5,7 @@ import { TransferingShipsFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
 import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
-import { fleetReady } from "../../actions/fleet/ready";
+import { fleetReady } from "../../actions/fleet/fleet-ready";
 
 @injectable()
 export class EndTransferShipsEventQueue implements GameEventQueue {

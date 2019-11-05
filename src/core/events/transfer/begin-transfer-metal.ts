@@ -10,7 +10,7 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { CONFIG, GameConfig } from "../../config";
 import { TransferMetalOrder } from "../../model/fleet-orders";
-import { popOrder } from "../../actions/fleet/pop-order";
+import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { transferMetal } from "../../actions/fleet/transfer-metal";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 
@@ -34,9 +34,9 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
             happen: () => {
               const world = worlds[fleet.currentWorldId];
 
-              if (fleet.ownerId !== world.ownerId) {
+              if (world.status === 'LOST' || fleet.ownerId !== world.ownerId) {
                 return [
-                  popOrder(fleet.id)
+                  popFleetOrder(fleet.id)
                 ]
               }
 
@@ -48,14 +48,14 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
 
               if (trueAmount === 0) {
                 return [
-                  popOrder(fleet.id)
+                  popFleetOrder(fleet.id)
                 ]
               }
 
               return [
                 transferMetal(fleet.id, trueAmount, timestamp + config.transferMetalDelay),
                 giveOrTakeWorldMetal(world.id, -1 * trueAmount),
-                popOrder(fleet.id)
+                popFleetOrder(fleet.id)
               ];
             }
           }
