@@ -2,10 +2,10 @@ import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TransferingShipsFleet } from "../../model/fleet";
-import { FleetReadyAction } from "../../actions/fleet/ready";
-import { GiveOrTakeFleetShipsAction } from "../../actions/fleet/give-or-take-ships";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
+import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
+import { fleetReady } from "../../actions/fleet/ready";
 
 @injectable()
 export class EndTransferShipsEventQueue implements GameEventQueue {
@@ -21,8 +21,8 @@ export class EndTransferShipsEventQueue implements GameEventQueue {
             timestamp: fleet.readyTimestamp,
             happen: () => {
               return [
-                new GiveOrTakeFleetShipsAction(fleet.id, fleet.transferAmount),
-                new FleetReadyAction(fleet.id),
+                giveOrTakeFleetShips(fleet.id, fleet.transferAmount),
+                fleetReady(fleet.id),
               ];
             }
           }

@@ -1,22 +1,17 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import produce from "immer";
-import { World } from "../../model/world";
+import { updateWorld } from "./update-world";
 
-export class GiveOrTakeWorldMetalAction implements Action {
-
-  constructor(public worldId: string, public amount: number) {
-
-  }
-
-  apply(state: State): State {
-    return produce(state, draft => {
-      const oldWorld = draft.universe.worlds[this.worldId] as World;
-      const newWorld: World = {
-        ...oldWorld,
-        metal: oldWorld.metal + this.amount
-      }
-      draft.universe.worlds[this.worldId] = newWorld;
-    })
+export function giveOrTakeWorldMetal(worldId: string, amount: number): Action {
+  return {
+    describe: () => `GiveOrTakeWorldMetal ${JSON.stringify({worldId, amount})}`,
+    apply: (state: State) => {
+      return updateWorld(state, worldId, oldWorld => {
+        return {
+          ...oldWorld,
+          metal: oldWorld.metal + amount
+        }
+      })
+    }
   }
 }

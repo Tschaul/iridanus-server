@@ -2,10 +2,10 @@ import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ArrivingFleet } from "../../model/fleet";
-import { FleetReadyAction } from "../../actions/fleet/ready";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
 import 'reflect-metadata'
+import { fleetReady } from "../../actions/fleet/ready";
 
 @injectable()
 export class ArriveAtWorldEventQueue implements GameEventQueue {
@@ -20,7 +20,7 @@ export class ArriveAtWorldEventQueue implements GameEventQueue {
             timestamp: fleet.readyTimestamp,
             happen: () => {
               return [
-                new FleetReadyAction(fleet.id),
+                fleetReady(fleet.id),
               ];
             }
           }

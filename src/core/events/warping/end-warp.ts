@@ -5,9 +5,9 @@ import { WarpingFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { inject } from "inversify";
 import { GameConfig, CONFIG } from "../../config";
-import { ArriveAtWorldAction } from "../../actions/fleet/arrive-at-world";
 import { injectable } from "inversify";
 import 'reflect-metadata'
+import { arriveAtWorld } from "../../actions/fleet/arrive-at-world";
 
 @injectable()
 export class EndWarpEventQueue implements GameEventQueue {
@@ -24,7 +24,7 @@ export class EndWarpEventQueue implements GameEventQueue {
             timestamp: fleet.arrivingTimestamp,
             happen: () => {
               return [
-                new ArriveAtWorldAction(fleet.id, fleet.arrivingTimestamp + config.arriveWorldDelay),
+                arriveAtWorld(fleet.id, fleet.arrivingTimestamp + config.arriveWorldDelay),
               ];
             }
           }

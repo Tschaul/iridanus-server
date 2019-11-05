@@ -2,13 +2,17 @@ import { FleetOrder } from "./fleet-orders";
 
 export type Fleet =
     LostFleet
-    | ReadyFleet 
-    | WaitingFleet 
-    | LeavingFleet 
-    | WarpingFleet 
-    | ArrivingFleet 
-    | TransferingMetalFleet 
+    | FleetAtWorld
+    | WarpingFleet;
+
+export type FleetAtWorld =
+    ReadyFleet
+    | WaitingFleet
+    | LeavingFleet
+    | ArrivingFleet
+    | TransferingMetalFleet
     | TransferingShipsFleet;
+
 
 export function baseFleet(fleet: Fleet): BaseFleet {
     return {

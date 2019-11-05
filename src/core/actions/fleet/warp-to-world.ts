@@ -1,29 +1,26 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import produce from "immer"
 import { baseFleet, LeavingFleet, WarpingFleet } from "../../model/fleet";
+import { updateFleet } from "./update-fleet";
 
-export class WarpToWorldAction implements Action {
+export function warpToWorld(
+  fleetId: string,
+  arrivingTimestamp: number
+): Action {
+  return {
+    describe: () => `WarpToWorld ${JSON.stringify({ fleetId, arrivingTimestamp })}`,
+    apply: (state: State) => {
 
-  constructor(
-    public readonly fleetId: string, 
-    public readonly arrivingTimestamp: number,
-  ) {
-
-  }
-
-  apply(state: State): State {
-    return produce(state, draft => {
-      const oldFleet = draft.universe.fleets[this.fleetId] as LeavingFleet;
-      const newFleet: WarpingFleet = {
-        ...baseFleet(oldFleet),
-        targetWorldId: oldFleet.targetWorldId,
-        originWorldId: oldFleet.currentWorldId,
-        status: 'WARPING',
-        arrivingTimestamp: this.arrivingTimestamp,
-        ownerId: oldFleet.ownerId
-      }
-      draft.universe.fleets[this.fleetId] = newFleet;
-    })
+      return updateFleet<LeavingFleet, WarpingFleet>(state, fleetId, (oldFleet) => {
+        return {
+          ...baseFleet(oldFleet),
+          targetWorldId: oldFleet.targetWorldId,
+          originWorldId: oldFleet.currentWorldId,
+          status: 'WARPING',
+          arrivingTimestamp: arrivingTimestamp,
+          ownerId: oldFleet.ownerId
+        }
+      })
+    }
   }
 }

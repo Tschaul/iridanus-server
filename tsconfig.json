@@ -3,6 +3,7 @@
         "module": "commonjs",
         "target": "es2017",
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "sourceMap": true,
         "strictNullChecks": true,
         "emitDecoratorMetadata":true,

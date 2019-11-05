@@ -5,9 +5,9 @@ import { LeavingFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { inject } from "inversify";
 import { GameConfig, CONFIG } from "../../config";
-import { WarpToWorldAction } from "../../actions/fleet/warp-to-world";
 import { injectable } from "inversify";
 import 'reflect-metadata'
+import { warpToWorld } from "../../actions/fleet/warp-to-world";
 
 @injectable()
 export class BeginWarpEventQueue implements GameEventQueue {
@@ -24,7 +24,7 @@ export class BeginWarpEventQueue implements GameEventQueue {
             timestamp: fleet.warpingTimestamp,
             happen: () => {
               return [
-                new WarpToWorldAction(fleet.id, fleet.warpingTimestamp + config.warpToWorldDelay),
+                warpToWorld(fleet.id, fleet.warpingTimestamp + config.warpToWorldDelay),
               ];
             }
           }

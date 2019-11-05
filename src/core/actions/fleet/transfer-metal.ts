@@ -1,30 +1,27 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import produce from "immer"
-import { ReadyFleet, baseFleet, TransferingMetalFleet } from "../../model/fleet";
+import { baseFleet, LeavingFleet, ArrivingFleet, ReadyFleet, TransferingMetalFleet } from "../../model/fleet";
+import { updateFleet } from "./update-fleet";
 
-export class TransferMetalAction implements Action {
+export function transferMetal(
+  fleetId: string,
+  amount: number,
+  readyTimestamp: number
+): Action {
+  return {
+    describe: () => `TransferMetal ${JSON.stringify({ fleetId, readyTimestamp })}`,
+    apply: (state: State) => {
 
-  constructor(
-    public readonly fleetId: string, 
-    public readonly amount: number,
-    public readonly readyTimestamp: number,
-  ) {
-
-  }
-
-  apply(state: State): State {
-    return produce(state, draft => {
-      const oldFleet = draft.universe.fleets[this.fleetId] as ReadyFleet;
-      const newFleet: TransferingMetalFleet = {
-        ...baseFleet(oldFleet),
-        currentWorldId: oldFleet.currentWorldId,
-        status: 'TRANSFERING_METAL',
-        readyTimestamp: this.readyTimestamp,
-        ownerId: oldFleet.ownerId,
-        transferAmount: this.amount
-      }
-      draft.universe.fleets[this.fleetId] = newFleet;
-    })
+      return updateFleet<ReadyFleet, TransferingMetalFleet>(state, fleetId, (oldFleet) => {
+        return {
+          ...baseFleet(oldFleet),
+          currentWorldId: oldFleet.currentWorldId,
+          status: 'TRANSFERING_METAL',
+          readyTimestamp: readyTimestamp,
+          ownerId: oldFleet.ownerId,
+          transferAmount: amount
+        }
+      })
+    }
   }
 }

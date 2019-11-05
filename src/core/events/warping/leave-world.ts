@@ -1,17 +1,16 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
-import { WarpingFleet, ReadyFleet } from "../../model/fleet";
+import { ReadyFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { inject } from "inversify";
 import { GameConfig, CONFIG } from "../../config";
-import { ArriveAtWorldAction } from "../../actions/fleet/arrive-at-world";
 import { WarpOrder } from "../../model/fleet-orders";
 import { TimeProjector } from "../../projectors/time-projector";
 import { injectable } from "inversify";
 import 'reflect-metadata'
-import { LeaveWorldAction } from "../../actions/fleet/leave-world";
-import { PopOrderAction } from "../../actions/fleet/pop-order";
+import { leaveWorld } from "../../actions/fleet/leave-world";
+import { popOrder } from "../../actions/fleet/pop-order";
 
 @injectable()
 export class LeaveWorldEventQueue implements GameEventQueue {
@@ -29,8 +28,8 @@ export class LeaveWorldEventQueue implements GameEventQueue {
             timestamp,
             happen: () => {
               return [
-                new LeaveWorldAction(fleet.id, order.targetWorldId, timestamp + config.leaveWorldDelay),
-                new PopOrderAction(fleet.id)
+                leaveWorld(fleet.id, order.targetWorldId, timestamp + config.leaveWorldDelay),
+                popOrder(fleet.id)
               ];
             }
           }

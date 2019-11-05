@@ -1,22 +1,17 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import produce from "immer";
-import { Fleet } from "../../model/fleet";
+import { updateFleet } from "./update-fleet";
 
-export class GiveOrTakeFleetMetalAction implements Action {
-
-  constructor(public fleetid: string, public amount: number) {
-
-  }
-
-  apply(state: State): State {
-    return produce(state, draft => {
-      const oldFleet = draft.universe.fleets[this.fleetid] as Fleet;
-      const newFleet: Fleet = {
-        ...oldFleet,
-        metal: oldFleet.metal + this.amount
-      }
-      draft.universe.fleets[this.fleetid] = newFleet;
-    })
+export function giveOrTakeFleetMetal(fleetid: string, amount: number): Action {
+  return {
+    describe: () => `GiveOrTakeFleetMetal ${JSON.stringify({fleetid, amount})}`,
+    apply: (state: State) => {
+      return updateFleet(state, fleetid, oldFleet => {
+        return {
+          ...oldFleet,
+          metal: oldFleet.metal + amount
+        }
+      })
+    }
   }
 }

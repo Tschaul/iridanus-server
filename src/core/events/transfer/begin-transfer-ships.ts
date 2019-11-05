@@ -1,11 +1,8 @@
 import { GameEvent, GameEventQueue } from "../event";
-import { PopOrderAction } from "../../actions/fleet/pop-order";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
 import { ReadyFleet } from "../../model/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
-import { TransferShipsAction } from "../../actions/fleet/transfer-ships";
-import { GiveOrTakeWorldShipsAction } from "../../actions/world/give-or-take-ships";
 import { injectable, inject } from "inversify";
 import 'reflect-metadata'
 import { FleetProjector } from "../../projectors/fleet-projector";
@@ -13,6 +10,9 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { CONFIG, GameConfig } from "../../config";
 import { TransferShipsOrder } from "../../model/fleet-orders";
+import { popOrder } from "../../actions/fleet/pop-order";
+import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
+import { transferShips } from "../../actions/fleet/transfer-ships";
 
 @injectable()
 export class BeginTransferShipsEventQueue implements GameEventQueue {
@@ -36,7 +36,7 @@ export class BeginTransferShipsEventQueue implements GameEventQueue {
 
               if (fleet.ownerId !== world.ownerId) {
                 return [
-                  new PopOrderAction(fleet.id)
+                  popOrder(fleet.id)
                 ]
               }
           
@@ -44,14 +44,14 @@ export class BeginTransferShipsEventQueue implements GameEventQueue {
           
               if (trueAmount === 0) {
                 return [
-                  new PopOrderAction(fleet.id)
+                  popOrder(fleet.id)
                 ]
               }
           
               return [
-                new TransferShipsAction(fleet.id, trueAmount, timestamp + config.transferShipsDelay),
-                new GiveOrTakeWorldShipsAction(world.id, -1 * trueAmount),
-                new PopOrderAction(fleet.id)
+                transferShips(fleet.id, trueAmount, timestamp + config.transferShipsDelay),
+                giveOrTakeWorldShips(world.id, -1 * trueAmount),
+                popOrder(fleet.id)
               ];
             }
           }

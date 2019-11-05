@@ -1,30 +1,26 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import produce from "immer"
-import { ReadyFleet, baseFleet, LeavingFleet } from "../../model/fleet";
+import { baseFleet, LeavingFleet, ReadyFleet } from "../../model/fleet";
+import { updateFleet } from "./update-fleet";
 
-export class LeaveWorldAction implements Action {
-
-  constructor(
-    public readonly fleetId: string, 
-    public readonly targetWorldId: string,
-    public readonly warpingTimestamp: number,
-  ) {
-
-  }
-
-  apply(state: State): State {
-    return produce(state, draft => {
-      const oldFleet = draft.universe.fleets[this.fleetId] as ReadyFleet;
-      const newFleet: LeavingFleet = {
-        ...baseFleet(oldFleet),
-        targetWorldId: this.targetWorldId,
-        currentWorldId: oldFleet.currentWorldId,
-        status: 'LEAVING',
-        warpingTimestamp: this.warpingTimestamp,
-        ownerId: oldFleet.ownerId
-      }
-      draft.universe.fleets[this.fleetId] = newFleet;
-    })
+export function leaveWorld(
+  fleetId: string,
+  targetWorldId: string,
+  warpingTimestamp: number
+): Action {
+  return {
+    describe: () => `LeaveWorld ${JSON.stringify({ fleetId, targetWorldId, warpingTimestamp })}`,
+    apply: (state: State) => {
+      return updateFleet<ReadyFleet, LeavingFleet>(state, fleetId, (oldFleet) => {
+        return {
+          ...baseFleet(oldFleet),
+          targetWorldId: targetWorldId,
+          currentWorldId: oldFleet.currentWorldId,
+          status: 'LEAVING',
+          warpingTimestamp: warpingTimestamp,
+          ownerId: oldFleet.ownerId
+        }
+      })
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { GameConfig } from "../config";
 
-const second = 1;
+const second = 1000;
 
 export const testConfig: GameConfig = {
   arriveWorldDelay: 1 * second,

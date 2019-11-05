@@ -1,11 +1,8 @@
 import { GameEvent, GameEventQueue } from "../event";
-import { PopOrderAction } from "../../actions/fleet/pop-order";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
 import { ReadyFleet } from "../../model/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
-import { TransferMetalAction } from "../../actions/fleet/transfer-metal";
-import { GiveOrTakeWorldMetalAction } from "../../actions/world/give-or-take-metal";
 import { injectable, inject } from "inversify";
 import 'reflect-metadata'
 import { FleetProjector } from "../../projectors/fleet-projector";
@@ -13,6 +10,9 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { CONFIG, GameConfig } from "../../config";
 import { TransferMetalOrder } from "../../model/fleet-orders";
+import { popOrder } from "../../actions/fleet/pop-order";
+import { transferMetal } from "../../actions/fleet/transfer-metal";
+import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 
 @injectable()
 export class BeginTransferMetalEventQueue implements GameEventQueue {
@@ -36,22 +36,26 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
 
               if (fleet.ownerId !== world.ownerId) {
                 return [
-                  new PopOrderAction(fleet.id)
+                  popOrder(fleet.id)
                 ]
               }
 
-              const trueAmount = getTrueTransferAmount(fleet.metal, world.metal, order.amount)
+              let trueAmount = getTrueTransferAmount(fleet.metal, world.metal, order.amount)
+
+              if (fleet.metal + trueAmount > fleet.ships) {
+                trueAmount = fleet.ships - fleet.metal;
+              }
 
               if (trueAmount === 0) {
                 return [
-                  new PopOrderAction(fleet.id)
+                  popOrder(fleet.id)
                 ]
               }
 
               return [
-                new TransferMetalAction(fleet.id, trueAmount, timestamp + config.transferMetalDelay),
-                new GiveOrTakeWorldMetalAction(world.id, -1 * trueAmount),
-                new PopOrderAction(fleet.id)
+                transferMetal(fleet.id, trueAmount, timestamp + config.transferMetalDelay),
+                giveOrTakeWorldMetal(world.id, -1 * trueAmount),
+                popOrder(fleet.id)
               ];
             }
           }

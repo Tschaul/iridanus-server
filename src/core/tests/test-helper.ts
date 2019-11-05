@@ -16,8 +16,8 @@ export function runMap(map: State): Promise<State> {
   });
 
   container.bind(Clock).toConstantValue(new Clock(0));
-  // container.bind(Logger).toSelf();
-  container.bind(Logger).to(TestLogger);
+  container.bind(Logger).toSelf();
+  // container.bind(Logger).to(TestLogger);
   container.bind(Store).toSelf();
   container.bind(ReadonlyStore).toSelf();
   container.bind(Game).toSelf();

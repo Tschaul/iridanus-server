@@ -1,7 +1,6 @@
 import { State } from "../../state";
 
 export const warpTestMap: State = {
-  counter: 0,
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_VALUE,
   universe: {

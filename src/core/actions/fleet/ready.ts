@@ -1,24 +1,23 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import produce from "immer";
-import { ArrivingFleet, ReadyFleet, baseFleet } from "../../model/fleet";
+import { updateFleet } from "./update-fleet";
+import { baseFleet, ReadyFleet, FleetAtWorld } from "../../model/fleet";
 
-export class FleetReadyAction implements Action {
+export function fleetReady(
+  fleetId: string,
+): Action {
+  return {
+    describe: () => `Ready ${JSON.stringify({ fleetId })}`,
+    apply: (state: State) => {
 
-  constructor(public fleetId: string) {
-
-  }
-
-  apply(state: State): State {
-    return produce(state, draft => {
-      const oldFleet = draft.universe.fleets[this.fleetId] as ArrivingFleet;
-      const newFleet: ReadyFleet = {
-        ...baseFleet(oldFleet),
-        currentWorldId: oldFleet.currentWorldId,
-        status: 'READY',
-        ownerId: oldFleet.ownerId
-      }
-      draft.universe.fleets[this.fleetId] = newFleet;
-    })
+      return updateFleet<FleetAtWorld, ReadyFleet>(state, fleetId, (oldFleet) => {
+        return {
+          ...baseFleet(oldFleet),
+          currentWorldId: oldFleet.currentWorldId,
+          status: 'READY',
+          ownerId: oldFleet.ownerId
+        }
+      })
+    }
   }
 }

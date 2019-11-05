@@ -1,15 +1,16 @@
 import { injectable } from "inversify";
 import 'reflect-metadata';
+import { Action } from "../actions/action";
 
 @injectable()
 export class Logger {
-  log(...msg: any) {
-    console.log(...msg)
+  logAction(action: Action) {
+    console.log(action.describe())
   }
 }
 
 export class TestLogger extends Logger {
-  log(...msg: any) {
+  logAction(action: Action) {
     return;
   }
 }

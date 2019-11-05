@@ -5,10 +5,10 @@ import 'reflect-metadata';
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
 import { State } from "./state";
-import { SetTimestampAction } from "./actions/set-timestamp";
 import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
 import { Logger } from "./infrastructure/logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";
+import { setTimestamp } from "./actions/set-timestamp";
 
 @injectable()
 export class Game {
@@ -79,10 +79,11 @@ export class Game {
     const actions = event.happen();
     for (const action of actions) {
       this.store.dispatch(action);
-      this.logger.log(action);
+      this.logger.logAction(action);
     }
-    this.store.dispatch(new SetTimestampAction(event.timestamp))
-    this.logger.log("new timestamp: "+event.timestamp);
+    const setTimestampAction = setTimestamp(event.timestamp);
+    this.store.dispatch(setTimestampAction)
+    this.logger.logAction(setTimestampAction);
     this.store.commit();
   }
 }
