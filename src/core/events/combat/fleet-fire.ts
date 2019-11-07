@@ -1,23 +1,20 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable, combineLatest } from "rxjs";
+import { Observable } from "rxjs";
 import { injectable, inject } from "inversify";
 import 'reflect-metadata';
-import { TimeProjector } from "../../projectors/time-projector";
 import { CONFIG, GameConfig } from "../../config";
 import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
-import { Fleet, FleetAtPeace, ReadyFleet } from "../../model/fleet";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { startFiring } from "../../actions/fleet/start-firing";
 import { CombatProjector } from "../../projectors/combat-projector";
 import { WorldProjector } from "../../projectors/world-projector";
-import { World, ReadyWorld } from "../../model/world";
-import { WorldOrder } from "../../model/world-order";
 import { determineTarget, determineDamage } from "./combat-helper";
 import { setFleetIntegrity } from "../../actions/fleet/set-integrity";
 import { looseFleet } from "../../actions/fleet/loose-fleet";
 import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
 import { setWorldIntegrity } from "../../actions/world/set-integrity";
+import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 
 @injectable()
 export class FleetFireEventQueue implements GameEventQueue {
@@ -27,11 +24,10 @@ export class FleetFireEventQueue implements GameEventQueue {
     private worlds: WorldProjector,
     private fleets: FleetProjector,
     private combat: CombatProjector,
-    private time: TimeProjector,
     private random: RandomNumberGenerator,
     @inject(CONFIG) config: GameConfig) {
 
-    this.upcomingEvent$ = this.combat.firstFiringFleet$.pipe(
+    this.upcomingEvent$ = this.combat.nextFiringFleet$.pipe(
       withLatestFrom(this.worlds.byId$, this.fleets.byCurrentWorldId$),
       map(([fleet, worldsById, fleetsByCurrentworldId]) => {
         if (!fleet) {
@@ -67,7 +63,7 @@ export class FleetFireEventQueue implements GameEventQueue {
                 }
               case 'WORLD':
                 return [
-                  giveOrTakeFleetShips(target.id, newShips - target.ships),
+                  giveOrTakeWorldShips(target.id, newShips - target.ships),
                   setWorldIntegrity(target.id, newIntegrity),
                   startFiring(fleet.id, weaponsReadyTimestamp),
                 ]

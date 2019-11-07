@@ -17,7 +17,7 @@ export class FleetStopFiringEventQueue implements GameEventQueue {
     private fleets: FleetProjector,
     private combat: CombatProjector,
     private time: TimeProjector) {
-    const startFiringFleet$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.fleets.byId$).pipe(
+    const stopFiringFleets$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.fleets.byId$).pipe(
       map(([[_, nonCombatWorldIds], fleetsById]) => {
 
         const fleets = Object.values(fleetsById);
@@ -30,7 +30,7 @@ export class FleetStopFiringEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = startFiringFleet$.pipe(
+    this.upcomingEvent$ = stopFiringFleets$.pipe(
       withLatestFrom(this.time.currentTimestamp$),
       map(([fleet, timestamp]) => {
         if(!fleet) {

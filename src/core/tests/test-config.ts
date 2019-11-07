@@ -4,8 +4,8 @@ const second = 1000;
 
 export const testConfig: GameConfig = {
   combat: {
-    integrityDamagePerShip: 0.05,
-    meanFiringInterval: 1 * second
+    integrityDamagePerShip: 0.456789,
+    meanFiringInterval: 3 * second
   },
   building: {
     buildIndustryDelay: 50 * second,

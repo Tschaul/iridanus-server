@@ -12,19 +12,22 @@ import { fleetReady } from "../actions/fleet/fleet-ready";
 export class CombatProjector {
 
   public worldIdsAtPeaceAndAtWar$: Observable<[string[], string[]]>;
-  public firstFiringFleet$: Observable<(ReadyFleetBase & FiringFleet) | null>;
+  public nextFiringFleet$: Observable<(ReadyFleetBase & FiringFleet) | null>;
 
   constructor(
     private worlds: WorldProjector,
     private fleets: FleetProjector) {
 
-    this.firstFiringFleet$ = fleets.byId$.pipe(
+    this.nextFiringFleet$ = fleets.byId$.pipe(
       map(fleetsById => {
         return (Object.values(fleetsById)
-          .find(fleet =>
+          .filter(fleet =>
             fleet.status === 'READY'
             && fleet.combatStatus === 'FIRING'
-          ) || null) as (ReadyFleetBase & FiringFleet) | null
+          ) as Array<(ReadyFleetBase & FiringFleet)>)
+          .sort((a,b) => 
+            a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
+          )[0]||null as (ReadyFleetBase & FiringFleet) | null
       })
     )
 
@@ -62,10 +65,8 @@ export class CombatProjector {
         if (!value) {
           fleetOwnersByWorldId.set(fleet.currentWorldId, [fleet.ownerId]);
         }
-        else {
-          if (value.indexOf(fleet.ownerId) === -1) {
-            value.push(fleet.ownerId);
-          }
+        else if (value.indexOf(fleet.ownerId) === -1) {
+          value.push(fleet.ownerId);
         }
       }
     }
@@ -76,7 +77,7 @@ export class CombatProjector {
         if (!value) {
           fleetOwnersByWorldId.set(world.id, [world.ownerId]);
         }
-        else {
+        else if (value.indexOf(world.ownerId) === -1) {
           value.push(world.ownerId);
         }
       }
