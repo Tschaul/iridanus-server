@@ -24,7 +24,7 @@ export class BeginWarpEventQueue implements GameEventQueue {
             timestamp: fleet.warpingTimestamp,
             happen: () => {
               return [
-                warpToWorld(fleet.id, fleet.warpingTimestamp + config.warpToWorldDelay),
+                warpToWorld(fleet.id, fleet.warpingTimestamp + config.warping.warpToWorldDelay),
               ];
             }
           }

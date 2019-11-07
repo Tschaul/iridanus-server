@@ -20,6 +20,7 @@ export function baseFleet(fleet: Fleet): BaseFleet {
         ships: fleet.ships,
         metal: fleet.metal,
         orders: fleet.orders,
+        integrity: fleet.integrity,
     }
 }
 
@@ -28,6 +29,7 @@ export interface BaseFleet {
     ships: number;
     metal: number;
     orders: FleetOrder[];
+    integrity: number;
 }
 
 export interface LostFleet extends BaseFleet {
@@ -35,17 +37,32 @@ export interface LostFleet extends BaseFleet {
     currentWorldId: string;
 }
 
-export interface ReadyFleet extends BaseFleet {
+export interface ReadyFleetBase extends BaseFleet {
     status: 'READY'
     currentWorldId: string;
     ownerId: string;
 }
+
+export type ReadyFleet = ReadyFleetBase & FleetWithCombatStatus;
 
 export interface WaitingFleet extends BaseFleet {
     status: 'WAITING'
     currentWorldId: string;
     readyTimestamp: number;
     ownerId: string;
+};
+
+export type FleetWithCombatStatus =
+    FleetAtPeace
+    | FiringFleet;
+
+export interface FleetAtPeace {
+    combatStatus: 'AT_PEACE'
+}
+
+export interface FiringFleet {
+    combatStatus: 'FIRING',
+    weaponsReadyTimestamp: number
 }
 
 export interface LeavingFleet extends BaseFleet {

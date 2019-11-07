@@ -24,7 +24,7 @@ export class EndWarpEventQueue implements GameEventQueue {
             timestamp: fleet.arrivingTimestamp,
             happen: () => {
               return [
-                arriveAtWorld(fleet.id, fleet.arrivingTimestamp + config.arriveWorldDelay),
+                arriveAtWorld(fleet.id, fleet.arrivingTimestamp + config.warping.arriveWorldDelay),
               ];
             }
           }

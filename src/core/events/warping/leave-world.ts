@@ -1,7 +1,7 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
-import { ReadyFleet } from "../../model/fleet";
+import { ReadyFleetBase, ReadyFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { inject } from "inversify";
 import { GameConfig, CONFIG } from "../../config";
@@ -28,7 +28,7 @@ export class LeaveWorldEventQueue implements GameEventQueue {
             timestamp,
             happen: () => {
               return [
-                leaveWorld(fleet.id, order.targetWorldId, timestamp + config.leaveWorldDelay),
+                leaveWorld(fleet.id, order.targetWorldId, timestamp + config.warping.leaveWorldDelay),
                 popFleetOrder(fleet.id)
               ];
             }

@@ -1,7 +1,6 @@
 import { State } from "../state";
 
 export const simpleMap: State = {
-  counter: 0,
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_VALUE,
   universe: {
@@ -9,40 +8,51 @@ export const simpleMap: State = {
       "f1": {
         id: "f1",
         status: 'READY',
+        combatStatus: 'AT_PEACE',
         currentWorldId: "w1",
         metal: 0,
         orders: [],
         ownerId: "p1",
-        ships: 10
+        ships: 10,
+        integrity: 1
       }
     },
     worlds: {
       "w1": {
+        status: 'READY',
+        orders: [],
         id: "w1",
         industry: 5,
         metal: 40,
         mines: 1,
         ownerId: "p1",
         population: 25,
-        ships: 5
+        ships: 5,
+        integrity: 1
       },
       "w2": {
+        status: 'READY',
+        orders: [],
         id: "w2",
         industry: 5,
         metal: 40,
         mines: 1,
         ownerId: "p1",
         population: 25,
-        ships: 5
+        ships: 5,
+        integrity: 1
       },
       "w3": {
+        status: 'READY',
+        orders: [],
         id: "w3",
         industry: 5,
         metal: 40,
         mines: 1,
         ownerId: "p1",
         population: 25,
-        ships: 5
+        ships: 5,
+        integrity: 1
       }
     },
     gates: {

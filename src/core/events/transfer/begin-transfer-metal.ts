@@ -1,7 +1,7 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
-import { ReadyFleet } from "../../model/fleet";
+import { ReadyFleetBase, ReadyFleet } from "../../model/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
 import { injectable, inject } from "inversify";
 import 'reflect-metadata'
@@ -53,7 +53,7 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
               }
 
               return [
-                transferMetal(fleet.id, trueAmount, timestamp + config.transferMetalDelay),
+                transferMetal(fleet.id, trueAmount, timestamp + config.transfering.transferMetalDelay),
                 giveOrTakeWorldMetal(world.id, -1 * trueAmount),
                 popFleetOrder(fleet.id)
               ];

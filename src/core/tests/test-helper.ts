@@ -8,6 +8,7 @@ import { CONFIG } from "../config";
 import { testConfig } from "./test-config";
 import { registerEventQueues } from "../events/register-queues";
 import { registerProjectors } from "../projectors/register-projectors";
+import { RandomNumberGenerator, NotSoRandomNumberGenerator } from "../infrastructure/random-number-generator";
 
 export function runMap(map: State): Promise<State> {
 
@@ -17,6 +18,7 @@ export function runMap(map: State): Promise<State> {
 
   container.bind(Clock).toConstantValue(new Clock(0));
   container.bind(Logger).toSelf();
+  container.bind(RandomNumberGenerator).to(NotSoRandomNumberGenerator);
   // container.bind(Logger).to(TestLogger);
   container.bind(Store).toSelf();
   container.bind(ReadonlyStore).toSelf();

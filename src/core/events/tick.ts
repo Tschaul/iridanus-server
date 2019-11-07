@@ -1,5 +1,4 @@
 import { State } from "../state";
-import { IncreaseCounterAction } from "../actions/increase-counter";
 import { GameEvent } from "./event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -19,6 +18,6 @@ export class TickEvent implements GameEvent {
     constructor(public timestamp: number){}
 
     happen() {
-        return [new IncreaseCounterAction()]
+        return []
     }
 }

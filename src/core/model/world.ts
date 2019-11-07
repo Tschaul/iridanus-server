@@ -17,6 +17,7 @@ export interface BaseWorld {
     population: number;
     mines: number;
     orders: WorldOrder[];
+    integrity: number;
 }
 
 export function baseWorld(world: World): BaseWorld {
@@ -27,7 +28,8 @@ export function baseWorld(world: World): BaseWorld {
         mines: world.mines,
         orders: world.orders,
         population: world.population,
-        ships: world.ships
+        ships: world.ships,
+        integrity: world.integrity,
     }
 }
 
