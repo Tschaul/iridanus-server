@@ -7,7 +7,7 @@ import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { fleetStartFiring } from "../../actions/fleet/start-firing";
-import { CombatProjector } from "../../projectors/combat-projector";
+import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 import { WorldProjector } from "../../projectors/world-projector";
 import { handleFiring } from "./combat-helper";
 
@@ -18,7 +18,7 @@ export class FleetFireEventQueue implements GameEventQueue {
   constructor(
     private worlds: WorldProjector,
     private fleets: FleetProjector,
-    private combat: CombatProjector,
+    private combat: CombatAndCaptureProjector,
     private random: RandomNumberGenerator,
     @inject(CONFIG) private config: GameConfig) {
 

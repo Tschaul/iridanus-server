@@ -70,5 +70,12 @@ green
 - repair: a fraction of destroyed ships per fleet get regenerated with a time delay
 - reflection: Deals damage to enemies proportional of there total fleet ships
 
+more ideas for upgrades:
+
+- building industry is cheaper
+- fleets can transport more metal
+- instant strike: when enagaging the enemy ships fire once instantly
+- sacrifice population to get extra metal from mines
+
 
 

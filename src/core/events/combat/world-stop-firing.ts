@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import { TimeProjector } from "../../projectors/time-projector";
 import { map, withLatestFrom } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
-import { CombatProjector } from "../../projectors/combat-projector";
+import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 import { worldStopFiring } from "../../actions/world/stop-firing";
 
 @injectable()
@@ -14,7 +14,7 @@ export class WorldStopFiringEventQueue implements GameEventQueue {
 
   constructor(
     private worlds: WorldProjector,
-    private combat: CombatProjector,
+    private combat: CombatAndCaptureProjector,
     private time: TimeProjector) {
     const stopFiringWorlds$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.worlds.byId$).pipe(
       map(([[_, nonCombatWorldIds], worldsById]) => {

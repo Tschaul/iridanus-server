@@ -8,7 +8,7 @@ import { map, withLatestFrom } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { worldStartFiring } from "../../actions/world/start-firing";
-import { CombatProjector } from "../../projectors/combat-projector";
+import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 
 @injectable()
 export class WorldStartFiringEventQueue implements GameEventQueue {
@@ -16,7 +16,7 @@ export class WorldStartFiringEventQueue implements GameEventQueue {
 
   constructor(
     private worlds: WorldProjector,
-    private combat: CombatProjector,
+    private combat: CombatAndCaptureProjector,
     private time: TimeProjector,
     random: RandomNumberGenerator,
     @inject(CONFIG) config: GameConfig) {
