@@ -3,11 +3,11 @@ import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
 import { baseFleet, ReadyFleet, FleetAtWorld } from "../../model/fleet";
 
-export function stopFiring(
+export function fleetStopFiring(
   fleetId: string,
 ): Action {
   return {
-    describe: () => `StopFiring ${JSON.stringify({ fleetId })}`,
+    describe: () => `FleetStopFiring ${JSON.stringify({ fleetId })}`,
     apply: (state: State) => {
 
       return updateFleet<FleetAtWorld, ReadyFleet>(state, fleetId, (oldFleet) => {

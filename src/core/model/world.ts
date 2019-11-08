@@ -33,9 +33,24 @@ export function baseWorld(world: World): BaseWorld {
     }
 }
 
-export interface ReadyWorld extends BaseWorld {
+export interface ReadyWorldBase extends BaseWorld {
     status: 'READY'
     ownerId: string;
+}
+
+export type ReadyWorld = ReadyWorldBase & WorldWithCombatStatus;
+
+export type WorldWithCombatStatus =
+    WorldAtPeace
+    | FiringWorld;
+
+export interface WorldAtPeace {
+    combatStatus: 'AT_PEACE'
+}
+
+export interface FiringWorld {
+    combatStatus: 'FIRING',
+    weaponsReadyTimestamp: number
 }
 
 export interface LostWorld extends BaseWorld {

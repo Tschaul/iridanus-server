@@ -5,9 +5,8 @@ import 'reflect-metadata';
 import { TimeProjector } from "../../projectors/time-projector";
 import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
-import { Fleet, FleetAtPeace } from "../../model/fleet";
 import { CombatProjector } from "../../projectors/combat-projector";
-import { stopFiring } from "../../actions/fleet/stop-firing";
+import { fleetStopFiring } from "../../actions/fleet/stop-firing";
 
 @injectable()
 export class FleetStopFiringEventQueue implements GameEventQueue {
@@ -41,7 +40,7 @@ export class FleetStopFiringEventQueue implements GameEventQueue {
           happen: () => {
 
             return [
-              stopFiring(fleet.id)
+              fleetStopFiring(fleet.id)
             ]
           }
         }

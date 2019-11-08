@@ -17,7 +17,8 @@ export const buildTestMap: State = {
         ownerId: "p1",
         population: 25,
         ships: 5,
-        integrity: 1
+        integrity: 1,
+        combatStatus: 'AT_PEACE'
       },
     },
     gates: {

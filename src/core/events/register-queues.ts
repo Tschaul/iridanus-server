@@ -15,6 +15,9 @@ import { EndBuildIndustryEventQueue } from "./building/end-build-industry";
 import { FleetStartFiringEventQueue } from "./combat/fleet-start-firing";
 import { FleetFireEventQueue } from "./combat/fleet-fire";
 import { FleetStopFiringEventQueue } from "./combat/fleet-stop-firing";
+import { WorldStartFiringEventQueue } from "./combat/world-start-firing";
+import { WorldFireEventQueue } from "./combat/world-fire";
+import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 
 export function registerEventQueues(container: Container) {
 
@@ -36,6 +39,10 @@ export function registerEventQueues(container: Container) {
   container.bind(FleetStartFiringEventQueue).toSelf();
   container.bind(FleetFireEventQueue).toSelf();
   container.bind(FleetStopFiringEventQueue).toSelf();
+
+  container.bind(WorldStartFiringEventQueue).toSelf();
+  container.bind(WorldFireEventQueue).toSelf();
+  container.bind(WorldStopFiringEventQueue).toSelf();
 
   container.bind(CompleteEventQueue).toSelf();
 

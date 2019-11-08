@@ -40,6 +40,7 @@ export const map: State = {
         ships: 5,
         orders: [],
         integrity: 1,
+        combatStatus: 'AT_PEACE'
       }
     },
     gates: {

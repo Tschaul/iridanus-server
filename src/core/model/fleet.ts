@@ -45,13 +45,6 @@ export interface ReadyFleetBase extends BaseFleet {
 
 export type ReadyFleet = ReadyFleetBase & FleetWithCombatStatus;
 
-export interface WaitingFleet extends BaseFleet {
-    status: 'WAITING'
-    currentWorldId: string;
-    readyTimestamp: number;
-    ownerId: string;
-};
-
 export type FleetWithCombatStatus =
     FleetAtPeace
     | FiringFleet;
@@ -64,6 +57,13 @@ export interface FiringFleet {
     combatStatus: 'FIRING',
     weaponsReadyTimestamp: number
 }
+
+export interface WaitingFleet extends BaseFleet {
+    status: 'WAITING'
+    currentWorldId: string;
+    readyTimestamp: number;
+    ownerId: string;
+};
 
 export interface LeavingFleet extends BaseFleet {
     status: 'LEAVING'

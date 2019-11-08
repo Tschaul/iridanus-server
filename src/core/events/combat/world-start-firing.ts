@@ -5,38 +5,38 @@ import 'reflect-metadata';
 import { TimeProjector } from "../../projectors/time-projector";
 import { CONFIG, GameConfig } from "../../config";
 import { map, withLatestFrom } from "rxjs/operators";
-import { FleetProjector } from "../../projectors/fleet-projector";
+import { WorldProjector } from "../../projectors/world-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
-import { fleetStartFiring } from "../../actions/fleet/start-firing";
+import { worldStartFiring } from "../../actions/world/start-firing";
 import { CombatProjector } from "../../projectors/combat-projector";
 
 @injectable()
-export class FleetStartFiringEventQueue implements GameEventQueue {
+export class WorldStartFiringEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    private fleets: FleetProjector,
+    private worlds: WorldProjector,
     private combat: CombatProjector,
     private time: TimeProjector,
     random: RandomNumberGenerator,
     @inject(CONFIG) config: GameConfig) {
-    const startFiringFleet$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.fleets.byId$).pipe(
-      map(([[combatWorldIds, _], fleetsById]) => {
+    const startFiringWorld$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.worlds.byId$).pipe(
+      map(([[combatWorldIds, _], worldsById]) => {
 
-        const fleets = Object.values(fleetsById);
+        const worlds = Object.values(worldsById);
 
-        return fleets.find(fleet =>
-          fleet.status === 'READY'
-          && combatWorldIds.indexOf(fleet.currentWorldId) !== -1
-          && fleet.combatStatus === 'AT_PEACE'
+        return worlds.find(world =>
+          world.status === 'READY'
+          && combatWorldIds.indexOf(world.id) !== -1
+          && world.combatStatus === 'AT_PEACE'
         )
       })
     )
 
-    this.upcomingEvent$ = startFiringFleet$.pipe(
+    this.upcomingEvent$ = startFiringWorld$.pipe(
       withLatestFrom(this.time.currentTimestamp$),
-      map(([fleet, timestamp]) => {
-        if(!fleet) {
+      map(([world, timestamp]) => {
+        if(!world) {
           return null;
         }
         return {
@@ -46,7 +46,7 @@ export class FleetStartFiringEventQueue implements GameEventQueue {
             const weaponsReadyTimestamp = timestamp + random.exponential() * config.combat.meanFiringInterval
 
             return [
-              fleetStartFiring(fleet.id, weaponsReadyTimestamp)
+              worldStartFiring(world.id, weaponsReadyTimestamp)
             ]
           }
         }

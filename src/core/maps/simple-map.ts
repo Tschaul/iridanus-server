@@ -28,7 +28,8 @@ export const simpleMap: State = {
         ownerId: "p1",
         population: 25,
         ships: 5,
-        integrity: 1
+        integrity: 1,
+        combatStatus: 'AT_PEACE'
       },
       "w2": {
         status: 'READY',
@@ -40,7 +41,8 @@ export const simpleMap: State = {
         ownerId: "p1",
         population: 25,
         ships: 5,
-        integrity: 1
+        integrity: 1,
+        combatStatus: 'AT_PEACE'
       },
       "w3": {
         status: 'READY',
@@ -52,7 +54,8 @@ export const simpleMap: State = {
         ownerId: "p1",
         population: 25,
         ships: 5,
-        integrity: 1
+        integrity: 1,
+        combatStatus: 'AT_PEACE'
       }
     },
     gates: {

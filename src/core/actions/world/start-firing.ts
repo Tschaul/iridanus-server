@@ -3,19 +3,21 @@ import { State } from "../../state";
 import { updateWorld } from "./update-world";
 import { baseWorld, ReadyWorld, WorldWithOwner } from "../../model/world";
 
-export function worldReady(
+export function worldStartFiring(
   worldId: string,
+  weaponsReadyTimestamp: number
 ): Action {
   return {
-    describe: () => `WorldReady ${JSON.stringify({ worldId })}`,
+    describe: () => `WorldStartFiring ${JSON.stringify({ worldId,weaponsReadyTimestamp })}`,
     apply: (state: State) => {
 
       return updateWorld<WorldWithOwner, ReadyWorld>(state, worldId, (oldWorld) => {
         return {
           ...baseWorld(oldWorld),
           status: 'READY',
-          ownerId: oldWorld.ownerId,
-          combatStatus: 'AT_PEACE'
+          combatStatus: 'FIRING',
+          weaponsReadyTimestamp,
+          ownerId: oldWorld.ownerId
         }
       })
     }

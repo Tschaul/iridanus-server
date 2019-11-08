@@ -18,6 +18,9 @@ import { EndBuildIndustryEventQueue } from "./building/end-build-industry";
 import { FleetFireEventQueue } from "./combat/fleet-fire";
 import { FleetStartFiringEventQueue } from "./combat/fleet-start-firing";
 import { FleetStopFiringEventQueue } from "./combat/fleet-stop-firing";
+import { WorldStartFiringEventQueue } from "./combat/world-start-firing";
+import { WorldFireEventQueue } from "./combat/world-fire";
+import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -40,6 +43,9 @@ export class CompleteEventQueue implements GameEventQueue {
     fleetStartFiring: FleetStartFiringEventQueue,
     fleetFire: FleetFireEventQueue,
     fleetStopFiring: FleetStopFiringEventQueue,
+    worldStartFiring: WorldStartFiringEventQueue,
+    worldFire: WorldFireEventQueue,
+    worldStopFiring: WorldStopFiringEventQueue,
   ) {
 
     const allEventQueues = [
@@ -58,6 +64,9 @@ export class CompleteEventQueue implements GameEventQueue {
       fleetStartFiring,
       fleetFire,
       fleetStopFiring,
+      worldStartFiring,
+      worldFire,
+      worldStopFiring,
     ]
 
     this.upcomingEvent$ = combineLatest(

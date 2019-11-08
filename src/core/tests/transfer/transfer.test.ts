@@ -23,7 +23,29 @@ describe("transfer", () => {
     const state = await runMap(map);
 
     expect((state.universe.fleets["f1"] as ReadyFleet).metal).to.equal(5)
-    expect((state.universe.worlds["w1"] as World).metal).to.equal(35)
+    expect((state.universe.worlds["w1"] as World).metal).to.equal(5)
+  })
+
+
+  it("load metal (all of worlds metal with two fleets simultanously)", async () => {
+    const map = produce(warpTestMap, draft => {
+
+      draft.universe.fleets["f1"].orders.push({
+        type: 'TRANSFER_METAL',
+        amount: 10
+      })
+      draft.universe.fleets["f2"].orders.push({
+        type: 'TRANSFER_METAL',
+        amount: 10
+      })
+  
+    });
+
+    const state = await runMap(map);
+
+    expect((state.universe.fleets["f1"] as ReadyFleet).metal).to.equal(10)
+    expect((state.universe.fleets["f2"] as ReadyFleet).metal).to.equal(0)
+    expect((state.universe.worlds["w1"] as World).metal).to.equal(0)
   })
 
   it("drop metal having none", async () => {
@@ -39,7 +61,7 @@ describe("transfer", () => {
     const state = await runMap(map);
 
     expect((state.universe.fleets["f1"] as ReadyFleet).metal).to.equal(0)
-    expect((state.universe.worlds["w1"] as World).metal).to.equal(40)
+    expect((state.universe.worlds["w1"] as World).metal).to.equal(10)
   })
 
   it("load ships", async () => {

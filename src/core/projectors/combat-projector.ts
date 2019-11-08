@@ -5,14 +5,14 @@ import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged } from "rxjs/operators";
 import { Fleet, ReadyFleetBase, FiringFleet } from "../model/fleet";
-import { World } from "../model/world";
-import { fleetReady } from "../actions/fleet/fleet-ready";
+import { World, FiringWorld, ReadyWorldBase } from "../model/world";
 
 @injectable()
 export class CombatProjector {
 
   public worldIdsAtPeaceAndAtWar$: Observable<[string[], string[]]>;
   public nextFiringFleet$: Observable<(ReadyFleetBase & FiringFleet) | null>;
+  public nextFiringWorld$: Observable<(ReadyWorldBase & FiringWorld) | null>;
 
   constructor(
     private worlds: WorldProjector,
@@ -25,9 +25,22 @@ export class CombatProjector {
             fleet.status === 'READY'
             && fleet.combatStatus === 'FIRING'
           ) as Array<(ReadyFleetBase & FiringFleet)>)
-          .sort((a,b) => 
+          .sort((a, b) =>
             a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
-          )[0]||null as (ReadyFleetBase & FiringFleet) | null
+          )[0] || null
+      })
+    )
+
+    this.nextFiringWorld$ = worlds.byId$.pipe(
+      map(worldsById => {
+        return (Object.values(worldsById)
+          .filter(world =>
+            world.status === 'READY'
+            && world.combatStatus === 'FIRING'
+          ) as Array<(ReadyWorldBase & FiringWorld)>)
+          .sort((a, b) =>
+            a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
+          )[0] || null
       })
     )
 

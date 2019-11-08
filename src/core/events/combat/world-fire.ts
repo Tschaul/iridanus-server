@@ -6,48 +6,43 @@ import { CONFIG, GameConfig } from "../../config";
 import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
-import { fleetStartFiring } from "../../actions/fleet/start-firing";
 import { CombatProjector } from "../../projectors/combat-projector";
-import { WorldProjector } from "../../projectors/world-projector";
 import { handleFiring } from "./combat-helper";
+import { worldStartFiring } from "../../actions/world/start-firing";
 
 @injectable()
-export class FleetFireEventQueue implements GameEventQueue {
+export class WorldFireEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    private worlds: WorldProjector,
     private fleets: FleetProjector,
     private combat: CombatProjector,
     private random: RandomNumberGenerator,
-    @inject(CONFIG) private config: GameConfig) {
+    @inject(CONFIG) config: GameConfig) {
 
-    this.upcomingEvent$ = this.combat.nextFiringFleet$.pipe(
-      withLatestFrom(this.worlds.byId$, this.fleets.byCurrentWorldId$),
-      map(([fleet, worldsById, fleetsByCurrentworldId]) => {
-        if (!fleet) {
+    this.upcomingEvent$ = this.combat.nextFiringWorld$.pipe(
+      withLatestFrom(this.fleets.byCurrentWorldId$),
+      map(([world, fleetsByCurrentworldId]) => {
+        if (!world) {
           return null;
         }
         return {
-          timestamp: fleet.weaponsReadyTimestamp,
+          timestamp: world.weaponsReadyTimestamp,
           happen: () => {
 
-            const weaponsReadyTimestamp = fleet.weaponsReadyTimestamp + random.exponential() * config.combat.meanFiringInterval
+            const weaponsReadyTimestamp = world.weaponsReadyTimestamp + random.exponential() * config.combat.meanFiringInterval
 
-            const world = worldsById[fleet.currentWorldId];
-
-            const damageActions = handleFiring(fleet, world, fleetsByCurrentworldId, this.config, this.random);
+            const damageActions = handleFiring(world, world, fleetsByCurrentworldId, config, this.random);
 
             return [
               ...damageActions, 
-              fleetStartFiring(fleet.id, weaponsReadyTimestamp)
+              worldStartFiring(world.id, weaponsReadyTimestamp)
             ]
-
           }
         }
       })
     )
   }
 
-
 }
+
