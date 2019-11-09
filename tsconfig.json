@@ -8,6 +8,11 @@
         "strictNullChecks": true,
         "emitDecoratorMetadata":true,
         "experimentalDecorators": true,
-        "outDir": "build"
+        "outDir": "build",
+        "declaration": true,
+        "types": [
+            "node",
+            "mocha"
+        ]
     }
 }

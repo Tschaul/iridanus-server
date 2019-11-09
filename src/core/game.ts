@@ -13,7 +13,7 @@ import { setTimestamp } from "./actions/set-timestamp";
 @injectable()
 export class Game {
 
-  private timeout: number | undefined;
+  private timeout: NodeJS.Timeout | undefined;
 
   public gameEnded$ = new Subject<State>();
 
@@ -56,7 +56,7 @@ export class Game {
           return;
         }
 
-        clearTimeout(this.timeout);
+        clearTimeout(this.timeout as NodeJS.Timeout);
         this.timeout = undefined;
 
         const now = this.clock.getTimestamp()

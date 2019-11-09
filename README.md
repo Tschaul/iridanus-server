@@ -37,7 +37,7 @@ multiple different attack modes per fleet/world
 ## Research
 
 - Research gets gathered proportional to population over time
-- Research can be spent on 5 tree with five colors similar to MTG colors
+- Research can be spent on 5 trees with five colors similar to MTG colors
 - Researched upgrades effect all fleets/worlds instantly
 - Only a total of 5 upgrades can be purchased per game
 
@@ -46,7 +46,7 @@ Possible Upgrades:
 cooldown for most abilities: ~1 week
 
 white
-- protection: soaks up a percentage of the damage
+- ?
 - armor: a low percentage of damage is constantly absorbed
 - warp bomb: worlds can send bombs (like probes) that do AoE damage to all ships in probed system
 
