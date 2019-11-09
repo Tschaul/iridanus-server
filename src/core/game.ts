@@ -1,7 +1,6 @@
 import { Store } from "./store";
 import { combineLatest, Subject } from "rxjs";
 import {injectable } from 'inversify'
-import 'reflect-metadata';
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
 import { State } from "./state";
@@ -28,25 +27,8 @@ export class Game {
 
   public startGameLoop(): Promise<State> {
     return new Promise<State>((resolve, reject) => {
-      const nextEvent$ = combineLatest(
-        this.completeEventQueue.upcomingEvent$,
-      ).pipe(
-        map((events) => {
-          return events.reduce((acc, event) => {
-            if (event === null) {
-              return acc;
-            } else if (acc === null) {
-              return event;
-            } else if (event.timestamp < acc.timestamp) {
-              return event;
-            } else {
-              return acc;
-            }
-          }, null as GameEvent | null)
-        }),
-      )
-
-      nextEvent$.pipe(
+      
+      this.completeEventQueue.upcomingEvent$.pipe(
         distinctUntilChanged(),
         debounceTime(0),
       ).subscribe((event) => {

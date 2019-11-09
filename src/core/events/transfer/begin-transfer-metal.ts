@@ -4,22 +4,25 @@ import { map, withLatestFrom } from "rxjs/operators";
 import { ReadyFleetBase, ReadyFleet } from "../../model/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
 import { injectable, inject } from "inversify";
-import 'reflect-metadata'
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { CONFIG, GameConfig } from "../../config";
 import { TransferMetalOrder } from "../../model/fleet-orders";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { transferMetal } from "../../actions/fleet/transfer-metal";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
+import { GameSetupProvider } from "../../game-setup-provider";
 
 @injectable()
 export class BeginTransferMetalEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
 
-  constructor(private fleets: FleetProjector, private worlds: WorldProjector, private time: TimeProjector, @inject(CONFIG) private config: GameConfig) {
+  constructor(
+    private fleets: FleetProjector, 
+    private worlds: WorldProjector, 
+    private time: TimeProjector, 
+    private setup: GameSetupProvider) {
 
     const readyFleetWithTransferMetalOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, TransferMetalOrder>('READY', 'TRANSFER_METAL')
 
@@ -53,7 +56,7 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
               }
 
               return [
-                transferMetal(fleet.id, trueAmount, timestamp + config.transfering.transferMetalDelay),
+                transferMetal(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferMetalDelay),
                 giveOrTakeWorldMetal(world.id, -1 * trueAmount),
                 popFleetOrder(fleet.id)
               ];

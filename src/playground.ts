@@ -1,6 +1,6 @@
 import { Game } from "./core/game";
 import { Clock } from "./core/infrastructure/clock";
-import { simpleMap } from "./core/maps/simple-map";
+import { simpleMap } from "./core/setup/simple-map";
 
 const clock = new Clock(new Date().getTime() - 10000);
 

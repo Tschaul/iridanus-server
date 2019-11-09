@@ -1,6 +1,4 @@
-export const CONFIG = Symbol.for("Config");
-
-export interface GameConfig {
+export interface GameRules {
   combat: {
     meanFiringInterval: number;
     integrityDamagePerShip: number;

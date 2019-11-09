@@ -1,5 +1,4 @@
 import { injectable } from "inversify";
-import 'reflect-metadata'
 import { GameEventQueue, GameEvent } from "./event";
 import { BeginTransferMetalEventQueue } from "./transfer/begin-transfer-metal";
 import { Observable, combineLatest } from "rxjs";

@@ -1,6 +1,5 @@
 import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
-import 'reflect-metadata';
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";

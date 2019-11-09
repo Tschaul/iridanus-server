@@ -4,7 +4,6 @@ import { map } from "rxjs/operators";
 import { ArrivingFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
-import 'reflect-metadata'
 import { fleetReady } from "../../actions/fleet/fleet-ready";
 
 @injectable()

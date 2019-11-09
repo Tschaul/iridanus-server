@@ -1,7 +1,7 @@
 import { ReadyFleet, Fleet } from "../../model/fleet";
 import { ReadyWorld, World } from "../../model/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
-import { GameConfig } from "../../config";
+import { GameRules } from "../../rules";
 import { Action } from "../../actions/action";
 import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
 import { setFleetIntegrity } from "../../actions/fleet/set-integrity";
@@ -9,7 +9,7 @@ import { looseFleet } from "../../actions/fleet/loose-fleet";
 import { setWorldIntegrity } from "../../actions/world/set-integrity";
 import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 
-export function handleFiring(attacker: ReadyFleet | ReadyWorld, world: World, fleetsByCurrentworldId: any, config: GameConfig, random: RandomNumberGenerator) {
+export function handleFiring(attacker: ReadyFleet | ReadyWorld, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
   const [targetType, target] = determineTarget(attacker, world, fleetsByCurrentworldId[world.id], random);
   const [newShips, newIntegrity] = determineDamage(attacker, target, config);
   const damageActions = makeActions(targetType, newShips, target, newIntegrity);
@@ -49,7 +49,7 @@ function determineTarget(attacker: ReadyFleet | ReadyWorld, world: World, otherF
   throw new Error('Could not determine target.')
 }
 
-function determineDamage(attacker: Fleet | World, defender: Fleet | World, config: GameConfig): [ number, number] {
+function determineDamage(attacker: Fleet | World, defender: Fleet | World, config: GameRules): [ number, number] {
   
   const damage = attacker.ships * config.combat.integrityDamagePerShip;
 

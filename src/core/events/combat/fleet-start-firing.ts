@@ -1,14 +1,13 @@
 import { GameEventQueue, GameEvent } from "../event";
 import { Observable, combineLatest } from "rxjs";
 import { injectable, inject } from "inversify";
-import 'reflect-metadata';
 import { TimeProjector } from "../../projectors/time-projector";
-import { CONFIG, GameConfig } from "../../config";
 import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { fleetStartFiring } from "../../actions/fleet/start-firing";
 import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
+import { GameSetupProvider } from "../../game-setup-provider";
 
 @injectable()
 export class FleetStartFiringEventQueue implements GameEventQueue {
@@ -18,8 +17,8 @@ export class FleetStartFiringEventQueue implements GameEventQueue {
     private fleets: FleetProjector,
     private combat: CombatAndCaptureProjector,
     private time: TimeProjector,
-    random: RandomNumberGenerator,
-    @inject(CONFIG) config: GameConfig) {
+    private random: RandomNumberGenerator,
+    private setup: GameSetupProvider) {
     const startFiringFleet$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.fleets.byId$).pipe(
       map(([[combatWorldIds, _], fleetsById]) => {
 
@@ -43,7 +42,7 @@ export class FleetStartFiringEventQueue implements GameEventQueue {
           timestamp,
           happen: () => {
 
-            const weaponsReadyTimestamp = timestamp + random.exponential() * config.combat.meanFiringInterval
+            const weaponsReadyTimestamp = timestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval
 
             return [
               fleetStartFiring(fleet.id, weaponsReadyTimestamp)

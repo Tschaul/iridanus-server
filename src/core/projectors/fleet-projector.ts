@@ -1,5 +1,4 @@
 import { injectable } from "inversify";
-import 'reflect-metadata'
 import { ReadonlyStore } from "../store";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Observable } from "rxjs";

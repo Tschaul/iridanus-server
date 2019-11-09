@@ -11,7 +11,10 @@ export const simpleMap: State = {
         combatStatus: 'AT_PEACE',
         currentWorldId: "w1",
         metal: 0,
-        orders: [],
+        orders: [{
+          type: 'WARP',
+          targetWorldId: 'w2'
+        }],
         ownerId: "p1",
         ships: 10,
         integrity: 1

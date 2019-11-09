@@ -1,33 +1,36 @@
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, throwError, concat, ReplaySubject } from 'rxjs';
 import { scan, startWith, tap, withLatestFrom, sample, publishReplay, publish, shareReplay } from 'rxjs/operators';
 import { injectable, inject } from 'inversify';
-import 'reflect-metadata';
 import { Action } from './actions/action';
-import { State, INITIAL_STATE } from './state';
+import { State } from './state';
+import { GameSetupProvider } from './game-setup-provider';
 
 @injectable()
 export class Store {
   private actions$$: Subject<Action> = new Subject();
   private commits$$: Subject<void> = new Subject();
   private lastState: State | null = null;
-  public state$: Observable<State>;
 
-  constructor(@inject(INITIAL_STATE) initialState: State) {
+  private stateInternal$$ = new ReplaySubject<State>(1);
 
-    this.state$ = this.actions$$.pipe(
+  public state$: Observable<State> = this.stateInternal$$;
+
+  constructor(private setup: GameSetupProvider) { 
+  }
+
+  public initialize() {
+    this.actions$$.pipe(
       scan((state: State, action: Action) => {
         const nextState = action.apply(state);
         // console.log(nextState);
         return nextState;
-      }, initialState),
+      }, this.setup.initialState),
       sample(this.commits$$),
-      startWith(initialState),
+      startWith(this.setup.initialState),
       tap(state => {
         this.lastState = state
       }),
-      shareReplay(1),
-    )
-
+    ).subscribe(state => this.stateInternal$$.next(state))
   }
 
   public dispatch(action: Action) {

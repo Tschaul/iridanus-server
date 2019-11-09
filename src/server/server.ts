@@ -13,16 +13,16 @@ const app = express();
 const server = createServer(app);
 
 //initialize the WebSocket server instance
-const wss = new Server({ server });
+const webSocketServer = new Server({ server });
 
 const containerRegistry = new ContainerRegistry();
 
 const subscriptionHandler = containerRegistry.globalContainer.get(SubscriptionHandler);
 const commandHandler = containerRegistry.globalContainer.get(CommandHandler);
 
-wss.on('connection', (ws: WebSocket) => {
+webSocketServer.on('connection', (socket: WebSocket) => {
 
-  ws.addEventListener('message', (e: MessageEvent) => {
+  socket.addEventListener('message', (e: MessageEvent) => {
 
     try {
       const message = JSON.parse(e.data) as RequestMessage;
@@ -34,11 +34,19 @@ wss.on('connection', (ws: WebSocket) => {
             message.subscription,
             message.id,
             message.gameId,
-            (data) => ws.send(JSON.stringify(data)),
+            (data) => socket.send(JSON.stringify(data)),
           );
           break;
         case 'END_SUBSCRIPTION':
           subscriptionHandler.cancelSubscription(message.id);
+          break;
+        case 'COMMAND':
+          commandHandler.handleCommand(
+            containerRegistry,
+            message.command,
+            message.gameId,
+            (data) => socket.send(JSON.stringify(data)),
+          )
           break;
         default:
           break;

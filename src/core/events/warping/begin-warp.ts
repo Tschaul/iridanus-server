@@ -4,17 +4,19 @@ import { map } from "rxjs/operators";
 import { LeavingFleet } from "../../model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { inject } from "inversify";
-import { GameConfig, CONFIG } from "../../config";
 import { injectable } from "inversify";
-import 'reflect-metadata'
 import { warpToWorld } from "../../actions/fleet/warp-to-world";
+import { GameSetupProvider } from "../../game-setup-provider";
 
 @injectable()
 export class BeginWarpEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
 
-  constructor(public fleets: FleetProjector, @inject(CONFIG) config: GameConfig) {
+  constructor(
+    public fleets: FleetProjector, 
+    private setup: GameSetupProvider
+  ) {
     this.upcomingEvent$ = this.fleets.firstByStatus<LeavingFleet>('LEAVING').pipe(
       map((fleet) => {
         if (!fleet) {
@@ -24,7 +26,7 @@ export class BeginWarpEventQueue implements GameEventQueue {
             timestamp: fleet.warpingTimestamp,
             happen: () => {
               return [
-                warpToWorld(fleet.id, fleet.warpingTimestamp + config.warping.warpToWorldDelay),
+                warpToWorld(fleet.id, fleet.warpingTimestamp + this.setup.rules.warping.warpToWorldDelay),
               ];
             }
           }

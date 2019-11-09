@@ -1,8 +1,8 @@
-import { GameConfig } from "../config";
+import { GameRules } from "../rules";
 
 const second = 1000;
 
-export const testConfig: GameConfig = {
+export const simpleRules: GameRules = {
   combat: {
     integrityDamagePerShip: 0.456789,
     meanFiringInterval: 3 * second

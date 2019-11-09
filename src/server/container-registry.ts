@@ -1,15 +1,17 @@
+import 'reflect-metadata';
 import { Container, injectable } from "inversify";
 import { CommandHandler } from "./commands/command-handler";
 import { SubscriptionHandler } from "./subscriptions/subscription-handler";
 import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
-import { RandomNumberGenerator, NotSoRandomNumberGenerator } from "../core/infrastructure/random-number-generator";
+import { RandomNumberGenerator } from "../core/infrastructure/random-number-generator";
 import { Store, ReadonlyStore } from "../core/store";
 import { Game } from "../core/game";
 import { registerEventQueues } from "../core/events/register-queues";
 import { registerProjectors } from "../core/projectors/register-projectors";
-import 'reflect-metadata';
 import { registerGlobalDataProviders } from "./subscriptions/providers/register-data-providers";
+import { GameSetupProvider } from "../core/game-setup-provider";
+import { registerCommandExecutors } from './commands/executors/register-command-executors';
 
 @injectable()
 export class ContainerRegistry {
@@ -53,7 +55,13 @@ export class ContainerRegistry {
       container.bind(Store).toSelf();
       container.bind(ReadonlyStore).toSelf();
       container.bind(Game).toSelf();
+      container.bind(GameSetupProvider).toSelf();
 
+      const setup =  container.get(GameSetupProvider);
+
+      setup.gameId = gameId;
+
+      registerCommandExecutors(container);
       registerEventQueues(container);
       registerProjectors(container);
 

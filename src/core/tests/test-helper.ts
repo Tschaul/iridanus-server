@@ -1,19 +1,20 @@
-import { State, INITIAL_STATE } from "../state";
+import 'reflect-metadata';
+import { State } from "../state";
 import { Clock } from "../infrastructure/clock";
 import { Game } from "../game";
-import { Logger, TestLogger } from "../infrastructure/logger";
+import { Logger } from "../infrastructure/logger";
 import { Store, ReadonlyStore } from "../store";
 import { Container } from "inversify";
-import { CONFIG } from "../config";
-import { testConfig } from "./test-config";
+import { simpleRules } from "./test-config";
 import { registerEventQueues } from "../events/register-queues";
 import { registerProjectors } from "../projectors/register-projectors";
 import { RandomNumberGenerator, NotSoRandomNumberGenerator } from "../infrastructure/random-number-generator";
+import { GameSetupProvider } from "../game-setup-provider";
 
 export function runMap(map: State): Promise<State> {
 
   let container = new Container({
-    defaultScope: "Request"
+    defaultScope: "Singleton"
   });
 
   container.bind(Clock).toConstantValue(new Clock(0));
@@ -23,8 +24,11 @@ export function runMap(map: State): Promise<State> {
   container.bind(Store).toSelf();
   container.bind(ReadonlyStore).toSelf();
   container.bind(Game).toSelf();
-  container.bind(CONFIG).toConstantValue(testConfig);
-  container.bind(INITIAL_STATE).toConstantValue(map);
+  container.bind(GameSetupProvider).toSelf();
+
+  const setup =  container.get(GameSetupProvider);
+  setup.rules = simpleRules;
+  setup.initialState = map;
 
   registerEventQueues(container);
   registerProjectors(container);

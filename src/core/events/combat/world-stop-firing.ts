@@ -1,7 +1,6 @@
 import { GameEventQueue, GameEvent } from "../event";
 import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
-import 'reflect-metadata';
 import { TimeProjector } from "../../projectors/time-projector";
 import { map, withLatestFrom } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";

@@ -49,13 +49,13 @@ export class SubscriptionHandler {
     this.activeSubscriptions.delete(id);
   }
 
-  private getDataProvider(registry: ContainerRegistry, subcription: Subscription, gameId: string | null | undefined): DataProvider {
+  private getDataProvider(registry: ContainerRegistry, subscription: Subscription, gameId: string | null | undefined): DataProvider {
     const container = registry.getContainerByGameId(gameId);
-    switch (subcription.type) {
+    switch (subscription.type) {
       case 'DUMMY_COUNTER':
         return container.get(CounterDataProvider) as DataProvider
     }
 
-    throw new Error('unhandled case ' + subcription.type)
+    throw new Error('unhandled case ' + subscription.type)
   }
 }

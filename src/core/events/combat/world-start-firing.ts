@@ -1,14 +1,13 @@
 import { GameEventQueue, GameEvent } from "../event";
 import { Observable, combineLatest } from "rxjs";
-import { injectable, inject } from "inversify";
-import 'reflect-metadata';
+import { injectable } from "inversify";
 import { TimeProjector } from "../../projectors/time-projector";
-import { CONFIG, GameConfig } from "../../config";
 import { map, withLatestFrom } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { worldStartFiring } from "../../actions/world/start-firing";
 import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
+import { GameSetupProvider } from "../../game-setup-provider";
 
 @injectable()
 export class WorldStartFiringEventQueue implements GameEventQueue {
@@ -18,8 +17,8 @@ export class WorldStartFiringEventQueue implements GameEventQueue {
     private worlds: WorldProjector,
     private combat: CombatAndCaptureProjector,
     private time: TimeProjector,
-    random: RandomNumberGenerator,
-    @inject(CONFIG) config: GameConfig) {
+    private random: RandomNumberGenerator,
+    private setup: GameSetupProvider) {
     const startFiringWorld$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.worlds.byId$).pipe(
       map(([[combatWorldIds, _], worldsById]) => {
 
@@ -43,7 +42,7 @@ export class WorldStartFiringEventQueue implements GameEventQueue {
           timestamp,
           happen: () => {
 
-            const weaponsReadyTimestamp = timestamp + random.exponential() * config.combat.meanFiringInterval
+            const weaponsReadyTimestamp = timestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval
 
             return [
               worldStartFiring(world.id, weaponsReadyTimestamp)
