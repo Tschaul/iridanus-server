@@ -33,6 +33,10 @@ export function runMap(map: State): Promise<State> {
   registerEventQueues(container);
   registerProjectors(container);
 
+  const store =  container.get(Store);
+
+  store.initialize();
+
   const game = container.get(Game);
 
   return game.startGameLoop();

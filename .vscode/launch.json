@@ -26,6 +26,8 @@
           "ts-node/register",
           "--timeout",
           "999999",
+          "--project",
+          "./tsconfig.server.json",
           "--colors",
           "${workspaceFolder}/src/core/tests/**/*test.ts",
       ],

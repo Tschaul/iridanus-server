@@ -34,7 +34,7 @@ webSocketServer.on('connection', (socket: WebSocket) => {
             message.subscription,
             message.id,
             message.gameId,
-            (data) => socket.send(JSON.stringify(data)),
+            (data: any) => socket.send(JSON.stringify(data)),
           );
           break;
         case 'END_SUBSCRIPTION':
@@ -45,7 +45,7 @@ webSocketServer.on('connection', (socket: WebSocket) => {
             containerRegistry,
             message.command,
             message.gameId,
-            (data) => socket.send(JSON.stringify(data)),
+            (data: any) => socket.send(JSON.stringify(data)),
           )
           break;
         default:

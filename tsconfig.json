@@ -2,14 +2,16 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es2017",
+        "jsx": "react",
         "noImplicitAny": true,
         "noImplicitThis": true,
         "sourceMap": true,
         "strictNullChecks": true,
         "emitDecoratorMetadata":true,
         "experimentalDecorators": true,
-        "outDir": "build",
+        "allowSyntheticDefaultImports": true,
         "declaration": true,
+        "outDir": "build",
         "types": [
             "node",
             "mocha"
