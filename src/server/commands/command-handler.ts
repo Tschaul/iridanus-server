@@ -1,9 +1,9 @@
 import { injectable } from "inversify";
-import { Command } from "../../shared/commands";
+import { Command } from "../../shared/messages/commands";
 import { CommandExecutor } from "./executors/command-executor";
 import { ContainerRegistry } from "../container-registry";
 import { CreateGameExecutor } from "./executors/create-game-executor";
-import { ResponseMessage } from "../../shared/response-message";
+import { ResponseMessage } from "../../shared/messages/response-message";
 
 @injectable()
 export class CommandHandler {

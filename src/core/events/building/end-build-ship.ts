@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { injectable } from "inversify";
 import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
-import { BuildingShipWorld } from "../../model/world";
+import { BuildingShipWorld } from "../../../shared/model/world";
 import { worldReady } from "../../actions/world/world-ready";
 
 @injectable()

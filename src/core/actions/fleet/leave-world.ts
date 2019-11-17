@@ -1,6 +1,6 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import { baseFleet, LeavingFleet, ReadyFleet } from "../../model/fleet";
+import { baseFleet, LeavingFleet, ReadyFleet } from "../../../shared/model/fleet";
 import { updateFleet } from "./update-fleet";
 
 export function leaveWorld(

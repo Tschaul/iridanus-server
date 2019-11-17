@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { baseFleet, ReadyFleet, LostFleet } from "../../model/fleet";
+import { baseFleet, ReadyFleet, LostFleet } from "../../../shared/model/fleet";
 
 export function captureFleet(
   fleetId: string,

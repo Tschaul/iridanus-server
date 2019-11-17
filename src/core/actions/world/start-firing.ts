@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, WorldWithOwner } from "../../model/world";
+import { baseWorld, ReadyWorld, WorldWithOwner } from "../../../shared/model/world";
 
 export function worldStartFiring(
   worldId: string,

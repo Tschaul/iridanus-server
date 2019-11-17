@@ -1,6 +1,6 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import { baseFleet, ReadyFleet, TransferingShipsFleet } from "../../model/fleet";
+import { baseFleet, ReadyFleet, TransferingShipsFleet } from "../../../shared/model/fleet";
 import { updateFleet } from "./update-fleet";
 
 export function transferShips(

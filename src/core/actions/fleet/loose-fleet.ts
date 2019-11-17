@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { baseFleet, FleetAtWorld, LostFleet } from "../../model/fleet";
+import { baseFleet, FleetAtWorld, LostFleet } from "../../../shared/model/fleet";
 
 export function looseFleet(
   fleetId: string,

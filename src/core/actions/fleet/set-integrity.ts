@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { Fleet, FleetAtWorld } from "../../model/fleet";
+import { Fleet, FleetAtWorld } from "../../../shared/model/fleet";
 
 export function setFleetIntegrity(
   fleetId: string,

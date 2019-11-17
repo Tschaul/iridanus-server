@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, LostWorld } from "../../model/world";
+import { baseWorld, ReadyWorld, LostWorld } from "../../../shared/model/world";
 
 export function captureWorld(
   worldId: string,

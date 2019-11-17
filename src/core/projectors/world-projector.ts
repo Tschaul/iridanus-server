@@ -1,8 +1,8 @@
 import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
-import { World } from "../model/world";
-import { WorldOrder } from "../model/world-order";
+import { World } from "../../shared/model/world";
+import { WorldOrder } from "../../shared/model/world-order";
 import { Observable } from "rxjs";
 
 @injectable()

@@ -2,8 +2,8 @@ import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { Fleet } from "../model/fleet";
-import { FleetOrder } from "../model/fleet-orders";
+import { Fleet } from "../../shared/model/fleet";
+import { FleetOrder } from "../../shared/model/fleet-orders";
 
 @injectable()
 export class FleetProjector {

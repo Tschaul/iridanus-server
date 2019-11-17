@@ -1,6 +1,6 @@
 import { Action } from "../action";
 import { State } from "../../state";
-import { ReadyWorld, BuildingShipWorld, baseWorld } from "../../model/world";
+import { ReadyWorld, BuildingShipWorld, baseWorld } from "../../../shared/model/world";
 import { updateWorld } from "./update-world";
 
 export function buildShip(

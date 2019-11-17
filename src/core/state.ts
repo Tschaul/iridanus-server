@@ -1,4 +1,4 @@
-import { Universe } from "./model/universe";
+import { Universe } from "../shared/model/universe";
 
 export interface State {
     currentTimestamp: number;

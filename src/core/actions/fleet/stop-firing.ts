@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { baseFleet, ReadyFleet, FleetAtWorld } from "../../model/fleet";
+import { baseFleet, ReadyFleet, FleetAtWorld } from "../../../shared/model/fleet";
 
 export function fleetStopFiring(
   fleetId: string,

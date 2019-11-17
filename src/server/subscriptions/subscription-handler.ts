@@ -1,11 +1,11 @@
 import { injectable } from "inversify";
-import { Subscription } from "../../shared/subscriptions";
+import { Subscription } from "../../shared/messages/subscriptions";
 import { Observable, Subject, interval } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ContainerRegistry } from "../container-registry";
 import { CounterDataProvider } from "./providers/counter-data-provider";
 import { DataProvider } from "./providers/data-provider";
-import { ResponseMessage } from "../../shared/response-message";
+import { ResponseMessage } from "../../shared/messages/response-message";
 
 @injectable()
 export class SubscriptionHandler {

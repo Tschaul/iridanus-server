@@ -1,10 +1,10 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
-import { ReadyFleetBase, ReadyFleet } from "../../model/fleet";
+import { ReadyFleetBase, ReadyFleet } from "../../../shared/model/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { inject } from "inversify";
-import { WarpOrder } from "../../model/fleet-orders";
+import { WarpOrder } from "../../../shared/model/fleet-orders";
 import { TimeProjector } from "../../projectors/time-projector";
 import { injectable } from "inversify";
 import { leaveWorld } from "../../actions/fleet/leave-world";

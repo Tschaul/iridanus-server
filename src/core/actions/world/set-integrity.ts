@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateWorld } from "./update-world";
-import { World } from "../../model/world";
+import { World } from "../../../shared/model/world";
 
 export function setWorldIntegrity(
   worldId: string,

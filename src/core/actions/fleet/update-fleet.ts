@@ -1,4 +1,4 @@
-import { Fleet } from "../../model/fleet";
+import { Fleet } from "../../../shared/model/fleet";
 import { State } from "../../state";
 import produce from "immer";
 

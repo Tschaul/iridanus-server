@@ -3,8 +3,8 @@ import produce from "immer";
 
 import { runMap } from "../test-helper";
 import { expect } from "chai";
-import { ReadyFleet } from "../../model/fleet";
-import { ReadyWorld } from "../../model/world";
+import { ReadyFleet } from "../../../shared/model/fleet";
+import { ReadyWorld } from "../../../shared/model/world";
 
 describe("capture", () => {
 

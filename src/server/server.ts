@@ -4,7 +4,7 @@ import { Server } from 'ws';
 import { AddressInfo } from 'net';
 import { ContainerRegistry } from './container-registry';
 import { SubscriptionHandler } from './subscriptions/subscription-handler';
-import { RequestMessage } from '../shared/request-message';
+import { RequestMessage } from '../shared/messages/request-message';
 import { CommandHandler } from './commands/command-handler';
 
 const app = express();

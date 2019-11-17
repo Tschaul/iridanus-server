@@ -3,10 +3,10 @@ import { Clock } from "../../infrastructure/clock";
 import { Game } from "../../game";
 
 import { expect } from 'chai';
-import { ReadyFleet } from "../../model/fleet";
+import { ReadyFleet } from "../../../shared/model/fleet";
 import produce from "immer";
 import { runMap } from "../test-helper";
-import { World } from "../../model/world";
+import { World } from "../../../shared/model/world";
 
 describe("transfer", () => {
 

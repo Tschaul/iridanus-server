@@ -1,6 +1,6 @@
 import { State } from "../../state";
 import produce from "immer";
-import { World } from "../../model/world";
+import { World } from "../../../shared/model/world";
 
 export function updateWorld<Told extends World, Tnew extends World>(
   state: State, 
