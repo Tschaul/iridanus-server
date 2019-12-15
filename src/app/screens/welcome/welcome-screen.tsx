@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Background } from "../../ui-components/background/background-component";
 import { Panel } from "../../ui-components/panel/panel-component";
+import { Button } from "../../ui-components/button/button";
 
 export class WelcomScreen extends React.Component {
   render() {
@@ -31,7 +32,15 @@ export class WelcomScreen extends React.Component {
             
             <br/>
             please enter login<br/>
-            >
+            ><br/>
+            <br/>
+            <br/>
+            please enter password<br/>
+            ><br/>
+            <br/>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <Button>ENTER</Button>
+            </div>
           </Panel>
         </div>
       </Background>

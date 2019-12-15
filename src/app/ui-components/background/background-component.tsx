@@ -1,4 +1,5 @@
 import * as React from "react";
+import { screenWhite } from "../colors/colors";
 
 export class Background extends React.Component {
   render() {
@@ -15,8 +16,9 @@ export class Background extends React.Component {
     }
 
     const foregroundStyle: React.CSSProperties = {
+      mixBlendMode: 'hard-light',
       zIndex: 3,
-      color: 'white',
+      color: screenWhite,
       width: '100%',
       height: '100%',
       position: 'absolute',
