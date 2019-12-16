@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import { observer } from 'mobx-react';
-import { GameBackdropComponent } from './game-backdrop-component';
+import { GameStageBackdrop } from './game-stage-backdrop-component';
+import { GameStageForeground } from './game-stage-foreground-component';
 
 @observer
 export class GameStage extends React.Component<{vm: GameStageViewModel, style: React.CSSProperties}> {
@@ -13,7 +14,8 @@ export class GameStage extends React.Component<{vm: GameStageViewModel, style: R
     return (
       <div ref={e => this.stageWrapper = e} style={{...this.props.style, width: '100%', height: '100%'}}>
         <svg viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
-          <GameBackdropComponent vm={this.props.vm}></GameBackdropComponent>
+          <GameStageBackdrop vm={this.props.vm}></GameStageBackdrop>
+          <GameStageForeground vm={this.props.vm}></GameStageForeground>
         </svg>
       </div>
     );

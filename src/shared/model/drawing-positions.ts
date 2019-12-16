@@ -1,3 +1,5 @@
+import { Vec2 } from '../math/vec2';
+
 export type DrawingPositions = {
-  [id: string]: {x: number, y: number}
+  [id: string]: Vec2
 }

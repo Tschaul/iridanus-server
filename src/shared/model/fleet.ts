@@ -2,10 +2,10 @@ import { FleetOrder } from "./fleet-orders";
 
 export type Fleet =
     LostFleet
-    | FleetAtWorld
+    | FleetWithOwnerAtWorld
     | WarpingFleet;
 
-export type FleetAtWorld =
+export type FleetWithOwnerAtWorld =
     ReadyFleet
     | WaitingFleet
     | LeavingFleet
@@ -13,6 +13,17 @@ export type FleetAtWorld =
     | TransferingMetalFleet
     | TransferingShipsFleet;
 
+export function fleetIsAtWorld(fleet: Fleet): fleet is FleetWithOwnerAtWorld | LostFleet {
+    return fleet.status !== 'WARPING';
+}
+
+export function fleetHasOwner(fleet: Fleet): fleet is FleetWithOwnerAtWorld | WarpingFleet {
+    return fleet.status !== 'LOST';
+}
+
+export function fleetIsAtWorldAndHasOwner(fleet: Fleet): fleet is FleetWithOwnerAtWorld {
+    return fleetHasOwner(fleet) && fleetIsAtWorld(fleet);
+}
 
 export function baseFleet(fleet: Fleet): BaseFleet {
     return {

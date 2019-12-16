@@ -3,6 +3,9 @@ import { Universe } from "../../../shared/model/universe";
 import { DrawingPositions } from "../../../shared/model/drawing-positions";
 import { MainViewModel } from "../main-view-model";
 import { GameStageViewModel } from "./game-stage-view-model";
+import { PlayerInfos } from "../../../shared/model/player-info";
+import { normalize } from "../../../shared/math/vec2";
+import { Fleet, fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet } from "../../../shared/model/fleet";
 
 export class GameViewModel {
 
@@ -10,10 +13,35 @@ export class GameViewModel {
 
   constructor(private mainViewModel: MainViewModel) {}
 
+  @computed get fleetsByWorldId() {
+    const result: { [k: string]: Array<FleetWithOwnerAtWorld | LostFleet> } = {};
+    for (const fleetKey of Object.getOwnPropertyNames(this.universe.fleets)) {
+      const fleet = this.universe.fleets[fleetKey];
+      if (fleetIsAtWorld(fleet)) {
+        result[fleet.currentWorldId] = result[fleet.currentWorldId] || [];
+        result[fleet.currentWorldId].push(fleet)
+      }
+    }
+    return result;
+  }
+
   @observable public rawDrawingPositions: DrawingPositions = {
     "w1": {x: 0, y: 0},
     "w2": {x: 0.5, y: 0.5},
     "w3": {x: 1, y: 1},
+  }
+
+  @observable public playerInfos: PlayerInfos = {
+    "p1": {
+      color: 'red',
+      name: 'Paul',
+      fleetDrawingPosition: normalize({x: 1, y: -1})
+    },
+    "p2": {
+      color: 'green',
+      name: 'Peter',
+      fleetDrawingPosition: normalize({x: -1, y: -1})
+    }
   }
 
   @observable public universe: Universe = {

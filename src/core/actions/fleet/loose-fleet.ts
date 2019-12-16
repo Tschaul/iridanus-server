@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { baseFleet, FleetAtWorld, LostFleet } from "../../../shared/model/fleet";
+import { baseFleet, FleetWithOwnerAtWorld, LostFleet } from "../../../shared/model/fleet";
 
 export function looseFleet(
   fleetId: string,
@@ -10,7 +10,7 @@ export function looseFleet(
     describe: () => `LooseFleet ${JSON.stringify({ fleetId })}`,
     apply: (state: State) => {
 
-      return updateFleet<FleetAtWorld, LostFleet>(state, fleetId, (oldFleet) => {
+      return updateFleet<FleetWithOwnerAtWorld, LostFleet>(state, fleetId, (oldFleet) => {
         return {
           ...baseFleet(oldFleet),
           currentWorldId: oldFleet.currentWorldId,

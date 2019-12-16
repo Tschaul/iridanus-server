@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
+import { Vec2, diff, normal, add, mul } from '../../../../shared/math/vec2';
 
 const WORLD_OUTER_RADIUS = 50;
 
@@ -8,7 +9,7 @@ const WORLD_BACKGROUND_COLOR = 'rgba(128, 151, 158, 1)';
 const WORLD_STROKE = 'rgba(230, 230, 230, 1)';
 
 @observer
-export class GameBackdropComponent extends React.Component<{
+export class GameStageBackdrop extends React.Component<{
   vm: GameStageViewModel
 }> {
   render() {
@@ -65,43 +66,7 @@ export class GameBackdropComponent extends React.Component<{
   }
 }
 
-type Vec2 = { x: number, y: number };
-
 function d(v: Vec2) {
   return `${v.x} ${v.y}`
 }
 
-function mul(v1: Vec2, m: number): Vec2 {
-  return {
-    x: v1.x * m,
-    y: v1.y * m
-  }
-}
-
-function diff(v1: Vec2, v2: Vec2) {
-  return add(v1, mul(v2, -1));
-}
-
-function add(v1: Vec2, v2: Vec2): Vec2 {
-  return {
-    x: v1.x - v2.x,
-    y: v1.y - v2.y
-  }
-}
-
-function normal(v: Vec2) {
-
-  const rawNormal = {
-    x: -v.y,
-    y: v.x,
-  }
-  const a = abs(rawNormal);
-  return {
-    x: rawNormal.x / a,
-    y: rawNormal.y / a,
-  }
-}
-
-function abs(v: Vec2): number {
-  return Math.sqrt(v.x * v.x + v.y * v.y);
-}

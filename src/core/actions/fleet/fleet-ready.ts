@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { State } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { baseFleet, ReadyFleet, FleetAtWorld } from "../../../shared/model/fleet";
+import { baseFleet, ReadyFleet, FleetWithOwnerAtWorld } from "../../../shared/model/fleet";
 
 export function fleetReady(
   fleetId: string,
@@ -10,7 +10,7 @@ export function fleetReady(
     describe: () => `FleetReady ${JSON.stringify({ fleetId })}`,
     apply: (state: State) => {
 
-      return updateFleet<FleetAtWorld, ReadyFleet>(state, fleetId, (oldFleet) => {
+      return updateFleet<FleetWithOwnerAtWorld, ReadyFleet>(state, fleetId, (oldFleet) => {
         return {
           ...baseFleet(oldFleet),
           currentWorldId: oldFleet.currentWorldId,
