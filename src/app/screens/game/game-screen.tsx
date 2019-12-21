@@ -3,6 +3,7 @@ import { Background } from "../../ui-components/background/background-component"
 import { Panel } from "../../ui-components/panel/panel-component";
 import { GameStage } from "./game-stage/game-stage-component";
 import { GameViewModel } from "../../view-model/game/game-view-model";
+import { SelectedWorldPanel } from "./selected-world/selected-world-panel-component";
 
 const TOP_BAR_HEIGHT = 75;
 const RIGHT_PANEL_WIDTH = 400;
@@ -49,13 +50,14 @@ export class GameScreen extends React.Component<{vm: GameViewModel}> {
           <Panel style={topLeftPanelStyle}>
             TOP LEFT
           </Panel>
-          <Panel style={middleRightPanelStyle}>
-            MIDDLE RIGHT
-          </Panel>
+          <SelectedWorldPanel 
+            vm={this.props.vm.selectedWorldViewModel} 
+            style={middleRightPanelStyle}
+          />
           <Panel style={bottomRightPanelStyle}>
             BOTTOM RIGHT
           </Panel>
-          <GameStage style={gameStageStyle} vm={this.props.vm.gameStageViewModel} ></GameStage>
+          <GameStage style={gameStageStyle} vm={this.props.vm.gameStageViewModel} />
         </div>
       </Background>
     )

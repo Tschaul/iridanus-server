@@ -90,4 +90,8 @@ export class GameStageViewModel {
       }
     })
   }
+
+  public selectWorld(id: string | null) {
+    this.gameViewModel.selectedWorldId = id;
+  }
 }

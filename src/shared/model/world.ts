@@ -33,6 +33,10 @@ export function baseWorld(world: World): BaseWorld {
     }
 }
 
+export function worldhasOwner(world: World): world is WorldWithOwner {
+    return world.status !== 'LOST';
+}
+
 export interface ReadyWorldBase extends BaseWorld {
     status: 'READY'
     ownerId: string;

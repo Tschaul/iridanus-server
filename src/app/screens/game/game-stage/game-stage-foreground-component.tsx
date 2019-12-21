@@ -63,7 +63,7 @@ export class GameStageForeground extends React.Component<{
   handleWorldClick(event: React.MouseEvent) {
     const elem = event.target as SVGCircleElement;
     const worldId = elem.getAttribute('data-world-id');
-    console.log(worldId)
+    this.props.vm.selectWorld(worldId);
   }
 
   getColorForWorld(world: World) {
