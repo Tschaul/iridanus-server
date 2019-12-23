@@ -2,7 +2,8 @@ import { GameViewModel } from "./game-view-model";
 import { observable, computed } from "mobx";
 import { DrawingPositions } from "../../../shared/model/drawing-positions";
 import { World } from "../../../shared/model/world";
-import { fleetIsAtWorldAndHasOwner } from "../../../shared/model/fleet";
+import { fleetIsAtWorldAndHasOwner, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/fleet";
+import { Vec2 } from "../../../shared/math/vec2";
 
 const STAGE_OFFSET = 75;
 
@@ -91,8 +92,45 @@ export class GameStageViewModel {
     })
   }
 
+  @computed get warpingFleetOwnersByBothWorlds(): Array<[string, Vec2, string, Vec2, string[]]> {
+    
+    const warpingFleetsMap = this.gameViewModel.warpingFleetsByBothWorlds;
+
+    const result = [] as Array<[string, Vec2, string, Vec2, string[]]>;
+
+    for (const key1 of Object.getOwnPropertyNames(warpingFleetsMap)) {
+      for (const key2 of Object.getOwnPropertyNames(warpingFleetsMap[key1])) {
+        const world1Vec = this.drawingPositons[key1];
+        const world2Vec = this.drawingPositons[key2];
+        const fleets = warpingFleetsMap[key1][key2];
+        const fleetOwners = [...new Set(fleets.map(fleet => fleet.ownerId))];
+        result.push([key1, world1Vec, key2, world2Vec, fleetOwners]);
+      }
+    }
+    return result;
+
+  }
+
   public selectWorld(id: string | null) {
-    this.gameViewModel.selectedWorldId = id;
+    if(id) {
+      this.gameViewModel.stageSelection = {
+        type: 'WORLD',
+        id
+      }
+    } else {
+      this.gameViewModel.stageSelection = {
+        type: 'NONE',
+      }
+    }
+    this.gameViewModel.selectedFleetdId = null;
+  }
+
+  public selectGate(id1: string, id2: string) {
+    this.gameViewModel.stageSelection = {
+      type: 'GATE',
+      id1,
+      id2
+    }
     this.gameViewModel.selectedFleetdId = null;
   }
 }

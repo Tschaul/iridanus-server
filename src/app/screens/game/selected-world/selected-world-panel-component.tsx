@@ -16,22 +16,31 @@ export class SelectedWorldPanel extends React.Component<{
 }> {
   render() {
 
-    if (!this.props.vm.selectedWorld) {
-      return this.renderPanel(
-        <i>nothing selected</i>
+    return this.renderPanel(
+      <div>
+        {this.renderWorldHeader()}
+        {this.props.vm.fleetsAtStageSelection.map(fleet => {
+          return this.renderTableRow(fleet, false, fleet.owner);
+        })}
+      </div>
+    )
+  }
+
+  renderWorldHeader() {
+    const world = this.props.vm.selectedWorld
+    if (!world) {
+      return (
+        <span />
+      )
+    } else {
+      return (
+        <div>
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {this.padSpaces(world.population)} P  {this.padSpaces(world.industry)} I  {this.padSpaces(world.mines)} M  <br />
+          ──────────────────────────────── <br />
+          {this.renderTableRow(world, true, this.props.vm.playerInfoOfSelectedWorld)}
+        </div>
       )
     }
-
-    const world = this.props.vm.selectedWorld;
-
-    return <Panel style={{ ...this.props.style }}>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {this.padSpaces(world.population)} P  {this.padSpaces(world.industry)} I  {this.padSpaces(world.mines)} M  <br />
-      ──────────────────────────────── <br/>
-      {this.renderTableRow(world, true, this.props.vm.playerInfoOfSelectedWorld)}
-      {this.props.vm.fleetsAtSelectedWorld.map(fleet => {
-        return this.renderTableRow(fleet, false, fleet.owner);
-      })}
-    </Panel>
   }
 
   renderPanel(content: React.ReactElement) {
@@ -42,7 +51,7 @@ export class SelectedWorldPanel extends React.Component<{
 
   renderTableRow(item: World | Fleet, isWorld: boolean, owner: PlayerInfo | null) {
     const selected = this.props.vm.isWorldOrFleetSelected(isWorld, item);
-    const topIcon = selected ? '■': '·';
+    const topIcon = selected ? '■' : '·';
 
     const color = owner ? owner.color : screenWhite;
 

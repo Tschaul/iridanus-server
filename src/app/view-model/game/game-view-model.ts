@@ -4,10 +4,27 @@ import { DrawingPositions } from "../../../shared/model/drawing-positions";
 import { MainViewModel } from "../main-view-model";
 import { GameStageViewModel } from "./game-stage-view-model";
 import { PlayerInfos } from "../../../shared/model/player-info";
-import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet } from "../../../shared/model/fleet";
+import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet, WarpingFleet } from "../../../shared/model/fleet";
 import { mockUniverse, mockPlayerInfos, mockRawDrawingPositions } from "./mock-data";
 import { SelectedWorldViewModel } from "./selected-world-view-model";
 import { OrderEditorViewModel } from "./order-editor-view-model";
+
+export type StageSelection = {
+  type: 'WORLD',
+  id: string
+} | {
+  type: 'GATE',
+  id1: string,
+  id2: string
+} | {
+  type: 'NONE'
+}
+
+export type FleetByTwoWorlds = {
+  [worldId1: string]: {
+    [worldId2: string]: WarpingFleet[];
+  };
+};
 
 export class GameViewModel {
 
@@ -18,9 +35,8 @@ export class GameViewModel {
   constructor(private mainViewModel: MainViewModel) {}
 
   @computed public get selectedWorld() {
-    const id = this.selectedWorldId;
-    if (id) {
-      return this.universe.worlds[id];
+    if (this.stageSelection.type === 'WORLD') {
+      return this.universe.worlds[this.stageSelection.id];
     } else {
       return null;
     }
@@ -46,7 +62,24 @@ export class GameViewModel {
     return result;
   }
 
-  @observable public selectedWorldId: string | null = null;
+  @computed get warpingFleetsByBothWorlds() {
+    const fleets = Object.values(this.universe.fleets).filter(
+      fleet => !fleetIsAtWorld(fleet)
+    ) as WarpingFleet[];
+
+    const result: FleetByTwoWorlds = {};
+
+    for (const fleet of fleets) {
+      const [id1, id2] = [fleet.originWorldId, fleet.targetWorldId].sort();
+      result[id1] = result[id1] || {};
+      result[id1][id2] = result[id1][id2] || [];
+      result[id1][id2].push(fleet);
+    }
+
+    return result;
+  }
+
+  @observable public stageSelection: StageSelection = { type: 'NONE'};
 
   @observable public selectedFleetdId: string | null = null;
 
