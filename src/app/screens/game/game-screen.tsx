@@ -6,7 +6,7 @@ import { GameViewModel } from "../../view-model/game/game-view-model";
 import { SelectedWorldPanel } from "./selected-world/selected-world-panel-component";
 
 const TOP_BAR_HEIGHT = 75;
-const RIGHT_PANEL_WIDTH = 400;
+const RIGHT_PANEL_WIDTH = 420;
 
 export class GameScreen extends React.Component<{vm: GameViewModel}> {
 

@@ -7,13 +7,32 @@ import { PlayerInfos } from "../../../shared/model/player-info";
 import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet } from "../../../shared/model/fleet";
 import { mockUniverse, mockPlayerInfos, mockRawDrawingPositions } from "./mock-data";
 import { SelectedWorldViewModel } from "./selected-world-view-model";
+import { OrderEditorViewModel } from "./order-editor-view-model";
 
 export class GameViewModel {
 
   gameStageViewModel = new GameStageViewModel(this);
   selectedWorldViewModel = new SelectedWorldViewModel(this);
+  orderEditorViewModel = new OrderEditorViewModel(this);
 
   constructor(private mainViewModel: MainViewModel) {}
+
+  @computed public get selectedWorld() {
+    const id = this.selectedWorldId;
+    if (id) {
+      return this.universe.worlds[id];
+    } else {
+      return null;
+    }
+  }
+
+  @computed get selectedFleet() {
+    if (this.selectedFleetdId) {
+      return this.universe.fleets[this.selectedFleetdId];
+    } else {
+      return null;
+    }
+  }
 
   @computed get fleetsByWorldId() {
     const result: { [k: string]: Array<FleetWithOwnerAtWorld | LostFleet> } = {};

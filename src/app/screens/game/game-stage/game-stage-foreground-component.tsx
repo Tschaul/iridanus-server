@@ -52,6 +52,7 @@ export class GameStageForeground extends React.Component<{
                 opacity="0"
                 data-world-id={world.id}
                 onClick={this.handleWorldClick}
+                style={{cursor: 'pointer'}}
               />
             </g>
           )

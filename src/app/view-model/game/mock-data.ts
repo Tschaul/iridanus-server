@@ -15,7 +15,7 @@ export const mockUniverse: Universe = {
         type: 'WARP',
         targetWorldId: 'w2'
       }],
-      ownerId: "p1",
+      ownerId: "p2",
       ships: 10,
       integrity: 1
     }
@@ -75,7 +75,7 @@ export const mockPlayerInfos: PlayerInfos = {
     fleetDrawingPosition: normalize({ x: 1, y: -1 })
   },
   "p2": {
-    color: 'green',
+    color: 'mediumseagreen',
     name: 'Peter',
     fleetDrawingPosition: normalize({ x: -1, y: -1 })
   }
