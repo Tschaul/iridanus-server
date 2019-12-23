@@ -1,7 +1,7 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
-import { worldhasOwner } from "../../../shared/model/world";
-import { fleetHasOwner } from "../../../shared/model/fleet";
+import { worldhasOwner, World } from "../../../shared/model/world";
+import { fleetHasOwner, Fleet } from "../../../shared/model/fleet";
 
 export class SelectedWorldViewModel {
 
@@ -31,7 +31,16 @@ export class SelectedWorldViewModel {
     }
   }
 
+  @computed get selectedWorld() {
+    return this.gameViewModel.selectedWorld;
+  }
+
   public selectFleetId(id: string | null) {
     this.gameViewModel.selectedFleetdId = id;
+  }
+
+  public isWorldOrFleetSelected(isWorld: boolean, item: World | Fleet) {
+    return (isWorld && !this.gameViewModel.selectedFleet)
+    || (!isWorld && this.gameViewModel.selectedFleet && this.gameViewModel.selectedFleet.id === item.id)
   }
 }

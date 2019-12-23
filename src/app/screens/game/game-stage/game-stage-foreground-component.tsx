@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import autobind from "autobind-decorator";
 import { World } from '../../../../shared/model/world';
+import { getClosestAttribute } from '../../helper/get-attribute';
 
 const WORLD_OUTER_RADIUS = 50;
 
@@ -62,8 +63,7 @@ export class GameStageForeground extends React.Component<{
   }
 
   handleWorldClick(event: React.MouseEvent) {
-    const elem = event.target as SVGCircleElement;
-    const worldId = elem.getAttribute('data-world-id');
+    const worldId = getClosestAttribute(event, 'data-world-id');
     this.props.vm.selectWorld(worldId);
   }
 

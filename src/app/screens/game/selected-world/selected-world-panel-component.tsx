@@ -41,10 +41,7 @@ export class SelectedWorldPanel extends React.Component<{
   }
 
   renderTableRow(item: World | Fleet, isWorld: boolean, owner: PlayerInfo | null) {
-    const selected = 
-      (isWorld && !this.props.vm.selectedFleet)
-      || (!isWorld && this.props.vm.selectedFleet && this.props.vm.selectedFleet.id === item.id)
-
+    const selected = this.props.vm.isWorldOrFleetSelected(isWorld, item);
     const topIcon = selected ? '■': '·';
 
     const color = owner ? owner.color : screenWhite;
