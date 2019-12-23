@@ -4,9 +4,13 @@ import { Panel } from "../../ui-components/panel/panel-component";
 import { GameStage } from "./game-stage/game-stage-component";
 import { GameViewModel } from "../../view-model/game/game-view-model";
 import { SelectedWorldPanel } from "./selected-world/selected-world-panel-component";
+import { OrderEditor } from "./order-editor/order-editor-component";
 
 const TOP_BAR_HEIGHT = 75;
 const RIGHT_PANEL_WIDTH = 420;
+
+const MIDDLE_PANEL_HEIGHT = 500;
+const BOTTOM_PANEL_HEIGHT = 300;
 
 export class GameScreen extends React.Component<{vm: GameViewModel}> {
 
@@ -17,7 +21,7 @@ export class GameScreen extends React.Component<{vm: GameViewModel}> {
       height: '100vh',
       width: '100vw',
       gridTemplateColumns: `[start] auto [panels-start] ${RIGHT_PANEL_WIDTH}px [end]`,
-      gridTemplateRows: `[start] ${TOP_BAR_HEIGHT}px [main-start] auto [middle-start] 500px [bottom-start] 300px [end]`,
+      gridTemplateRows: `[start] ${TOP_BAR_HEIGHT}px [main-start] auto [middle-start] ${MIDDLE_PANEL_HEIGHT}px [bottom-start] ${BOTTOM_PANEL_HEIGHT}px [end]`,
       position: 'fixed',
       top: 0,
       left: 0
@@ -54,9 +58,10 @@ export class GameScreen extends React.Component<{vm: GameViewModel}> {
             vm={this.props.vm.selectedWorldViewModel} 
             style={middleRightPanelStyle}
           />
-          <Panel style={bottomRightPanelStyle}>
-            BOTTOM RIGHT
-          </Panel>
+          <OrderEditor
+            vm={this.props.vm.orderEditorViewModel} 
+            style={bottomRightPanelStyle}
+          />
           <GameStage style={gameStageStyle} vm={this.props.vm.gameStageViewModel} />
         </div>
       </Background>
