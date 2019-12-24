@@ -58,7 +58,7 @@ export class OrderEditor extends React.Component<{
             case 'WARP':
               return `${order.type}`
           }
-        })}
+        }).map(str => <div>{str}</div>)}
       </div>
     )
   }

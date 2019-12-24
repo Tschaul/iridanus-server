@@ -3,6 +3,7 @@ import { GameStageViewModel } from '../../../view-model/game/game-stage-view-mod
 import { observer } from 'mobx-react';
 import { GameStageBackdrop } from './game-stage-backdrop-component';
 import { GameStageForeground } from './game-stage-foreground-component';
+import { GameStageSelectedFleet } from './game-stage-selected-fleet';
 
 @observer
 export class GameStage extends React.Component<{vm: GameStageViewModel, style: React.CSSProperties}> {
@@ -16,6 +17,7 @@ export class GameStage extends React.Component<{vm: GameStageViewModel, style: R
         <svg viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
           <GameStageBackdrop vm={this.props.vm}></GameStageBackdrop>
           <GameStageForeground vm={this.props.vm}></GameStageForeground>
+          <GameStageSelectedFleet vm={this.props.vm}></GameStageSelectedFleet>
         </svg>
       </div>
     );

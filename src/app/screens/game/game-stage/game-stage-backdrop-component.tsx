@@ -2,11 +2,8 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import { Vec2, diff, normal, add, mul } from '../../../../shared/math/vec2';
+import { WORLD_OUTER_RADIUS, WORLD_STROKE, WORLD_BACKGROUND_COLOR } from './constants';
 
-const WORLD_OUTER_RADIUS = 50;
-
-const WORLD_BACKGROUND_COLOR = 'rgba(128, 151, 158, 1)';
-const WORLD_STROKE = 'rgba(230, 230, 230, 1)';
 
 @observer
 export class GameStageBackdrop extends React.Component<{

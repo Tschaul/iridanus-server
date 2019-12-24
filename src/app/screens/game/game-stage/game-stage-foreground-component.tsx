@@ -4,13 +4,9 @@ import { GameStageViewModel } from '../../../view-model/game/game-stage-view-mod
 import autobind from "autobind-decorator";
 import { World } from '../../../../shared/model/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
-import { WarpingFleet } from '../../../../shared/model/fleet';
-import { mul, add, diff, normal } from '../../../../shared/math/vec2';
+import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
+import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';
 
-const WORLD_OUTER_RADIUS = 50;
-
-const FLEET_DISTANCE = 33;
-const FLEET_SPREAD_DURING_WARP = 22;
 
 @observer
 @autobind
@@ -29,7 +25,7 @@ export class GameStageForeground extends React.Component<{
   private renderFleets() {
     return this.props.vm.warpingFleetOwnersByBothWorlds.map(([id1, world1Pos, id2, world2Pos, fleetOwners]) => {
 
-      const meanPosition = mul(add(world1Pos, world2Pos), 0.5);
+      const meanPosition = middle(world1Pos, world2Pos);
 
       const delta = diff(world1Pos, world2Pos);
       const n = normal(delta);

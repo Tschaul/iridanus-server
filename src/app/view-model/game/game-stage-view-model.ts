@@ -40,6 +40,10 @@ export class GameStageViewModel {
     }, {} as { [k: string]: string[] })
   }
 
+  @computed get selectedFleet() {
+    return this.gameViewModel.selectedFleet;
+  }
+
   @computed get drawingPositons() {
     const result: DrawingPositions = {}
 

@@ -7,18 +7,20 @@ export const mockUniverse: Universe = {
   fleets: {
     "f1": {
       id: "f1",
-      status: 'WARPING',
-      originWorldId: "w1",
-      targetWorldId: "w2",
-      arrivingTimestamp: 0,
+      status: 'READY',
+      currentWorldId: "w1",
       metal: 0,
       orders: [{
         type: 'WARP',
         targetWorldId: 'w2'
+      },{
+        type: 'WARP',
+        targetWorldId: 'w3'
       }],
       ownerId: "p2",
       ships: 10,
-      integrity: 1
+      integrity: 1,
+      combatStatus: 'AT_PEACE'
     },
     "f2": {
       id: "f2",
@@ -27,10 +29,7 @@ export const mockUniverse: Universe = {
       targetWorldId: "w2",
       arrivingTimestamp: 0,
       metal: 0,
-      orders: [{
-        type: 'WARP',
-        targetWorldId: 'w2'
-      }],
+      orders: [],
       ownerId: "p1",
       ships: 10,
       integrity: 1

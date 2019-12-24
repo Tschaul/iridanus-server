@@ -34,3 +34,16 @@ export function abs(v: Vec2): number {
 export function normalize(v: Vec2): Vec2 {
   return mul(v, 1/abs(v));
 }
+
+export function middle(v1: Vec2, v2: Vec2) {
+  return mul(add(v1, v2), 0.5)
+}
+
+export function shorten(v: Vec2, d: number) {
+  return extend(v, -1 * d);
+}
+
+export function extend(v: Vec2, d: number) {
+  const a = abs(v);
+  return mul(normalize(v), a + d);
+}
