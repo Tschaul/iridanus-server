@@ -6,6 +6,7 @@ import { ContainerRegistry } from './container-registry';
 import { SubscriptionHandler } from './subscriptions/subscription-handler';
 import { RequestMessage } from '../shared/messages/request-message';
 import { CommandHandler } from './commands/command-handler';
+import { UserRepository } from './repositories/users/user-repository';
 
 const app = express();
 
@@ -20,7 +21,11 @@ const containerRegistry = new ContainerRegistry();
 const subscriptionHandler = containerRegistry.globalContainer.get(SubscriptionHandler);
 const commandHandler = containerRegistry.globalContainer.get(CommandHandler);
 
+const userRepository = containerRegistry.globalContainer.get(UserRepository);
+
 webSocketServer.on('connection', (socket: WebSocket) => {
+
+  let authenticatedUser: string | null = null;
 
   socket.addEventListener('message', (e: MessageEvent) => {
 
@@ -28,6 +33,22 @@ webSocketServer.on('connection', (socket: WebSocket) => {
       const message = JSON.parse(e.data) as RequestMessage;
 
       switch (message.type) {
+        case 'AUTHENTICATE':
+          userRepository.authenticateUser(message.userId, message.password)
+          .then(authResult => {
+            if (authResult) {
+              authenticatedUser = message.userId;
+              socket.send(JSON.stringify({
+                type: 'AUTHENTICATION_SUCCESSFULL'
+              }))
+            } else {
+              socket.send(JSON.stringify({
+                type: 'ERROR',
+                error: 'Authentication was not successfull'
+              }))
+            }
+          })
+          break;
         case 'BEGIN_SUBSCRIPTION':
           subscriptionHandler.newSubscription(
             containerRegistry,
@@ -54,6 +75,10 @@ webSocketServer.on('connection', (socket: WebSocket) => {
 
     } catch (error) {
       console.error(error)
+      socket.send(JSON.stringify({
+        type: 'ERROR',
+        error: error + ''
+      }))
       // TODO send error
     }
 

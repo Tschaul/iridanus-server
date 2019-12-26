@@ -2,8 +2,9 @@ import { injectable } from "inversify";
 import { Command } from "../../shared/messages/commands";
 import { CommandExecutor } from "./executors/command-executor";
 import { ContainerRegistry } from "../container-registry";
-import { CreateGameExecutor } from "./executors/create-game-executor";
+import { CreateGameExecutor } from "./executors/game-setup/create-game-executor";
 import { ResponseMessage } from "../../shared/messages/response-message";
+import { SignUpUserExecutor } from "./executors/authentication/sign-up-user-executor";
 
 @injectable()
 export class CommandHandler {
@@ -16,21 +17,21 @@ export class CommandHandler {
     sendfn: (data: ResponseMessage) => void
   ) {
     const executor = this.getDataProvider(registry, command, gameId);
-    executor.execute(command, (error) => {
+    executor.execute(command).catch((error) => {
       sendfn({
         type: 'ERROR',
-        error
+        error: error + ''
       })
     })
   }
 
-  private getDataProvider(registry: ContainerRegistry, subscription: Command, gameId: string | null | undefined): CommandExecutor {
+  private getDataProvider(registry: ContainerRegistry, command: Command, gameId: string | null | undefined): CommandExecutor<Command> {
     const container = registry.getContainerByGameId(gameId);
-    switch (subscription.type) {
+    switch (command.type) {
       case 'CREATE_GAME':
-        return container.get(CreateGameExecutor) as CommandExecutor
+        return container.get(CreateGameExecutor) as CommandExecutor<Command>;
+      case 'SIGN_UP_USER':
+        return container.get(SignUpUserExecutor) as CommandExecutor<Command>;
     }
-
-    throw new Error('unhandled case ' + subscription.type)
   }
 }

@@ -11,7 +11,9 @@ import { registerEventQueues } from "../core/events/register-queues";
 import { registerProjectors } from "../core/projectors/register-projectors";
 import { registerGlobalDataProviders } from "./subscriptions/providers/register-data-providers";
 import { GameSetupProvider } from "../core/game-setup-provider";
-import { registerCommandExecutors } from './commands/executors/register-command-executors';
+import { registerGameCommandExecutors, registerGlobalCommandExecutors } from './commands/executors/register-command-executors';
+import { registerRepositories } from './repositories/register-repositories';
+import { registerEnvironment } from './environment/register-environment';
 
 @injectable()
 export class ContainerRegistry {
@@ -28,7 +30,10 @@ export class ContainerRegistry {
     this.globalContainer.bind(CommandHandler).toSelf();
     this.globalContainer.bind(SubscriptionHandler).toSelf();
 
+    registerEnvironment(this.globalContainer);
     registerGlobalDataProviders(this.globalContainer);
+    registerGlobalCommandExecutors(this.globalContainer);
+    registerRepositories(this.globalContainer);
   }
 
   public getContainerByGameId(gameId: string | null | undefined): Container {
@@ -61,7 +66,7 @@ export class ContainerRegistry {
 
       setup.gameId = gameId;
 
-      registerCommandExecutors(container);
+      registerGameCommandExecutors(container);
       registerEventQueues(container);
       registerProjectors(container);
 

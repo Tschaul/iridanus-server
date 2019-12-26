@@ -2,6 +2,10 @@ import { Command } from "./commands";
 import { Subscription } from "./subscriptions";
 
 export type RequestMessage = {
+  type: 'AUTHENTICATE',
+  userId: string,
+  password: string
+} | {
   type: 'COMMAND',
   command: Command,
   gameId?: string | null,
