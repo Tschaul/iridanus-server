@@ -1,7 +1,7 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { TransferingShipsFleet } from "../../../shared/model/fleet";
+import { TransferingShipsFleet } from "../../../shared/model/v1/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
 import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";

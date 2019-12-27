@@ -1,7 +1,7 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { Fleet, FleetWithOwnerAtWorld } from "../../../shared/model/fleet";
+import { Fleet, FleetWithOwnerAtWorld } from "../../../shared/model/v1/fleet";
 
 export function setFleetIntegrity(
   fleetId: string,
@@ -9,7 +9,7 @@ export function setFleetIntegrity(
 ): Action {
   return {
     describe: () => `SetIntegrity ${JSON.stringify({ fleetId, integrity })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateFleet<FleetWithOwnerAtWorld, Fleet>(state, fleetId, (oldFleet) => {
 

@@ -1,9 +1,9 @@
-import { State } from "../state";
+import { GameState } from "../state";
 import { GameEvent } from "./event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-export function upcomingTickEvent(state$: Observable<State>): Observable<TickEvent> {
+export function upcomingTickEvent(state$: Observable<GameState>): Observable<TickEvent> {
     return state$.pipe(
         map(state => state.currentTimestamp),
         map(currentTimestamp => {

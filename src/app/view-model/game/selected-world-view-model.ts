@@ -1,8 +1,8 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
-import { worldhasOwner, World } from "../../../shared/model/world";
-import { fleetHasOwner, Fleet } from "../../../shared/model/fleet";
-import { PlayerInfo } from "../../../shared/model/player-info";
+import { worldhasOwner, World } from "../../../shared/model/v1/world";
+import { fleetHasOwner, Fleet } from "../../../shared/model/v1/fleet";
+import { PlayerInfo } from "../../../shared/model/v1/player-info";
 
 export class SelectedWorldViewModel {
 

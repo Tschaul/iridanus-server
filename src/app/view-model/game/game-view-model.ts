@@ -1,10 +1,10 @@
 import {observable, computed} from "mobx";
-import { Universe } from "../../../shared/model/universe";
-import { DrawingPositions } from "../../../shared/model/drawing-positions";
+import { Universe } from "../../../shared/model/v1/universe";
+import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
 import { MainViewModel } from "../main-view-model";
 import { GameStageViewModel } from "./game-stage-view-model";
-import { PlayerInfos } from "../../../shared/model/player-info";
-import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet, WarpingFleet } from "../../../shared/model/fleet";
+import { PlayerInfos } from "../../../shared/model/v1/player-info";
+import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet, WarpingFleet } from "../../../shared/model/v1/fleet";
 import { mockUniverse, mockPlayerInfos, mockRawDrawingPositions } from "./mock-data";
 import { SelectedWorldViewModel } from "./selected-world-view-model";
 import { OrderEditorViewModel } from "./order-editor-view-model";

@@ -3,9 +3,9 @@ import { SelectedWorldViewModel } from "../../../view-model/game/selected-world-
 import { Panel } from "../../../ui-components/panel/panel-component";
 import { observer } from "mobx-react";
 import { screenWhite } from "../../../ui-components/colors/colors";
-import { Fleet } from "../../../../shared/model/fleet";
-import { World } from "../../../../shared/model/world";
-import { PlayerInfo } from "../../../../shared/model/player-info";
+import { Fleet } from "../../../../shared/model/v1/fleet";
+import { World } from "../../../../shared/model/v1/world";
+import { PlayerInfo } from "../../../../shared/model/v1/player-info";
 import autobind from "autobind-decorator";
 import { getClosestAttribute } from "../../helper/get-attribute";
 

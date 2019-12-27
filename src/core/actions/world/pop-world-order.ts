@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateWorld } from "./update-world";
 
 export function popWorldOrder(
@@ -7,7 +7,7 @@ export function popWorldOrder(
 ): Action {
   return {
     describe: () => `PopWorldOrder ${JSON.stringify({worldId})}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateWorld(state, worldId, (oldWorld) => {
         return {

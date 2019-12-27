@@ -1,6 +1,6 @@
 import { Action } from "../action";
-import { State } from "../../state";
-import { baseFleet, LeavingFleet, ReadyFleet } from "../../../shared/model/fleet";
+import { GameState } from "../../state";
+import { baseFleet, LeavingFleet, ReadyFleet } from "../../../shared/model/v1/fleet";
 import { updateFleet } from "./update-fleet";
 
 export function leaveWorld(
@@ -10,7 +10,7 @@ export function leaveWorld(
 ): Action {
   return {
     describe: () => `LeaveWorld ${JSON.stringify({ fleetId, targetWorldId, warpingTimestamp })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
       return updateFleet<ReadyFleet, LeavingFleet>(state, fleetId, (oldFleet) => {
         return {
           ...baseFleet(oldFleet),

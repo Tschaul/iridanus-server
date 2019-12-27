@@ -1,7 +1,7 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateWorld } from "./update-world";
-import { World } from "../../../shared/model/world";
+import { World } from "../../../shared/model/v1/world";
 
 export function setWorldIntegrity(
   worldId: string,
@@ -9,7 +9,7 @@ export function setWorldIntegrity(
 ): Action {
   return {
     describe: () => `SetIntegrity ${JSON.stringify({ worldId, integrity })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateWorld<World, World>(state, worldId, (oldWorld) => {
 

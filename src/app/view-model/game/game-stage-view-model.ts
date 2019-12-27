@@ -1,8 +1,8 @@
 import { GameViewModel } from "./game-view-model";
 import { observable, computed } from "mobx";
-import { DrawingPositions } from "../../../shared/model/drawing-positions";
-import { World } from "../../../shared/model/world";
-import { fleetIsAtWorldAndHasOwner, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/fleet";
+import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
+import { World } from "../../../shared/model/v1/world";
+import { fleetIsAtWorldAndHasOwner, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 
 const STAGE_OFFSET = 75;

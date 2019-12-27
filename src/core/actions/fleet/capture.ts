@@ -1,7 +1,7 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { baseFleet, ReadyFleet, LostFleet } from "../../../shared/model/fleet";
+import { baseFleet, ReadyFleet, LostFleet } from "../../../shared/model/v1/fleet";
 
 export function captureFleet(
   fleetId: string,
@@ -9,7 +9,7 @@ export function captureFleet(
 ): Action {
   return {
     describe: () => `CaptureFleet ${JSON.stringify({ fleetId })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateFleet<LostFleet, ReadyFleet>(state, fleetId, (oldFleet) => {
         return {

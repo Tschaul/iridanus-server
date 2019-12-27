@@ -1,7 +1,7 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, LostWorld } from "../../../shared/model/world";
+import { baseWorld, ReadyWorld, LostWorld } from "../../../shared/model/v1/world";
 
 export function captureWorld(
   worldId: string,
@@ -9,7 +9,7 @@ export function captureWorld(
 ): Action {
   return {
     describe: () => `CaptureWorld ${JSON.stringify({ worldId })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateWorld<LostWorld, ReadyWorld>(state, worldId, (oldWorld) => {
         return {

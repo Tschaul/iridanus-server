@@ -47,13 +47,6 @@ export class UserRepository {
     const pepper = data.pepper;
     const passwordHash = hashPassword(password, data.users[id].salt, pepper);
 
-    console.log({
-      password,
-      salt: data.users[id].salt,
-      pepper,
-      passwordHash,
-      passwordHashInDb: data.users[id].passwordHash
-    })
     return passwordHash === data.users[id].passwordHash;
   }
 

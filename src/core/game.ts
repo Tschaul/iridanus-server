@@ -3,7 +3,7 @@ import { combineLatest, Subject } from "rxjs";
 import {injectable } from 'inversify'
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
-import { State } from "./state";
+import { GameState } from "./state";
 import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
 import { Logger } from "./infrastructure/logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";
@@ -14,7 +14,7 @@ export class Game {
 
   private timeout: NodeJS.Timeout | undefined;
 
-  public gameEnded$ = new Subject<State>();
+  public gameEnded$ = new Subject<GameState>();
 
   constructor(
     private clock: Clock, 
@@ -25,8 +25,8 @@ export class Game {
 
   }
 
-  public startGameLoop(): Promise<State> {
-    return new Promise<State>((resolve, reject) => {
+  public startGameLoop(): Promise<GameState> {
+    return new Promise<GameState>((resolve, reject) => {
       
       this.completeEventQueue.upcomingEvent$.pipe(
         distinctUntilChanged(),
@@ -34,7 +34,7 @@ export class Game {
       ).subscribe((event) => {
 
         if (event === null) {
-          resolve(this.store.finalize() as State)
+          resolve(this.store.finalize() as GameState)
           return;
         }
 

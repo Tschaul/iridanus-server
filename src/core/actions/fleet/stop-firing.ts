@@ -1,14 +1,14 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateFleet } from "./update-fleet";
-import { baseFleet, ReadyFleet, FleetWithOwnerAtWorld } from "../../../shared/model/fleet";
+import { baseFleet, ReadyFleet, FleetWithOwnerAtWorld } from "../../../shared/model/v1/fleet";
 
 export function fleetStopFiring(
   fleetId: string,
 ): Action {
   return {
     describe: () => `FleetStopFiring ${JSON.stringify({ fleetId })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateFleet<FleetWithOwnerAtWorld, ReadyFleet>(state, fleetId, (oldFleet) => {
         return {

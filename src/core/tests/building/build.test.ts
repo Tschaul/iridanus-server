@@ -3,7 +3,7 @@ import { buildTestMap } from "./build-test-map";
 import { expect } from 'chai';
 import produce from "immer";
 import { runMap } from "../test-helper";
-import { World } from "../../../shared/model/world";
+import { World } from "../../../shared/model/v1/world";
 
 describe("build", () => {
 

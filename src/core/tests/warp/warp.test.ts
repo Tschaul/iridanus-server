@@ -3,7 +3,7 @@ import { Clock } from "../../infrastructure/clock";
 import { Game } from "../../game";
 
 import { expect } from 'chai';
-import { ReadyFleet } from "../../../shared/model/fleet";
+import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import produce from "immer";
 import { runMap } from "../test-helper";
 

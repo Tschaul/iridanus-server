@@ -1,5 +1,5 @@
-import { ReadyFleet, Fleet } from "../../../shared/model/fleet";
-import { ReadyWorld, World } from "../../../shared/model/world";
+import { ReadyFleet, Fleet } from "../../../shared/model/v1/fleet";
+import { ReadyWorld, World } from "../../../shared/model/v1/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { GameRules } from "../../rules";
 import { Action } from "../../actions/action";

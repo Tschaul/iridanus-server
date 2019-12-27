@@ -2,11 +2,11 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import autobind from "autobind-decorator";
-import { Fleet, fleetIsAtWorld, WarpingFleet } from '../../../../shared/model/fleet';
+import { Fleet, fleetIsAtWorld, WarpingFleet } from '../../../../shared/model/v1/fleet';
 import { middle, diff, shorten, add } from '../../../../shared/math/vec2';
 import { WORLD_OUTER_RADIUS } from './constants';
 import { screenWhite } from '../../../ui-components/colors/colors';
-import { WarpOrder } from '../../../../shared/model/fleet-orders';
+import { WarpOrder } from '../../../../shared/model/v1/fleet-orders';
 
 @observer
 @autobind

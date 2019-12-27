@@ -1,6 +1,6 @@
 import { Action } from "../action";
-import { State } from "../../state";
-import { ReadyWorld, BuildingShipWorld, baseWorld } from "../../../shared/model/world";
+import { GameState } from "../../state";
+import { ReadyWorld, BuildingShipWorld, baseWorld } from "../../../shared/model/v1/world";
 import { updateWorld } from "./update-world";
 
 export function buildShip(
@@ -9,7 +9,7 @@ export function buildShip(
 ): Action {
   return {
     describe: () => `BuildShip ${JSON.stringify({ worldId, readyTimestamp })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateWorld<ReadyWorld, BuildingShipWorld>(state, worldId, (oldWorld) => {
         return {

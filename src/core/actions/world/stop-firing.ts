@@ -1,14 +1,14 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, WorldWithOwner } from "../../../shared/model/world";
+import { baseWorld, ReadyWorld, WorldWithOwner } from "../../../shared/model/v1/world";
 
 export function worldStopFiring(
   worldId: string,
 ): Action {
   return {
     describe: () => `WorldStopFiring ${JSON.stringify({ worldId })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateWorld<WorldWithOwner, ReadyWorld>(state, worldId, (oldWorld) => {
         return {

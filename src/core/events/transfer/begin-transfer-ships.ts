@@ -1,13 +1,13 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
-import { ReadyFleetBase, ReadyFleet } from "../../../shared/model/fleet";
+import { ReadyFleetBase, ReadyFleet } from "../../../shared/model/v1/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
 import { injectable, inject } from "inversify";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { TransferShipsOrder } from "../../../shared/model/fleet-orders";
+import { TransferShipsOrder } from "../../../shared/model/v1/fleet-orders";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 import { transferShips } from "../../actions/fleet/transfer-ships";

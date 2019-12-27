@@ -1,6 +1,6 @@
-import { Universe } from "../shared/model/universe";
+import { Universe } from "../shared/model/v1/universe";
 
-export interface State {
+export interface GameState {
     currentTimestamp: number;
     gameEndTimestamp: number;
     universe: Universe;

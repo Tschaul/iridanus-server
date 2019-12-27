@@ -1,6 +1,6 @@
-import { State } from "../state";
+import { GameState } from "../state";
 
 export interface Action {
     describe(): string;
-    apply(state: State): State
+    apply(state: GameState): GameState
 }

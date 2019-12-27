@@ -1,7 +1,7 @@
-import { Universe } from "../../../shared/model/universe";
-import { PlayerInfo, PlayerInfos } from "../../../shared/model/player-info";
+import { Universe } from "../../../shared/model/v1/universe";
+import { PlayerInfo, PlayerInfos } from "../../../shared/model/v1/player-info";
 import { normalize } from "../../../shared/math/vec2";
-import { DrawingPositions } from "../../../shared/model/drawing-positions";
+import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
 
 export const mockUniverse: Universe = {
   fleets: {
@@ -87,12 +87,14 @@ export const mockPlayerInfos: PlayerInfos = {
   "p1": {
     color: 'red',
     name: 'Paul',
-    fleetDrawingPosition: normalize({ x: 1, y: -1 })
+    fleetDrawingPosition: normalize({ x: 1, y: -1 }),
+    state: 'READY',
   },
   "p2": {
     color: 'mediumseagreen',
     name: 'Peter',
-    fleetDrawingPosition: normalize({ x: -1, y: -1 })
+    fleetDrawingPosition: normalize({ x: -1, y: -1 }),
+    state: 'READY',
   }
 };
 

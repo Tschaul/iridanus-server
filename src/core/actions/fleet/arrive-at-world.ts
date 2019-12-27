@@ -1,6 +1,6 @@
 import { Action } from "../action";
-import { State } from "../../state";
-import { baseFleet, LeavingFleet, ArrivingFleet, WarpingFleet } from "../../../shared/model/fleet";
+import { GameState } from "../../state";
+import { baseFleet, LeavingFleet, ArrivingFleet, WarpingFleet } from "../../../shared/model/v1/fleet";
 import { updateFleet } from "./update-fleet";
 
 export function arriveAtWorld(
@@ -9,7 +9,7 @@ export function arriveAtWorld(
 ): Action {
   return {
     describe: () => `ArriveAtWorld ${JSON.stringify({fleetId, readyTimestamp})}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateFleet<WarpingFleet, ArrivingFleet>(state, fleetId, (oldFleet) => {
         return {

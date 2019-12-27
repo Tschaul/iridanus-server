@@ -2,25 +2,25 @@ import { Subject, Observable, throwError, concat, ReplaySubject } from 'rxjs';
 import { scan, startWith, tap, withLatestFrom, sample, publishReplay, publish, shareReplay } from 'rxjs/operators';
 import { injectable, inject } from 'inversify';
 import { Action } from './actions/action';
-import { State } from './state';
+import { GameState } from './state';
 import { GameSetupProvider } from './game-setup-provider';
 
 @injectable()
 export class Store {
   private actions$$: Subject<Action> = new Subject();
   private commits$$: Subject<void> = new Subject();
-  private lastState: State | null = null;
+  private lastState: GameState | null = null;
 
-  private stateInternal$$ = new ReplaySubject<State>(1);
+  private stateInternal$$ = new ReplaySubject<GameState>(1);
 
-  public state$: Observable<State> = this.stateInternal$$;
+  public state$: Observable<GameState> = this.stateInternal$$;
 
   constructor(private setup: GameSetupProvider) { 
   }
 
   public initialize() {
     this.actions$$.pipe(
-      scan((state: State, action: Action) => {
+      scan((state: GameState, action: Action) => {
         const nextState = action.apply(state);
         // console.log(nextState);
         return nextState;
@@ -51,7 +51,7 @@ export class Store {
 @injectable()
 export class ReadonlyStore {
 
-  public state$: Observable<State>;
+  public state$: Observable<GameState>;
 
   constructor(private store: Store) {
     this.state$ = store.state$;

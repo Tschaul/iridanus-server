@@ -1,11 +1,11 @@
-import { Fleet } from "../../../shared/model/fleet";
-import { State } from "../../state";
+import { Fleet } from "../../../shared/model/v1/fleet";
+import { GameState } from "../../state";
 import produce from "immer";
 
 export function updateFleet<Told extends Fleet, Tnew extends Fleet>(
-  state: State, 
+  state: GameState, 
   fleetId: string, 
-  updater: (oldFleet: Told) => Tnew): State {
+  updater: (oldFleet: Told) => Tnew): GameState {
   return produce(state, draft => {
     const oldFleet = draft.universe.fleets[fleetId] as Told;
     const newFleet = updater(oldFleet);

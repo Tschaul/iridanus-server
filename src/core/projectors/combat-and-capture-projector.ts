@@ -3,8 +3,8 @@ import { injectable } from "inversify";
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
-import { Fleet, ReadyFleetBase, FiringFleet, LostFleet } from "../../shared/model/fleet";
-import { World, FiringWorld, ReadyWorldBase, LostWorld } from "../../shared/model/world";
+import { Fleet, ReadyFleetBase, FiringFleet, LostFleet } from "../../shared/model/v1/fleet";
+import { World, FiringWorld, ReadyWorldBase, LostWorld } from "../../shared/model/v1/world";
 
 @injectable()
 export class CombatAndCaptureProjector {

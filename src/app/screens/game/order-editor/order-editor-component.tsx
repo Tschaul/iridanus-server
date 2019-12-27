@@ -3,8 +3,8 @@ import autobind from "autobind-decorator";
 import { observer } from "mobx-react";
 import { OrderEditorViewModel } from "../../../view-model/game/order-editor-view-model";
 import { Panel } from "../../../ui-components/panel/panel-component";
-import { WorldOrder } from "../../../../shared/model/world-order";
-import { FleetOrder } from "../../../../shared/model/fleet-orders";
+import { WorldOrder } from "../../../../shared/model/v1/world-order";
+import { FleetOrder } from "../../../../shared/model/v1/fleet-orders";
 
 @observer
 export class OrderEditor extends React.Component<{

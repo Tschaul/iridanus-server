@@ -1,6 +1,6 @@
-import { State } from "../../state";
+import { GameState } from "../../state";
 
-export const map: State = {
+export const map: GameState = {
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_VALUE,
   universe: {

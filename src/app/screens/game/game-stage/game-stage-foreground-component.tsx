@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import autobind from "autobind-decorator";
-import { World } from '../../../../shared/model/world';
+import { World } from '../../../../shared/model/v1/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
 import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
 import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';

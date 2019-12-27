@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateFleet } from "./update-fleet";
 
 export function popFleetOrder(
@@ -7,7 +7,7 @@ export function popFleetOrder(
 ): Action {
   return {
     describe: () => `PopFleetOrder ${JSON.stringify({fleetId})}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateFleet(state, fleetId, (oldFleet) => {
         return {

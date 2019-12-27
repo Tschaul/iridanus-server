@@ -1,4 +1,4 @@
-import { State } from "../state";
+import { GameState } from "../state";
 import { Action } from "../actions/action";
 import { Observable } from "rxjs";
 

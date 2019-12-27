@@ -1,7 +1,7 @@
 import { Action } from "../action";
-import { State } from "../../state";
+import { GameState } from "../../state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, WorldWithOwner } from "../../../shared/model/world";
+import { baseWorld, ReadyWorld, WorldWithOwner } from "../../../shared/model/v1/world";
 
 export function worldStartFiring(
   worldId: string,
@@ -9,7 +9,7 @@ export function worldStartFiring(
 ): Action {
   return {
     describe: () => `WorldStartFiring ${JSON.stringify({ worldId,weaponsReadyTimestamp })}`,
-    apply: (state: State) => {
+    apply: (state: GameState) => {
 
       return updateWorld<WorldWithOwner, ReadyWorld>(state, worldId, (oldWorld) => {
         return {

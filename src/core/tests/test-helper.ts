@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { State } from "../state";
+import { GameState } from "../state";
 import { Clock } from "../infrastructure/clock";
 import { Game } from "../game";
 import { Logger } from "../infrastructure/logger";
@@ -11,7 +11,7 @@ import { registerProjectors } from "../projectors/register-projectors";
 import { RandomNumberGenerator, NotSoRandomNumberGenerator } from "../infrastructure/random-number-generator";
 import { GameSetupProvider } from "../game-setup-provider";
 
-export function runMap(map: State): Promise<State> {
+export function runMap(map: GameState): Promise<GameState> {
 
   let container = new Container({
     defaultScope: "Singleton"

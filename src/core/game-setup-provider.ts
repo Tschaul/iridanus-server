@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { GameRules } from "./rules";
-import { State } from "./state";
+import { GameState } from "./state";
 
 @injectable()
 export class GameSetupProvider {
@@ -21,16 +21,16 @@ export class GameSetupProvider {
     this.configInternal = value;
   }
 
-  private initialStateInternal: State;
+  private initialStateInternal: GameState;
 
-  public get initialState(): State {
+  public get initialState(): GameState {
     if (!this.initialStateInternal) {
       throw new Error('Initial state is not set yet.')
     }
     return this.initialStateInternal;
   }
 
-  public set initialState(value: State) {
+  public set initialState(value: GameState) {
     if (this.initialStateInternal) {
       throw new Error('Initial state is allready set.')
     }

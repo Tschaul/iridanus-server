@@ -1,7 +1,7 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { WarpingFleet } from "../../../shared/model/fleet";
+import { WarpingFleet } from "../../../shared/model/v1/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { inject } from "inversify";
 import { injectable } from "inversify";

@@ -1,6 +1,6 @@
-import { State } from "../../state";
+import { GameState } from "../../state";
 
-export const warpTestMap: State = {
+export const warpTestMap: GameState = {
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_VALUE,
   universe: {
