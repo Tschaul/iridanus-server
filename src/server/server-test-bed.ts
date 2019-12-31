@@ -28,11 +28,8 @@ export class ServerTestBed {
     rmdirSync(this.path, { recursive: true })
   }
 
-  async settle() {
-    await this.server.settleQueue();
-  }
-
   async sendMessage(message: RequestMessage) {
     this.server.handleMessage(message);
+    await this.server.settleQueue();
   }
 }

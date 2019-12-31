@@ -40,8 +40,6 @@ describe("user registration", () => {
       password: '1234'
     });
 
-    await testBed.settle();
-
     expect(testBed.responses).to.deep.include({
       type: 'AUTHENTICATION_SUCCESSFULL'
     })
