@@ -1,3 +1,5 @@
+import { resolve } from "dns";
+
 type QueueItem = () => Promise<void>;
 
 export class Queue {
@@ -7,6 +9,19 @@ export class Queue {
   add(item: QueueItem) {
     this.items.push(item);
     this.dequeue();
+  }
+  
+  addJoined<TResult>(item: () => Promise<TResult>): Promise<TResult> {
+    return new Promise((resolve, reject) => {
+      this.add(async () => {
+        try {
+          const result = await item();
+          resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    })
   }
 
   private dequeue() {

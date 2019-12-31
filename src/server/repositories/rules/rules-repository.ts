@@ -24,7 +24,8 @@ export class RulesRepository {
     const data = [] as RulesSchema[];
 
     for (const ruleId of ruleIds) {
-      const rules = await this.handleForRuleId(ruleId).read();
+      const handle = await this.handleForRuleId(ruleId);
+      const rules = await handle.read();
       data.push(rules);
     }
 
@@ -44,7 +45,7 @@ export class RulesRepository {
   }
 
   public async getRuleById(ruleId: string) {
-    const handle = this.handleForRuleId(ruleId);
+    const handle = await this.handleForRuleId(ruleId);
     return await handle.read();
   }
 }

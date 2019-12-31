@@ -10,16 +10,17 @@ import { Initializer } from '../commands/infrastructure/initialisation/initializ
 @injectable()
 export class DataHandleRegistry {
 
-  constructor(private environment: Environment, private initializer: Initializer) { }
+  constructor(private environment: Environment) { }
 
   private dataHandlesByPath = new Map<string, DataHandle<unknown>>();
 
-  getDataHandle<TData>(path: string): DataHandle<TData> {
+  async getDataHandle<TData>(path: string): Promise<DataHandle<TData>> {
     if (this.dataHandlesByPath.has(path)) {
       return this.dataHandlesByPath.get(path) as DataHandle<TData>
     } else {
-      const dataHandle = new DataHandle<TData>(path, this.environment, this.initializer);
+      const dataHandle = new DataHandle<TData>(path, this.environment);
       this.dataHandlesByPath.set(path, dataHandle);
+      await dataHandle.initialize();
       return dataHandle;
     }
   }
@@ -44,20 +45,23 @@ export class DataHandle<TData> {
 
   existsForSure = false;
 
-  constructor(private path: string, private environment: Environment, initializer: Initializer) {
-    initializer.requestInitialization(this.exists().then(fileExists => {
+  constructor(private path: string, private environment: Environment) {
+  }
+
+  public initialize() {
+    // Lock object
+    return this.exists().then(fileExists => {
       if (fileExists) {
         this.existsForSure = true;
         return this.readFileAtFullpath();
       }
-    }))
+    });
+    // Release object
   }
 
   private async readFileAtFullpath() {
-    // TODO lock object
     // TODO dont block thread while reading
     this._data$.next(JSON.parse(readFileSync(this.fullpath, 'utf8')));
-    // TODO release lock
   }
 
   private async writeFileAtFullpath(data: TData) {
@@ -117,6 +121,7 @@ export class DataHandle<TData> {
   }
 
   public async create(data: TData) {
+    // TODO lock here
     if (await this.exists()) {
       throw new Error(`file for data handle '${this.path}' allready exists`)
     }
@@ -127,14 +132,12 @@ export class DataHandle<TData> {
     mkdirSync(dir, { recursive: true })
 
     await this.writeFileAtFullpath(data);
-
+    // TODO release here
   }
 
   public async createIfMissing(data: TData) {
-    // TODO lock here
     if (!await this.exists()) {
       await this.create(data);
     }
-    // TODO release here
   }
 }
