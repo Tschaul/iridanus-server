@@ -5,24 +5,34 @@ import { ContainerRegistry } from "../container-registry";
 import { CreateGameExecutor } from "./executors/game-setup/create-game-executor";
 import { ResponseMessage } from "../../shared/messages/response-message";
 import { SignUpUserExecutor } from "./executors/authentication/sign-up-user-executor";
+import { GlobalErrorHandler } from "./infrastructure/error-handling/global-error-handler";
+import { Initializer } from "./infrastructure/initialisation/initializer";
 
 @injectable()
 export class CommandHandler {
   constructor() {}
 
-  public handleCommand(
+  public async handleCommand(
     registry: ContainerRegistry, 
     command: Command, 
     gameId: string | null | undefined,
     sendfn: (data: ResponseMessage) => void
   ) {
     const executor = this.getDataProvider(registry, command, gameId);
-    executor.execute(command).catch((error) => {
+    const globalErrorHandler = registry.globalContainer.get(GlobalErrorHandler);
+    const initializer = registry.globalContainer.get(Initializer);
+
+    await initializer.initializeAllRequested()
+
+    try {
+      await executor.execute(command);
+    } catch(error) {
+      globalErrorHandler.handleError(error);
       sendfn({
         type: 'ERROR',
         error: error + ''
       })
-    })
+    }
   }
 
   private getDataProvider(registry: ContainerRegistry, command: Command, gameId: string | null | undefined): CommandExecutor<Command> {

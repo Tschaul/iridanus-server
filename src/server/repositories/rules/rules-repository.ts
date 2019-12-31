@@ -3,6 +3,7 @@ import { DataHandleRegistry } from "../data-handle-registry";
 import { ReplaySubject, Observable } from "rxjs";
 import { RulesSchema } from "./schema/v1";
 import { take } from "rxjs/operators";
+import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
 
 const BASE_FOLDER = 'rules'
 
@@ -13,8 +14,8 @@ export class RulesRepository {
 
   private _data$ = new ReplaySubject<RulesSchema[]>(1);
 
-  constructor(private dataHandleRegistry: DataHandleRegistry) {
-    this.initialize().catch(console.error);
+  constructor(private dataHandleRegistry: DataHandleRegistry, initializer: Initializer) {
+    initializer.requestInitialization(this.initialize());
   }
 
   private async initialize() {

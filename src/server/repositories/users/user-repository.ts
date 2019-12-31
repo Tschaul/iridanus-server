@@ -1,7 +1,9 @@
-import { User, UsersSchema, initialData } from "./schema/v1";
+import { UsersSchema, initialData } from "./schema/v1";
 import { DataHandle, DataHandleRegistry } from "../data-handle-registry";
-import { randomBytes, createHash } from "crypto";
 import { injectable } from "inversify";
+import { GlobalErrorHandler } from "../../commands/infrastructure/error-handling/global-error-handler";
+import { CryptoWrapper } from "../../commands/infrastructure/crypto/crypto-wrapper";
+import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
 
 const USER_DATA_PATH ='users/users.json';
 
@@ -10,23 +12,23 @@ export class UserRepository {
 
   private handle: DataHandle<UsersSchema>;
 
-  constructor(dataHandleRegistry: DataHandleRegistry) { 
+  constructor(dataHandleRegistry: DataHandleRegistry, private crypto: CryptoWrapper, private initilaizer: Initializer) {
     this.handle = dataHandleRegistry.getDataHandle(USER_DATA_PATH);
-    this.initialize().catch(console.error);
+    initilaizer.requestInitialization(this.initialize());
   }
 
   async initialize() {
-    await this.handle.createIfMissing(initialData(await secureRandom()))
+    await this.handle.createIfMissing(initialData(await this.crypto.secureRandom()))
   }
 
   async createUser(id: string, email: string, password: string) {
-    return this.handle.do(async (data) => {
+    await this.handle.do(async (data) => {
       if (data.users[id]) {
         throw new Error(`user id '${id}' is allready taken`)
       }
-      const salt = await secureRandom();
+      const salt = await this.crypto.secureRandom();
       const pepper = data.pepper;
-      const passwordHash = hashPassword(password, salt, pepper);
+      const passwordHash = this.crypto.hashPassword(password, salt, pepper);
       return (data) => {
         data.users[id] = {
           email,
@@ -45,25 +47,9 @@ export class UserRepository {
     }
 
     const pepper = data.pepper;
-    const passwordHash = hashPassword(password, data.users[id].salt, pepper);
+    const passwordHash = this.crypto.hashPassword(password, data.users[id].salt, pepper);
 
     return passwordHash === data.users[id].passwordHash;
   }
 
-}
-
-function secureRandom(): Promise<string> {
-  return new Promise((resolve, reject) => {
-    randomBytes(16, function (err, buffer) {
-      if (err) {
-        reject(err);
-      }
-      var token = buffer.toString('hex');
-      resolve(token);
-    });
-  })
-}
-
-function hashPassword(password: string, salt: string, pepper: string) {
-  return createHash('sha1').update(password + salt + pepper).digest('hex')
 }

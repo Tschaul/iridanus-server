@@ -3,88 +3,27 @@ import { createServer } from 'http';
 import { Server } from 'ws';
 import { AddressInfo } from 'net';
 import { ContainerRegistry } from './container-registry';
-import { SubscriptionHandler } from './subscriptions/subscription-handler';
+import { ConnectionHandler } from './connection-handler';
 import { RequestMessage } from '../shared/messages/request-message';
-import { CommandHandler } from './commands/command-handler';
-import { UserRepository } from './repositories/users/user-repository';
 
 const app = express();
 
-//initialize a simple http server
 const server = createServer(app);
 
-//initialize the WebSocket server instance
 const webSocketServer = new Server({ server });
 
 const containerRegistry = new ContainerRegistry();
 
-const subscriptionHandler = containerRegistry.globalContainer.get(SubscriptionHandler);
-const commandHandler = containerRegistry.globalContainer.get(CommandHandler);
-
-const userRepository = containerRegistry.globalContainer.get(UserRepository);
-
 webSocketServer.on('connection', (socket: WebSocket) => {
 
-  let authenticatedUser: string | null = null;
+  const connectionHandler = new ConnectionHandler(containerRegistry, r => socket.send(JSON.stringify(r)));
 
   socket.addEventListener('message', (e: MessageEvent) => {
 
-    try {
-      const message = JSON.parse(e.data) as RequestMessage;
-
-      switch (message.type) {
-        case 'AUTHENTICATE':
-          userRepository.authenticateUser(message.userId, message.password)
-          .then(authResult => {
-            if (authResult) {
-              authenticatedUser = message.userId;
-              socket.send(JSON.stringify({
-                type: 'AUTHENTICATION_SUCCESSFULL'
-              }))
-            } else {
-              socket.send(JSON.stringify({
-                type: 'ERROR',
-                error: 'Authentication was not successfull'
-              }))
-            }
-          })
-          break;
-        case 'BEGIN_SUBSCRIPTION':
-          subscriptionHandler.newSubscription(
-            containerRegistry,
-            message.subscription,
-            message.id,
-            message.gameId,
-            (data: any) => socket.send(JSON.stringify(data)),
-          );
-          break;
-        case 'END_SUBSCRIPTION':
-          subscriptionHandler.cancelSubscription(message.id);
-          break;
-        case 'COMMAND':
-          commandHandler.handleCommand(
-            containerRegistry,
-            message.command,
-            message.gameId,
-            (data: any) => socket.send(JSON.stringify(data)),
-          )
-          break;
-        default:
-          break;
-      }
-
-    } catch (error) {
-      console.error(error)
-      socket.send(JSON.stringify({
-        type: 'ERROR',
-        error: error + ''
-      }))
-      // TODO send error
-    }
-
+        const message = JSON.parse(e.data) as RequestMessage;
+        connectionHandler.handleMessage(message);
   });
-
-});
+})
 
 //start our server
 server.listen(process.env.PORT || 8999, () => {

@@ -5,11 +5,12 @@ import { Environment } from '../environment/environment';
 import produce from "immer";
 import { ReplaySubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { Initializer } from '../commands/infrastructure/initialisation/initializer';
 
 @injectable()
 export class DataHandleRegistry {
 
-  constructor(private environment: Environment) { }
+  constructor(private environment: Environment, private initializer: Initializer) { }
 
   private dataHandlesByPath = new Map<string, DataHandle<unknown>>();
 
@@ -17,7 +18,7 @@ export class DataHandleRegistry {
     if (this.dataHandlesByPath.has(path)) {
       return this.dataHandlesByPath.get(path) as DataHandle<TData>
     } else {
-      const dataHandle = new DataHandle<TData>(path, this.environment);
+      const dataHandle = new DataHandle<TData>(path, this.environment, this.initializer);
       this.dataHandlesByPath.set(path, dataHandle);
       return dataHandle;
     }
@@ -43,13 +44,13 @@ export class DataHandle<TData> {
 
   existsForSure = false;
 
-  constructor(private path: string, private environment: Environment) {
-    this.exists().then(fileExists => {
+  constructor(private path: string, private environment: Environment, initializer: Initializer) {
+    initializer.requestInitialization(this.exists().then(fileExists => {
       if (fileExists) {
         this.existsForSure = true;
         return this.readFileAtFullpath();
       }
-    })
+    }))
   }
 
   private async readFileAtFullpath() {
@@ -63,6 +64,7 @@ export class DataHandle<TData> {
     // TODO dont block thread while writing
     this._data$.next(data);
     writeFileSync(this.fullpath, JSON.stringify(data, null, 4), 'utf8');
+    this.existsForSure = true;
   }
 
   private get fullpath() {
@@ -72,7 +74,7 @@ export class DataHandle<TData> {
   private _data$ = new ReplaySubject<TData>(1);
 
   async read() {
-    if (!await this.exists()) {
+    if (!(await this.exists())) {
       throw new Error(`file for data handle '${this.path}' noes not exist`)
     }
     // TODO await asynchronous initialization
@@ -86,7 +88,7 @@ export class DataHandle<TData> {
 
   public async do(transaction: Transaction<TData>) {
 
-    if (!await this.exists()) {
+    if (!(await this.exists())) {
       throw new Error(`file for data handle '${this.path}' noes not exist`)
     }
 

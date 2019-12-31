@@ -14,6 +14,7 @@ import { GameSetupProvider } from "../core/game-setup-provider";
 import { registerGameCommandExecutors, registerGlobalCommandExecutors } from './commands/executors/register-command-executors';
 import { registerRepositories } from './repositories/register-repositories';
 import { registerEnvironment } from './environment/register-environment';
+import { registerGlobalInfrastructure } from './commands/infrastructure/register-infrastructure';
 
 @injectable()
 export class ContainerRegistry {
@@ -30,6 +31,7 @@ export class ContainerRegistry {
     this.globalContainer.bind(CommandHandler).toSelf();
     this.globalContainer.bind(SubscriptionHandler).toSelf();
 
+    registerGlobalInfrastructure(this.globalContainer);
     registerEnvironment(this.globalContainer);
     registerGlobalDataProviders(this.globalContainer);
     registerGlobalCommandExecutors(this.globalContainer);
