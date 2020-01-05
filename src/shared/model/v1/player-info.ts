@@ -1,6 +1,7 @@
 import { Vec2 } from "../../math/vec2";
 
 export interface PlayerInfo {
+  id: string,
   name: string,
   color: string,
   fleetDrawingPosition: Vec2,

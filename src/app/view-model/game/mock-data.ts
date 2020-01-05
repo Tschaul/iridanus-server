@@ -85,12 +85,14 @@ export const mockUniverse: Universe = {
 
 export const mockPlayerInfos: PlayerInfos = {
   "p1": {
+    id: 'p1',
     color: 'red',
     name: 'Paul',
     fleetDrawingPosition: normalize({ x: 1, y: -1 }),
     state: 'READY',
   },
   "p2": {
+    id: 'p2',
     color: 'mediumseagreen',
     name: 'Peter',
     fleetDrawingPosition: normalize({ x: -1, y: -1 }),

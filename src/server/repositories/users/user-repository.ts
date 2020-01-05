@@ -1,7 +1,6 @@
 import { UsersSchema, initialData } from "./schema/v1";
 import { DataHandle, DataHandleRegistry } from "../data-handle-registry";
 import { injectable } from "inversify";
-import { GlobalErrorHandler } from "../../commands/infrastructure/error-handling/global-error-handler";
 import { CryptoWrapper } from "../../commands/infrastructure/crypto/crypto-wrapper";
 import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
 
@@ -12,12 +11,12 @@ export class UserRepository {
 
   private handle: DataHandle<UsersSchema>;
 
-  constructor(dataHandleRegistry: DataHandleRegistry, private crypto: CryptoWrapper, private initilaizer: Initializer) {
-    this.handle = dataHandleRegistry.getDataHandle(USER_DATA_PATH);
+  constructor(private dataHandleRegistry: DataHandleRegistry, private crypto: CryptoWrapper, initilaizer: Initializer) {
     initilaizer.requestInitialization(this.initialize());
   }
 
   async initialize() {
+    this.handle = await this.dataHandleRegistry.getDataHandle(USER_DATA_PATH);
     await this.handle.createIfMissing(initialData(await this.crypto.secureRandom()))
   }
 

@@ -1,8 +1,11 @@
+import { GameInfo } from "../model/v1/game-info";
+
 export type SubscriptionResult = GamesSubscriptionResult
   | DummySubscriptionResult;
 
 export interface GamesSubscriptionResult {
-  type: 'GAMES'
+  type: 'GAMES',
+  games: GameInfo[]
 }
 
 export interface DummySubscriptionResult {

@@ -4,11 +4,12 @@ import { mkdirSync, rmdirSync } from "fs";
 import { ResponseMessage } from "../shared/messages/response-message";
 import { ConnectionHandler } from "./connection-handler";
 import { RequestMessage } from "../shared/messages/request-message";
+import { expect } from "chai";
 
 export class ServerTestBed {
   path: string;
 
-  public responses: ResponseMessage[];
+  private responses: ResponseMessage[];
   server: ConnectionHandler;
 
   constructor(private registry: ContainerRegistry) {
@@ -31,5 +32,13 @@ export class ServerTestBed {
   async sendMessage(message: RequestMessage) {
     this.server.handleMessage(message);
     await this.server.settleQueue();
+  }
+
+  clearResponses() {
+    this.responses = [];
+  }
+
+  expectResponse(response: ResponseMessage) {
+    expect(this.responses).to.deep.include(response);
   }
 }

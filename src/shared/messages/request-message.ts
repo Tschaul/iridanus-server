@@ -1,4 +1,4 @@
-import { Command } from "./commands";
+import { Command } from "./commands/commands";
 import { Subscription } from "./subscriptions";
 
 export type RequestMessage = {
@@ -8,6 +8,7 @@ export type RequestMessage = {
 } | {
   type: 'COMMAND',
   command: Command,
+  commandId: string,
   gameId?: string | null,
 } | {
   type: 'BEGIN_SUBSCRIPTION'

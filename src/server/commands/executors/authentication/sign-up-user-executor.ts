@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { CommandExecutor } from "../command-executor";
-import { SignUpUserCommand } from "../../../../shared/messages/commands";
 import { UserRepository } from "../../../repositories/users/user-repository";
+import { SignUpUserCommand } from "../../../../shared/messages/commands/user-commands";
 
 @injectable()
 export class SignUpUserExecutor implements CommandExecutor<SignUpUserCommand> {

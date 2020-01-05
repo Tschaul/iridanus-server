@@ -1,5 +1,3 @@
-import { resolve } from "dns";
-
 type QueueItem = () => Promise<void>;
 
 export class Queue {

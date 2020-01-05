@@ -5,7 +5,7 @@ import { ContainerRegistry } from '../../container-registry';
 import { ConnectionHandler } from '../../connection-handler';
 import { ResponseMessage } from '../../../shared/messages/response-message';
 import { ServerTestBed } from '../../server-test-bed';
-import { signUpAndLogin } from './user-management.workflows';
+import { signUpAndLogin } from '../user-registration/user-management.workflows';
 
 describe("user registration", () => {
 
@@ -23,9 +23,11 @@ describe("user registration", () => {
     await testBed.cleanup();
   })
 
-  it("does sign up and login", async () => {
+  it("creates game", async () => {
 
     await signUpAndLogin(testBed, 'foobar', '1234');
+
+    
 
   })
 

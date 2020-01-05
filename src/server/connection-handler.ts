@@ -73,6 +73,7 @@ export class ConnectionHandler {
           this.queue.add(() => this.commandHandler.handleCommand(
             this.containerRegistry,
             message.command,
+            message.commandId,
             message.gameId,
             (data: any) => this.sendfn(data),
           ));

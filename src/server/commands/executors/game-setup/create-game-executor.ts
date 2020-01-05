@@ -1,11 +1,11 @@
 import { injectable } from "inversify";
 import { CommandExecutor } from "../command-executor";
-import { CreateGameCommand } from "../../../../shared/messages/commands";
 import { GameSetupProvider } from "../../../../core/game-setup-provider";
 import { Game } from "../../../../core/game";
 import { simpleRules } from "../../../../core/tests/test-config";
 import { simpleMap } from "../../../../core/setup/simple-map";
 import { Store } from "../../../../core/store";
+import { CreateGameCommand } from "../../../../shared/messages/commands/game-commands";
 
 @injectable()
 export class CreateGameExecutor implements CommandExecutor<CreateGameCommand> {

@@ -5,7 +5,6 @@ import { Environment } from '../environment/environment';
 import produce from "immer";
 import { ReplaySubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Initializer } from '../commands/infrastructure/initialisation/initializer';
 
 @injectable()
 export class DataHandleRegistry {
@@ -15,6 +14,9 @@ export class DataHandleRegistry {
   private dataHandlesByPath = new Map<string, DataHandle<unknown>>();
 
   async getDataHandle<TData>(path: string): Promise<DataHandle<TData>> {
+    if (!this.validateFilePath(path)) {
+      throw new Error(`Path '${path}' is invalid.`)
+    }
     if (this.dataHandlesByPath.has(path)) {
       return this.dataHandlesByPath.get(path) as DataHandle<TData>
     } else {
@@ -26,6 +28,9 @@ export class DataHandleRegistry {
   }
 
   async listDirectories(path: string): Promise<string[]> {
+    if (!this.validateDirectoryPath(path)) {
+      throw new Error(`Path '${path}' is invalid.`)
+    }
     const dir = join(this.environment.dataPath, path);
     // TODO dont block thread while creating directory
     mkdirSync(dir, { recursive: true })
@@ -33,6 +38,14 @@ export class DataHandleRegistry {
     return readdirSync(dir, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name)
+  }
+
+  private validateFilePath(path: string) {
+    return path.endsWith('.json') && this.validateDirectoryPath(path.slice(0,-5));
+  }
+
+  private validateDirectoryPath(path: string) {
+    return !!path.match(/^[a-z\d\/\-]*$/)
   }
 
 }

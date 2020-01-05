@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { Command } from "../../shared/messages/commands";
+import { Command } from "../../shared/messages/commands/commands";
 import { CommandExecutor } from "./executors/command-executor";
 import { ContainerRegistry } from "../container-registry";
 import { CreateGameExecutor } from "./executors/game-setup/create-game-executor";
@@ -15,6 +15,7 @@ export class CommandHandler {
   public async handleCommand(
     registry: ContainerRegistry, 
     command: Command, 
+    commandId: string,
     gameId: string | null | undefined,
     sendfn: (data: ResponseMessage) => void
   ) {
@@ -26,11 +27,16 @@ export class CommandHandler {
 
     try {
       await executor.execute(command);
+      sendfn({
+        type: 'COMMAND_SUCCESS',
+        commandId
+      })
     } catch(error) {
       globalErrorHandler.handleError(error);
       sendfn({
         type: 'ERROR',
-        error: error + ''
+        error: error + '',
+        commandId
       })
     }
   }

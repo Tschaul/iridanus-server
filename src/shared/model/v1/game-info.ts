@@ -1,8 +1,19 @@
-import { PlayerInfo } from "./player-info";
+import { PlayerInfos } from "./player-info";
 
-export interface GameInfo {
-  state: 'PROPOSED' | 'STARTED' | 'ENDED';
+export type GameInfo = ProposedGameInfo | StartedGameInfo;
+
+export interface GameInfoBase {
+  players: PlayerInfos;
+}
+
+export interface ProposedGameInfo extends GameInfoBase {
+  state: 'PROPOSED';
+  mapId?: string;
+  rulesId?: string;
+}
+
+export interface StartedGameInfo extends GameInfoBase {
+  state: 'STARTED' | 'ENDED';
   mapId: string;
   rulesId: string;
-  players: PlayerInfo;
 }
