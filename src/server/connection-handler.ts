@@ -15,7 +15,7 @@ export class ConnectionHandler {
   private commandHandler: CommandHandler;
   private userRepository: UserRepository;
   private globalErrorHandler: GlobalErrorHandler;
-  private authenticatedUser: string | null = null;
+  private authenticatedUserId: string | null = null;
   queue: Queue;
   initializer: Initializer;
 
@@ -27,6 +27,10 @@ export class ConnectionHandler {
     this.initializer = containerRegistry.globalContainer.get(Initializer);
 
     this.queue = new Queue();
+  }
+
+  logout() {
+    this.authenticatedUserId = null;
   }
 
   settleQueue() {
@@ -45,7 +49,7 @@ export class ConnectionHandler {
             await this.initializer.initializeAllRequested();
             const authResult =  await  this.userRepository.authenticateUser(message.userId, message.password)
               if (authResult) {
-                this.authenticatedUser = message.userId;
+                this.authenticatedUserId = message.userId;
                 this.sendfn({
                   type: 'AUTHENTICATION_SUCCESSFULL'
                 })
@@ -75,7 +79,7 @@ export class ConnectionHandler {
             message.command,
             message.commandId,
             message.gameId,
-            this.authenticatedUser,
+            this.authenticatedUserId,
             (data: any) => this.sendfn(data),
           ));
           break;

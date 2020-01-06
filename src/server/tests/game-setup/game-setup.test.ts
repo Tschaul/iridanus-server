@@ -6,7 +6,7 @@ import { ConnectionHandler } from '../../connection-handler';
 import { ResponseMessage } from '../../../shared/messages/response-message';
 import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from '../user-registration/user-management.workflows';
-import { createGame } from './game-setup.workflows';
+import { createGame, joinGame } from './game-setup.workflows';
 
 describe.only("user registration", () => {
 
@@ -29,6 +29,49 @@ describe.only("user registration", () => {
     await signUpAndLogin(testBed, 'foobar', '1234');
 
     await createGame(testBed, 'game1');
+
+    await testBed.sendMessage({
+      type: 'BEGIN_SUBSCRIPTION',
+      id: 'games',
+      subscription: {
+        type: 'GAME/LIST'
+      }
+    })
+
+    testBed.expectSubscriptionResponse({
+      type: 'SUBSCRIPTION_RESULT',
+      id: 'games',
+      result: {
+        type: 'GAME/LIST',
+        games: [{
+          id: 'game1',
+          players: {
+            'foobar': () => true
+          },
+          state: 'PROPOSED',
+        }]
+      }
+    });
+
+    await signUpAndLogin(testBed, 'barbaz', '1234');
+
+    await joinGame(testBed, 'game1');
+
+    testBed.expectSubscriptionResponse({
+      type: 'SUBSCRIPTION_RESULT',
+      id: 'games',
+      result: {
+        type: 'GAME/LIST',
+        games: [{
+          id: 'game1',
+          players: {
+            'foobar': () => true,
+            'barbaz': () => true,
+          },
+          state: 'PROPOSED',
+        }]
+      }
+    });
 
   })
 

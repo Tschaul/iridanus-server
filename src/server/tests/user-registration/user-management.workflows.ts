@@ -2,6 +2,8 @@ import { ServerTestBed } from "../../server-test-bed";
 
 export async function signUpAndLogin(testBed: ServerTestBed, username: string, password: string) {
 
+  testBed.logout();
+
   await testBed.sendMessage({
     type: 'COMMAND',
     command: {
@@ -13,7 +15,7 @@ export async function signUpAndLogin(testBed: ServerTestBed, username: string, p
     commandId: 'sign_up'
   })
 
-  testBed.expectResponse({
+  testBed.expectCommandResponse({
     type: 'COMMAND_SUCCESS',
     commandId: 'sign_up'
   });
@@ -24,7 +26,7 @@ export async function signUpAndLogin(testBed: ServerTestBed, username: string, p
     password: password
   });
 
-  testBed.expectResponse({
+  testBed.expectAuthenticationResponse({
     type: 'AUTHENTICATION_SUCCESSFULL'
   });
 

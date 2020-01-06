@@ -4,7 +4,6 @@ import { mkdirSync, rmdirSync } from "fs";
 import { ResponseMessage } from "../shared/messages/response-message";
 import { ConnectionHandler } from "./connection-handler";
 import { RequestMessage } from "../shared/messages/request-message";
-import { expect } from "chai";
 
 import a from 'assertron';
 
@@ -18,12 +17,16 @@ export class ServerTestBed {
     this.path = registry.globalContainer.get(Environment).dataPath;
   }
 
+  logout() {
+    this.server.logout();
+  }
+
   async prepare() {
     this.cleanup();
     this.responses = [];
     mkdirSync(this.path, { recursive: true })
     this.server = new ConnectionHandler(this.registry, r => {
-      this.responses.push(r)
+      this.responses.unshift(r)
     })
   }
 
@@ -44,7 +47,22 @@ export class ServerTestBed {
     a.satisfies(this.latestResponse(), response)
   }
 
+  expectSubscriptionResponse(response: any) {
+    const subscriptionResponse = this.responses.find(r => r.type ==='SUBSCRIPTION_RESULT')
+    a.satisfies(subscriptionResponse, response)
+  }
+
+  expectCommandResponse(response: any) {
+    const commandResponse = this.responses.find(r => r.type ==='COMMAND_SUCCESS')
+    a.satisfies(commandResponse, response)
+  }
+
+  expectAuthenticationResponse(response: any) {
+    const authResponse = this.responses.find(r => r.type ==='AUTHENTICATION_SUCCESSFULL')
+    a.satisfies(authResponse, response)
+  }
+
   latestResponse() {
-    return this.responses[this.responses.length - 1];
+    return this.responses[0];
   }
 }
