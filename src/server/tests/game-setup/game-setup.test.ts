@@ -6,8 +6,9 @@ import { ConnectionHandler } from '../../connection-handler';
 import { ResponseMessage } from '../../../shared/messages/response-message';
 import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from '../user-registration/user-management.workflows';
+import { createGame } from './game-setup.workflows';
 
-describe("user registration", () => {
+describe.only("user registration", () => {
 
   let containerRegistry: ContainerRegistry;
   let testBed: ServerTestBed;
@@ -27,7 +28,7 @@ describe("user registration", () => {
 
     await signUpAndLogin(testBed, 'foobar', '1234');
 
-    
+    await createGame(testBed, 'game1');
 
   })
 

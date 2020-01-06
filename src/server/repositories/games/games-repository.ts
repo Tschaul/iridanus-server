@@ -2,10 +2,11 @@ import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
 import { Observable, combineLatest, from, BehaviorSubject } from "rxjs";
 import { GameInfoSchema } from "./schema/v1";
-import { take, switchMap, concatMap } from "rxjs/operators";
+import { take, switchMap, concatMap, map } from "rxjs/operators";
 import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { normalize } from "../../../shared/math/vec2";
+import { GameInfo } from "../../../shared/model/v1/game-info";
 
 const BASE_FOLDER = 'games'
 
@@ -14,7 +15,7 @@ const pathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/games.json`;
 @injectable()
 export class GamesRepository {
 
-  private _data$: Observable<GameInfoSchema[]>;
+  private _data$: Observable<GameInfo[]>;
   private _gameIds$ = new BehaviorSubject<string[]>([]);
 
   constructor(private dataHandleRegistry: DataHandleRegistry, initializer: Initializer) {
@@ -26,7 +27,8 @@ export class GamesRepository {
             concatMap(handle => handle.asObservable())
           ))
         )
-      })
+      }),
+      map(schemas => schemas.map(schema => schema.info))
     )
   }
 
@@ -43,8 +45,8 @@ export class GamesRepository {
     return this._data$.pipe(take(1)).toPromise();
   }
 
-  public allGameInfossAsObservable() {
-    return this._data$ as Observable<Readonly<GameInfoSchema[]>>;
+  public allGameInfosAsObservable() {
+    return this._data$;
   }
 
   public async getGameInfoById(gameId: string) {
@@ -55,9 +57,9 @@ export class GamesRepository {
   public async createGame(gameId: string) {
     const handle = await this.handleForGameInfoById(gameId);
     await handle.create({
-      id: gameId,
       version: 1,
       info: {
+        id: gameId,
         state: 'PROPOSED',
         players: {}
       }
@@ -95,7 +97,7 @@ export class GamesRepository {
         draft.info.players[playerId] = {
           state: 'JOINED',
           name: playerId,
-          ... getPlayerTemplate(count)
+          ...getPlayerTemplate(count)
         } as PlayerInfo;
       }
     })

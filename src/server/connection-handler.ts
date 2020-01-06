@@ -75,6 +75,7 @@ export class ConnectionHandler {
             message.command,
             message.commandId,
             message.gameId,
+            this.authenticatedUser,
             (data: any) => this.sendfn(data),
           ));
           break;

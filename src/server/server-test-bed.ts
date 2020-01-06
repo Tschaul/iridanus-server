@@ -6,6 +6,8 @@ import { ConnectionHandler } from "./connection-handler";
 import { RequestMessage } from "../shared/messages/request-message";
 import { expect } from "chai";
 
+import a from 'assertron';
+
 export class ServerTestBed {
   path: string;
 
@@ -38,7 +40,11 @@ export class ServerTestBed {
     this.responses = [];
   }
 
-  expectResponse(response: ResponseMessage) {
-    expect(this.responses).to.deep.include(response);
+  expectResponse(response: any) {
+    a.satisfies(this.latestResponse(), response)
+  }
+
+  latestResponse() {
+    return this.responses[this.responses.length - 1];
   }
 }

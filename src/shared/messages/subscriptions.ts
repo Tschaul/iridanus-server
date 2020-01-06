@@ -1,8 +1,8 @@
-export type Subscription = GamesSubscription
+export type Subscription = GamesListSubscription
   | DummySubscription;
 
-export interface GamesSubscription {
-  type: 'GAMES'
+export interface GamesListSubscription {
+  type: 'GAME/LIST'
 }
 
 export interface DummySubscription {

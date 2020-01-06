@@ -13,15 +13,15 @@ export async function signUpAndLogin(testBed: ServerTestBed, username: string, p
     commandId: 'sign_up'
   })
 
+  testBed.expectResponse({
+    type: 'COMMAND_SUCCESS',
+    commandId: 'sign_up'
+  });
+
   await testBed.sendMessage({
     type: 'AUTHENTICATE',
     userId: username,
     password: password
-  });
-
-  testBed.expectResponse({
-    type: 'COMMAND_SUCCESS',
-    commandId: 'sign_up'
   });
 
   testBed.expectResponse({

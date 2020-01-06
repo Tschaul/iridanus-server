@@ -6,6 +6,7 @@ import { ContainerRegistry } from "../container-registry";
 import { CounterDataProvider } from "./providers/counter-data-provider";
 import { DataProvider } from "./providers/data-provider";
 import { ResponseMessage } from "../../shared/messages/response-message";
+import { getGameSetupDataProvider } from "./providers/game-setup/game-setup-data-provider-registry";
 
 @injectable()
 export class SubscriptionHandler {
@@ -51,7 +52,12 @@ export class SubscriptionHandler {
 
   private getDataProvider(registry: ContainerRegistry, subscription: Subscription, gameId: string | null | undefined): DataProvider {
     const container = registry.getContainerByGameId(gameId);
-    switch (subscription.type) {
+
+    const firstPart = subscription.type.split('/')[0];
+
+    switch (firstPart) {
+      case 'GAME':
+        return getGameSetupDataProvider(registry, subscription, gameId);
       case 'DUMMY_COUNTER':
         return container.get(CounterDataProvider) as DataProvider
     }

@@ -1,3 +1,3 @@
 export interface CommandExecutor<T> {
-  execute(command: T): Promise<void>
+  execute(command: T, userId: string | null): Promise<void>
 }

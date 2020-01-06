@@ -1,29 +1,33 @@
 
-export type GameCommand = CreateGameCommand;
+export type GameCommand = CreateGameCommand
+  | SetRulesForGameCommand
+  | SetMapForGameCommand
+  | JoinGameCommand
+  | ReadyForGameCommand;
 
 export interface CreateGameCommand {
-  type: 'CREATE_GAME',
+  type: 'GAME/CREATE',
   gameId: string
 }
 
 export interface SetRulesForGameCommand {
-  type: 'SET_RULES_FOR_GAME',
+  type: 'GAME/SET_RULES',
   gameId: string,
   rulesId: string,
 }
 
 export interface SetMapForGameCommand {
-  type: 'SET_MAP_FOR_GAME',
+  type: 'GAME/SET_MAP',
   gameId: string,
-  rulesId: string,
+  mapId: string,
 }
 
 export interface JoinGameCommand {
-  type: 'JOIN_GAME',
+  type: 'GAME/JOIN',
   gameId: string
 }
 
 export interface ReadyForGameCommand {
-  type: 'READY_FOR_GAME',
+  type: 'GAME/READY',
   gameId: string
 }

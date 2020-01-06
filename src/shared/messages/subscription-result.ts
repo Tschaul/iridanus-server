@@ -4,7 +4,7 @@ export type SubscriptionResult = GamesSubscriptionResult
   | DummySubscriptionResult;
 
 export interface GamesSubscriptionResult {
-  type: 'GAMES',
+  type: 'GAME/LIST',
   games: GameInfo[]
 }
 

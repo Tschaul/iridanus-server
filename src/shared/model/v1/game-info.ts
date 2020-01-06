@@ -3,6 +3,7 @@ import { PlayerInfos } from "./player-info";
 export type GameInfo = ProposedGameInfo | StartedGameInfo;
 
 export interface GameInfoBase {
+  id: string;
   players: PlayerInfos;
 }
 
