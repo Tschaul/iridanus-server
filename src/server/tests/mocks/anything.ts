@@ -1,0 +1,1 @@
+export const anything = (() => true) as any;

@@ -7,6 +7,7 @@ import { ResponseMessage } from '../../../shared/messages/response-message';
 import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from '../user-registration/user-management.workflows';
 import { createGame, joinGame } from './game-setup.workflows';
+import { anything } from '../mocks/anything';
 
 describe.only("user registration", () => {
 
@@ -46,7 +47,7 @@ describe.only("user registration", () => {
         games: [{
           id: 'game1',
           players: {
-            'foobar': () => true
+            'foobar': anything
           },
           state: 'PROPOSED',
         }]
@@ -65,8 +66,8 @@ describe.only("user registration", () => {
         games: [{
           id: 'game1',
           players: {
-            'foobar': () => true,
-            'barbaz': () => true,
+            'foobar': anything,
+            'barbaz': anything,
           },
           state: 'PROPOSED',
         }]

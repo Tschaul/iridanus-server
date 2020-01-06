@@ -1,7 +1,7 @@
 import { ContainerRegistry } from "./container-registry";
 import { Environment } from "./environment/environment";
 import { mkdirSync, rmdirSync } from "fs";
-import { ResponseMessage } from "../shared/messages/response-message";
+import { ResponseMessage, SubscriptionResponse, CommandResponse, AuthenticationResponse } from "../shared/messages/response-message";
 import { ConnectionHandler } from "./connection-handler";
 import { RequestMessage } from "../shared/messages/request-message";
 
@@ -47,17 +47,17 @@ export class ServerTestBed {
     a.satisfies(this.latestResponse(), response)
   }
 
-  expectSubscriptionResponse(response: any) {
+  expectSubscriptionResponse(response: SubscriptionResponse) {
     const subscriptionResponse = this.responses.find(r => r.type ==='SUBSCRIPTION_RESULT')
     a.satisfies(subscriptionResponse, response)
   }
 
-  expectCommandResponse(response: any) {
+  expectCommandResponse(response: CommandResponse) {
     const commandResponse = this.responses.find(r => r.type ==='COMMAND_SUCCESS')
     a.satisfies(commandResponse, response)
   }
 
-  expectAuthenticationResponse(response: any) {
+  expectAuthenticationResponse(response: AuthenticationResponse) {
     const authResponse = this.responses.find(r => r.type ==='AUTHENTICATION_SUCCESSFULL')
     a.satisfies(authResponse, response)
   }
