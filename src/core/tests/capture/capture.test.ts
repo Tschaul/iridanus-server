@@ -1,4 +1,4 @@
-import { map } from "./capture-test-map";
+import { caputerTestMap } from "./capture-test-map";
 import produce from "immer";
 
 import { runMap } from "../test-helper";
@@ -10,7 +10,7 @@ describe("capture", () => {
 
   it("does capture fleet", async () => {
     
-    const playedMap = produce(map, draft => {
+    const playedMap = produce(caputerTestMap, draft => {
       draft.universe.fleets["f2"].status = 'LOST';
     });
 
@@ -23,7 +23,7 @@ describe("capture", () => {
 
   it("does capture world", async () => {
     
-    const playedMap = produce(map, draft => {
+    const playedMap = produce(caputerTestMap, draft => {
       draft.universe.fleets["f2"].status = 'LOST';
       draft.universe.worlds["w1"].status = 'LOST';
     });

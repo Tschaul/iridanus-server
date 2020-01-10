@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
 import { ReplaySubject, Observable } from "rxjs";
 import { RulesSchema } from "./schema/v1";
-import { take } from "rxjs/operators";
+import { take, map } from "rxjs/operators";
 import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
 
 const BASE_FOLDER = 'rules'
@@ -41,7 +41,7 @@ export class RulesRepository {
   }
 
   public allRulesAsObservable() {
-    return this._data$ as Observable<Readonly<RulesSchema[]>>;
+    return this._data$.pipe(map(rulesData => rulesData.map(data => data.rules)));
   }
 
   public async getRuleById(ruleId: string) {

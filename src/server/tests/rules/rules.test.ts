@@ -3,30 +3,28 @@ import { setupContainerRegistry } from '../setup-container-registry';
 import { ContainerRegistry } from '../../container-registry';
 import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from '../user-registration/user-management.workflows';
-import { MapSchema } from '../../repositories/maps/schema/v1';
+import { RulesSchema } from '../../repositories/rules/schema/v1';
 
 describe("user registration", () => {
 
 
-  const map1data: MapSchema = {
+  const rules1data: RulesSchema = {
     version: 1,
-    map: {
-      id: 'map1',
+    rules: {
+      id: 'rules1',
+      name: 'Awesome Ruleset',
+      rules: undefined as any,
       final: true,
-      initialState: undefined as any,
-      name: 'Awesome Map',
-      seats: []
     }
   }
 
-  const map2data: MapSchema = {
+  const rules2data: RulesSchema = {
     version: 1,
-    map: {
-      id: 'map2',
+    rules: {
+      id: 'rules2',
+      name: 'Another Ruleset',
+      rules: undefined as any,
       final: false,
-      initialState: undefined as any,
-      name: 'Another Map',
-      seats: []
     }
   }
 
@@ -42,51 +40,51 @@ describe("user registration", () => {
     await signUpAndLogin(testBed, 'foobar', '1234');
     testBed.clearResponses()
 
-    await testBed.putData('maps/map1/map.json', map1data)
-    await testBed.putData('maps/map2/map.json', map2data)
+    await testBed.putData('rules/rules1/rules.json', rules1data)
+    await testBed.putData('rules/rules2/rules.json', rules2data)
   })
 
   afterEach(async () => {
     await testBed.cleanup();
   })
 
-  it('gets all maps', async () => {
+  it('gets all rules', async () => {
 
     await testBed.sendMessage({
       type: 'BEGIN_SUBSCRIPTION',
-      id: 'all_maps',
+      id: 'all_rules',
       subscription: {
-        type: 'MAP/LIST_ALL'
+        type: 'RULES/LIST_ALL'
       },
     })
 
     testBed.expectSubscriptionResponse({
       type: 'SUBSCRIPTION_RESULT',
-      id: 'all_maps',
+      id: 'all_rules',
       result: {
-        type: 'MAP/LIST_ALL',
-        maps: [map1data.map, map2data.map]
+        type: 'RULES/LIST_ALL',
+        rules: [rules1data.rules, rules2data.rules]
       }
     })
 
   })
 
-  it('gets all finalized maps', async () => {
+  it('gets all finalized rules', async () => {
 
     await testBed.sendMessage({
       type: 'BEGIN_SUBSCRIPTION',
-      id: 'final_maps',
+      id: 'final_rules',
       subscription: {
-        type: 'MAP/LIST_FINAL'
+        type: 'RULES/LIST_FINAL'
       },
     })
 
     testBed.expectSubscriptionResponse({
       type: 'SUBSCRIPTION_RESULT',
-      id: 'final_maps',
+      id: 'final_rules',
       result: {
-        type: 'MAP/LIST_FINAL',
-        maps: [map1data.map]
+        type: 'RULES/LIST_FINAL',
+        rules: [rules1data.rules]
       }
     })
 

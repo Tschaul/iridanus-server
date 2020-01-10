@@ -2,8 +2,9 @@ import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
 import { ReplaySubject, Observable } from "rxjs";
 import { MapSchema } from "./schema/v1";
-import { take } from "rxjs/operators";
+import { take, map } from "rxjs/operators";
 import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
+import { GameMap } from "../../../shared/model/v1/game-map";
 
 const BASE_FOLDER = 'maps'
 
@@ -36,12 +37,12 @@ export class MapRepository {
     return this.dataHandleRegistry.getDataHandle<MapSchema>(pathById(mapId));
   }
 
-  public getAllMap() {
-    return this._data$.pipe(take(1)).toPromise();
+  public getAllMaps() {
+    return this.allMapAsObservable().pipe(take(1)).toPromise();
   }
 
   public allMapAsObservable() {
-    return this._data$ as Observable<Readonly<MapSchema[]>>;
+    return this._data$.pipe(map(mapData => mapData.map(data => data.map))) as Observable<GameMap[]>;
   }
 
   public async getMapById(mapId: string) {

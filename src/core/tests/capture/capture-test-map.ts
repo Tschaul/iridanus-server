@@ -1,6 +1,6 @@
 import { GameState } from "../../../shared/model/v1/state";
 
-export const map: GameState = {
+export const caputerTestMap: GameState = {
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_VALUE,
   universe: {

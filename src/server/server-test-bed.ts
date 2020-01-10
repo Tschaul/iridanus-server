@@ -46,6 +46,7 @@ export class ServerTestBed {
   async sendMessage(message: RequestMessage) {
     this.server.handleMessage(message);
     await this.server.settleQueue();
+    await new Promise(r => setTimeout(r,0));
   }
 
   clearResponses() {

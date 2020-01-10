@@ -6,6 +6,8 @@ import { ContainerRegistry } from "../container-registry";
 import { DataProvider } from "./providers/data-provider";
 import { ResponseMessage } from "../../shared/messages/response-message";
 import { getGameSetupDataProvider } from "./providers/game-setup/game-setup-data-provider-registry";
+import { getMapDataProvider } from "./providers/maps/maps-data-provider-registry";
+import { getRulesDataProvider } from "./providers/rules/rules-data-provider-registry";
 
 @injectable()
 export class SubscriptionHandler {
@@ -16,11 +18,11 @@ export class SubscriptionHandler {
 
   public newSubscription(
     registry: ContainerRegistry,
-    subcription: Subscription, 
-    id: string, 
+    subcription: Subscription,
+    id: string,
     gameId: string | null | undefined,
     userId: string | null,
-    sendfn: (data: ResponseMessage) => void, 
+    sendfn: (data: ResponseMessage) => void,
   ) {
 
     if (this.activeSubscriptions.has(id)) {
@@ -63,13 +65,16 @@ export class SubscriptionHandler {
   }
 
   private getDataProvider(registry: ContainerRegistry, subscription: Subscription, gameId: string | null | undefined): DataProvider {
-    const container = registry.getContainerByGameId(gameId);
 
     const firstPart = subscription.type.split('/')[0];
 
     switch (firstPart) {
       case 'GAME':
         return getGameSetupDataProvider(registry, subscription, gameId);
+      case 'MAP':
+        return getMapDataProvider(registry, subscription, gameId);
+      case 'RULES':
+        return getRulesDataProvider(registry, subscription, gameId);
     }
 
     throw new Error('unhandled case ' + subscription.type)

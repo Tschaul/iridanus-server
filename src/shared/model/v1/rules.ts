@@ -23,4 +23,5 @@ export interface GameRuleSet {
   id: string;
   name: string;
   rules: GameRules;
+  final: boolean;
 }

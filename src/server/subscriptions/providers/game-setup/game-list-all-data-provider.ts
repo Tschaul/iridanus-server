@@ -7,7 +7,7 @@ import { GameListAllSubscriptionResult } from "../../../../shared/messages/subsc
 import { GameRepository } from "../../../repositories/games/games-repository";
 
 @injectable()
-export class GamesListDataProvider implements DataProvider {
+export class GameListAllDataProvider implements DataProvider {
   authenticationRequired = true;
 
   constructor(private repository: GameRepository){}
