@@ -5,7 +5,8 @@ import { SignUpUserCommand } from "../../../../shared/messages/commands/user-com
 
 @injectable()
 export class SignUpUserExecutor implements CommandExecutor<SignUpUserCommand> {
-
+  authenticationRequired = false;
+  
   constructor(private userRepository: UserRepository) {
   }
 

@@ -1,4 +1,4 @@
-import { Universe } from "../shared/model/v1/universe";
+import { Universe } from "./universe";
 
 export interface GameState {
     currentTimestamp: number;

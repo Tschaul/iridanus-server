@@ -13,7 +13,7 @@ const BASE_FOLDER = 'games'
 const pathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/games.json`;
 
 @injectable()
-export class GamesRepository {
+export class GameRepository {
 
   private _data$: Observable<GameInfo[]>;
   private _gameIds$ = new BehaviorSubject<string[]>([]);

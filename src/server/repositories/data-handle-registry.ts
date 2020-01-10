@@ -45,7 +45,7 @@ export class DataHandleRegistry {
   }
 
   private validateDirectoryPath(path: string) {
-    return !!path.match(/^[a-z\d\/\-]*$/)
+    return !!path.match(/^[a-z\d\/\-_]*$/)
   }
 
 }

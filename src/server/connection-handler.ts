@@ -67,6 +67,7 @@ export class ConnectionHandler {
             message.subscription,
             message.id,
             message.gameId,
+            this.authenticatedUserId,
             (data: any) => this.sendfn(data),
           );
           break;

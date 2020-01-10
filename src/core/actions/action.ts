@@ -1,4 +1,4 @@
-import { GameState } from "../state";
+import { GameState } from "../../shared/model/v1/state";
 
 export interface Action {
     describe(): string;

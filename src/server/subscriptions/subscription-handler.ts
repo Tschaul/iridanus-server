@@ -3,7 +3,6 @@ import { Subscription } from "../../shared/messages/subscriptions";
 import { Observable, Subject, interval } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ContainerRegistry } from "../container-registry";
-import { CounterDataProvider } from "./providers/counter-data-provider";
 import { DataProvider } from "./providers/data-provider";
 import { ResponseMessage } from "../../shared/messages/response-message";
 import { getGameSetupDataProvider } from "./providers/game-setup/game-setup-data-provider-registry";
@@ -20,16 +19,29 @@ export class SubscriptionHandler {
     subcription: Subscription, 
     id: string, 
     gameId: string | null | undefined,
-    sendfn: (data: Object) => void, 
+    userId: string | null,
+    sendfn: (data: ResponseMessage) => void, 
   ) {
 
     if (this.activeSubscriptions.has(id)) {
-      return; // TODO send error
+      sendfn({
+        type: 'ERROR',
+        error: 'Subscription id is allready in use'
+      })
+      return;
     }
 
     const cancelSubject = new Subject<never>();
 
     const dataProvider = this.getDataProvider(registry, subcription, gameId);
+
+    if (dataProvider.authenticationRequired && userId == null) {
+      sendfn({
+        type: 'ERROR',
+        error: 'Authentication required'
+      })
+      return;
+    }
 
     dataProvider.getObservable(subcription).pipe(takeUntil(cancelSubject)).subscribe(data => {
       const response: ResponseMessage = {
@@ -58,8 +70,6 @@ export class SubscriptionHandler {
     switch (firstPart) {
       case 'GAME':
         return getGameSetupDataProvider(registry, subscription, gameId);
-      case 'DUMMY_COUNTER':
-        return container.get(CounterDataProvider) as DataProvider
     }
 
     throw new Error('unhandled case ' + subscription.type)

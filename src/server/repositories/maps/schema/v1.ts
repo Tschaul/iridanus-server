@@ -1,9 +1,6 @@
-import { GameState } from "../../../../core/state";
+import { GameMap } from "../../../../shared/model/v1/game-map";
 
 export interface MapSchema {
-  id: string;
-  name: string;
-  final: boolean;
-  initialState: GameState;
-  seats: string[];
+  version: 1;
+  map: GameMap
 }

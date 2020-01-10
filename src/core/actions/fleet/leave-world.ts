@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { GameState } from "../../state";
+import { GameState } from "../../../shared/model/v1/state";
 import { baseFleet, LeavingFleet, ReadyFleet } from "../../../shared/model/v1/fleet";
 import { updateFleet } from "./update-fleet";
 

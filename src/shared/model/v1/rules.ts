@@ -18,3 +18,9 @@ export interface GameRules {
     arriveWorldDelay: number;
   }
 }
+
+export interface GameRuleSet {
+  id: string;
+  name: string;
+  rules: GameRules;
+}

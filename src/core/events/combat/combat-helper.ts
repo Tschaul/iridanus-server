@@ -1,7 +1,7 @@
 import { ReadyFleet, Fleet } from "../../../shared/model/v1/fleet";
 import { ReadyWorld, World } from "../../../shared/model/v1/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
-import { GameRules } from "../../rules";
+import { GameRules } from "../../../shared/model/v1/rules";
 import { Action } from "../../actions/action";
 import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
 import { setFleetIntegrity } from "../../actions/fleet/set-integrity";

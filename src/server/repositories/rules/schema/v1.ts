@@ -1,8 +1,6 @@
-import { GameRules } from "../../../../core/rules";
+import { GameRuleSet } from "../../../../shared/model/v1/rules";
 
 export interface RulesSchema {
   version: 1;
-  id: string;
-  name: string;
-  rules: GameRules;
+  data: GameRuleSet;
 }

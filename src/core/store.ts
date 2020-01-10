@@ -2,7 +2,7 @@ import { Subject, Observable, throwError, concat, ReplaySubject } from 'rxjs';
 import { scan, startWith, tap, withLatestFrom, sample, publishReplay, publish, shareReplay } from 'rxjs/operators';
 import { injectable, inject } from 'inversify';
 import { Action } from './actions/action';
-import { GameState } from './state';
+import { GameState } from '../shared/model/v1/state';
 import { GameSetupProvider } from './game-setup-provider';
 
 @injectable()

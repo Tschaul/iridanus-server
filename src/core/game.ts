@@ -3,7 +3,7 @@ import { combineLatest, Subject } from "rxjs";
 import {injectable } from 'inversify'
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
-import { GameState } from "./state";
+import { GameState } from "../shared/model/v1/state";
 import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
 import { Logger } from "./infrastructure/logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";

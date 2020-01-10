@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { GameState } from "../../state";
+import { GameState } from "../../../shared/model/v1/state";
 import { updateFleet } from "./update-fleet";
 
 export function giveOrTakeFleetShips(fleetid: string, amount: number): Action {

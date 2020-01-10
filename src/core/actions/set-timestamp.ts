@@ -1,5 +1,5 @@
 import { Action } from "./action";
-import { GameState } from "../state";
+import { GameState } from "../../shared/model/v1/state";
 import produce from "immer"
 
 export function setTimestamp(newTimestamp: number): Action {

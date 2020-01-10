@@ -1,20 +1,24 @@
 import { ContainerRegistry } from "./container-registry";
 import { Environment } from "./environment/environment";
-import { mkdirSync, rmdirSync } from "fs";
-import { ResponseMessage, SubscriptionResponse, CommandResponse, AuthenticationResponse } from "../shared/messages/response-message";
+import { mkdirSync, rmdirSync, writeFileSync } from "fs";
+import { ResponseMessage, SubscriptionResponse, CommandResponse, AuthenticationResponse, ErrorReponse } from "../shared/messages/response-message";
 import { ConnectionHandler } from "./connection-handler";
 import { RequestMessage } from "../shared/messages/request-message";
 
 import a from 'assertron';
+import { join, dirname } from "path";
+import { DataHandleRegistry } from "./repositories/data-handle-registry";
 
 export class ServerTestBed {
   path: string;
 
   private responses: ResponseMessage[];
   server: ConnectionHandler;
+  dataHandleRegistry: DataHandleRegistry;
 
   constructor(private registry: ContainerRegistry) {
     this.path = registry.globalContainer.get(Environment).dataPath;
+    this.dataHandleRegistry = registry.globalContainer.get(DataHandleRegistry);
   }
 
   logout() {
@@ -28,6 +32,11 @@ export class ServerTestBed {
     this.server = new ConnectionHandler(this.registry, r => {
       this.responses.unshift(r)
     })
+  }
+
+  async putData(path: string, data: any) {
+    const handle = await this.dataHandleRegistry.getDataHandle(path);
+    await handle.create(data);
   }
 
   async cleanup() {
@@ -54,6 +63,11 @@ export class ServerTestBed {
 
   expectCommandResponse(response: CommandResponse) {
     const commandResponse = this.responses.find(r => r.type ==='COMMAND_SUCCESS')
+    a.satisfies(commandResponse, response)
+  }
+
+  expectErrorResponse(response: ErrorReponse) {
+    const commandResponse = this.responses.find(r => r.type ==='ERROR')
     a.satisfies(commandResponse, response)
   }
 

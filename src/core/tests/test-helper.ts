@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { GameState } from "../state";
+import { GameState } from "../../shared/model/v1/state";
 import { Clock } from "../infrastructure/clock";
 import { Game } from "../game";
 import { Logger } from "../infrastructure/logger";

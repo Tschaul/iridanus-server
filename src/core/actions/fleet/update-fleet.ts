@@ -1,5 +1,5 @@
 import { Fleet } from "../../../shared/model/v1/fleet";
-import { GameState } from "../../state";
+import { GameState } from "../../../shared/model/v1/state";
 import produce from "immer";
 
 export function updateFleet<Told extends Fleet, Tnew extends Fleet>(

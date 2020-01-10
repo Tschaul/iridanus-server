@@ -1,4 +1,4 @@
-import { GameState } from "../../state";
+import { GameState } from "../../../shared/model/v1/state";
 
 export const warpTestMap: GameState = {
   currentTimestamp: 0,

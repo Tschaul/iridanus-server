@@ -1,4 +1,4 @@
-import { GameState } from "../state";
+import { GameState } from "../../shared/model/v1/state";
 import { GameEvent } from "./event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";

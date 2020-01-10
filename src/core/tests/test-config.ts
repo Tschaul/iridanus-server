@@ -1,4 +1,4 @@
-import { GameRules } from "../rules";
+import { GameRules } from "../../shared/model/v1/rules";
 
 const second = 1000;
 

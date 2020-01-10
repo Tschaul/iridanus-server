@@ -1,10 +1,10 @@
-export type Subscription = GamesListSubscription
-  | DummySubscription;
+export type Subscription = GamesListAllSubscription
+  | MapListAllSubscription;
 
-export interface GamesListSubscription {
-  type: 'GAME/LIST'
+export interface GamesListAllSubscription {
+  type: 'GAME/LIST_ALL'
 }
 
-export interface DummySubscription {
-  type: 'DUMMY_COUNTER'
+export interface MapListAllSubscription {
+  type: 'MAP/LIST_ALL'
 }

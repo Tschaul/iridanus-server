@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { GameRules } from "./rules";
-import { GameState } from "./state";
+import { GameRules } from "../shared/model/v1/rules";
+import { GameState } from "../shared/model/v1/state";
 
 @injectable()
 export class GameSetupProvider {

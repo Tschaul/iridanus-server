@@ -1,5 +1,5 @@
 import { GameInfo } from "../../../../shared/model/v1/game-info";
-import { GameState } from "../../../../core/state";
+import { GameState } from "../../../../shared/model/v1/state";
 
 export interface GameInfoSchema {
   version: 1;

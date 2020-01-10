@@ -1,12 +1,13 @@
 import { injectable } from "inversify";
 import { CommandExecutor } from "../command-executor";
 import { CreateGameCommand } from "../../../../shared/messages/commands/game-commands";
-import { GamesRepository } from "../../../repositories/games/games-repository";
+import { GameRepository } from "../../../repositories/games/games-repository";
 
 @injectable()
 export class CreateGameExecutor implements CommandExecutor<CreateGameCommand> {
+  authenticationRequired = true;
 
-  constructor(private repository: GamesRepository) {
+  constructor(private repository: GameRepository) {
 
   }
 

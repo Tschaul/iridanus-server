@@ -21,6 +21,16 @@ export class CommandHandler {
     sendfn: (data: ResponseMessage) => void
   ) {
     const executor = this.getCommandExecutor(registry, command, gameId);
+
+    if (executor.authenticationRequired && userId == null) {
+      sendfn({
+        type: 'ERROR',
+        error: 'Authentication required',
+        commandId
+      })
+      return;
+    }
+
     const globalErrorHandler = registry.globalContainer.get(GlobalErrorHandler);
     const initializer = registry.globalContainer.get(Initializer);
 

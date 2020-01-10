@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { GameState } from "../../state";
+import { GameState } from "../../../shared/model/v1/state";
 import { ReadyWorld, baseWorld, BuildingIndustryWorld } from "../../../shared/model/v1/world";
 import { updateWorld } from "./update-world";
 

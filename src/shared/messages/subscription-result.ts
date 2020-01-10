@@ -1,14 +1,15 @@
 import { GameInfo } from "../model/v1/game-info";
+import { GameMap } from "../model/v1/game-map";
 
-export type SubscriptionResult = GamesSubscriptionResult
-  | DummySubscriptionResult;
+export type SubscriptionResult = GameListAllSubscriptionResult
+ | MapListAllSubscriptionResult;
 
-export interface GamesSubscriptionResult {
-  type: 'GAME/LIST',
+export interface GameListAllSubscriptionResult {
+  type: 'GAME/LIST_ALL',
   games: GameInfo[]
 }
 
-export interface DummySubscriptionResult {
-  type: 'DUMMY_COUNTER',
-  i: number
+export interface MapListAllSubscriptionResult {
+  type: 'MAP/LIST_ALL',
+  maps: GameMap[]
 }
