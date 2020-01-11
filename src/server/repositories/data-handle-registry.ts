@@ -67,6 +67,8 @@ export class DataHandle<TData> {
       if (fileExists) {
         this.existsForSure = true;
         return this.readFileAtFullpath();
+      } else {
+        return Promise.resolve()
       }
     });
     // Release object
@@ -74,7 +76,8 @@ export class DataHandle<TData> {
 
   private async readFileAtFullpath() {
     // TODO dont block thread while reading
-    this._data$.next(JSON.parse(readFileSync(this.fullpath, 'utf8')));
+    const data =JSON.parse(readFileSync(this.fullpath, 'utf8'));
+    this._data$.next(data);
   }
 
   private async writeFileAtFullpath(data: TData) {
@@ -128,6 +131,7 @@ export class DataHandle<TData> {
     // TODO dont block thread
     if (existsSync(this.fullpath)) {
       this.existsForSure = true;
+      return true;
     } else {
       return false;
     }

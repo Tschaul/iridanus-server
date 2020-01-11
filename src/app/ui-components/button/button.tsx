@@ -1,7 +1,9 @@
 import * as React from "react";
 import { screenPseudoTransparent, screenWhite } from "../colors/colors";
 
-export class Button extends React.Component {
+export class Button extends React.Component<{
+  onClick?: () => void
+}> {
   render() {
 
     const buttonStyle: React.CSSProperties = {
@@ -12,11 +14,12 @@ export class Button extends React.Component {
       borderRadius: '0.5em',
       fontWeight: 'bold',
       boxShadow: 'rgba(255, 255, 255, 0.5) 0px 0px 5px',
-      textShadow: 'rgba(114, 130, 135, 029) 0px 0px 5px'
+      textShadow: 'rgba(114, 130, 135, 029) 0px 0px 5px',
+      cursor: 'pointer'
     }
 
     return(
-      <div style={buttonStyle}>{this.props.children}</div>
+      <div style={buttonStyle} onClick={this.props.onClick}>{this.props.children}</div>
     )
   }
 }

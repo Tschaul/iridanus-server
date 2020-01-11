@@ -1,13 +1,15 @@
-import { injectable } from "inversify";
 import { GameViewModel } from "./game/game-view-model";
+import { observable } from "mobx";
+import { WelcomeViewModel } from "./welcome/welcome-view-model";
 
-type PossibleScreen = 'GAME';
+type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
 
-@injectable()
 export class MainViewModel {
   
-  activeScreen: PossibleScreen = 'GAME';
+  @observable
+  activeScreen: PossibleScreen = 'WELCOME';
 
   public gameViewModel = new GameViewModel(this);
+  public welcomeViewModel = new WelcomeViewModel(this);
 
 }

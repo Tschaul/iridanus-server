@@ -1,7 +1,7 @@
 import { SubscriptionResult } from "./subscription-result";
 
 export interface AuthenticationResponse {
-  type: 'AUTHENTICATION_SUCCESSFULL'
+  type: 'AUTHENTICATION_SUCCESSFULL' | 'AUTHENTICATION_NOT_SUCCESSFULL'
 }
 
 export interface ErrorReponse {

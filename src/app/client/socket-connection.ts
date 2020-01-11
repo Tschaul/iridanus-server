@@ -2,7 +2,10 @@ import { injectable } from "inversify";
 import { ReplaySubject, Observable } from "rxjs";
 import { RequestMessage } from "../../shared/messages/request-message";
 import { ResponseMessage, SubscriptionResponse } from "../../shared/messages/response-message";
-import { filter } from "rxjs/operators";
+import { filter, take } from "rxjs/operators";
+import { makeId } from "./make-id";
+import { Command } from "../../shared/messages/commands/commands";
+import { response } from "express";
 
 @injectable()
 export class SocketConnection {
@@ -30,8 +33,53 @@ export class SocketConnection {
     })
   }
 
-  public send(msg: RequestMessage) {
+  private send(msg: RequestMessage) {
     this.requests$$.next(msg);
+  }
+
+  public authenticate(userId: string, password: string) {
+    this.send({
+      type: 'AUTHENTICATE',
+      userId,
+      password,
+    })
+    return new Promise((resolve, reject) => {
+      this.responses$.pipe(
+        filter(response => response.type === 'AUTHENTICATION_SUCCESSFULL' || response.type === 'AUTHENTICATION_NOT_SUCCESSFULL'),
+        take(1)
+      ).subscribe(response => {
+        if(response.type === 'AUTHENTICATION_SUCCESSFULL') {
+          resolve();
+        } else {
+          reject('Authentication was not successfull');
+        }
+      }
+      )
+    })
+  }
+
+  public sendCommand(command: Command, gameId?: string): Promise<void> {
+    const commandId = makeId();
+    this.send({
+      type: 'COMMAND',
+      command,
+      commandId,
+      gameId
+    })
+    return new Promise((resolve, reject) => {
+      this.responses$.pipe(
+        filter(response => 'commandId' in response && response.commandId === commandId),
+        take(1)
+      ).subscribe(response => {
+        if(response.type === 'COMMAND_SUCCESS') {
+          resolve();
+        } else {
+          const error = response.type === 'ERROR' ?  response.error : 'command id was missused'
+          reject(error);
+        }
+      }
+      )
+    })
   }
 
   public subscribe<TSubscriptionResponse, TSubscriptionResult>(subscription: TSubscriptionResponse): Observable<TSubscriptionResult> {
@@ -56,12 +104,3 @@ export class SocketConnection {
 
 }
 
-function makeId(length: number) {
-  var result = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}

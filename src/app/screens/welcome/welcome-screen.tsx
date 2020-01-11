@@ -2,8 +2,14 @@ import * as React from "react";
 import { Background } from "../../ui-components/background/background-component";
 import { Panel } from "../../ui-components/panel/panel-component";
 import { Button } from "../../ui-components/button/button";
+import { WelcomeViewModel } from "../../view-model/welcome/welcome-view-model";
+import { InputString } from "../../ui-components/input/input-component";
+import { wrapObservable } from "../helper/wrap-observable";
+import autobind from "autobind-decorator";
 
-export class WelcomScreen extends React.Component {
+export class WelcomeScreen extends React.Component<{
+  vm: WelcomeViewModel
+}> {
   render() {
 
     const flexContainerStyle: React.CSSProperties = {
@@ -32,18 +38,23 @@ export class WelcomScreen extends React.Component {
             
             <br/>
             please enter login<br/>
-            ><br/>
+            ><InputString value={wrapObservable(this.props.vm, 'username')} /><br/>
             <br/>
             <br/>
             please enter password<br/>
-            ><br/>
+            ><InputString value={wrapObservable(this.props.vm, 'password')} /><br/>
             <br/>
             <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-            <Button>ENTER</Button>
+            <Button onClick={this.handleEnterClick}>ENTER</Button>
             </div>
           </Panel>
         </div>
       </Background>
     )
+  }
+
+  @autobind
+  handleEnterClick() {
+    this.props.vm.login();
   }
 }

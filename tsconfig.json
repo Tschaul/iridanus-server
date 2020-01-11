@@ -16,5 +16,9 @@
             "node",
             "mocha"
         ]
-    }
+    },
+    "exclude": [
+        "**/tests/**/*.ts",
+        "build/**"
+    ]
 }

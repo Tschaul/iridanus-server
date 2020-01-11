@@ -55,8 +55,7 @@ export class ConnectionHandler {
                 })
               } else {
                 this.sendfn({
-                  type: 'ERROR',
-                  error: 'Authentication was not successfull'
+                  type: 'AUTHENTICATION_NOT_SUCCESSFULL',
                 })
               }
             })
