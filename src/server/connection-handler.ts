@@ -8,6 +8,7 @@ import { GlobalErrorHandler } from "./commands/infrastructure/error-handling/glo
 
 import { Initializer } from "./commands/infrastructure/initialisation/initializer";
 import { Queue } from "./commands/infrastructure/queue/queue";
+import { Subject } from "rxjs";
 
 export class ConnectionHandler {
 
@@ -16,8 +17,9 @@ export class ConnectionHandler {
   private userRepository: UserRepository;
   private globalErrorHandler: GlobalErrorHandler;
   private authenticatedUserId: string | null = null;
-  queue: Queue;
-  initializer: Initializer;
+  private queue: Queue;
+  private initializer: Initializer;
+  private hasBeenDisposed$$: Subject<never>;
 
   constructor(private containerRegistry: ContainerRegistry, private sendfn: (reponse: ResponseMessage) => void) {
     this.subscriptionHandler = containerRegistry.globalContainer.get(SubscriptionHandler);
@@ -27,6 +29,8 @@ export class ConnectionHandler {
     this.initializer = containerRegistry.globalContainer.get(Initializer);
 
     this.queue = new Queue();
+
+    this.hasBeenDisposed$$ = new Subject<never>();
   }
 
   logout() {
@@ -37,6 +41,11 @@ export class ConnectionHandler {
     return new Promise((resolve) => {
       this.queue.add(async () => resolve())
     })
+  }
+
+  dispose() {
+    this.hasBeenDisposed$$.next();
+    this.hasBeenDisposed$$.complete();
   }
 
   handleMessage(message: RequestMessage) {
@@ -68,6 +77,7 @@ export class ConnectionHandler {
             message.gameId,
             this.authenticatedUserId,
             (data: any) => this.sendfn(data),
+            this.hasBeenDisposed$$
           );
           break;
         case 'END_SUBSCRIPTION':

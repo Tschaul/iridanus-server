@@ -19,10 +19,13 @@ webSocketServer.on('connection', (socket: WebSocket) => {
   const connectionHandler = new ConnectionHandler(containerRegistry, r => socket.send(JSON.stringify(r)));
 
   socket.addEventListener('message', (e: MessageEvent) => {
-
-        const message = JSON.parse(e.data) as RequestMessage;
-        connectionHandler.handleMessage(message);
+    const message = JSON.parse(e.data) as RequestMessage;
+    connectionHandler.handleMessage(message);
   });
+
+  socket.addEventListener('close', () => {
+    connectionHandler.dispose();
+  })
 })
 
 //start our server

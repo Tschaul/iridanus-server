@@ -3,7 +3,7 @@ import { Subscription } from "../../../../shared/messages/subscriptions";
 import { DataProvider } from "../data-provider";
 import { Container } from "inversify";
 import { MapListAllDataProvider } from "./map-list-all-data-provider";
-import { MapListFinalDataProvider } from "./map-list-final-data-provider copy";
+import { MapListFinalDataProvider } from "./map-list-final-data-provider";
 
 export function getMapDataProvider(registry: ContainerRegistry, subscription: Subscription, gameId: string | null | undefined): DataProvider {
   const container = registry.getContainerByGameId(gameId);

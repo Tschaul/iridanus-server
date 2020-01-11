@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, interval } from "rxjs";
 import { injectable } from "inversify";
 import { map } from "rxjs/operators";
 import { DataProvider } from "../data-provider";

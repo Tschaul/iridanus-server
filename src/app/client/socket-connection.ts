@@ -86,7 +86,11 @@ export class SocketConnection {
 
     return Observable.create((observer: any) => {
       const subscriptionId = makeId(12);
-      this.send(subscription as any);
+      this.send({
+        type: 'BEGIN_SUBSCRIPTION',
+        subscription: subscription as any,
+        id: subscriptionId
+      });
       const sub = this.responses$$.pipe(
         filter(response => {
           return response.type === 'SUBSCRIPTION_RESULT' && response.id === subscriptionId

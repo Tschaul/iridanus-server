@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { Subscription } from "../../shared/messages/subscriptions";
-import { Observable, Subject, interval } from "rxjs";
+import { Observable, Subject, interval, race } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ContainerRegistry } from "../container-registry";
 import { DataProvider } from "./providers/data-provider";
@@ -23,6 +23,7 @@ export class SubscriptionHandler {
     gameId: string | null | undefined,
     userId: string | null,
     sendfn: (data: ResponseMessage) => void,
+    connectionClosed$: Observable<never>
   ) {
 
     if (this.activeSubscriptions.has(id)) {
@@ -33,7 +34,7 @@ export class SubscriptionHandler {
       return;
     }
 
-    const cancelSubject = new Subject<never>();
+    const cancelSubject$$ = new Subject<never>();
 
     const dataProvider = this.getDataProvider(registry, subcription, gameId);
 
@@ -45,7 +46,7 @@ export class SubscriptionHandler {
       return;
     }
 
-    dataProvider.getObservable(subcription).pipe(takeUntil(cancelSubject)).subscribe(data => {
+    dataProvider.getObservable(subcription).pipe(takeUntil(race(cancelSubject$$, connectionClosed$))).subscribe(data => {
       const response: ResponseMessage = {
         type: 'SUBSCRIPTION_RESULT',
         id,
@@ -54,7 +55,7 @@ export class SubscriptionHandler {
       sendfn(response)
     })
 
-    this.activeSubscriptions.set(id, cancelSubject);
+    this.activeSubscriptions.set(id, cancelSubject$$);
   }
 
   public cancelSubscription(id: string) {

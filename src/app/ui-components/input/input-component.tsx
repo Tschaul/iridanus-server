@@ -5,12 +5,27 @@ import autobind from "autobind-decorator";
 
 @observer
 export class InputString extends React.Component<{
-  value: WrappedObservable<string>
+  value: WrappedObservable<string>,
+  isPassword?: boolean
 }> {
   
   render() {
+
+    const style: React.CSSProperties = {
+      backgroundColor: "transparent",
+      border: 0,
+      color: "inherit",
+      fontSize: "inherit",
+      textShadow: "inherit"
+    }
+
     return (
-      <input value={this.props.value.get()} onChange={this.handleChange}/>
+      <input 
+        type={this.props.isPassword ? "password" : "text"}
+        style={style} 
+        value={this.props.value.get()} 
+        onChange={this.handleChange}
+      />
     )
   }
 

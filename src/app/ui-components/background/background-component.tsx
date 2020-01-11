@@ -26,7 +26,7 @@ export class Background extends React.Component {
 
     return [
       <div style={backgroundStyle} key="background"></div>,
-      <div style={foregroundStyle}>
+      <div style={foregroundStyle} key="foreground">
         {this.props.children}
       </div>
     ]

@@ -28,7 +28,8 @@ export class WelcomeViewModel {
 
   async login() {
     await this.userManagementervice.login(this.username, this.password)
-    this.mainViewModel.activeScreen = 'LOBBY'
+    this.mainViewModel.activeScreen = 'LOBBY';
+    this.mainViewModel.loggedInUserId = this.username;
   }
 
   async signUp() {

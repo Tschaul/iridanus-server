@@ -63,7 +63,7 @@ export class WelcomeScreen extends React.Component<{
         <br />
         <br />
         please enter password<br />
-        ><InputString value={wrapObservable(this.props.vm, 'password')} /><br />
+        ><InputString isPassword value={wrapObservable(this.props.vm, 'password')} /><br />
         <br />
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button onClick={this.handleSignUpClick}>SIGN UP</Button>
