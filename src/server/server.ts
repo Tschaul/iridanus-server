@@ -5,6 +5,7 @@ import { AddressInfo } from 'net';
 import { ContainerRegistry } from './container-registry';
 import { ConnectionHandler } from './connection-handler';
 import { RequestMessage } from '../shared/messages/request-message';
+import { GameRunner } from './game-runner';
 
 const app = express();
 
@@ -13,6 +14,10 @@ const server = createServer(app);
 const webSocketServer = new Server({ server });
 
 const containerRegistry = new ContainerRegistry();
+
+const gameRunner = new GameRunner(containerRegistry);
+
+gameRunner.run();
 
 webSocketServer.on('connection', (socket: WebSocket) => {
 

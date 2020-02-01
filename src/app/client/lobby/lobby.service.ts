@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { SocketConnection } from "../socket-connection";
 import { GamesListAllSubscription, MapListFinalSubscription, RulesListFinalSubscription } from "../../../shared/messages/subscriptions";
 import { GameListAllSubscriptionResult, MapListFinalSubscriptionResult, RulesListFinalSubscriptionResult } from "../../../shared/messages/subscription-result";
-import { shareReplay, map } from "rxjs/operators";
+import { shareReplay, map, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { GameInfo } from "../../../shared/model/v1/game-info";
 import { makeId } from "../make-id";

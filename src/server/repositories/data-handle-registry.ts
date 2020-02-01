@@ -52,7 +52,7 @@ export class DataHandleRegistry {
 
 export type Update<TData> = (data: TData) => void;
 
-export type Transaction<TData> = (data: TData) => Promise<Update<TData>>;
+export type Transaction<TData> = (data: Readonly<TData>) => Promise<Update<TData>>;
 
 export class DataHandle<TData> {
 
@@ -76,7 +76,7 @@ export class DataHandle<TData> {
 
   private async readFileAtFullpath() {
     // TODO dont block thread while reading
-    const data =JSON.parse(readFileSync(this.fullpath, 'utf8'));
+    const data = JSON.parse(readFileSync(this.fullpath, 'utf8'));
     this._data$.next(data);
   }
 

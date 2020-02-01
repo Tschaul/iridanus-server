@@ -1,15 +1,22 @@
 import { injectable } from "inversify";
-import { Action } from "../actions/action";
 
 @injectable()
 export class Logger {
-  logAction(action: Action) {
-    console.log(action.describe())
-  }
-}
 
-export class TestLogger extends Logger {
-  logAction(action: Action) {
-    return;
+  info(message: string) {
+    console.log(message)
   }
+
+  debug(message: string) {
+    console.log(message)
+  }
+
+  warning(message: string) {
+    console.warn(message)
+  }
+
+  error(message: string) {
+    console.error(message)
+  }
+
 }

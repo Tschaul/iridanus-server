@@ -44,6 +44,15 @@ export class LobbyViewModel {
   @observable
   public selectedGameId: string | null = null;
 
+  @computed
+  public get selectedGame() {
+    if (this.selectedGameId) {
+      return this.allGames.current.find(game => game.id === this.selectedGameId) || null
+    } else {
+      return null
+    }
+  }
+
   public async createGame() {
     await this.lobbyService.createGame();
   }

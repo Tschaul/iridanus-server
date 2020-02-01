@@ -1,9 +1,9 @@
-import { GameState } from "./state";
+import { Universe } from "./universe";
 
 export interface GameMap {
   id: string;
   name: string;
   final: boolean;
-  initialState: GameState;
+  universe: Universe;
   seats: string[];
 }

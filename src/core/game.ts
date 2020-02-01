@@ -5,7 +5,7 @@ import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
 import { GameState } from "../shared/model/v1/state";
 import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
-import { Logger } from "./infrastructure/logger";
+import { ActionLogger } from "./infrastructure/action-logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";
 import { setTimestamp } from "./actions/set-timestamp";
 
@@ -19,7 +19,7 @@ export class Game {
   constructor(
     private clock: Clock, 
     private store: Store, 
-    private logger: Logger,
+    private logger: ActionLogger,
     private completeEventQueue: CompleteEventQueue
     ) {
 

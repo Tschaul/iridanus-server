@@ -3,7 +3,7 @@ import { Container, injectable } from "inversify";
 import { CommandHandler } from "./commands/command-handler";
 import { SubscriptionHandler } from "./subscriptions/subscription-handler";
 import { Clock } from "../core/infrastructure/clock";
-import { Logger } from "../core/infrastructure/logger";
+import { ActionLogger } from "../core/infrastructure/action-logger";
 import { RandomNumberGenerator } from "../core/infrastructure/random-number-generator";
 import { Store, ReadonlyStore } from "../core/store";
 import { Game } from "../core/game";
@@ -15,6 +15,7 @@ import { registerGameCommandExecutors, registerGlobalCommandExecutors } from './
 import { registerRepositories } from './repositories/register-repositories';
 import { registerEnvironment } from './environment/register-environment';
 import { registerGlobalInfrastructure } from './commands/infrastructure/register-infrastructure';
+import { registerCoreInfrastructure } from '../core/infrastructure/register-core-infrastructure';
 
 @injectable()
 export class ContainerRegistry {
@@ -31,6 +32,7 @@ export class ContainerRegistry {
     this.globalContainer.bind(CommandHandler).toSelf();
     this.globalContainer.bind(SubscriptionHandler).toSelf();
 
+    registerCoreInfrastructure(this.globalContainer);
     registerGlobalInfrastructure(this.globalContainer);
     registerEnvironment(this.globalContainer);
     registerGlobalDataProviders(this.globalContainer);
@@ -56,9 +58,6 @@ export class ContainerRegistry {
 
       container.parent = this.globalContainer;
 
-      container.bind(Clock).toConstantValue(new Clock(new Date().getTime()));
-      container.bind(Logger).toSelf();
-      container.bind(RandomNumberGenerator).toSelf();
       container.bind(Store).toSelf();
       container.bind(ReadonlyStore).toSelf();
       container.bind(Game).toSelf();

@@ -22,7 +22,6 @@ export class Store {
     this.actions$$.pipe(
       scan((state: GameState, action: Action) => {
         const nextState = action.apply(state);
-        // console.log(nextState);
         return nextState;
       }, this.setup.initialState),
       sample(this.commits$$),

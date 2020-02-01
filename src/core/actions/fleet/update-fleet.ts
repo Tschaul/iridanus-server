@@ -10,6 +10,5 @@ export function updateFleet<Told extends Fleet, Tnew extends Fleet>(
     const oldFleet = draft.universe.fleets[fleetId] as Told;
     const newFleet = updater(oldFleet);
     draft.universe.fleets[fleetId] = newFleet;
-    // console.log("updating fleet "+fleetId,{oldFleet, newFleet});
   })
 }

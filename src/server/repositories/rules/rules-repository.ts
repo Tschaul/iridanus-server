@@ -46,6 +46,7 @@ export class RulesRepository {
 
   public async getRuleById(ruleId: string) {
     const handle = await this.handleForRuleId(ruleId);
-    return await handle.read();
+    const data = await handle.read();
+    return data.rules;
   }
 }

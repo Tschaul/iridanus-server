@@ -1,34 +1,40 @@
 import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
-import { Observable, combineLatest, from, BehaviorSubject } from "rxjs";
-import { GameInfoSchema } from "./schema/v1";
-import { take, switchMap, concatMap, map } from "rxjs/operators";
+import { Observable, combineLatest, from, BehaviorSubject, ReplaySubject, NEVER, merge } from "rxjs";
+import { GameInfoSchema, GameStateSchema } from "./schema/v1";
+import { take, switchMap, concatMap, map, first, tap, mergeMap } from "rxjs/operators";
 import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { normalize } from "../../../shared/math/vec2";
 import { GameInfo } from "../../../shared/model/v1/game-info";
+import { GameState } from "../../../shared/model/v1/state";
+import { Clock } from "../../../core/infrastructure/clock";
 
 const BASE_FOLDER = 'games'
 
-const pathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/games.json`;
+const infoPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/info.json`;
+const statePathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/state.json`;
 
 @injectable()
 export class GameRepository {
 
   private _data$: Observable<GameInfo[]>;
-  private _gameIds$ = new BehaviorSubject<string[]>([]);
+  private _gameIds$ = new ReplaySubject<string[]>(1);
 
-  constructor(private dataHandleRegistry: DataHandleRegistry, initializer: Initializer) {
+  constructor(private dataHandleRegistry: DataHandleRegistry, initializer: Initializer, private clock: Clock) {
     initializer.requestInitialization(this.initialize());
     this._data$ = this._gameIds$.pipe(
       switchMap(gameIds => {
         return combineLatest(
-          gameIds.map((gameId: string) => from(this.handleForGameInfoById(gameId)).pipe(
-            concatMap(handle => handle.asObservable())
+          ...gameIds.map((gameId: string) => merge(from(this.handleForGameInfoById(gameId)), NEVER).pipe(
+            concatMap(handle => {
+              return handle.asObservable().pipe(
+              )
+            })
           ))
         )
       }),
-      map(schemas => schemas.map(schema => schema.info))
+      map(schemas => schemas.map(schema => schema.info)),
     )
   }
 
@@ -38,7 +44,11 @@ export class GameRepository {
   }
 
   private handleForGameInfoById(gameId: string) {
-    return this.dataHandleRegistry.getDataHandle<GameInfoSchema>(pathById(gameId));
+    return this.dataHandleRegistry.getDataHandle<GameInfoSchema>(infoPathById(gameId));
+  }
+
+  private handleForGameStateById(gameId: string) {
+    return this.dataHandleRegistry.getDataHandle<GameStateSchema>(statePathById(gameId));
   }
 
   public getAllGameInfos() {
@@ -64,7 +74,7 @@ export class GameRepository {
         players: {}
       }
     })
-    const currentGameIds = this._gameIds$.value;
+    const currentGameIds = await this._gameIds$.pipe(first()).toPromise();
     this._gameIds$.next([...currentGameIds, gameId])
   }
 
@@ -116,6 +126,36 @@ export class GameRepository {
         draft.info.players[playerId].state = 'READY'
       }
     })
+  }
+
+  public async getGameState(gameId: string) {
+    const handle = await this.handleForGameStateById(gameId);
+    const exists = await handle.exists()
+    if (!exists) {
+      return null;
+    } else {
+      const data = await handle.read();
+      return data.currentState;
+    }
+  }
+
+  public async setGameState(gameId: string, newState: GameState) {
+    const handle = await this.handleForGameStateById(gameId);
+    const exists = await handle.exists()
+    if (!exists) {
+      await handle.create({
+        version: 1,
+        currentState: newState,
+        stateHistory: {
+          [this.clock.getTimestamp()]: newState
+        }
+      })
+    } else {
+      await handle.do(async () => draft => {
+        draft.currentState = newState;
+        draft.stateHistory[this.clock.getTimestamp()] = newState;
+      })
+    }
   }
 }
 

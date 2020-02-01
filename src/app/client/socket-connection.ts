@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { ReplaySubject, Observable } from "rxjs";
 import { RequestMessage } from "../../shared/messages/request-message";
 import { ResponseMessage, SubscriptionResponse } from "../../shared/messages/response-message";
-import { filter, take } from "rxjs/operators";
+import { filter, take, map } from "rxjs/operators";
 import { makeId } from "./make-id";
 import { Command } from "../../shared/messages/commands/commands";
 import { response } from "express";
@@ -95,6 +95,7 @@ export class SocketConnection {
         filter(response => {
           return response.type === 'SUBSCRIPTION_RESULT' && response.id === subscriptionId
         }),
+        map((response: SubscriptionResponse) => response.result)
       ).subscribe(observer);
       return () => {
         this.send({
