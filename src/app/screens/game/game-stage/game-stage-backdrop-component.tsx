@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import { Vec2, diff, normal, add, mul } from '../../../../shared/math/vec2';
-import { WORLD_OUTER_RADIUS, WORLD_STROKE, WORLD_BACKGROUND_COLOR } from './constants';
+import { WORLD_OUTER_RADIUS, WORLD_STROKE, WORLD_BACKGROUND_COLOR, WARP_LANE_WIDTH } from './constants';
 
 
 @observer
@@ -33,7 +33,7 @@ export class GameStageBackdrop extends React.Component<{
             }
             const delta = diff(end, start);
             const n = normal(delta);
-            const width = 10;
+            const width = WARP_LANE_WIDTH / 2;
             const path = 'M' +
               d(add(start, mul(n, width))) +
               'L' +

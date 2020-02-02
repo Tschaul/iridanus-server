@@ -8,7 +8,7 @@ type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
 export class MainViewModel {
   
   @observable
-  activeScreen: PossibleScreen = 'WELCOME';
+  activeScreen: PossibleScreen = 'GAME';
 
   @observable
   loggedInUserId: string | null = null;

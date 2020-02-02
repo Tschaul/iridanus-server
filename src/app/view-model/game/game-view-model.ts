@@ -8,6 +8,9 @@ import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet, WarpingFleet } from "
 import { mockUniverse, mockPlayerInfos, mockRawDrawingPositions } from "./mock-data";
 import { SelectedWorldViewModel } from "./selected-world-view-model";
 import { OrderEditorViewModel } from "./order-editor-view-model";
+import { makeGomeisaSix } from "../../../util/hex-map/gomeisa-six";
+
+const {universe, drawingPositions} = makeGomeisaSix();
 
 export type StageSelection = {
   type: 'WORLD',
@@ -85,9 +88,9 @@ export class GameViewModel {
 
   @observable public selfPlayerId: string = 'p1';
 
-  @observable public rawDrawingPositions: DrawingPositions = mockRawDrawingPositions;
+  @observable public rawDrawingPositions: DrawingPositions = drawingPositions;
 
   @observable public playerInfos: PlayerInfos = mockPlayerInfos;
 
-  @observable public universe: Universe = mockUniverse;
+  @observable public universe: Universe = universe;
 }

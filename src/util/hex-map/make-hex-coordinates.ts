@@ -1,3 +1,5 @@
+import { scaleMapCoordinates } from "./scale-coordinates";
+
 export interface MapCoordinates {
   [key: string]: [number, number]
 }
@@ -85,4 +87,5 @@ export function makeHexCoordinates(maxRanks: number, hexRadius: number) {
     result['e24'] = [ -1 * s,  7 * h ];
   }
 
+  return scaleMapCoordinates(result);
 }

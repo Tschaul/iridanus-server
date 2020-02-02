@@ -1,4 +1,46 @@
-import { Gates } from "../../shared/model/v1/universe";
+import { Gates, Universe } from "../../shared/model/v1/universe";
+import { makeHexCoordinates } from "./make-hex-coordinates";
+import { Vec2 } from "../../shared/math/vec2";
+import { LostWorld } from "../../shared/model/v1/world";
+import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
+
+export function makeGomeisaSix() {
+  const worldPositions = makeHexCoordinates(5, 1);
+
+  const universe: Universe = {
+    fleets: {},
+    worlds: {},
+    gates
+  }
+
+  const drawingPositions: DrawingPositions = {}
+
+  Object.getOwnPropertyNames(worldPositions).forEach(worldId => {
+    const [x, y] = worldPositions[worldId];
+    const position: Vec2 = { x, y }
+    universe.worlds[worldId] = makeWorld(worldId);
+    drawingPositions[worldId] = position;
+  })
+
+  return {
+    universe,
+    drawingPositions
+  }
+}
+
+function makeWorld(id: string): LostWorld {
+  return {
+    id,
+    industry: 0,
+    integrity: 0,
+    metal: 0,
+    mines: 0,
+    orders: [],
+    population: 0,
+    ships: 1,
+    status: 'LOST'
+  }
+}
 
 export const gates: Gates = {
   a1:  [ 'b1',  'b2',  'b3',  'b4',  'b5',  'b6'],
@@ -39,8 +81,8 @@ export const gates: Gates = {
   d14: [ 'c9', 'c10', 'd13',        'e19'       ],
   d15: ['c10', 'c11', 'd16',        'e19'       ],
   d16: [              'd15', 'd17', 'e20', 'e22'],
-  d17: ['c11', 'c12', 'd18',        'e23'       ],
-  d18: ['c12',  'c1',  'd1',       ' e23'       ],
+  d17: ['c11', 'c12', 'd16',        'e23'       ],
+  d18: ['c12',  'c1',  'd1',        'e23'       ],
   
   e1:  [               'e2', 'e24'],
   e2:  [ 'd1'       ,  'e1',  'e3'],

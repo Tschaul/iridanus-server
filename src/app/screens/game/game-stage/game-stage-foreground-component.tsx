@@ -71,7 +71,7 @@ export class GameStageForeground extends React.Component<{
             textAnchor="middle"
             fill={color}
             fontSize={33}
-          >◉</text>
+          >{/*world.id*/}◉</text>
           {fleetOwners.map(ownerId => {
             const playerInfo = this.props.vm.playerInfos[ownerId];
             return (
@@ -115,7 +115,7 @@ export class GameStageForeground extends React.Component<{
 
   getColorForWorld(world: World) {
     if (world.status === 'LOST') {
-      return 'grey'
+      return 'lightgray'
     } else {
       return this.props.vm.playerInfos[world.ownerId].color;
     }
