@@ -9,8 +9,9 @@ import { mockUniverse, mockPlayerInfos, mockRawDrawingPositions } from "./mock-d
 import { SelectedWorldViewModel } from "./selected-world-view-model";
 import { OrderEditorViewModel } from "./order-editor-view-model";
 import { makeGomeisaSix } from "../../../util/hex-map/gomeisa-six";
+import { makeGomeisaThree } from "../../../util/hex-map/gomeisa-three";
 
-const {universe, drawingPositions} = makeGomeisaSix();
+const {universe, drawingPositions} = makeGomeisaThree();
 
 export type StageSelection = {
   type: 'WORLD',
