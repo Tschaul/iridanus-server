@@ -1,6 +1,10 @@
 import { Fleet } from "./fleet";
 import { World } from "./world";
 
+export interface Gates {
+  [worldId: string]: string[]
+}
+
 export interface Universe {
 
   fleets: {
@@ -9,7 +13,5 @@ export interface Universe {
   worlds: {
     [id: string]: World
   },
-  gates: {
-    [worldId: string]: string[]
-  }
+  gates: Gates
 }
