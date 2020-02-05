@@ -1,7 +1,7 @@
 {
-  "name": "eridanus-server",
+  "name": "iridanus-server",
   "version": "1.0.0",
-  "description": "Server for Eridanus",
+  "description": "Server for Iridanus",
   "main": "index.js",
   "scripts": {
     "test": "tsc && mocha 'build/src/core/tests/**/*.test.js'",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tschaul/eridanus-server.git"
+    "url": "git+https://github.com/Tschaul/iridanus-server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Tschaul/eridanus-server/issues"
+    "url": "https://github.com/Tschaul/iridanus-server/issues"
   },
-  "homepage": "https://github.com/Tschaul/eridanus-server#readme",
+  "homepage": "https://github.com/Tschaul/iridanus-server#readme",
   "dependencies": {
     "@types/autobind-decorator": "^2.1.0",
     "@types/chai": "^4.2.4",

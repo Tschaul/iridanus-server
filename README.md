@@ -1,5 +1,5 @@
-# eridanus-server
-Server for Eridanus
+# Iridanus-server
+Server for Iridanus
 
 # MVP
 
