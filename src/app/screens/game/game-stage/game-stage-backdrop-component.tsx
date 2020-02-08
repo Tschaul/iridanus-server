@@ -16,13 +16,14 @@ export class GameStageBackdrop extends React.Component<{
           {this.props.vm.worldsWithKeyAndDisplayPosition.map(world => {
             return (
               <circle
+                key={world.id}
                 cx={world.x}
                 cy={world.y}
                 r={WORLD_OUTER_RADIUS}
               />
             )
           })}
-          {this.props.vm.gatesWithDisplayPosition.map(gate => {
+          {this.props.vm.gatesWithDisplayPosition.map((gate, index) => {
             const start = {
               x: gate.xStart,
               y: gate.yStart
@@ -44,7 +45,7 @@ export class GameStageBackdrop extends React.Component<{
               d(add(start, mul(n, -1 * width))) +
               'Z';
             return (
-              <path d={path}></path>
+              <path key={index} d={path}></path>
             )
           })}
         </clipPath>
@@ -53,11 +54,11 @@ export class GameStageBackdrop extends React.Component<{
         </filter>
         <g filter="url(#backdropBorder)">
           <rect width="100%" height="100%" fill={WORLD_STROKE} 
-            clip-path="url(#clipPath)" />
+            clipPath="url(#clipPath)" />
 
         </g>
         <rect width="100%" height="100%" fill={WORLD_BACKGROUND_COLOR}
-          clip-path="url(#clipPath)" />
+          clipPath="url(#clipPath)" />
       </g>
     )
   }

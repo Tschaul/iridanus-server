@@ -1,8 +1,16 @@
 import { Gates, Universe } from "../../shared/model/v1/universe";
-import { makeHexCoordinates } from "./make-hex-coordinates";
+import { makeHexCoordinates, getRank } from "./make-hex-coordinates";
 import { Vec2 } from "../../shared/math/vec2";
-import { LostWorld } from "../../shared/model/v1/world";
+import { LostWorld, ReadyWorld } from "../../shared/model/v1/world";
 import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
+
+const homeWorlds = ['c3', 'c7', 'c11'];
+
+const seats: { [key: string]: string } = {
+  c3: 'p1',
+  c7: 'p2',
+  c11: 'p3'
+}
 
 export function makeGomeisaThree() {
   const worldPositions = makeHexCoordinates(4, 1);
@@ -15,11 +23,43 @@ export function makeGomeisaThree() {
 
   const drawingPositions: DrawingPositions = {}
 
+  let fleetKeyNumber = 1;
+
   Object.getOwnPropertyNames(worldPositions).forEach(worldId => {
     const [x, y] = worldPositions[worldId];
     const position: Vec2 = { x, y }
-    universe.worlds[worldId] = makeWorld(worldId);
+    let world: LostWorld | ReadyWorld = makeWorld(worldId);
     drawingPositions[worldId] = position;
+
+    if (homeWorlds.includes(worldId)) {
+      world = {
+        ...world,
+        status: 'READY',
+        ownerId: seats[worldId],
+        combatStatus: 'AT_PEACE',
+        industry: 30,
+        population: 100,
+        ships: 2
+      };
+
+      ([1,2,3,4,5]).forEach(() => {
+        const fleetId = 'f' + fleetKeyNumber++;
+        universe.fleets[fleetId] = {
+          status: 'READY',
+          combatStatus:'AT_PEACE',
+          currentWorldId: worldId,
+          id: fleetId,
+          integrity: 0,
+          metal: 0,
+          orders: [],
+          ownerId: seats[worldId],
+          ships: 6
+        }
+      })
+    }
+
+    universe.worlds[worldId] = world
+
   })
 
   return {
@@ -29,15 +69,20 @@ export function makeGomeisaThree() {
 }
 
 function makeWorld(id: string): LostWorld {
+
+  const rank = getRank(id);
+
+  const amount = 5 - rank;
+
   return {
     id,
-    industry: 0,
+    industry: amount,
     integrity: 0,
-    metal: 0,
-    mines: 0,
+    metal: amount,
+    mines: amount,
     orders: [],
-    population: 0,
-    ships: 1,
+    population: amount*10,
+    ships: 0,
     status: 'LOST'
   }
 }

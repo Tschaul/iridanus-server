@@ -97,6 +97,13 @@ export const mockPlayerInfos: PlayerInfos = {
     name: 'Peter',
     fleetDrawingPosition: normalize({ x: -1, y: -1 }),
     state: 'READY',
+  },
+  "p3": {
+    id: 'p2',
+    color: 'yellow',
+    name: 'Franz',
+    fleetDrawingPosition: normalize({ x: -1, y: 1 }),
+    state: 'READY',
   }
 };
 
