@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { ContainerRegistry } from "./container-registry";
 import { GameRepository } from "./repositories/games/games-repository";
-import { first, debounceTime, pairwise } from "rxjs/operators";
+import { first, debounceTime, pairwise, filter } from "rxjs/operators";
 import { Game } from "../core/game";
 import { GlobalErrorHandler } from "./commands/infrastructure/error-handling/global-error-handler";
 import { GameSetupProvider } from "../core/game-setup-provider";
@@ -10,8 +10,8 @@ import { GameInfo } from "../shared/model/v1/game-info";
 import { GameMap } from "../shared/model/v1/game-map";
 import { GameState } from "../shared/model/v1/state";
 import produce from "immer";
-import { worldhasOwner } from "../shared/model/v1/world";
-import { fleetHasOwner } from "../shared/model/v1/fleet";
+import { worldhasOwner, LostWorld, baseWorld } from "../shared/model/v1/world";
+import { fleetHasOwner, baseFleet, ReadyFleet } from "../shared/model/v1/fleet";
 import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
@@ -57,17 +57,21 @@ export class GameRunner {
 
       this.gameRepository.allGameInfosAsObservable().pipe(
         pairwise(),
-      ).subscribe(([gameInfos, newGameInfos]) => {
-        gameInfos.forEach(gameInfo => {
-          if (gameInfo.state === 'PROPOSED') {
-            const newGame = newGameInfos.find(info => info.id === gameInfo.id);
-            if (newGame && newGame.state === 'STARTED') {
-              this.errorHandler.catchPromise(this.runGame(gameInfo));
+      ).subscribe(([oldGameInfos, newGameInfos]) => {
+        newGameInfos.forEach(newGameInfo => {
+          if (this.gameShouldStart(newGameInfo)) {
+            const oldGame = oldGameInfos.find(info => info.id === newGameInfo.id);
+            if (!this.gameShouldStart(oldGame)) {
+              this.errorHandler.catchPromise(this.runGame(newGameInfo));
             }
           }
         });
       })
     })
+  }
+
+  private gameShouldStart(game: GameInfo | undefined): boolean {
+    return !!game && game.state === 'PROPOSED' && !Object.values(game.players).some(player => player.state !== 'READY');
   }
 
   async runGame(gameInfo: GameInfo) {
@@ -87,6 +91,8 @@ export class GameRunner {
       const map = makeGomeisaThree()
 
       const state = this.instantiateMap(gameInfo, map);
+
+      await this.gameRepository.startGame(gameInfo.id, map.drawingPositions);
 
       setup.initialState = state;
 
@@ -115,13 +121,28 @@ export class GameRunner {
         Object.getOwnPropertyNames(state.worlds).forEach(worldId => {
           const world = state.worlds[worldId];
           if (worldhasOwner(world) && world.ownerId === seat) {
-            world.ownerId = player;
+            if (player) {
+              world.ownerId = player;
+            }  else {
+              state.worlds[worldId] = {
+                status: 'LOST',
+                ...baseWorld(world)
+              }
+            }
           }
         })
         Object.getOwnPropertyNames(state.fleets).forEach(fleetId => {
           const fleet = state.fleets[fleetId];
           if (fleetHasOwner(fleet) && fleet.ownerId === seat) {
-            fleet.ownerId = player;
+            if (player) {
+              fleet.ownerId = player;
+            }  else {
+              state.fleets[fleetId] = {
+                status: 'LOST',
+                ...baseFleet(fleet),
+                currentWorldId: (fleet as ReadyFleet).currentWorldId
+              }
+            }
           }
         })
       })

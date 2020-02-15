@@ -20,16 +20,17 @@ export function makeGomeisaThree(): GameMap {
     fleets: {},
     worlds: {},
     gates,
-    drawingPositions: {}
   }
 
   let fleetKeyNumber = 1;
+
+  const drawingPositions: DrawingPositions = {};
 
   Object.getOwnPropertyNames(worldPositions).forEach(worldId => {
     const [x, y] = worldPositions[worldId];
     const position: Vec2 = { x, y }
     let world: LostWorld | ReadyWorld = makeWorld(worldId);
-    universe.drawingPositions[worldId] = position;
+    drawingPositions[worldId] = position;
 
     if (homeWorlds.includes(worldId)) {
       world = {
@@ -76,6 +77,7 @@ export function makeGomeisaThree(): GameMap {
   return {
     seats: Object.values(seats),
     universe,
+    drawingPositions
   }
 }
 

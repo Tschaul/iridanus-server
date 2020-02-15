@@ -1,4 +1,5 @@
 import { PlayerInfos } from "./player-info";
+import { DrawingPositions } from "./drawing-positions";
 
 export type GameInfo = ProposedGameInfo | StartedGameInfo;
 
@@ -13,4 +14,5 @@ export interface ProposedGameInfo extends GameInfoBase {
 
 export interface StartedGameInfo extends GameInfoBase {
   state: 'STARTED' | 'ENDED';
+  drawingPositions: DrawingPositions
 }

@@ -117,6 +117,9 @@ export class GameStageForeground extends React.Component<{
     if (world.status === 'LOST') {
       return 'lightgray'
     } else {
+      if (!this.props.vm.playerInfos[world.ownerId]) {
+        console.log({world})
+      }
       return this.props.vm.playerInfos[world.ownerId].color;
     }
   }

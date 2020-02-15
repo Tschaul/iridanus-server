@@ -80,7 +80,8 @@ export class CombatAndCaptureProjector {
       map(([fleetsById, playersAtWorldById]) => {
         const lostFleets = Object.values(fleetsById).filter(fleet => fleet.status === 'LOST') as LostFleet[];
         const capturedFleet = lostFleets.find(fleet => {
-          return playersAtWorldById[fleet.currentWorldId].length === 1;
+          const players = playersAtWorldById[fleet.currentWorldId] || [];
+          return players.length === 1;
         });
         if (capturedFleet) {
           return [capturedFleet, playersAtWorldById[capturedFleet.currentWorldId][0]]
@@ -94,7 +95,8 @@ export class CombatAndCaptureProjector {
       map(([worldsById, playersAtWorldById]) => {
         const lostWorlds = Object.values(worldsById).filter(fleet => fleet.status === 'LOST') as LostWorld[];
         const capturedFleet = lostWorlds.find(world => {
-          return playersAtWorldById[world.id].length === 1;
+          const players = playersAtWorldById[world.id] || [];
+          return players.length === 1;
         });
         if (capturedFleet) {
           return [capturedFleet, playersAtWorldById[capturedFleet.id][0]]

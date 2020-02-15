@@ -14,6 +14,14 @@ const BOTTOM_PANEL_HEIGHT = 300;
 
 export class GameScreen extends React.Component<{vm: GameViewModel}> {
 
+  componentDidMount() {
+    this.props.vm.focus();
+  }
+
+  componentWillUnmount() {
+    this.props.vm.unfocus();
+  }
+
   render() {
 
     const gridContainerStyle: React.CSSProperties = {

@@ -6,9 +6,10 @@ import { take, switchMap, concatMap, map, first, tap, mergeMap } from "rxjs/oper
 import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { normalize } from "../../../shared/math/vec2";
-import { GameInfo } from "../../../shared/model/v1/game-info";
+import { GameInfo, StartedGameInfo } from "../../../shared/model/v1/game-info";
 import { GameState } from "../../../shared/model/v1/state";
 import { Clock } from "../../../core/infrastructure/clock";
+import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
 
 const BASE_FOLDER = 'games'
 
@@ -62,6 +63,15 @@ export class GameRepository {
   public async getGameInfoById(gameId: string) {
     const handle = await this.handleForGameInfoById(gameId);
     return await handle.read();
+  }
+
+  public getGameInfoByIdAsObservable(gameId: string) {
+    return from(this.handleForGameInfoById(gameId)).pipe(
+      switchMap(handle => {
+        return handle.asObservable();
+      }),
+      map(data => data.info)
+    );
   }
 
   public async createGame(gameId: string) {
@@ -138,6 +148,20 @@ export class GameRepository {
         draft.stateHistory[this.clock.getTimestamp()] = newState;
       })
     }
+  }
+
+  public async startGame(gameId: string, drawingPosition: DrawingPositions) {
+    const handle = await this.handleForGameInfoById(gameId);
+    handle.do(async (draft) => {
+      if (draft.info.state !== 'PROPOSED') {
+        throw new Error("Game has allready started.")
+      }
+      return draft => {
+        const info = draft.info as StartedGameInfo;
+        info.state = 'STARTED';
+        info.drawingPositions = drawingPosition;
+      }
+    })
   }
 }
 

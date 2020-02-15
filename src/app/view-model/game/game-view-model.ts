@@ -1,4 +1,4 @@
-import {observable, computed} from "mobx";
+import { observable, computed, when } from "mobx";
 import { Universe } from "../../../shared/model/v1/universe";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
 import { MainViewModel } from "../main-view-model";
@@ -8,9 +8,12 @@ import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet, WarpingFleet } from "
 import { mockPlayerInfos } from "./mock-data";
 import { SelectedWorldViewModel } from "./selected-world-view-model";
 import { OrderEditorViewModel } from "./order-editor-view-model";
-import { makeGomeisaThree } from "../../../util/hex-map/gomeisa-three";
-
-const {universe, drawingPositions} = makeGomeisaThree() as any;
+import { resolveFromRegistry } from "../../container-registry";
+import { GameStateService } from "../../client/game-state/game-state.service";
+import { IStreamListener, fromStream } from "mobx-utils";
+import { empty } from "rxjs";
+import { GameInfo, StartedGameInfo } from "../../../shared/model/v1/game-info";
+import { GameState } from "../../../shared/model/v1/state";
 
 export type StageSelection = {
   type: 'WORLD',
@@ -29,13 +32,66 @@ export type FleetByTwoWorlds = {
   };
 };
 
+const dummyState: GameState = {
+  currentTimestamp: 0,
+  gameEndTimestamp: Number.MAX_SAFE_INTEGER,
+  universe: {
+    fleets: {},
+    worlds: {},
+    gates: {}
+  }
+}
+
+const dummyInfo: GameInfo = {
+  id: '',
+  state: 'STARTED',
+  drawingPositions: {},
+  players: {}
+}
+
 export class GameViewModel {
+
+  private gameStateService = resolveFromRegistry(GameStateService);
 
   gameStageViewModel = new GameStageViewModel(this);
   selectedWorldViewModel = new SelectedWorldViewModel(this);
   orderEditorViewModel = new OrderEditorViewModel(this);
 
-  constructor(private mainViewModel: MainViewModel) {}
+  @observable public gameInfo: IStreamListener<GameInfo> = fromStream(empty(), dummyInfo);
+
+  @observable public gameState: IStreamListener<GameState> = fromStream(empty(), dummyState);
+
+  @computed public get rawDrawingPositions() {
+    const gameInfo = this.gameInfo.current as StartedGameInfo;
+    return gameInfo.drawingPositions;
+  }
+
+  @computed public get playerInfos(): PlayerInfos {
+    return this.gameInfo.current.players;
+  };
+
+  @computed public get universe(): Universe {
+
+    return this.gameState.current.universe;
+  }
+
+  constructor(private mainViewModel: MainViewModel) { }
+
+  public focus() {
+    const gameId = this.mainViewModel.activeGameId as string;
+    this.gameInfo = fromStream(this.gameStateService.getGameInfoById(gameId), dummyInfo);
+    when(
+      () => !!this.gameInfo.current.id,
+      () => {
+        this.gameState = fromStream(this.gameStateService.getGameStateById(gameId), dummyState);
+      }
+    )
+  }
+
+  public unfocus() {
+    this.gameState.dispose();
+    this.gameInfo.dispose();
+  }
 
   @computed public get selectedWorld() {
     if (this.stageSelection.type === 'WORLD') {
@@ -82,7 +138,7 @@ export class GameViewModel {
     return result;
   }
 
-  @observable public stageSelection: StageSelection = { type: 'NONE'};
+  @observable public stageSelection: StageSelection = { type: 'NONE' };
 
   @observable public selectedFleetdId: string | null = null;
 
@@ -92,12 +148,6 @@ export class GameViewModel {
     }
     return this.mainViewModel.loggedInUserId;
   }
-
-  @observable public rawDrawingPositions: DrawingPositions = drawingPositions;
-
-  @observable public playerInfos: PlayerInfos = mockPlayerInfos;
-
-  @observable public universe: Universe = universe;
 
   backToLobby() {
     this.mainViewModel.activeGameId = null;

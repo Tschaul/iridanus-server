@@ -82,14 +82,15 @@ export class SocketConnection {
     })
   }
 
-  public subscribe<TSubscriptionResponse, TSubscriptionResult>(subscription: TSubscriptionResponse): Observable<TSubscriptionResult> {
+  public subscribe<TSubscriptionResponse, TSubscriptionResult>(subscription: TSubscriptionResponse, gameId: string | null = null): Observable<TSubscriptionResult> {
 
     return Observable.create((observer: any) => {
       const subscriptionId = makeId(12);
       this.send({
         type: 'BEGIN_SUBSCRIPTION',
         subscription: subscription as any,
-        id: subscriptionId
+        id: subscriptionId,
+        gameId
       });
       const sub = this.responses$$.pipe(
         filter(response => {
