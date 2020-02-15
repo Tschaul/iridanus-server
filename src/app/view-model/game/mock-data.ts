@@ -1,9 +1,16 @@
 import { Universe } from "../../../shared/model/v1/universe";
-import { PlayerInfo, PlayerInfos } from "../../../shared/model/v1/player-info";
+import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { normalize } from "../../../shared/math/vec2";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
 
+export const mockRawDrawingPositions: DrawingPositions = {
+  "w1": { x: 0, y: 0 },
+  "w2": { x: 0.125, y: 0.125 },
+  "w3": { x: 0.25, y: 0.25 },
+}
+
 export const mockUniverse: Universe = {
+  drawingPositions: mockRawDrawingPositions,
   fleets: {
     "f1": {
       id: "f1",
@@ -106,9 +113,3 @@ export const mockPlayerInfos: PlayerInfos = {
     state: 'READY',
   }
 };
-
-export const mockRawDrawingPositions: DrawingPositions = {
-  "w1": { x: 0, y: 0 },
-  "w2": { x: 0.125, y: 0.125 },
-  "w3": { x: 0.25, y: 0.25 },
-}

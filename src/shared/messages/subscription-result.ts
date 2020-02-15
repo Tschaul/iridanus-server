@@ -1,34 +1,14 @@
 import { GameInfo } from "../model/v1/game-info";
-import { GameMap } from "../model/v1/game-map";
-import { GameRuleSet } from "../model/v1/rules";
+import { GameState } from "../model/v1/state";
 
 export type SubscriptionResult = GameListAllSubscriptionResult
-  | MapListAllSubscriptionResult
-  | MapListFinalSubscriptionResult
-  | RulesListAllSubscriptionResult
-  | RulesListFinalSubscriptionResult;
+  | GameStateSubscriptionResult;
 
 export interface GameListAllSubscriptionResult {
   type: 'GAME/LIST_ALL',
   games: GameInfo[]
 }
-
-export interface MapListAllSubscriptionResult {
-  type: 'MAP/LIST_ALL',
-  maps: GameMap[]
-}
-
-export interface MapListFinalSubscriptionResult {
-  type: 'MAP/LIST_FINAL',
-  maps: GameMap[]
-}
-
-export interface RulesListAllSubscriptionResult {
-  type: 'RULES/LIST_ALL',
-  rules: GameRuleSet[]
-}
-
-export interface RulesListFinalSubscriptionResult {
-  type: 'RULES/LIST_FINAL',
-  rules: GameRuleSet[]
+export interface GameStateSubscriptionResult {
+  type: 'GAME/STATE',
+  state: GameState
 }

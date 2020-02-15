@@ -4,7 +4,7 @@ import { DataProvider } from "../data-provider";
 import { GameListAllDataProvider } from "./game-list-all-data-provider";
 import { Container } from "inversify";
 
-export function getGameSetupDataProvider(registry: ContainerRegistry, subscription: Subscription, gameId: string | null | undefined): DataProvider {
+export function getGameDataProvider(registry: ContainerRegistry, subscription: Subscription, gameId: string | null | undefined): DataProvider {
   const container = registry.getContainerByGameId(gameId);
   switch (subscription.type) {
     case 'GAME/LIST_ALL':

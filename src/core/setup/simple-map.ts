@@ -65,6 +65,11 @@ export const simpleMap: GameState = {
       "w1": ["w2"],
       "w2": ["w1","w3"],
       "w3": ["w2"]
+    },
+    drawingPositions: {
+      "w1": { x: 0, y: 0 },
+      "w2": { x: 0.125, y: 0.125 },
+      "w3": { x: 0.25, y: 0.25 },
     }
   }
 }

@@ -54,11 +54,26 @@ export class LobbyViewModel {
   public async createGame() {
     await this.lobbyService.createGame();
   }
-  public async joinGame(gameId: string) {
-    await this.lobbyService.joinGame(gameId);
+
+  public async joinGame() {
+    if (!this.selectedGameId) {
+      return
+    }
+    await this.lobbyService.joinGame(this.selectedGameId);
   }
-  public async readyForGame(gameId: string) {
-    await this.lobbyService.readyForGame(gameId);
+
+  public async readyForGame() {
+    if (!this.selectedGameId) {
+      return
+    }
+    await this.lobbyService.readyForGame(this.selectedGameId);
+  }
+
+  public async viewGame() {
+    if (!this.selectedGameId) {
+      return
+    }
+    this.mainViewModel.activeGameId = this.selectedGameId;
   }
 
 }

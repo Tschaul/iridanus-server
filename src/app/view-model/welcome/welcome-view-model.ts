@@ -1,7 +1,7 @@
 import { MainViewModel } from "../main-view-model";
 import { resolveFromRegistry } from "../../container-registry";
 import { observable } from "mobx";
-import { UserManagementService } from "../../client/user-management.service.ts/user-management.service";
+import { UserManagementService } from "../../client/user-management/user-management.service";
 
 export type WelcomScreenMode = 'LOGIN' | 'SIGN_UP'
 
@@ -28,7 +28,6 @@ export class WelcomeViewModel {
 
   async login() {
     await this.userManagementervice.login(this.username, this.password)
-    this.mainViewModel.activeScreen = 'LOBBY';
     this.mainViewModel.loggedInUserId = this.username;
   }
 

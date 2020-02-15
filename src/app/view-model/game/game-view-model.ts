@@ -5,13 +5,12 @@ import { MainViewModel } from "../main-view-model";
 import { GameStageViewModel } from "./game-stage-view-model";
 import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { fleetIsAtWorld, FleetWithOwnerAtWorld, LostFleet, WarpingFleet } from "../../../shared/model/v1/fleet";
-import { mockUniverse, mockPlayerInfos, mockRawDrawingPositions } from "./mock-data";
+import { mockPlayerInfos } from "./mock-data";
 import { SelectedWorldViewModel } from "./selected-world-view-model";
 import { OrderEditorViewModel } from "./order-editor-view-model";
-import { makeGomeisaSix } from "../../../util/hex-map/gomeisa-six";
 import { makeGomeisaThree } from "../../../util/hex-map/gomeisa-three";
 
-const {universe, drawingPositions} = makeGomeisaThree();
+const {universe, drawingPositions} = makeGomeisaThree() as any;
 
 export type StageSelection = {
   type: 'WORLD',
@@ -87,11 +86,20 @@ export class GameViewModel {
 
   @observable public selectedFleetdId: string | null = null;
 
-  @observable public selfPlayerId: string = 'p1';
+  @computed public get selfPlayerId(): string {
+    if (!this.mainViewModel.loggedInUserId) {
+      throw new Error('User is not logged in.');
+    }
+    return this.mainViewModel.loggedInUserId;
+  }
 
   @observable public rawDrawingPositions: DrawingPositions = drawingPositions;
 
   @observable public playerInfos: PlayerInfos = mockPlayerInfos;
 
   @observable public universe: Universe = universe;
+
+  backToLobby() {
+    this.mainViewModel.activeGameId = null;
+  }
 }

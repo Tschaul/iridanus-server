@@ -7,7 +7,10 @@ import autobind from 'autobind-decorator';
 import { Button } from '../../ui-components/button/button';
 import { observer } from 'mobx-react';
 import { getClosestAttribute } from '../helper/get-attribute';
-import { SelectBox } from '../../ui-components/input/select-component';
+
+const clickableRowStyle: React.CSSProperties = {
+  cursor: 'pointer'
+}
 
 @observer
 export class LobbyScreen extends React.Component<{
@@ -45,17 +48,42 @@ export class LobbyScreen extends React.Component<{
     }
     return (
       <Panel style={{ width: 500, height: 500 }}>
-        GAME {game.id.toUpperCase().slice(0,5)}<br />
+        GAME {game.id.toUpperCase().slice(0, 5)} [{game.state}]<br />
         ──────────────────────────────── <br />
-        <SelectBox options={[{key: '1', name: 'foobar'}]} display={v => v.name} />
+        {this.renderPlayerRows()}
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {game.state === 'PROPOSED' && (
+            this.playerHasJoinedGame()
+              ? <Button onClick={this.handleReadyClick}>READY</Button>
+              : <Button onClick={this.handleJoinClick}>JOIN</Button>
+          )}
+          {game.state === 'STARTED' && this.playerHasJoinedGame() && (
+            <Button onClick={this.handleViewClick}>VIEW</Button>
+          )}
           <Button onClick={this.handleBackClick}>BACK</Button>
         </div>
       </Panel>
     )
   }
-  handleBackClick(): (() => void) | undefined {
-    throw new Error("Method not implemented.");
+
+  @autobind
+  handleBackClick() {
+    this.props.vm.selectedGameId = null;
+  }
+
+  @autobind
+  handleReadyClick() {
+    this.props.vm.readyForGame();
+  }
+
+  @autobind
+  handleJoinClick() {
+    this.props.vm.joinGame();
+  }
+
+  @autobind
+  handleViewClick() {
+    this.props.vm.viewGame();
   }
 
   renderLobby() {
@@ -83,8 +111,23 @@ export class LobbyScreen extends React.Component<{
     const isJoined = Object.getOwnPropertyNames(game.players).indexOf(this.props.vm.loggedInUserId || '') !== -1;
 
     return (
-      <div data-game-id={game.id} onClick={this.handeGameClick}>{displayName} · {game.state} · {isJoined ? 'JOINED' : ''}</div>
+      <div style={clickableRowStyle} data-game-id={game.id} onClick={this.handeGameClick}>{displayName} · {game.state} · {isJoined ? 'JOINED' : ''}</div>
     )
+  }
+
+  renderPlayerRows(): JSX.Element[] {
+
+    const game = this.props.vm.selectedGame;
+
+    if (!game) {
+      return [<span/>]
+    }
+
+    return Object.values(game.players).map(playerInfo => {
+      return (
+        <div>{playerInfo.name} · {playerInfo.state}</div>
+      )
+    })
   }
 
   @autobind
@@ -95,5 +138,17 @@ export class LobbyScreen extends React.Component<{
 
   componentWillUnmount() {
     this.props.vm.unfocus()
+  }
+
+  private playerHasJoinedGame() {
+
+    const game = this.props.vm.selectedGame;
+    const playerId = this.props.vm.loggedInUserId;
+
+    if (!game || !playerId) {
+      return false;
+    }
+
+    return Object.getOwnPropertyNames(game.players).includes(playerId)
   }
 }

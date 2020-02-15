@@ -19,10 +19,9 @@ export function makeGomeisaThree(): GameMap {
   const universe: Universe = {
     fleets: {},
     worlds: {},
-    gates
+    gates,
+    drawingPositions: {}
   }
-
-  const drawingPositions: DrawingPositions = {}
 
   let fleetKeyNumber = 1;
 
@@ -30,7 +29,7 @@ export function makeGomeisaThree(): GameMap {
     const [x, y] = worldPositions[worldId];
     const position: Vec2 = { x, y }
     let world: LostWorld | ReadyWorld = makeWorld(worldId);
-    drawingPositions[worldId] = position;
+    universe.drawingPositions[worldId] = position;
 
     if (homeWorlds.includes(worldId)) {
       world = {
@@ -77,7 +76,6 @@ export function makeGomeisaThree(): GameMap {
   return {
     seats: Object.values(seats),
     universe,
-    drawingPositions
   }
 }
 

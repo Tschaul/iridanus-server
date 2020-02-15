@@ -5,7 +5,7 @@ import { takeUntil } from "rxjs/operators";
 import { ContainerRegistry } from "../container-registry";
 import { DataProvider } from "./providers/data-provider";
 import { ResponseMessage } from "../../shared/messages/response-message";
-import { getGameSetupDataProvider } from "./providers/game-setup/game-setup-data-provider-registry";
+import { getGameDataProvider } from "./providers/game/game-data-provider-registry";
 
 @injectable()
 export class SubscriptionHandler {
@@ -69,7 +69,7 @@ export class SubscriptionHandler {
 
     switch (firstPart) {
       case 'GAME':
-        return getGameSetupDataProvider(registry, subscription, gameId);
+        return getGameDataProvider(registry, subscription, gameId);
     }
 
     throw new Error('unhandled case ' + subscription.type)

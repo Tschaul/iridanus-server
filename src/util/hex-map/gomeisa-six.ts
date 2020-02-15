@@ -2,7 +2,6 @@ import { Gates, Universe } from "../../shared/model/v1/universe";
 import { makeHexCoordinates } from "./make-hex-coordinates";
 import { Vec2 } from "../../shared/math/vec2";
 import { LostWorld } from "../../shared/model/v1/world";
-import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
 
 export function makeGomeisaSix() {
   const worldPositions = makeHexCoordinates(5, 1);
@@ -10,21 +9,19 @@ export function makeGomeisaSix() {
   const universe: Universe = {
     fleets: {},
     worlds: {},
-    gates
+    gates,
+    drawingPositions: {}
   }
-
-  const drawingPositions: DrawingPositions = {}
 
   Object.getOwnPropertyNames(worldPositions).forEach(worldId => {
     const [x, y] = worldPositions[worldId];
     const position: Vec2 = { x, y }
     universe.worlds[worldId] = makeWorld(worldId);
-    drawingPositions[worldId] = position;
+    universe.drawingPositions[worldId] = position;
   })
 
   return {
     universe,
-    drawingPositions
   }
 }
 
