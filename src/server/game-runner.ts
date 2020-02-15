@@ -71,7 +71,10 @@ export class GameRunner {
   }
 
   private gameShouldStart(game: GameInfo | undefined): boolean {
-    return !!game && game.state === 'PROPOSED' && !Object.values(game.players).some(player => player.state !== 'READY');
+    return !!game 
+      && game.state === 'PROPOSED' 
+      && !Object.values(game.players).some(player => player.state !== 'READY')
+      && Object.values(game.players).length > 1;
   }
 
   async runGame(gameInfo: GameInfo) {
