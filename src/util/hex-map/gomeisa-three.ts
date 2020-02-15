@@ -3,6 +3,7 @@ import { makeHexCoordinates, getRank } from "./make-hex-coordinates";
 import { Vec2 } from "../../shared/math/vec2";
 import { LostWorld, ReadyWorld } from "../../shared/model/v1/world";
 import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
+import { GameMap } from "../../shared/model/v1/game-map";
 
 const homeWorlds = ['c3', 'c7', 'c11'];
 
@@ -12,7 +13,7 @@ const seats: { [key: string]: string } = {
   c11: 'p3'
 }
 
-export function makeGomeisaThree() {
+export function makeGomeisaThree(): GameMap {
   const worldPositions = makeHexCoordinates(4, 1);
 
   const universe: Universe = {
@@ -56,6 +57,17 @@ export function makeGomeisaThree() {
           ships: 6
         }
       })
+    } else {
+      const fleetId = 'f' + fleetKeyNumber++;
+        universe.fleets[fleetId] = {
+          status: 'LOST',
+          currentWorldId: worldId,
+          id: fleetId,
+          integrity: 0,
+          metal: 0,
+          orders: [],
+          ships: 6
+        }
     }
 
     universe.worlds[worldId] = world
@@ -63,6 +75,7 @@ export function makeGomeisaThree() {
   })
 
   return {
+    seats: Object.values(seats),
     universe,
     drawingPositions
   }

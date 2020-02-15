@@ -31,8 +31,6 @@ export class LobbyViewModel {
 
   public focus() {
     this.allGames = fromStream(this.lobbyService.allGames$, []);
-    this.allMaps = fromStream(this.lobbyService.finalMaps$, []);
-    this.allRulesSets = fromStream(this.lobbyService.finalRuleSets$, []);
   }
 
   public unfocus() {

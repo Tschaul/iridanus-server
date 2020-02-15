@@ -9,12 +9,8 @@ export interface GameInfoBase {
 
 export interface ProposedGameInfo extends GameInfoBase {
   state: 'PROPOSED';
-  mapId?: string;
-  rulesId?: string;
 }
 
 export interface StartedGameInfo extends GameInfoBase {
   state: 'STARTED' | 'ENDED';
-  mapId: string;
-  rulesId: string;
 }

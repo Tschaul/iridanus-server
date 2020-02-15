@@ -1,9 +1,8 @@
 import { Universe } from "./universe";
+import { DrawingPositions } from "./drawing-positions";
 
 export interface GameMap {
-  id: string;
-  name: string;
-  final: boolean;
   universe: Universe;
   seats: string[];
+  drawingPositions: DrawingPositions
 }

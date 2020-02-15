@@ -1,14 +1,12 @@
 import { injectable } from "inversify";
 import { ContainerRegistry } from "./container-registry";
 import { GameRepository } from "./repositories/games/games-repository";
-import { first, debounce, debounceTime, pairwise } from "rxjs/operators";
+import { first, debounceTime, pairwise } from "rxjs/operators";
 import { Game } from "../core/game";
 import { GlobalErrorHandler } from "./commands/infrastructure/error-handling/global-error-handler";
 import { GameSetupProvider } from "../core/game-setup-provider";
 import { Store } from "../core/store";
 import { GameInfo } from "../shared/model/v1/game-info";
-import { RulesRepository } from "./repositories/rules/rules-repository";
-import { MapRepository } from "./repositories/maps/map-repository";
 import { GameMap } from "../shared/model/v1/game-map";
 import { GameState } from "../shared/model/v1/state";
 import produce from "immer";
@@ -18,13 +16,13 @@ import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
 import { Initializer } from "./commands/infrastructure/initialisation/initializer";
+import { testConfig } from "../core/setup/simple-config";
+import { makeGomeisaThree } from "../util/hex-map/gomeisa-three";
 
 @injectable()
 export class GameRunner {
 
   private readonly gameRepository: GameRepository;
-  private readonly rulesRepository: RulesRepository;
-  private readonly mapRepository: MapRepository;
   private readonly errorHandler: GlobalErrorHandler;
   private readonly clock: Clock;
   private readonly logger: Logger;
@@ -35,8 +33,6 @@ export class GameRunner {
   ) {
     this.gameRepository = registry.globalContainer.get(GameRepository);
     this.errorHandler = registry.globalContainer.get(GlobalErrorHandler);
-    this.rulesRepository = registry.globalContainer.get(RulesRepository);
-    this.mapRepository = registry.globalContainer.get(MapRepository);
     this.clock = registry.globalContainer.get(Clock);
     this.logger = registry.globalContainer.get(Logger);
     this.initializer = registry.globalContainer.get(Initializer);
@@ -80,13 +76,7 @@ export class GameRunner {
     const setup = container.get(GameSetupProvider);
     const store = container.get(Store);
 
-    if (!gameInfo.rulesId) {
-      throw new Error('Game was started with no rule set selected.')
-    }
-
-    const ruleSet = await this.rulesRepository.getRuleById(gameInfo.rulesId);
-
-    setup.rules = ruleSet.rules;
+    setup.rules = testConfig;
 
     const currentState = await this.gameRepository.getGameState(gameInfo.id);
 
@@ -94,11 +84,7 @@ export class GameRunner {
 
       this.logger.info('game runner: starting game ' + gameInfo.id);
 
-      if (!gameInfo.mapId) {
-        throw new Error('Game was started with no map selected.')
-      }
-
-      const map = await this.mapRepository.getMapById(gameInfo.mapId);
+      const map = makeGomeisaThree()
 
       const state = this.instantiateMap(gameInfo, map);
 

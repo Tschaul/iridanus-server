@@ -78,24 +78,6 @@ export class GameRepository {
     this._gameIds$.next([...currentGameIds, gameId])
   }
 
-  public async setRules(gameId: string, rulesId: string) {
-    const handle = await this.handleForGameInfoById(gameId);
-    handle.do(async () => {
-      return draft => {
-        draft.info.rulesId = rulesId;
-      }
-    })
-  }
-
-  public async setMap(gameId: string, mapId: string) {
-    const handle = await this.handleForGameInfoById(gameId);
-    handle.do(async () => {
-      return draft => {
-        draft.info.mapId = mapId;
-      }
-    })
-  }
-
   public async joinGame(gameId: string, playerId: string) {
     const handle = await this.handleForGameInfoById(gameId);
     handle.do(async (draft) => {

@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { CommandExecutor } from "../command-executor";
-import { SetRulesForGameCommand, SetMapForGameCommand, JoinGameCommand } from "../../../../shared/messages/commands/game-commands";
+import { JoinGameCommand } from "../../../../shared/messages/commands/game-commands";
 import { GameRepository } from "../../../repositories/games/games-repository";
 
 @injectable()

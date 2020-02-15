@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { SocketConnection } from "../socket-connection";
-import { GamesListAllSubscription, MapListFinalSubscription, RulesListFinalSubscription } from "../../../shared/messages/subscriptions";
+import { GamesListAllSubscription } from "../../../shared/messages/subscriptions";
 import { GameListAllSubscriptionResult, MapListFinalSubscriptionResult, RulesListFinalSubscriptionResult } from "../../../shared/messages/subscription-result";
 import { shareReplay, map, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
@@ -21,20 +21,6 @@ export class LobbyService {
     shareReplay(1)
   ) as Observable<GameInfo[]>
 
-  finalMaps$ = this.connection.subscribe<MapListFinalSubscription, MapListFinalSubscriptionResult>({
-    type: 'MAP/LIST_FINAL'
-  }).pipe(
-    map(result => result.maps),
-    shareReplay(1)
-  ) as Observable<GameMap[]>
-
-  finalRuleSets$ = this.connection.subscribe<RulesListFinalSubscription, RulesListFinalSubscriptionResult>({
-    type: 'RULES/LIST_FINAL'
-  }).pipe(
-    map(result => result.rules),
-    shareReplay(1)
-  ) as Observable<GameRuleSet[]>
-
   getGameInfoById(id: string) {
     return this.allGames$.pipe(
       map(games => games.find(game => game.id === id) || null)
@@ -54,22 +40,6 @@ export class LobbyService {
     await this.connection.sendCommand({
       type: 'GAME/JOIN',
       gameId: id
-    })
-  }
-
-  async selectMap(gameId: string, mapId: string) {
-    await this.connection.sendCommand({
-      type: 'GAME/SET_MAP',
-      gameId,
-      mapId
-    })
-  }
-
-  async selectRules(gameId: string, rulesId: string) {
-    await this.connection.sendCommand({
-      type: 'GAME/SET_RULES',
-      gameId,
-      rulesId
     })
   }
 
