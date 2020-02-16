@@ -6,10 +6,12 @@ export type OrderCommand = UpdateWorldOrdersCommand
 
 export interface UpdateWorldOrdersCommand {
   type: 'ORDERS/UPDATE_WORLD',
+  worldId: string,
   orders: WorldOrder[]
 }
 
 export interface UpdateFleetOrdersCommand {
   type: 'ORDERS/UPDATE_FLEET',
+  fleetId: string,
   orders: FleetOrder[]
 }

@@ -4,7 +4,6 @@ import { ContainerRegistry } from '../../container-registry';
 import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from '../user-registration/user-management.workflows';
 import { anything } from '../mocks/anything';
-import { MapSchema } from '../../repositories/maps/schema/v1';
 
 describe("user registration", () => {
 
@@ -97,87 +96,6 @@ describe("user registration", () => {
       }
     });
 
-  })
-
-  it('throws when selecting a map that does not exist', async () => {
-
-    await testBed.sendMessage({
-      type: 'COMMAND',
-      command: {
-        type: 'GAME/SET_MAP',
-        gameId: 'game1',
-        mapId: 'does_not_exist'
-      },
-      commandId: 'set_map'
-    })
-
-    testBed.expectErrorResponse({
-      type: 'ERROR',
-      error: anything
-    })
-  })
-
-  it('selects a map that does exist', async () => {
-
-    const map: MapSchema = {
-      version: 1,
-      map: {
-        id: 'map1',
-        final: true,
-        initialState: undefined as any,
-        name: 'Awesome Map',
-        seats: []
-      }
-    }
-
-    await testBed.putData('maps/map1/map.json', map)
-
-    await testBed.sendMessage({
-      type: 'COMMAND',
-      command: {
-        type: 'GAME/SET_MAP',
-        gameId: 'game1',
-        mapId: 'map1'
-      },
-      commandId: 'set_map'
-    })
-
-    testBed.expectCommandResponse({
-      type: 'COMMAND_SUCCESS',
-      commandId: 'set_map'
-    })
-  })
-
-  it('throws when selecting a map that is not finalized', async () => {
-
-    const map: MapSchema = {
-      version: 1,
-      map: {
-        id: 'map1',
-        final: false,
-        initialState: undefined as any,
-        name: 'Awesome Map',
-        seats: []
-      }
-    }
-
-    await testBed.putData('maps/map1/map.json', map)
-
-    await testBed.sendMessage({
-      type: 'COMMAND',
-      command: {
-        type: 'GAME/SET_MAP',
-        gameId: 'game1',
-        mapId: 'map1'
-      },
-      commandId: 'set_map'
-    })
-
-    testBed.expectErrorResponse({
-      type: 'ERROR',
-      error: anything,
-      commandId: 'set_map'
-    })
   })
 
 })

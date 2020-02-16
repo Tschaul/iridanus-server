@@ -6,7 +6,8 @@ import { ResponseMessage } from "../../shared/messages/response-message";
 import { SignUpUserExecutor } from "./executors/authentication/sign-up-user-executor";
 import { GlobalErrorHandler } from "../infrastructure/error-handling/global-error-handler";
 import { Initializer } from "../infrastructure/initialisation/initializer";
-import { getGameSetupCommandExecutor } from "./executors/game-setup/game-setup command-executor-registry";
+import { getGameSetupCommandExecutor } from "./executors/game-setup/game-setup-command-executor-registry";
+import { getOrderCommandExecutor } from "./executors/orders/order-command-executor-registry";
 
 @injectable()
 export class CommandHandler {
@@ -60,9 +61,11 @@ export class CommandHandler {
     switch (firstParh) {
       case 'GAME':
         return getGameSetupCommandExecutor(registry, command, gameId);
+      case 'ORDERS':
+        return getOrderCommandExecutor(registry, command, gameId);
       case 'SIGN_UP_USER':
         return container.get(SignUpUserExecutor) as CommandExecutor<Command>;
-      
+
     }
 
     throw new Error('No command executor found for command type: ' + command.type)
