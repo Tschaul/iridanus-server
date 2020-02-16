@@ -9,7 +9,8 @@ export class WelcomeViewModel {
 
   private userManagementervice = resolveFromRegistry(UserManagementService);
 
-  constructor(private mainViewModel: MainViewModel) { }
+  constructor(private mainViewModel: MainViewModel) { 
+  }
 
   @observable
   mode: WelcomScreenMode = 'LOGIN'

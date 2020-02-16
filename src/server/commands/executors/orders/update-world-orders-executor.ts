@@ -22,6 +22,7 @@ export class UpdateWorldOrdersExecutor implements CommandExecutor<UpdateWorldOrd
     }
 
     this.store.dispatch(putWorldOrders(command.worldId, command.orders));
+    this.store.commit();
   }
 
 }

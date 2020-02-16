@@ -6,11 +6,12 @@ import { UpdateFleetOrdersExecutor } from "./update-fleet-orders-executor";
 import { UpdateWorldOrdersExecutor } from "./update-world-orders-executor";
 
 export function getOrderCommandExecutor(registry: ContainerRegistry, command: Command, gameId: string | null | undefined): CommandExecutor<Command> {
+  const container = registry.getContainerByGameId(gameId);
   switch (command.type) {
     case 'ORDERS/UPDATE_FLEET':
-      return registry.globalContainer.get(UpdateFleetOrdersExecutor) as CommandExecutor<Command>;
+      return container.get(UpdateFleetOrdersExecutor) as CommandExecutor<Command>;
     case 'ORDERS/UPDATE_WORLD':
-      return registry.globalContainer.get(UpdateWorldOrdersExecutor) as CommandExecutor<Command>;
+      return container.get(UpdateWorldOrdersExecutor) as CommandExecutor<Command>;
   }
 
   throw new Error('No command executor found for command type: ' +  command.type)

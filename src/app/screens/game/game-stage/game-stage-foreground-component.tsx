@@ -6,6 +6,7 @@ import { World } from '../../../../shared/model/v1/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
 import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
 import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';
+import { screenWhite } from '../../../ui-components/colors/colors';
 
 
 @observer
@@ -16,10 +17,20 @@ export class GameStageForeground extends React.Component<{
   render() {
     return (
       <g opacity="1">
+        {this.renderModeHint()}
         {this.renderWorlds()}
         {this.renderFleets()}
       </g>
     )
+  }
+
+  private renderModeHint() {
+    switch (this.props.vm.mode.type) {
+      case 'NORMAL':
+        return <g />
+      case 'SELECT_WORLD_TARGET':
+        return <text fill={screenWhite} x="32" y="32">{this.props.vm.mode.description}</text>
+    }
   }
 
   private renderFleets() {
@@ -52,7 +63,7 @@ export class GameStageForeground extends React.Component<{
               onClick={this.handleGateClick}
               cursor='pointer'
             >►</text>
-            );
+          );
         })}
       </g>
     })
@@ -118,7 +129,7 @@ export class GameStageForeground extends React.Component<{
       return 'lightgray'
     } else {
       if (!this.props.vm.playerInfos[world.ownerId]) {
-        console.log({world})
+        console.log({ world })
       }
       return this.props.vm.playerInfos[world.ownerId].color;
     }

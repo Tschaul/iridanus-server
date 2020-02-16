@@ -5,6 +5,7 @@ import { OrderEditorViewModel } from "../../../view-model/game/order-editor-view
 import { Panel } from "../../../ui-components/panel/panel-component";
 import { WorldOrder } from "../../../../shared/model/v1/world-order";
 import { FleetOrder } from "../../../../shared/model/v1/fleet-orders";
+import { Button } from "../../../ui-components/button/button";
 
 @observer
 export class OrderEditor extends React.Component<{
@@ -59,6 +60,8 @@ export class OrderEditor extends React.Component<{
               return `${order.type}`
           }
         }).map(str => <div>{str}</div>)}
+        ──────────────────────────────── <br />
+        <Button onClick={this.handleNewWarpOrder}>WARP</Button>
       </div>
     )
   }
@@ -69,5 +72,9 @@ export class OrderEditor extends React.Component<{
     </Panel>
   }
 
+  @autobind
+  handleNewWarpOrder() {
+    this.props.vm.newWarpOrder()
+  }
 
 }

@@ -5,6 +5,14 @@ import { World } from "../../../shared/model/v1/world";
 import { fleetIsAtWorldAndHasOwner, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 
+export type GameStageMode = {
+  type: 'NORMAL'
+} | {
+  type: 'SELECT_WORLD_TARGET',
+  description: string,
+  callback: (worldId: string) => void
+}
+
 const STAGE_OFFSET = 75;
 
 export type WorldWithKeyAndDisplayPosition = World & {
@@ -21,10 +29,21 @@ export type GateWithStartAndEndPosition = {
 }
 
 export class GameStageViewModel {
+
   constructor(private gameViewModel: GameViewModel) { }
 
   get playerInfos() {
     return this.gameViewModel.playerInfos;
+  }
+
+  @observable public mode: GameStageMode = { type: 'NORMAL' };
+
+  public requestWorldTargetSelection(description: string, callback: (worldId: string) => void) {
+    this.mode = {
+      type: 'SELECT_WORLD_TARGET',
+      description,
+      callback
+    }
   }
 
   @observable public stageWidth = 0;
@@ -87,8 +106,8 @@ export class GameStageViewModel {
     return Array.from(gatesSet).map(([keyFrom, keyTo]) => {
       const positionFrom = this.drawingPositons[keyFrom];
       const positionTo = this.drawingPositons[keyTo];
-      if (!positionFrom || ! positionTo) {
-        console.log({keyFrom, keyTo})
+      if (!positionFrom || !positionTo) {
+        console.log({ keyFrom, keyTo })
       }
       return {
         xStart: positionFrom.x,
@@ -100,7 +119,7 @@ export class GameStageViewModel {
   }
 
   @computed get warpingFleetOwnersByBothWorlds(): Array<[string, Vec2, string, Vec2, string[]]> {
-    
+
     const warpingFleetsMap = this.gameViewModel.warpingFleetsByBothWorlds;
 
     const result = [] as Array<[string, Vec2, string, Vec2, string[]]>;
@@ -119,7 +138,14 @@ export class GameStageViewModel {
   }
 
   public selectWorld(id: string | null) {
-    if(id) {
+    if (this.mode.type === 'SELECT_WORLD_TARGET') {
+      if (id) {
+        this.mode.callback(id);
+      }
+      this.mode = { type: 'NORMAL' }
+      return;
+    }
+    if (id) {
       this.gameViewModel.stageSelection = {
         type: 'WORLD',
         id

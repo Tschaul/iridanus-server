@@ -66,6 +66,10 @@ export class GameViewModel {
     return gameInfo.drawingPositions;
   }
 
+  @computed public get gameId() {
+    return this.mainViewModel.activeGameId;
+  }
+
   @computed public get playerInfos(): PlayerInfos {
     return this.gameInfo.current.players;
   };
@@ -151,5 +155,10 @@ export class GameViewModel {
 
   backToLobby() {
     this.mainViewModel.activeGameId = null;
+  }
+
+  
+  requestWorldTargetSelection(description: string, callback: (worldId: string) => void) {
+    this.gameStageViewModel.requestWorldTargetSelection(description, callback);
   }
 }

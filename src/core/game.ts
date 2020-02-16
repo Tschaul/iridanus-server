@@ -34,7 +34,7 @@ export class Game {
       ).subscribe((event) => {
 
         if (event === null) {
-          resolve(this.store.finalize() as GameState)
+          // resolve(this.store.finalize() as GameState)
           return;
         }
 

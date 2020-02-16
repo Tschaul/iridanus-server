@@ -22,6 +22,7 @@ export class UpdateFleetOrdersExecutor implements CommandExecutor<UpdateFleetOrd
     }
 
     this.store.dispatch(putFleetOrders(command.fleetId, command.orders));
+    this.store.commit();
   }
 
 }
