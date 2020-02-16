@@ -1,7 +1,5 @@
 import { injectable } from "inversify";
 import { CommandExecutor } from "../command-executor";
-import { CreateGameCommand } from "../../../../shared/messages/commands/game-commands";
-import { GameRepository } from "../../../repositories/games/games-repository";
 import { UpdateFleetOrdersCommand } from "../../../../shared/messages/commands/order-commands";
 import { Store } from "../../../../core/store";
 import { putFleetOrders } from "../../../../core/actions/fleet/put-fleet-orders";
@@ -14,10 +12,6 @@ export class UpdateFleetOrdersExecutor implements CommandExecutor<UpdateFleetOrd
   constructor(private store: Store) { }
 
   async execute(command: UpdateFleetOrdersCommand, userId: string) {
-
-    if (command.orders.length > 100) {
-      throw new Error('Too many orders');
-    }
 
     const state = await this.store.state$.pipe(first()).toPromise();
 

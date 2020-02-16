@@ -13,10 +13,6 @@ export class UpdateWorldOrdersExecutor implements CommandExecutor<UpdateWorldOrd
 
   async execute(command: UpdateWorldOrdersCommand, userId: string) {
 
-    if (command.orders.length > 100) {
-      throw new Error('Too many orders');
-    }
-    
     const state = await this.store.state$.pipe(first()).toPromise();
 
     const world = state.universe.worlds[command.worldId];
