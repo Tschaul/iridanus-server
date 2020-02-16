@@ -1,0 +1,341 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "anyOf": [
+        {
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "AUTHENTICATE"
+                    ],
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        {
+            "properties": {
+                "command": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/SignUpUserCommand"
+                        },
+                        {
+                            "$ref": "#/definitions/CreateGameCommand"
+                        },
+                        {
+                            "$ref": "#/definitions/JoinGameCommand"
+                        },
+                        {
+                            "$ref": "#/definitions/ReadyForGameCommand"
+                        },
+                        {
+                            "$ref": "#/definitions/UpdateWorldOrdersCommand"
+                        },
+                        {
+                            "$ref": "#/definitions/UpdateFleetOrdersCommand"
+                        }
+                    ]
+                },
+                "commandId": {
+                    "type": "string"
+                },
+                "gameId": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "type": {
+                    "enum": [
+                        "COMMAND"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        {
+            "properties": {
+                "gameId": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "subscription": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/GamesListAllSubscription"
+                        },
+                        {
+                            "$ref": "#/definitions/GameStateSubscription"
+                        },
+                        {
+                            "$ref": "#/definitions/GameInfoSubscription"
+                        }
+                    ]
+                },
+                "type": {
+                    "enum": [
+                        "BEGIN_SUBSCRIPTION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "END_SUBSCRIPTION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    ],
+    "definitions": {
+        "BuildIndustryOrder": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "BUILD_INDUSTRY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "BuildShipOrder": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "BUILD_SHIP"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "CreateGameCommand": {
+            "properties": {
+                "gameId": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "GAME/CREATE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "GameInfoSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/INFO"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "GameStateSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/STATE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "GamesListAllSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/LIST_ALL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "JoinGameCommand": {
+            "properties": {
+                "gameId": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "GAME/JOIN"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ReadyForGameCommand": {
+            "properties": {
+                "gameId": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "GAME/READY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "SignUpUserCommand": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "SIGN_UP_USER"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "TransferMetalOrder": {
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "type": {
+                    "enum": [
+                        "TRANSFER_METAL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "TransferShipsOrder": {
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "type": {
+                    "enum": [
+                        "TRANSFER_SHIPS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "UpdateFleetOrdersCommand": {
+            "properties": {
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "enum": [
+                        "ORDERS/UPDATE_FLEET"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "UpdateWorldOrdersCommand": {
+            "properties": {
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BuildShipOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/BuildIndustryOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "enum": [
+                        "ORDERS/UPDATE_WORLD"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "WaitOrder": {
+            "properties": {
+                "amountTime": {
+                    "type": "number"
+                },
+                "type": {
+                    "enum": [
+                        "WAIT"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "WarpOrder": {
+            "properties": {
+                "targetWorldId": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "WARP"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    }
+}
+

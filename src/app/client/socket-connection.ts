@@ -90,7 +90,7 @@ export class SocketConnection {
         type: 'BEGIN_SUBSCRIPTION',
         subscription: subscription as any,
         id: subscriptionId,
-        gameId
+        gameId,
       });
       const sub = this.responses$$.pipe(
         filter(response => {

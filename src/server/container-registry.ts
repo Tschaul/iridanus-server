@@ -14,7 +14,7 @@ import { GameSetupProvider } from "../core/game-setup-provider";
 import { registerGameCommandExecutors, registerGlobalCommandExecutors } from './commands/executors/register-command-executors';
 import { registerRepositories } from './repositories/register-repositories';
 import { registerEnvironment } from './environment/register-environment';
-import { registerGlobalInfrastructure } from './commands/infrastructure/register-infrastructure';
+import { registerGlobalInfrastructure } from './infrastructure/register-infrastructure';
 import { registerCoreInfrastructure } from '../core/infrastructure/register-core-infrastructure';
 
 @injectable()

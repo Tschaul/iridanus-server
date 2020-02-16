@@ -3,7 +3,7 @@ import { ContainerRegistry } from "./container-registry";
 import { GameRepository } from "./repositories/games/games-repository";
 import { first, debounceTime, pairwise, filter } from "rxjs/operators";
 import { Game } from "../core/game";
-import { GlobalErrorHandler } from "./commands/infrastructure/error-handling/global-error-handler";
+import { GlobalErrorHandler } from "./infrastructure/error-handling/global-error-handler";
 import { GameSetupProvider } from "../core/game-setup-provider";
 import { Store } from "../core/store";
 import { GameInfo } from "../shared/model/v1/game-info";
@@ -15,7 +15,7 @@ import { fleetHasOwner, baseFleet, ReadyFleet } from "../shared/model/v1/fleet";
 import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
-import { Initializer } from "./commands/infrastructure/initialisation/initializer";
+import { Initializer } from "./infrastructure/initialisation/initializer";
 import { testConfig } from "../core/setup/simple-config";
 import { makeGomeisaThree } from "../util/hex-map/gomeisa-three";
 

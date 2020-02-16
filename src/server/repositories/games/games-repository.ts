@@ -3,7 +3,7 @@ import { DataHandleRegistry } from "../data-handle-registry";
 import { Observable, combineLatest, from, BehaviorSubject, ReplaySubject, NEVER, merge } from "rxjs";
 import { GameInfoSchema, GameStateSchema } from "./schema/v1";
 import { take, switchMap, concatMap, map, first, tap, mergeMap } from "rxjs/operators";
-import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
+import { Initializer } from "../../infrastructure/initialisation/initializer";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { normalize } from "../../../shared/math/vec2";
 import { GameInfo, StartedGameInfo } from "../../../shared/model/v1/game-info";

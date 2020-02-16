@@ -4,8 +4,8 @@ import { CommandExecutor } from "./executors/command-executor";
 import { ContainerRegistry } from "../container-registry";
 import { ResponseMessage } from "../../shared/messages/response-message";
 import { SignUpUserExecutor } from "./executors/authentication/sign-up-user-executor";
-import { GlobalErrorHandler } from "./infrastructure/error-handling/global-error-handler";
-import { Initializer } from "./infrastructure/initialisation/initializer";
+import { GlobalErrorHandler } from "../infrastructure/error-handling/global-error-handler";
+import { Initializer } from "../infrastructure/initialisation/initializer";
 import { getGameSetupCommandExecutor } from "./executors/game-setup/game-setup command-executor-registry";
 
 @injectable()
@@ -62,6 +62,7 @@ export class CommandHandler {
         return getGameSetupCommandExecutor(registry, command, gameId);
       case 'SIGN_UP_USER':
         return container.get(SignUpUserExecutor) as CommandExecutor<Command>;
+      
     }
 
     throw new Error('No command executor found for command type: ' + command.type)

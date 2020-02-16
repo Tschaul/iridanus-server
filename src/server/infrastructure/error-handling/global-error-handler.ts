@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { Logger } from "../../../../core/infrastructure/logger";
+import { Logger } from "../../../core/infrastructure/logger";
 
 @injectable()
 export class GlobalErrorHandler {

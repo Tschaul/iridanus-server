@@ -4,11 +4,12 @@ import { CommandHandler } from "./commands/command-handler";
 import { UserRepository } from "./repositories/users/user-repository";
 import { RequestMessage } from "../shared/messages/request-message";
 import { ResponseMessage } from "../shared/messages/response-message";
-import { GlobalErrorHandler } from "./commands/infrastructure/error-handling/global-error-handler";
+import { GlobalErrorHandler } from "./infrastructure/error-handling/global-error-handler";
 
-import { Initializer } from "./commands/infrastructure/initialisation/initializer";
-import { Queue } from "./commands/infrastructure/queue/queue";
+import { Initializer } from "./infrastructure/initialisation/initializer";
+import { Queue } from "./infrastructure/queue/queue";
 import { Subject } from "rxjs";
+import { RequestMessageValidator } from "./infrastructure/validation/request-message-validator";
 
 export class ConnectionHandler {
 
@@ -20,6 +21,7 @@ export class ConnectionHandler {
   private queue: Queue;
   private initializer: Initializer;
   private hasBeenDisposed$$: Subject<never>;
+  private requestMessageValidator: RequestMessageValidator;
 
   constructor(private containerRegistry: ContainerRegistry, private sendfn: (reponse: ResponseMessage) => void) {
     this.subscriptionHandler = containerRegistry.globalContainer.get(SubscriptionHandler);
@@ -27,6 +29,7 @@ export class ConnectionHandler {
     this.userRepository = containerRegistry.globalContainer.get(UserRepository);
     this.globalErrorHandler = containerRegistry.globalContainer.get(GlobalErrorHandler);
     this.initializer = containerRegistry.globalContainer.get(Initializer);
+    this.requestMessageValidator = containerRegistry.globalContainer.get(RequestMessageValidator);
 
     this.queue = new Queue();
 
@@ -51,6 +54,8 @@ export class ConnectionHandler {
   handleMessage(message: RequestMessage) {
 
     try {
+
+      this.requestMessageValidator.assertRequestMessageValid(message);
 
       switch (message.type) {
         case 'AUTHENTICATE':

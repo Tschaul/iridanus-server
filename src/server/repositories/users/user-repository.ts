@@ -1,8 +1,8 @@
 import { UsersSchema, initialData } from "./schema/v1";
 import { DataHandle, DataHandleRegistry } from "../data-handle-registry";
 import { injectable } from "inversify";
-import { CryptoWrapper } from "../../commands/infrastructure/crypto/crypto-wrapper";
-import { Initializer } from "../../commands/infrastructure/initialisation/initializer";
+import { CryptoWrapper } from "../../infrastructure/crypto/crypto-wrapper";
+import { Initializer } from "../../infrastructure/initialisation/initializer";
 
 const USER_DATA_PATH ='users/users.json';
 

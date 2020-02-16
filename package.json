@@ -7,7 +7,8 @@
     "test": "tsc && mocha 'build/src/core/tests/**/*.test.js'",
     "run:playground": "tsc && node build/playground.js",
     "start:dev": "webpack-dev-server",
-    "build:watch": "tsc --watch"
+    "build:watch": "tsc --watch",
+    "generate:schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd -o request-schema.json .\\tsconfig.json RequestMessage"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "express": "^4.17.1",
     "immer": "^5.0.0",
     "inversify": "^5.0.1",
+    "jsonschema": "^1.2.5",
     "mobx": "^5.15.1",
     "mobx-react": "^6.1.4",
     "mobx-utils": "^5.5.2",
@@ -45,6 +47,7 @@
     "rxjs": "^6.5.3",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.4",
+    "typescript-json-schema": "^0.42.0",
     "webpack-dev-server": "^3.9.0",
     "ws": "^7.2.0"
   },
