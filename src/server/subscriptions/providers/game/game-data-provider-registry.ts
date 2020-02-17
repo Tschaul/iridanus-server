@@ -5,6 +5,7 @@ import { GameListAllDataProvider } from "./game-list-all-data-provider";
 import { Container } from "inversify";
 import { GameStateDataProvider } from "./game-state-data-provider";
 import { GameInfoDataProvider } from "./game-info-data-provider";
+import { GameMetaDataDataProvider } from "./game-meta-data-provider";
 
 export function getGameDataProvider(registry: ContainerRegistry, subscription: Subscription, gameId: string | null | undefined): DataProvider {
   const container = registry.getContainerByGameId(gameId);
@@ -13,8 +14,10 @@ export function getGameDataProvider(registry: ContainerRegistry, subscription: S
       return container.get(GameListAllDataProvider) as DataProvider
     case 'GAME/STATE':
       return container.get(GameStateDataProvider) as DataProvider
-      case 'GAME/INFO':
-        return container.get(GameInfoDataProvider) as DataProvider
+    case 'GAME/INFO':
+      return container.get(GameInfoDataProvider) as DataProvider
+    case 'GAME/META_DATA':
+      return container.get(GameMetaDataDataProvider) as DataProvider
   }
 }
 
@@ -22,4 +25,5 @@ export function registerGameSetupDataProviders(container: Container) {
   container.bind(GameListAllDataProvider).toSelf();
   container.bind(GameStateDataProvider).toSelf();
   container.bind(GameInfoDataProvider).toSelf();
+  container.bind(GameMetaDataDataProvider).toSelf();
 }

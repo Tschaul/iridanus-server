@@ -1,9 +1,10 @@
-import { GameInfo } from "../model/v1/game-info";
+import { GameInfo, GameMetaData } from "../model/v1/game-info";
 import { GameState } from "../model/v1/state";
 
 export type SubscriptionResult = GameListAllSubscriptionResult
   | GameStateSubscriptionResult
-  | GameInfoSubscriptionResult;
+  | GameInfoSubscriptionResult
+  | GameMetaDataSubscriptionResult;
 
 export interface GameListAllSubscriptionResult {
   type: 'GAME/LIST_ALL',
@@ -18,4 +19,9 @@ export interface GameStateSubscriptionResult {
 export interface GameInfoSubscriptionResult {
   type: 'GAME/INFO',
   info: GameInfo
+}
+
+export interface GameMetaDataSubscriptionResult {
+  type: 'GAME/META_DATA',
+  data: GameMetaData
 }

@@ -14,5 +14,8 @@ export interface ProposedGameInfo extends GameInfoBase {
 
 export interface StartedGameInfo extends GameInfoBase {
   state: 'STARTED' | 'ENDED';
+}
+
+export interface GameMetaData {
   drawingPositions: DrawingPositions
 }

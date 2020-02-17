@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
 import { Observable, combineLatest, from, BehaviorSubject, ReplaySubject, NEVER, merge } from "rxjs";
-import { GameInfoSchema, GameStateSchema, GameHistorySchema, GameLogSchema } from "./schema/v1";
+import { GameInfoSchema, GameStateSchema, GameHistorySchema, GameLogSchema, GameMetaDataSchema } from "./schema/v1";
 import { take, switchMap, concatMap, map, first, tap, mergeMap } from "rxjs/operators";
 import { Initializer } from "../../infrastructure/initialisation/initializer";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
@@ -17,6 +17,7 @@ const infoPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/info.json`;
 const statePathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/state.json`;
 const historyPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/history.json`;
 const logPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/log.json`;
+const metaDataPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/meta-data.json`;
 
 @injectable()
 export class GameRepository {
@@ -62,6 +63,10 @@ export class GameRepository {
     return this.dataHandleRegistry.getDataHandle<GameLogSchema>(logPathById(gameId));
   }
 
+  private handleForGameMetaDataById(gameId: string) {
+    return this.dataHandleRegistry.getDataHandle<GameMetaDataSchema>(metaDataPathById(gameId));
+  }
+
   public getAllGameInfos() {
     return this._data$.pipe(take(1)).toPromise();
   }
@@ -81,6 +86,15 @@ export class GameRepository {
         return handle.asObservable();
       }),
       map(data => data.info)
+    );
+  }
+
+  public getGameMetaDataByIdAsObservable(gameId: string) {
+    return from(this.handleForGameMetaDataById(gameId)).pipe(
+      switchMap(handle => {
+        return handle.asObservable();
+      }),
+      map(data => data.data)
     );
   }
 
@@ -188,7 +202,7 @@ export class GameRepository {
     }
   }
 
-  public async startGame(gameId: string, drawingPosition: DrawingPositions) {
+  public async startGame(gameId: string, drawingPositions: DrawingPositions) {
     const handle = await this.handleForGameInfoById(gameId);
     handle.do(async (draft) => {
       if (draft.info.state !== 'PROPOSED') {
@@ -197,8 +211,12 @@ export class GameRepository {
       return draft => {
         const info = draft.info as StartedGameInfo;
         info.state = 'STARTED';
-        info.drawingPositions = drawingPosition;
       }
+    })
+    const metaDataHandle = await this.handleForGameMetaDataById(gameId);
+    await metaDataHandle.create({
+      version: 1,
+      data: { drawingPositions }
     })
   }
 }

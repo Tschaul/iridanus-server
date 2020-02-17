@@ -81,6 +81,9 @@
                         },
                         {
                             "$ref": "#/definitions/GameInfoSubscription"
+                        },
+                        {
+                            "$ref": "#/definitions/GameMetaDataSubscription"
                         }
                     ]
                 },
@@ -150,6 +153,17 @@
                 "type": {
                     "enum": [
                         "GAME/INFO"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "GameMetaDataSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/META_DATA"
                     ],
                     "type": "string"
                 }
@@ -256,6 +270,9 @@
         },
         "UpdateFleetOrdersCommand": {
             "properties": {
+                "fleetId": {
+                    "type": "string"
+                },
                 "orders": {
                     "items": {
                         "anyOf": [
@@ -303,6 +320,9 @@
                     "enum": [
                         "ORDERS/UPDATE_WORLD"
                     ],
+                    "type": "string"
+                },
+                "worldId": {
                     "type": "string"
                 }
             },

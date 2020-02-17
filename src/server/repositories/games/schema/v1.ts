@@ -1,4 +1,4 @@
-import { GameInfo } from "../../../../shared/model/v1/game-info";
+import { GameInfo, GameMetaData } from "../../../../shared/model/v1/game-info";
 import { GameState } from "../../../../shared/model/v1/state";
 
 export interface GameInfoSchema {
@@ -9,6 +9,11 @@ export interface GameInfoSchema {
 export interface GameStateSchema {
   version: 1;
   currentState: GameState;
+}
+
+export interface GameMetaDataSchema {
+  version: 1;
+  data: GameMetaData;
 }
 
 export interface GameHistorySchema {

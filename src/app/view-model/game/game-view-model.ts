@@ -12,7 +12,7 @@ import { resolveFromRegistry } from "../../container-registry";
 import { GameStateService } from "../../client/game-state/game-state.service";
 import { IStreamListener, fromStream } from "mobx-utils";
 import { empty } from "rxjs";
-import { GameInfo, StartedGameInfo } from "../../../shared/model/v1/game-info";
+import { GameInfo, StartedGameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
 import { GameState } from "../../../shared/model/v1/state";
 
 export type StageSelection = {
@@ -42,10 +42,13 @@ const dummyState: GameState = {
   }
 }
 
+const dummyMetaData: GameMetaData = {
+  drawingPositions: {}
+}
+
 const dummyInfo: GameInfo = {
   id: '',
   state: 'STARTED',
-  drawingPositions: {},
   players: {}
 }
 
@@ -60,9 +63,10 @@ export class GameViewModel {
   @observable public gameInfo: IStreamListener<GameInfo> = fromStream(empty(), dummyInfo);
 
   @observable public gameState: IStreamListener<GameState> = fromStream(empty(), dummyState);
+  @observable public metaData: IStreamListener<GameMetaData> = fromStream(empty(), dummyMetaData);;
 
   @computed public get rawDrawingPositions() {
-    const gameInfo = this.gameInfo.current as StartedGameInfo;
+    const gameInfo = this.metaData.current as GameMetaData;
     return gameInfo.drawingPositions;
   }
 
@@ -84,8 +88,9 @@ export class GameViewModel {
   public focus() {
     const gameId = this.mainViewModel.activeGameId as string;
     this.gameInfo = fromStream(this.gameStateService.getGameInfoById(gameId), dummyInfo);
+    this.metaData = fromStream(this.gameStateService.getGameMetaDataById(gameId), dummyMetaData);
     when(
-      () => !!this.gameInfo.current.id,
+      () => !!Object.values(this.metaData.current.drawingPositions).length,
       () => {
         this.gameState = fromStream(this.gameStateService.getGameStateById(gameId), dummyState);
       }
@@ -157,7 +162,7 @@ export class GameViewModel {
     this.mainViewModel.activeGameId = null;
   }
 
-  
+
   requestWorldTargetSelection(description: string, callback: (worldId: string) => void) {
     this.gameStageViewModel.requestWorldTargetSelection(description, callback);
   }
