@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
 import { Observable, combineLatest, from, BehaviorSubject, ReplaySubject, NEVER, merge } from "rxjs";
-import { GameInfoSchema, GameStateSchema } from "./schema/v1";
+import { GameInfoSchema, GameStateSchema, GameHistorySchema, GameLogSchema } from "./schema/v1";
 import { take, switchMap, concatMap, map, first, tap, mergeMap } from "rxjs/operators";
 import { Initializer } from "../../infrastructure/initialisation/initializer";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
@@ -15,6 +15,8 @@ const BASE_FOLDER = 'games'
 
 const infoPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/info.json`;
 const statePathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/state.json`;
+const historyPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/history.json`;
+const logPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/log.json`;
 
 @injectable()
 export class GameRepository {
@@ -50,6 +52,14 @@ export class GameRepository {
 
   private handleForGameStateById(gameId: string) {
     return this.dataHandleRegistry.getDataHandle<GameStateSchema>(statePathById(gameId));
+  }
+
+  private handleForGameHistoryById(gameId: string) {
+    return this.dataHandleRegistry.getDataHandle<GameHistorySchema>(historyPathById(gameId));
+  }
+
+  private handleForGameLogById(gameId: string) {
+    return this.dataHandleRegistry.getDataHandle<GameLogSchema>(logPathById(gameId));
   }
 
   public getAllGameInfos() {
@@ -132,20 +142,48 @@ export class GameRepository {
   }
 
   public async setGameState(gameId: string, newState: GameState) {
-    const handle = await this.handleForGameStateById(gameId);
-    const exists = await handle.exists()
-    if (!exists) {
-      await handle.create({
+    const stateHandle = await this.handleForGameStateById(gameId);
+    const stateExists = await stateHandle.exists()
+    if (!stateExists) {
+      await stateHandle.create({
         version: 1,
         currentState: newState,
+      })
+    } else {
+      await stateHandle.do(async () => draft => {
+        draft.currentState = newState;
+      })
+    }
+
+    const historyHandle = await this.handleForGameHistoryById(gameId);
+    const historyExists = await historyHandle.exists()
+    if (!historyExists) {
+      await historyHandle.create({
+        version: 1,
         stateHistory: {
           [this.clock.getTimestamp()]: newState
         }
       })
     } else {
-      await handle.do(async () => draft => {
-        draft.currentState = newState;
+      await historyHandle.do(async () => draft => {
         draft.stateHistory[this.clock.getTimestamp()] = newState;
+      })
+    }
+  }
+
+  public async appendGameLog(gameId: string, message: string) {
+    const logHandle = await this.handleForGameLogById(gameId);
+    const stateExists = await logHandle.exists()
+    if (!stateExists) {
+      await logHandle.create({
+        version: 1,
+        actionLog: {
+          [this.clock.getTimestamp()]: message
+        }
+      })
+    } else {
+      await logHandle.do(async () => draft => {
+        draft.actionLog[this.clock.getTimestamp()] = message;
       })
     }
   }

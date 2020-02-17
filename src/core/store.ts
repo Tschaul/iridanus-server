@@ -1,5 +1,5 @@
 import { Subject, Observable, throwError, concat, ReplaySubject } from 'rxjs';
-import { scan, startWith, tap, withLatestFrom, sample, publishReplay, publish, shareReplay } from 'rxjs/operators';
+import { scan, startWith, tap, withLatestFrom, sample, publishReplay, publish, shareReplay, map } from 'rxjs/operators';
 import { injectable, inject } from 'inversify';
 import { Action } from './actions/action';
 import { GameState } from '../shared/model/v1/state';
@@ -14,6 +14,11 @@ export class Store {
   private stateInternal$$ = new ReplaySubject<GameState>(1);
 
   public state$: Observable<GameState> = this.stateInternal$$;
+
+  public actionLog$: Observable<string> = this.actions$$.pipe(
+    map(action => action.describe()),
+    shareReplay(1)
+  );
 
   constructor(private setup: GameSetupProvider) { 
   }

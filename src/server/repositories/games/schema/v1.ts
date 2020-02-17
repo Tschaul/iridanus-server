@@ -9,7 +9,18 @@ export interface GameInfoSchema {
 export interface GameStateSchema {
   version: 1;
   currentState: GameState;
+}
+
+export interface GameHistorySchema {
+  version: 1;
   stateHistory: {
     [timestamp: number]: GameState
+  }
+}
+
+export interface GameLogSchema {
+  version: 1;
+  actionLog: {
+    [timestamp: number]: string
   }
 }

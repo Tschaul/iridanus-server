@@ -112,6 +112,12 @@ export class GameRunner {
     ).subscribe(newState => {
       this.errorHandler.catchPromise(this.gameRepository.setGameState(gameInfo.id, newState));
     })
+    
+    store.actionLog$.pipe(
+      debounceTime(0),
+    ).subscribe(message => {
+      this.errorHandler.catchPromise(this.gameRepository.appendGameLog(gameInfo.id, message));
+    })
 
     await game.startGameLoop();
   }
