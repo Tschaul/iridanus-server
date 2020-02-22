@@ -8,6 +8,7 @@ import { RequestMessage } from "../shared/messages/request-message";
 import a from 'assertron';
 import { join, dirname } from "path";
 import { DataHandleRegistry } from "./repositories/data-handle-registry";
+import { Initializer } from "./infrastructure/initialisation/initializer";
 
 export class ServerTestBed {
   path: string;
@@ -15,10 +16,12 @@ export class ServerTestBed {
   private responses: ResponseMessage[];
   server: ConnectionHandler;
   dataHandleRegistry: DataHandleRegistry;
+  initializer: Initializer;
 
   constructor(private registry: ContainerRegistry) {
     this.path = registry.globalContainer.get(Environment).dataPath;
     this.dataHandleRegistry = registry.globalContainer.get(DataHandleRegistry);
+    this.initializer = registry.globalContainer.get(Initializer);
   }
 
   logout() {
@@ -32,6 +35,7 @@ export class ServerTestBed {
     this.server = new ConnectionHandler(this.registry, r => {
       this.responses.unshift(r)
     })
+    await this.initializer.initializeAllRequested();
   }
 
   async putData(path: string, data: any) {
@@ -46,7 +50,7 @@ export class ServerTestBed {
   async sendMessage(message: RequestMessage) {
     this.server.handleMessage(message);
     await this.server.settleQueue();
-    await new Promise(r => setTimeout(r,0));
+    await new Promise(r => setTimeout(r, 0));
   }
 
   clearResponses() {
@@ -58,22 +62,22 @@ export class ServerTestBed {
   }
 
   expectSubscriptionResponse(response: SubscriptionResponse) {
-    const subscriptionResponse = this.responses.find(r => r.type ==='SUBSCRIPTION_RESULT')
+    const subscriptionResponse = this.responses.find(r => r.type === 'SUBSCRIPTION_RESULT')
     a.satisfies(subscriptionResponse, response)
   }
 
   expectCommandResponse(response: CommandResponse) {
-    const commandResponse = this.responses.find(r => r.type ==='COMMAND_SUCCESS')
+    const commandResponse = this.responses.find(r => r.type === 'COMMAND_SUCCESS')
     a.satisfies(commandResponse, response)
   }
 
   expectErrorResponse(response: ErrorReponse) {
-    const commandResponse = this.responses.find(r => r.type ==='ERROR')
+    const commandResponse = this.responses.find(r => r.type === 'ERROR')
     a.satisfies(commandResponse, response)
   }
 
   expectAuthenticationResponse(response: AuthenticationResponse) {
-    const authResponse = this.responses.find(r => r.type ==='AUTHENTICATION_SUCCESSFULL')
+    const authResponse = this.responses.find(r => r.type === 'AUTHENTICATION_SUCCESSFULL')
     a.satisfies(authResponse, response)
   }
 

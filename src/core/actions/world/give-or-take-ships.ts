@@ -10,7 +10,6 @@ export function giveOrTakeWorldShips(worldId: string, amount: number): Action {
         return {
           ...oldWorld,
           ships: oldWorld.ships + amount,
-          metal: Math.min(oldWorld.metal, oldWorld.ships + amount)
         }
       })
     }

@@ -1,14 +1,26 @@
 import { GameViewModel } from "./game-view-model";
-import { computed } from "mobx";
+import { computed, observable, reaction } from "mobx";
 import { OrderService } from "../../client/orders/order-service";
 import { resolveFromRegistry } from "../../container-registry";
-import { WarpOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder } from "../../../shared/model/v1/fleet-orders";
+import { WorldOrder } from "../../../shared/model/v1/world-order";
 
 export class OrderEditorViewModel {
 
   private orderService = resolveFromRegistry(OrderService)
 
-  constructor(private gameViewModel: GameViewModel) { }
+  @observable private fleetOrderDrafts = new Map<string, FleetOrder[]>();
+  @observable private worldOrderDrafts = new Map<string, WorldOrder[]>();
+
+  constructor(private gameViewModel: GameViewModel) {
+    reaction(
+      () => this.gameViewModel.gameId,
+      () => {
+        this.fleetOrderDrafts.clear();
+        this.worldOrderDrafts.clear();
+      }
+    )
+  }
 
   @computed get selectionType() {
     if (this.gameViewModel.selectedFleet) {
@@ -20,12 +32,19 @@ export class OrderEditorViewModel {
     }
   }
 
-  @computed get orders() {
+  @computed get orders(): FleetOrder[] | WorldOrder[] {
+
     switch (this.selectionType) {
       case 'FLEET':
-        return this.gameViewModel.selectedFleet!.orders;
+        if (!this.gameViewModel.selectedFleetdId || !this.gameViewModel.selectedFleet) {
+          return [];
+        }
+        return this.fleetOrderDrafts.get(this.gameViewModel.selectedFleetdId) || this.gameViewModel.selectedFleet.orders;
       case 'WORLD':
-        return this.gameViewModel.selectedWorld!.orders;
+        if (!this.gameViewModel.selectedWorld) {
+          return [];
+        }
+        return this.worldOrderDrafts.get(this.gameViewModel.selectedWorld.id) || this.gameViewModel.selectedWorld!.orders;
       default:
         return [];
     }
@@ -34,7 +53,6 @@ export class OrderEditorViewModel {
   public newWarpOrder() {
     this.gameViewModel.requestWorldTargetSelection('Select warp target!', (worldId) => {
 
-      const gameId = this.gameViewModel.gameId!;
       const fleet = this.gameViewModel.selectedFleet!;
 
       const warpOrder: WarpOrder = {
@@ -44,7 +62,7 @@ export class OrderEditorViewModel {
 
       const orders = [...fleet.orders, warpOrder]
 
-      this.orderService.updateFleetOrders(gameId, fleet.id, orders);
+      this.fleetOrderDrafts.set(fleet.id, orders);
     })
   }
 

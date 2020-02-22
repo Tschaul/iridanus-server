@@ -1,6 +1,6 @@
 import { Store } from "./store";
 import { combineLatest, Subject } from "rxjs";
-import {injectable } from 'inversify'
+import { injectable } from 'inversify'
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
 import { GameState } from "../shared/model/v1/state";
@@ -8,6 +8,7 @@ import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
 import { ActionLogger } from "./infrastructure/action-logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";
 import { setTimestamp } from "./actions/set-timestamp";
+import { GameSetupProvider } from "./game-setup-provider";
 
 @injectable()
 export class Game {
@@ -17,24 +18,27 @@ export class Game {
   public gameEnded$ = new Subject<GameState>();
 
   constructor(
-    private clock: Clock, 
-    private store: Store, 
+    private clock: Clock,
+    private store: Store,
     private logger: ActionLogger,
-    private completeEventQueue: CompleteEventQueue
-    ) {
+    private completeEventQueue: CompleteEventQueue,
+    private setup: GameSetupProvider
+  ) {
 
   }
 
   public startGameLoop(): Promise<GameState> {
     return new Promise<GameState>((resolve, reject) => {
-      
+
       this.completeEventQueue.upcomingEvent$.pipe(
         distinctUntilChanged(),
         debounceTime(0),
       ).subscribe((event) => {
 
         if (event === null) {
-          // resolve(this.store.finalize() as GameState)
+          if (this.setup.endGameLoopWhenNoEventIsQueued) {
+            resolve(this.store.finalize() as GameState)
+          }
           return;
         }
 

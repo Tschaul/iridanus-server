@@ -4,19 +4,20 @@ import { injectable, inject } from "inversify";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { ReadyWorld } from "../../../shared/model/v1/world";
-import { BuildShipOrder } from "../../../shared/model/v1/world-order";
+import { BuildShipsOrder } from "../../../shared/model/v1/world-order";
 import { map, withLatestFrom, tap } from "rxjs/operators";
 import { popWorldOrder } from "../../actions/world/pop-world-order";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { buildShip } from "../../actions/world/build-ship";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { decrementBuildOrderAmount } from "../../actions/world/decrement-build-order-amount";
 
 @injectable()
 export class BeginBuildingShipEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(private worlds: WorldProjector, private time: TimeProjector, private setup: GameSetupProvider) {
-    this.upcomingEvent$ = worlds.firstByStatusAndNextOrderType<ReadyWorld, BuildShipOrder>('READY', 'BUILD_SHIP').pipe(
+    this.upcomingEvent$ = worlds.firstByStatusAndNextOrderType<ReadyWorld, BuildShipsOrder>('READY', 'BUILD_SHIPS').pipe(
       withLatestFrom(this.time.currentTimestamp$),
       map(([[world, order], timestamp]) => {
         if (!world || !order) {
@@ -25,7 +26,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
           return {
             timestamp,
             happen: () => {
-              if (world.metal < 1) {
+              if (world.metal < 1 || world.industry === 0) {
                 return [
                   popWorldOrder(world.id)
                 ];
@@ -33,7 +34,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
                 return [
                   buildShip(world.id, timestamp + this.setup.rules.building.buildShipDelay / Math.min(world.industry, world.population)),
                   giveOrTakeWorldMetal(world.id, -1),
-                  popWorldOrder(world.id)
+                  decrementBuildOrderAmount(world.id, 'BUILD_SHIPS')
                 ];
               }
             }

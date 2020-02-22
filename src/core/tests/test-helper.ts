@@ -10,8 +10,10 @@ import { registerEventQueues } from "../events/register-queues";
 import { registerProjectors } from "../projectors/register-projectors";
 import { RandomNumberGenerator, NotSoRandomNumberGenerator } from "../infrastructure/random-number-generator";
 import { GameSetupProvider } from "../game-setup-provider";
+import { ActionLogger } from '../infrastructure/action-logger';
+import { map } from 'rxjs/operators';
 
-export function runMap(map: GameState): Promise<GameState> {
+export function runMap(testMap: GameState, watcher: null | ((state: GameState) => string | number | boolean) = null): Promise<GameState> {
 
   let container = new Container({
     defaultScope: "Singleton"
@@ -19,6 +21,7 @@ export function runMap(map: GameState): Promise<GameState> {
 
   container.bind(Clock).toConstantValue(new Clock(0));
   container.bind(Logger).toSelf();
+  container.bind(ActionLogger).toSelf();
   // container.bind(Logger).to(TestLogger);
   container.bind(RandomNumberGenerator).to(NotSoRandomNumberGenerator);
   container.bind(Store).toSelf();
@@ -26,19 +29,29 @@ export function runMap(map: GameState): Promise<GameState> {
   container.bind(Game).toSelf();
   container.bind(GameSetupProvider).toSelf();
 
-  const setup =  container.get(GameSetupProvider);
+  const setup = container.get(GameSetupProvider);
   setup.rules = simpleRules;
-  setup.initialState = map;
+  setup.initialState = testMap;
+  setup.endGameLoopWhenNoEventIsQueued = true;
 
   registerEventQueues(container);
   registerProjectors(container);
 
-  const store =  container.get(Store);
+  const store = container.get(Store);
 
   store.initialize();
+
+  if (watcher) {
+    const logger = container.get(Logger);
+    store.state$.pipe(
+      map(watcher)
+    ).subscribe(message => {
+      logger.debug(`watcher: ${message}`)
+    })
+  }
 
   const game = container.get(Game);
 
   return game.startGameLoop();
-  
+
 }

@@ -7,6 +7,7 @@ export class GlobalErrorHandler {
   constructor(private logger: Logger) {}
 
   handleError(error: Error) {
+    debugger;
     this.logger.error(error.toString());
   }
 

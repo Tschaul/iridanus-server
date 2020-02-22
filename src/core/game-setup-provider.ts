@@ -53,4 +53,6 @@ export class GameSetupProvider {
     this.gameIdInternal = value;
   }
 
+  public endGameLoopWhenNoEventIsQueued: boolean = false;
+
 }

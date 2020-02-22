@@ -1,9 +1,9 @@
 import { ContainerRegistry } from "../container-registry";
 import { DataHandleRegistry } from "../repositories/data-handle-registry";
 import { DataHandleRegistryMock } from "./mocks/data-handle-registry-mock";
-import { CryptoWrapper } from "../commands/infrastructure/crypto/crypto-wrapper";
 import { CryptoWrapperMock } from "./mocks/crypto-warpper-mock";
 import { Environment } from "../environment/environment";
+import { CryptoWrapper } from "../infrastructure/crypto/crypto-wrapper";
 
 export function setupContainerRegistry() {
   const containerRegistry =  new ContainerRegistry();

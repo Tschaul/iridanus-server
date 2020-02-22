@@ -34,7 +34,7 @@ export class OrderEditor extends React.Component<{
         {orders.map(order => {
           switch (order.type) {
             case 'BUILD_INDUSTRY':
-            case 'BUILD_SHIP':
+            case 'BUILD_SHIPS':
               return order.type;
           }
         })}

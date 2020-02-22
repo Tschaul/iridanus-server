@@ -10,6 +10,7 @@ import { popWorldOrder } from "../../actions/world/pop-world-order";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { buildIndustry } from "../../actions/world/build-industry";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { decrementBuildOrderAmount } from "../../actions/world/decrement-build-order-amount";
 
 @injectable()
 export class BeginBuildingIndustryEventQueue implements GameEventQueue {
@@ -25,7 +26,7 @@ export class BeginBuildingIndustryEventQueue implements GameEventQueue {
           return {
             timestamp,
             happen: () => {
-              if (world.metal < this.setup.rules.building.buildIndustryCost) {
+              if (world.metal < this.setup.rules.building.buildIndustryCost || world.industry === 0) {
                 return [
                   popWorldOrder(world.id)
                 ];
@@ -33,7 +34,7 @@ export class BeginBuildingIndustryEventQueue implements GameEventQueue {
                 return [
                   buildIndustry(world.id, timestamp + this.setup.rules.building.buildIndustryDelay / Math.min(world.industry, world.population)),
                   giveOrTakeWorldMetal(world.id, -1 * this.setup.rules.building.buildIndustryCost),
-                  popWorldOrder(world.id)
+                  decrementBuildOrderAmount(world.id, 'BUILD_INDUSTRY')
                 ];
               }
             }

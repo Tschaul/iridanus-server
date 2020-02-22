@@ -11,12 +11,14 @@ describe("build", () => {
     const map = produce(buildTestMap, draft => {
 
       draft.universe.worlds["w1"].orders.push({
-        type: 'BUILD_SHIP',
+        type: 'BUILD_SHIPS',
+        amount: 1
       })
   
     });
+    expect((map.universe.worlds["w1"] as World).metal).to.equal(40)
 
-    const state = await runMap(map);
+    const state = await runMap(map, state => (state.universe.worlds["w1"] as World).metal);
 
     expect((state.universe.worlds["w1"] as World).ships).to.equal(6)
     expect((state.universe.worlds["w1"] as World).metal).to.equal(39)
@@ -27,6 +29,7 @@ describe("build", () => {
 
       draft.universe.worlds["w1"].orders.push({
         type: 'BUILD_INDUSTRY',
+        amount: 1
       })
   
     });
