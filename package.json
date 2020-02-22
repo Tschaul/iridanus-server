@@ -4,7 +4,7 @@
   "description": "Server for Iridanus",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && mocha 'build/src/core/tests/**/*.test.js'",
+    "test": "tsc --p tsconfig.tests.json && mocha 'build/core/tests/**/*.test.js'",
     "run:playground": "tsc && node build/playground.js",
     "start:dev": "webpack-dev-server",
     "build:watch": "tsc --watch",
