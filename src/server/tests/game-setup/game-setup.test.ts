@@ -5,7 +5,7 @@ import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from '../user-registration/user-management.workflows';
 import { anything } from '../mocks/anything';
 
-describe.only("game setup", () => {
+describe("game setup", () => {
 
   let containerRegistry: ContainerRegistry;
   let testBed: ServerTestBed;

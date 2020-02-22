@@ -29,7 +29,7 @@
         "--project",
         "./tsconfig.server.json",
         "--colors",
-        "${workspaceFolder}/src/*/tests/**/*test.ts",
+        "${workspaceFolder}/src/*/tests/**/*.test.ts",
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
