@@ -69,12 +69,13 @@ export class GameStageViewModel {
     for (const key of Object.getOwnPropertyNames(this.gameViewModel.rawDrawingPositions)) {
       const xMax = this.stageWidth - STAGE_OFFSET * 2;
       const yMax = this.stageHeight - STAGE_OFFSET * 2;
-      const xMin = STAGE_OFFSET;
-      const yMin = STAGE_OFFSET;
+      const boxSize = Math.min(xMax, yMax);
+      const xMin = STAGE_OFFSET + 0.5 * (xMax - boxSize);
+      const yMin = STAGE_OFFSET + 0.5 * (yMax - boxSize);
       const rawPosition = this.gameViewModel.rawDrawingPositions[key];
       result[key] = {
-        x: xMin + xMax * rawPosition.x,
-        y: yMin + yMax * rawPosition.y,
+        x: xMin + boxSize * rawPosition.x,
+        y: yMin + boxSize * rawPosition.y,
       }
     }
 

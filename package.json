@@ -4,7 +4,7 @@
   "description": "Server for Iridanus",
   "main": "index.js",
   "scripts": {
-    "test": "tsc --p tsconfig.tests.json && mocha",
+    "test": "tsc --p tsconfig.tests.json && nyc --reporter=html --reporter=text mocha",
     "run:playground": "tsc && node build/playground.js",
     "start:dev": "webpack-dev-server",
     "build:watch": "tsc --watch",
@@ -57,6 +57,7 @@
     "ws": "^7.2.0"
   },
   "devDependencies": {
+    "nyc": "^15.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }
