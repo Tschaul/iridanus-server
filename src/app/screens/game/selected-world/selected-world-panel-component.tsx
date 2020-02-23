@@ -2,7 +2,7 @@ import * as React from "react";
 import { SelectedWorldViewModel } from "../../../view-model/game/selected-world-view-model";
 import { Panel } from "../../../ui-components/panel/panel-component";
 import { observer } from "mobx-react";
-import { screenWhite } from "../../../ui-components/colors/colors";
+import { screenWhite, selectedYellow } from "../../../ui-components/colors/colors";
 import { Fleet } from "../../../../shared/model/v1/fleet";
 import { World } from "../../../../shared/model/v1/world";
 import { PlayerInfo } from "../../../../shared/model/v1/player-info";
@@ -72,7 +72,8 @@ export class SelectedWorldPanel extends React.Component<{
     const icon = isWorld ? '◉' : '◈'
 
     const style: React.CSSProperties = {
-      cursor: 'pointer'
+      cursor: 'pointer',
+      color: selected ? selectedYellow : screenWhite
     }
 
     return (

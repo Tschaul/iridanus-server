@@ -63,6 +63,10 @@ export class GameStageViewModel {
     return this.gameViewModel.selectedFleet;
   }
 
+  @computed get selectedWorld() {
+    return this.gameViewModel.selectedWorld;
+  }
+
   @computed get drawingPositons() {
     const result: DrawingPositions = {}
 

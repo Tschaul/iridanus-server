@@ -6,7 +6,7 @@ import { World } from '../../../../shared/model/v1/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
 import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
 import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';
-import { screenWhite } from '../../../ui-components/colors/colors';
+import { screenWhite, selectedYellow } from '../../../ui-components/colors/colors';
 import { Tooltip } from '../../../ui-components/tooltip/tooltip.component';
 
 
@@ -74,6 +74,7 @@ export class GameStageForeground extends React.Component<{
     return this.props.vm.worldsWithKeyAndDisplayPosition.map(world => {
       const color = this.getColorForWorld(world);
       const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
+      const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       return (
         <g key={world.id}>
           <text
@@ -101,6 +102,21 @@ export class GameStageForeground extends React.Component<{
             svg={true}
             content={this.getTooltipForWorld(world)}
           >
+            {selected && (
+              <circle
+                cx={world.x}
+                cy={world.y}
+                r={WORLD_OUTER_RADIUS}
+                opacity="1"
+                stroke={selectedYellow}
+                fill="none"
+                stroke-width="3"
+                stroke-dasharray="10,10"
+                data-world-id={world.id}
+                onClick={this.handleWorldClick}
+                style={{ cursor: 'pointer' }}
+              />
+            )}
             <circle
               cx={world.x}
               cy={world.y}
@@ -143,8 +159,8 @@ export class GameStageForeground extends React.Component<{
 
   getTooltipForWorld(world: World) {
     return <span>
-      {world.population} P {world.industry} I {world.mines} M <br/>
-      
+      {world.population} P {world.industry} I {world.mines} M <br />
+
     </span>
   }
 }
