@@ -62,7 +62,7 @@ export class GameScreen extends React.Component<{vm: GameViewModel}> implements 
     return (
       <Background>
         <div style={gridContainerStyle}>
-          <Panel style={topLeftPanelStyle}>
+          <Panel style={topLeftPanelStyle} fadeDirection="left">
             TOP LEFT
           </Panel>
           <SelectedWorldPanel 

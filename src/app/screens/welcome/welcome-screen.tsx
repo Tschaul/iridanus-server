@@ -47,7 +47,7 @@ export class WelcomeScreen extends React.Component<{
     return (
       <Background>
         <div style={flexContainerStyle}>
-          <Panel style={{ width: 500, height: 500 }} ref={elem => this.panel = elem}>
+          <Panel style={{ width: 500, height: 500 }} ref={elem => this.panel = elem} fadeDirection="top">
             Welcome to {iridanusAscii}
             {this.renderForm()}
 

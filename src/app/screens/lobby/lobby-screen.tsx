@@ -49,7 +49,7 @@ export class LobbyScreen extends React.Component<{
       return;
     }
     return (
-      <Panel style={{ width: 500, height: 500 }}>
+      <Panel style={{ width: 500, height: 500 }} fadeDirection="top">
         GAME {game.id.toUpperCase().slice(0, 5)} [{game.state}]<br />
         ──────────────────────────────── <br />
         {this.renderPlayerRows()}
@@ -90,7 +90,7 @@ export class LobbyScreen extends React.Component<{
 
   renderLobby() {
     return (
-      <Panel style={{ width: 500, height: 500 }}>
+      <Panel style={{ width: 500, height: 500 }} fadeDirection="top">
         LOBBY<br />
         ──────────────────────────────── <br />
         {this.props.vm.allGames.current.map(game => this.renderGameRow(game))}
