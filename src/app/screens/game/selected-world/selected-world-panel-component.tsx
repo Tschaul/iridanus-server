@@ -15,7 +15,7 @@ export class SelectedWorldPanel extends React.Component<{
   vm: SelectedWorldViewModel,
   style: React.CSSProperties;
 }> {
-  panel: HTMLDivElement | null;
+  panel: Panel | null;
   render() {
 
     return this.renderPanel(
@@ -34,14 +34,7 @@ export class SelectedWorldPanel extends React.Component<{
       (id) => {
         console.log('pizzaz', id)
         if (this.panel) {
-          this.panel.classList.add('fade-in-bright')
-          const removeAnimationClass = () => {
-            if (this.panel) {
-              this.panel.classList.remove('fade-in-bright')
-              this.panel.removeEventListener('animationend', removeAnimationClass);
-            }
-          }
-          this.panel.addEventListener('animationend', removeAnimationClass)
+          this.panel.refreshAnimation();
         }
       }
     )
@@ -65,7 +58,7 @@ export class SelectedWorldPanel extends React.Component<{
   }
 
   renderPanel(content: React.ReactElement) {
-    return <Panel style={{ ...this.props.style }} panelRef={elem => this.panel = elem}>
+    return <Panel style={{ ...this.props.style }} ref={elem => this.panel = elem}>
       {content}
     </Panel>
   }

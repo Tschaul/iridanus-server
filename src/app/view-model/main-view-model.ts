@@ -3,17 +3,17 @@ import { observable, computed } from "mobx";
 import { WelcomeViewModel } from "./welcome/welcome-view-model";
 import { LobbyViewModel } from "./lobby/lobby-view-model";
 
-type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
+export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
 
 export class MainViewModel {
   
   constructor() {
     this.welcomeViewModel.username = 'tschaul';
     this.welcomeViewModel.password = '123456';
-    this.welcomeViewModel.login();
+    // this.welcomeViewModel.login();
 
-    this.lobbyViewModel.selectedGameId = 'pojj0g8a0fkq';
-    this.lobbyViewModel.viewGame();
+    // this.lobbyViewModel.selectedGameId = 'pojj0g8a0fkq';
+    // this.lobbyViewModel.viewGame();
   }
 
   @computed get activeScreen(): PossibleScreen {

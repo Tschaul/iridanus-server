@@ -5,6 +5,7 @@ import { GameStage } from "./game-stage/game-stage-component";
 import { GameViewModel } from "../../view-model/game/game-view-model";
 import { SelectedWorldPanel } from "./selected-world/selected-world-panel-component";
 import { OrderEditor } from "./order-editor/order-editor-component";
+import { SwitchableScreen } from "./screen";
 
 const TOP_BAR_HEIGHT = 75;
 const RIGHT_PANEL_WIDTH = 420;
@@ -12,7 +13,9 @@ const RIGHT_PANEL_WIDTH = 420;
 const MIDDLE_PANEL_HEIGHT = 500;
 const BOTTOM_PANEL_HEIGHT = 300;
 
-export class GameScreen extends React.Component<{vm: GameViewModel}> {
+export class GameScreen extends React.Component<{vm: GameViewModel}> implements SwitchableScreen {
+
+  async fadeOut() {}
 
   componentDidMount() {
     this.props.vm.focus();

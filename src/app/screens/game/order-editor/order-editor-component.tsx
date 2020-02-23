@@ -67,7 +67,7 @@ export class OrderEditor extends React.Component<{
   }
 
   renderPanel(content: React.ReactElement) {
-    return <Panel style={{ ...this.props.style }} className="fade-in-right">
+    return <Panel style={{ ...this.props.style }}>
       {content}
     </Panel>
   }

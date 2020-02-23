@@ -7,6 +7,7 @@ import autobind from 'autobind-decorator';
 import { Button } from '../../ui-components/button/button';
 import { observer } from 'mobx-react';
 import { getClosestAttribute } from '../helper/get-attribute';
+import { SwitchableScreen } from '../game/screen';
 
 const clickableRowStyle: React.CSSProperties = {
   cursor: 'pointer'
@@ -15,7 +16,8 @@ const clickableRowStyle: React.CSSProperties = {
 @observer
 export class LobbyScreen extends React.Component<{
   vm: LobbyViewModel
-}> {
+}> implements SwitchableScreen {
+  async fadeOut() {}
 
   constructor(props: any) {
     super(props);

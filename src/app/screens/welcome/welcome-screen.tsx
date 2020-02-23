@@ -7,11 +7,23 @@ import { InputString } from "../../ui-components/input/input-component";
 import { wrapObservable } from "../helper/wrap-observable";
 import autobind from "autobind-decorator";
 import { observer } from "mobx-react";
+import { SwitchableScreen } from "../game/screen";
 
 @observer
 export class WelcomeScreen extends React.Component<{
   vm: WelcomeViewModel
-}> {
+}> implements SwitchableScreen {
+  panel: Panel | null;
+
+  async fadeOut() {
+    if (this.panel) {
+      console.log('fadeOut')
+      await this.panel.fadeOutAnimation();
+      console.log('fadeOut done')
+
+    }
+  }
+
   render() {
 
     const flexContainerStyle: React.CSSProperties = {
@@ -35,7 +47,7 @@ export class WelcomeScreen extends React.Component<{
     return (
       <Background>
         <div style={flexContainerStyle}>
-          <Panel style={{ width: 500, height: 500 }}>
+          <Panel style={{ width: 500, height: 500 }} ref={elem => this.panel = elem}>
             Welcome to {iridanusAscii}
             {this.renderForm()}
 
