@@ -7,6 +7,7 @@ import { getClosestAttribute } from '../../helper/get-attribute';
 import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
 import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';
 import { screenWhite } from '../../../ui-components/colors/colors';
+import { Tooltip } from '../../../ui-components/tooltip/tooltip.component';
 
 
 @observer
@@ -96,15 +97,20 @@ export class GameStageForeground extends React.Component<{
                 fontSize={22}
               >►</text>);
           })}
-          <circle
-            cx={world.x}
-            cy={world.y}
-            r={WORLD_OUTER_RADIUS}
-            opacity="0"
-            data-world-id={world.id}
-            onClick={this.handleWorldClick}
-            style={{ cursor: 'pointer' }}
-          />
+          <Tooltip
+            svg={true}
+            content={this.getTooltipForWorld(world)}
+          >
+            <circle
+              cx={world.x}
+              cy={world.y}
+              r={WORLD_OUTER_RADIUS}
+              opacity="0"
+              data-world-id={world.id}
+              onClick={this.handleWorldClick}
+              style={{ cursor: 'pointer' }}
+            />
+          </Tooltip>
         </g>);
     });
   }
@@ -133,5 +139,12 @@ export class GameStageForeground extends React.Component<{
       }
       return this.props.vm.playerInfos[world.ownerId].color;
     }
+  }
+
+  getTooltipForWorld(world: World) {
+    return <span>
+      {world.population} P {world.industry} I {world.mines} M <br/>
+      
+    </span>
   }
 }

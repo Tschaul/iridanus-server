@@ -8,12 +8,14 @@ import { World } from "../../../../shared/model/v1/world";
 import { PlayerInfo } from "../../../../shared/model/v1/player-info";
 import autobind from "autobind-decorator";
 import { getClosestAttribute } from "../../helper/get-attribute";
+import { reaction } from "mobx";
 
 @observer
 export class SelectedWorldPanel extends React.Component<{
   vm: SelectedWorldViewModel,
   style: React.CSSProperties;
 }> {
+  panel: HTMLDivElement | null;
   render() {
 
     return this.renderPanel(
@@ -23,6 +25,25 @@ export class SelectedWorldPanel extends React.Component<{
           return this.renderTableRow(fleet, false, fleet.owner);
         })}
       </div>
+    )
+  }
+
+  componentDidMount() {
+    reaction(
+      () => this.props.vm.selectedWorld && this.props.vm.selectedWorld.id,
+      (id) => {
+        console.log('pizzaz', id)
+        if (this.panel) {
+          this.panel.classList.add('fade-in-bright')
+          const removeAnimationClass = () => {
+            if (this.panel) {
+              this.panel.classList.remove('fade-in-bright')
+              this.panel.removeEventListener('animationend', removeAnimationClass);
+            }
+          }
+          this.panel.addEventListener('animationend', removeAnimationClass)
+        }
+      }
     )
   }
 
@@ -44,7 +65,7 @@ export class SelectedWorldPanel extends React.Component<{
   }
 
   renderPanel(content: React.ReactElement) {
-    return <Panel style={{ ...this.props.style }}>
+    return <Panel style={{ ...this.props.style }} panelRef={elem => this.panel = elem}>
       {content}
     </Panel>
   }

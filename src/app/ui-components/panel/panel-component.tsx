@@ -2,7 +2,9 @@ import * as React from "react";
 import { screenPseudoTransparent, screenWhite } from "../colors/colors";
 
 export class Panel extends React.Component<{
-  style?: React.CSSProperties
+  style?: React.CSSProperties,
+  className?: string,
+  panelRef?: (elem: HTMLDivElement | null) => void,
 }> {
   render() {
 
@@ -19,7 +21,7 @@ export class Panel extends React.Component<{
     }
 
     return (
-      <div style={panelStyle}>
+      <div style={panelStyle} className={this.props.className} ref={this.props.panelRef}> 
         {this.props.children}
       </div>
     )
