@@ -7,125 +7,52 @@ import { InputString } from "../../ui-components/input/input-component";
 import { wrapObservable } from "../helper/wrap-observable";
 import autobind from "autobind-decorator";
 import { observer } from "mobx-react";
-import { SwitchableScreen } from "../game/screen";
+import { HasExitAnimation } from "../../ui-components/animatable-components";
+import { errorRed } from "../../ui-components/colors/colors";
+import classNames from "classnames";
+import { LoginPanel } from "./login-panel";
+import { SignUpPanel } from "./sign-up-panel";
+import { reaction } from "mobx";
 
 @observer
 export class WelcomeScreen extends React.Component<{
   vm: WelcomeViewModel
-}> implements SwitchableScreen {
-  panel: Panel | null;
+}, {
+  activePanel: 'LOGIN' | 'SIGN_UP'
+}> implements HasExitAnimation {
+  panel: HasExitAnimation | null;
 
   async fadeOut() {
     if (this.panel) {
-      console.log('fadeOut')
-      await this.panel.fadeOutAnimation();
-      console.log('fadeOut done')
-
+      await this.panel.fadeOut();
     }
+  }
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      activePanel: this.props.vm.mode
+    }
+    reaction(
+      () => this.props.vm.mode,
+      async (value) => {
+        if (this.panel) {
+          await this.panel.fadeOut();
+        }
+        this.setState({
+          activePanel: value
+        });
+      }
+    )
   }
 
   render() {
-
-    const flexContainerStyle: React.CSSProperties = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100%'
-    }
-
-    const iridanusAscii = (
-      <div style={{ whiteSpace: 'pre' }}>
-        {`
- _      _     _                       
-| |_ __(_) __| | __ _ _ __  _   _ ___ 
-| | '__| |\/ _\` |\/ _\` \| \'_ \\| | | / __|
-| | |  | | (_| | (_| | | | | |_| \\__ \\
-|_|_|  |_|\\__,_|\\__,_|_| |_|\\__,_|___/
-                                            `}</div>
-    )
-
-    return (
-      <Background>
-        <div style={flexContainerStyle}>
-          <Panel style={{ width: 500, height: 500 }} ref={elem => this.panel = elem} fadeDirection="top">
-            Welcome to {iridanusAscii}
-            {this.renderForm()}
-
-          </Panel>
-        </div>
-      </Background>
-    )
-  }
-
-  renderForm() {
-    switch (this.props.vm.mode) {
+    switch (this.state.activePanel) {
       case 'LOGIN':
-        return this.renderLoginForm();
+        return <LoginPanel ref={elem => this.panel = elem} vm={this.props.vm}></LoginPanel>
       case 'SIGN_UP':
-        return this.renderSignUpForm();
+        return <SignUpPanel ref={elem => this.panel = elem} vm={this.props.vm}></SignUpPanel>
     }
   }
 
-  renderLoginForm() {
-    return (
-      <div>
-        <br />
-        please enter login<br />
-        ><InputString value={wrapObservable(this.props.vm, 'username')} /><br />
-        <br />
-        <br />
-        please enter password<br />
-        ><InputString isPassword value={wrapObservable(this.props.vm, 'password')} /><br />
-        <br />
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button onClick={this.handleSignUpClick}>SIGN UP</Button>
-          <Button onClick={this.handleLoginClick}>LOGIN</Button>
-        </div>
-      </div>
-    )
-  }
-
-  renderSignUpForm() {
-    return (
-      <div>
-        <br />
-        please enter username<br />
-        ><InputString value={wrapObservable(this.props.vm, 'username')} /><br />
-        <br />
-        please enter email<br />
-        ><InputString value={wrapObservable(this.props.vm, 'email')} /><br />
-        <br />
-        please enter password<br />
-        ><InputString value={wrapObservable(this.props.vm, 'password')} /><br />
-        <br />
-        please enter password again<br />
-        ><InputString value={wrapObservable(this.props.vm, 'passwordRepeated')} /><br />
-        <br />
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button onClick={this.handleBackClick}>BACK</Button>
-          <Button onClick={this.handleSubmitClick}>SUBMIT</Button>
-        </div>
-      </div>
-    )
-  }
-
-  @autobind
-  handleLoginClick() {
-    this.props.vm.login();
-  }
-
-  @autobind
-  handleBackClick() {
-    this.props.vm.mode = 'LOGIN';
-  }
-
-  @autobind
-  handleSubmitClick() {
-    this.props.vm.signUp();
-  }
-
-  @autobind
-  handleSignUpClick() {
-    this.props.vm.mode = 'SIGN_UP';
-  }
 }

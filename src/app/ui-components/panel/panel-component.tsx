@@ -1,9 +1,11 @@
 import * as React from "react";
 import { screenPseudoTransparent, screenWhite } from "../colors/colors";
 import { animateElement } from "../animate-element";
+import autobind from "autobind-decorator";
 
 export class Panel extends React.Component<{
-  style?: React.CSSProperties,
+  panelStyle?: React.CSSProperties,
+  contentStyle?: React.CSSProperties,
   fadeDirection: 'top' | 'bottom' | 'left' | 'right'
 }> {
   content: HTMLDivElement | null;
@@ -21,14 +23,18 @@ export class Panel extends React.Component<{
     await animateElement(this.content, 'fade-in-screen');
   }
 
-  async fadeOutAnimation() {
+  async fadeOut() {
+    const start = new Date().getTime();
+    console.log('start ' + this.getFadeOutAnimationName(), this.panel)
     await animateElement(this.panel, this.getFadeOutAnimationName());
+    const end = new Date().getTime();
+    console.log('end ' + this.getFadeOutAnimationName(), end - start)
   }
 
   render() {
 
     const panelStyle: React.CSSProperties = {
-      ...this.props.style || {},
+      ...this.props.panelStyle || {},
       border: '2px solid ' + screenWhite,
       borderRadius: '0.5em',
       backgroundColor: screenPseudoTransparent,
@@ -41,7 +47,7 @@ export class Panel extends React.Component<{
 
     return (
       <div style={panelStyle} className={this.getFadeInAnimationName()} ref={elem => this.panel = elem}>
-        <div ref={elem => this.content = elem}>
+        <div style={this.props.contentStyle} ref={elem => this.content = elem}>
           {this.props.children}
         </div>
       </div>

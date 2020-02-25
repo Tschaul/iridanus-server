@@ -8,8 +8,9 @@ import { setupContainerRegistry } from './container-registry';
 import { WelcomeScreen } from './screens/welcome/welcome-screen';
 import { LobbyScreen } from './screens/lobby/lobby-screen';
 import { TooltipOverlay } from './ui-components/tooltip/tooltip-overlay.component';
-import { SwitchableScreen } from './screens/game/screen';
+import { HasExitAnimation } from './ui-components/animatable-components';
 import { reaction } from 'mobx';
+import { Background } from './ui-components/background/background-component';
 
 setupContainerRegistry();
 
@@ -43,12 +44,14 @@ class App extends React.Component<{
     )
   }
 
-  activeScreenComponent: SwitchableScreen | null;
+  activeScreenComponent: HasExitAnimation | null;
 
   render() {
     return (
       <TooltipOverlay>
-        {this.renderScreen()}
+        <Background>
+          {this.renderScreen()}
+        </Background>
       </TooltipOverlay>
     )
   }

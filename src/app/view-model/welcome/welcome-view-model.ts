@@ -9,8 +9,11 @@ export class WelcomeViewModel {
 
   private userManagementervice = resolveFromRegistry(UserManagementService);
 
-  constructor(private mainViewModel: MainViewModel) { 
+  constructor(private mainViewModel: MainViewModel) {
   }
+
+  @observable
+  loginError = false;
 
   @observable
   mode: WelcomScreenMode = 'LOGIN'
@@ -28,12 +31,16 @@ export class WelcomeViewModel {
   email: string = ''
 
   async login() {
-    await this.userManagementervice.login(this.username, this.password)
-    this.mainViewModel.loggedInUserId = this.username;
+    try {
+      await this.userManagementervice.login(this.username, this.password)
+      this.mainViewModel.loggedInUserId = this.username;
+    } catch {
+      this.loginError = true;
+    }
   }
 
   async signUp() {
-    if (this.password === this.passwordRepeated) {
+    if (this.password && this.password === this.passwordRepeated) {
       await this.userManagementervice.signUp(this.username, this.email, this.password)
     }
   }

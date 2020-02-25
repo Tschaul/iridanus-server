@@ -73,7 +73,7 @@ export class SelectedWorldPanel extends React.Component<{
   }
 
   renderPanel(content: React.ReactElement) {
-    return <Panel style={{ ...this.props.style }} ref={elem => this.panel = elem} fadeDirection="right">
+    return <Panel panelStyle={{ ...this.props.style }} ref={elem => this.panel = elem} fadeDirection="right">
       {content}
     </Panel>
   }

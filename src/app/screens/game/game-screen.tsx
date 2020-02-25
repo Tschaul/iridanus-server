@@ -1,11 +1,10 @@
 import * as React from "react";
-import { Background } from "../../ui-components/background/background-component";
 import { Panel } from "../../ui-components/panel/panel-component";
 import { GameStage } from "./game-stage/game-stage-component";
 import { GameViewModel } from "../../view-model/game/game-view-model";
 import { SelectedWorldPanel } from "./selected-world/selected-world-panel-component";
 import { OrderEditor } from "./order-editor/order-editor-component";
-import { SwitchableScreen } from "./screen";
+import { HasExitAnimation } from "../../ui-components/animatable-components";
 
 const TOP_BAR_HEIGHT = 75;
 const RIGHT_PANEL_WIDTH = 420;
@@ -13,7 +12,7 @@ const RIGHT_PANEL_WIDTH = 420;
 const MIDDLE_PANEL_HEIGHT = 500;
 const BOTTOM_PANEL_HEIGHT = 300;
 
-export class GameScreen extends React.Component<{vm: GameViewModel}> implements SwitchableScreen {
+export class GameScreen extends React.Component<{vm: GameViewModel}> implements HasExitAnimation {
 
   async fadeOut() {}
 
@@ -60,9 +59,8 @@ export class GameScreen extends React.Component<{vm: GameViewModel}> implements 
     }
 
     return (
-      <Background>
         <div style={gridContainerStyle}>
-          <Panel style={topLeftPanelStyle} fadeDirection="left">
+          <Panel panelStyle={topLeftPanelStyle} fadeDirection="left">
             TOP LEFT
           </Panel>
           <SelectedWorldPanel 
@@ -75,7 +73,6 @@ export class GameScreen extends React.Component<{vm: GameViewModel}> implements 
           />
           <GameStage style={gameStageStyle} vm={this.props.vm.gameStageViewModel} />
         </div>
-      </Background>
     )
   }
 }

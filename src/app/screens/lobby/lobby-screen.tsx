@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { LobbyViewModel } from '../../view-model/lobby/lobby-view-model';
-import { Background } from '../../ui-components/background/background-component';
 import { Panel } from '../../ui-components/panel/panel-component';
 import { GameInfo } from '../../../shared/model/v1/game-info';
 import autobind from 'autobind-decorator';
 import { Button } from '../../ui-components/button/button';
 import { observer } from 'mobx-react';
 import { getClosestAttribute } from '../helper/get-attribute';
-import { SwitchableScreen } from '../game/screen';
+import { HasExitAnimation } from '../../ui-components/animatable-components';
 
 const clickableRowStyle: React.CSSProperties = {
   cursor: 'pointer'
@@ -16,7 +15,7 @@ const clickableRowStyle: React.CSSProperties = {
 @observer
 export class LobbyScreen extends React.Component<{
   vm: LobbyViewModel
-}> implements SwitchableScreen {
+}> implements HasExitAnimation {
   async fadeOut() {}
 
   constructor(props: any) {
@@ -34,12 +33,9 @@ export class LobbyScreen extends React.Component<{
     }
 
     return (
-      <Background>
         <div style={flexContainerStyle}>
           {this.props.vm.selectedGame ? this.renderGame() : this.renderLobby()}
         </div>
-
-      </Background>
     )
   }
 
@@ -49,7 +45,7 @@ export class LobbyScreen extends React.Component<{
       return;
     }
     return (
-      <Panel style={{ width: 500, height: 500 }} fadeDirection="top">
+      <Panel panelStyle={{ width: 500, height: 500 }} fadeDirection="top">
         GAME {game.id.toUpperCase().slice(0, 5)} [{game.state}]<br />
         ──────────────────────────────── <br />
         {this.renderPlayerRows()}
@@ -90,7 +86,7 @@ export class LobbyScreen extends React.Component<{
 
   renderLobby() {
     return (
-      <Panel style={{ width: 500, height: 500 }} fadeDirection="top">
+      <Panel panelStyle={{ width: 500, height: 500 }} fadeDirection="top">
         LOBBY<br />
         ──────────────────────────────── <br />
         {this.props.vm.allGames.current.map(game => this.renderGameRow(game))}

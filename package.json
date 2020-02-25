@@ -6,7 +6,8 @@
   "scripts": {
     "test": "tsc --p tsconfig.tests.json && nyc --reporter=html --reporter=text mocha",
     "run:playground": "tsc && node build/playground.js",
-    "start:dev": "webpack-dev-server",
+    "start-app:dev": "webpack-dev-server",
+    "start-server:dev": "node build/server/server.js",
     "build:watch": "tsc --watch",
     "generate:schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd -o request-schema.json .\\tsconfig.json RequestMessage"
   },
