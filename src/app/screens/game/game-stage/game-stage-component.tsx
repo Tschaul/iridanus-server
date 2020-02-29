@@ -13,12 +13,12 @@ export class GameStage extends React.Component<{vm: GameStageViewModel, style: R
   render() {
     const viewBox = `0 0 ${this.props.vm.stageWidth} ${this.props.vm.stageHeight}`
     return (
-      <div ref={e => this.stageWrapper = e} style={{...this.props.style, width: '100%', height: '100%'}}>
-        <svg viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
+      <div className="fade-in-screen"  ref={e => this.stageWrapper = e} style={{...this.props.style, width: '100%', height: '100%'}}>
+        {this.props.vm.doneLoading && <svg viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
           <GameStageBackdrop vm={this.props.vm}></GameStageBackdrop>
           <GameStageForeground vm={this.props.vm}></GameStageForeground>
           <GameStageSelectedFleet vm={this.props.vm}></GameStageSelectedFleet>
-        </svg>
+        </svg>}
       </div>
     );
   }

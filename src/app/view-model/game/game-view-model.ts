@@ -65,6 +65,8 @@ export class GameViewModel {
   @observable public gameState: IStreamListener<GameState> = fromStream(empty(), dummyState);
   @observable public metaData: IStreamListener<GameMetaData> = fromStream(empty(), dummyMetaData);;
 
+  @observable public doneLoading = false;
+
   @computed public get rawDrawingPositions() {
     const gameInfo = this.metaData.current as GameMetaData;
     return gameInfo.drawingPositions;
@@ -93,6 +95,13 @@ export class GameViewModel {
       () => !!Object.values(this.metaData.current.drawingPositions).length,
       () => {
         this.gameState = fromStream(this.gameStateService.getGameStateById(gameId), dummyState);
+      }
+    )
+    when(
+      () => !!Object.values(this.gameState.current.universe.worlds),
+      () => {
+        console.log("doneLoading")
+        this.doneLoading = true;
       }
     )
   }

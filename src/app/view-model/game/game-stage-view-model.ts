@@ -32,8 +32,12 @@ export class GameStageViewModel {
 
   constructor(private gameViewModel: GameViewModel) { }
 
-  get playerInfos() {
+  @computed get playerInfos() {
     return this.gameViewModel.playerInfos;
+  }
+
+  @computed get doneLoading() {
+    return this.gameViewModel.doneLoading;
   }
 
   @observable public mode: GameStageMode = { type: 'NORMAL' };

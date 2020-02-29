@@ -8,9 +8,9 @@ export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
 export class MainViewModel {
   
   constructor() {
-    // this.welcomeViewModel.username = 'tschaul';
-    // this.welcomeViewModel.password = '123456';
-    // this.welcomeViewModel.login();
+    this.welcomeViewModel.username = 'tschaul';
+    this.welcomeViewModel.password = '123456';
+    this.welcomeViewModel.login();
 
     // this.lobbyViewModel.selectedGameId = 'pojj0g8a0fkq';
     // this.lobbyViewModel.viewGame();

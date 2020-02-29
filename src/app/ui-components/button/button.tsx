@@ -5,7 +5,7 @@ import classNames from "classnames";
 
 const classes = createClasses({
   button: {
-    transition: "color 0.3s",
+    transition: "background-color 0.3s",
     cursor: 'pointer',
     color: 'rgba(114, 130, 135, 029)',
     backgroundColor: screenWhite,

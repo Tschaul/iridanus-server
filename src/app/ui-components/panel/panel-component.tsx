@@ -2,10 +2,12 @@ import * as React from "react";
 import { screenPseudoTransparent, screenWhite } from "../colors/colors";
 import { animateElement } from "../animate-element";
 import autobind from "autobind-decorator";
+import classNames from "classnames";
 
 export class Panel extends React.Component<{
   panelStyle?: React.CSSProperties,
   contentStyle?: React.CSSProperties,
+  contentClassName?: string,
   fadeDirection: 'top' | 'bottom' | 'left' | 'right'
 }> {
   content: HTMLDivElement | null;
@@ -25,10 +27,8 @@ export class Panel extends React.Component<{
 
   async fadeOut() {
     const start = new Date().getTime();
-    console.log('start ' + this.getFadeOutAnimationName(), this.panel)
     await animateElement(this.panel, this.getFadeOutAnimationName());
     const end = new Date().getTime();
-    console.log('end ' + this.getFadeOutAnimationName(), end - start)
   }
 
   render() {
@@ -47,7 +47,7 @@ export class Panel extends React.Component<{
 
     return (
       <div style={panelStyle} className={this.getFadeInAnimationName()} ref={elem => this.panel = elem}>
-        <div style={this.props.contentStyle} ref={elem => this.content = elem}>
+        <div className={classNames(this.props.contentClassName)} style={this.props.contentStyle} ref={elem => this.content = elem}>
           {this.props.children}
         </div>
       </div>

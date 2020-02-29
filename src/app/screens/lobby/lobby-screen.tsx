@@ -7,20 +7,50 @@ import { Button } from '../../ui-components/button/button';
 import { observer } from 'mobx-react';
 import { getClosestAttribute } from '../helper/get-attribute';
 import { HasExitAnimation } from '../../ui-components/animatable-components';
+import { PanelDivider } from '../../ui-components/panel/panel-divider';
+import { createClasses } from '../../ui-components/setup-jss';
+import { screenWhite, selectedYellow, hoverYellow } from '../../ui-components/colors/colors';
+import classNames from 'classnames';
 
-const clickableRowStyle: React.CSSProperties = {
-  cursor: 'pointer'
-}
+const classes = createClasses({
+  row: {
+    transition: "color 0.3s",
+    cursor: 'pointer',
+    color: screenWhite,
+    "&:hover": {
+      color: hoverYellow
+    }
+  },
+  panel: {
+    width: 500,
+    height: 500,
+    display: 'flex',
+    flexDirection: 'column'
+  }
+});
 
 @observer
 export class LobbyScreen extends React.Component<{
   vm: LobbyViewModel
 }> implements HasExitAnimation {
-  async fadeOut() {}
+
+  panel: Panel | null;
+
+  async fadeOut() {
+    if (this.panel) {
+      await this.panel.fadeOut();
+    }
+  }
 
   constructor(props: any) {
     super(props);
     this.props.vm.focus()
+  }
+
+  async refreshPanel() {
+    if (this.panel) {
+      await this.panel.refreshAnimation();
+    }
   }
 
   render() {
@@ -33,9 +63,9 @@ export class LobbyScreen extends React.Component<{
     }
 
     return (
-        <div style={flexContainerStyle}>
-          {this.props.vm.selectedGame ? this.renderGame() : this.renderLobby()}
-        </div>
+      <div style={flexContainerStyle}>
+        {this.props.vm.selectedGame ? this.renderGame() : this.renderLobby()}
+      </div>
     )
   }
 
@@ -45,16 +75,19 @@ export class LobbyScreen extends React.Component<{
       return;
     }
     return (
-      <Panel panelStyle={{ width: 500, height: 500 }} fadeDirection="top">
-        GAME {game.id.toUpperCase().slice(0, 5)} [{game.state}]<br />
-        ──────────────────────────────── <br />
-        {this.renderPlayerRows()}
+      <Panel contentClassName={classNames(classes.panel)} fadeDirection="top" ref={elem => this.panel = elem}>
+        <div>
+          GAME {game.id.toUpperCase().slice(0, 5)} [{game.state}]
+        <PanelDivider />
+        </div>
+        <div style={{ flex: 1 }}>{this.renderPlayerRows()}</div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           {game.state === 'PROPOSED' && (
             this.playerHasJoinedGame()
               ? <Button onClick={this.handleReadyClick}>READY</Button>
               : <Button onClick={this.handleJoinClick}>JOIN</Button>
           )}
+          <PanelDivider />
           {game.state === 'STARTED' && this.playerHasJoinedGame() && (
             <Button onClick={this.handleViewClick}>VIEW</Button>
           )}
@@ -67,6 +100,7 @@ export class LobbyScreen extends React.Component<{
   @autobind
   handleBackClick() {
     this.props.vm.selectedGameId = null;
+    this.refreshPanel();
   }
 
   @autobind
@@ -86,10 +120,14 @@ export class LobbyScreen extends React.Component<{
 
   renderLobby() {
     return (
-      <Panel panelStyle={{ width: 500, height: 500 }} fadeDirection="top">
-        LOBBY<br />
-        ──────────────────────────────── <br />
-        {this.props.vm.allGames.current.map(game => this.renderGameRow(game))}
+      <Panel contentClassName={classNames(classes.panel)} fadeDirection="top" ref={elem => this.panel = elem}>
+        <div>
+          LOBBY
+          <PanelDivider />
+        </div>
+        <div style={{ flex: 1 }}>
+          {this.props.vm.allGames.current.map(game => this.renderGameRow(game))}
+        </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button onClick={this.handleCreateGameClick}>CREATE GAME</Button>
         </div>
@@ -109,7 +147,7 @@ export class LobbyScreen extends React.Component<{
     const isJoined = Object.getOwnPropertyNames(game.players).indexOf(this.props.vm.loggedInUserId || '') !== -1;
 
     return (
-      <div style={clickableRowStyle} data-game-id={game.id} onClick={this.handeGameClick}>{displayName} · {game.state} · {isJoined ? 'JOINED' : ''}</div>
+      <div className={classNames(classes.row)} data-game-id={game.id} onClick={this.handeGameClick}>{displayName} · {game.state} · {isJoined ? 'JOINED' : ''}</div>
     )
   }
 
@@ -118,7 +156,7 @@ export class LobbyScreen extends React.Component<{
     const game = this.props.vm.selectedGame;
 
     if (!game) {
-      return [<span/>]
+      return [<span />]
     }
 
     return Object.values(game.players).map(playerInfo => {
@@ -132,6 +170,7 @@ export class LobbyScreen extends React.Component<{
   public handeGameClick(event: React.MouseEvent) {
     const gametId = getClosestAttribute(event, 'data-game-id');
     this.props.vm.selectedGameId = gametId;
+    this.refreshPanel();
   }
 
   componentWillUnmount() {
