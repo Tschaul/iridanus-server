@@ -10,7 +10,8 @@ import autobind from "autobind-decorator";
 import { getClosestAttribute } from "../../helper/get-attribute";
 import { reaction } from "mobx";
 import * as classNames from 'classnames'
-import { createClasses } from "../../../ui-components/setup-jss";
+import { createClasses, StyleSheet } from "../../../ui-components/setup-jss";
+import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 
 const classes = createClasses({
   row: {
@@ -29,7 +30,7 @@ const classes = createClasses({
 @observer
 export class SelectedWorldPanel extends React.Component<{
   vm: SelectedWorldViewModel,
-  style: React.CSSProperties;
+  panelClassName?: string,
 }> {
   panel: Panel | null;
   render() {
@@ -64,8 +65,12 @@ export class SelectedWorldPanel extends React.Component<{
     } else {
       return (
         <div>
-          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {this.padSpaces(world.population)} P  {this.padSpaces(world.industry)} I  {this.padSpaces(world.mines)} M  <br />
-          ──────────────────────────────── <br />
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div>{this.padSpaces(world.population)} P &nbsp;</div>
+            <div>{this.padSpaces(world.industry)} I &nbsp;</div>
+            <div>{this.padSpaces(world.mines)} M &nbsp;</div>
+          </div>
+          <PanelDivider></PanelDivider>
           {this.renderTableRow(world, true, this.props.vm.playerInfoOfSelectedWorld)}
         </div>
       )
@@ -73,7 +78,7 @@ export class SelectedWorldPanel extends React.Component<{
   }
 
   renderPanel(content: React.ReactElement) {
-    return <Panel panelStyle={{ ...this.props.style }} ref={elem => this.panel = elem} fadeDirection="right">
+    return <Panel panelClassName={classNames(this.props.panelClassName)} ref={elem => this.panel = elem} fadeDirection="right">
       {content}
     </Panel>
   }
@@ -86,12 +91,8 @@ export class SelectedWorldPanel extends React.Component<{
 
     const icon = isWorld ? '◉' : '◈'
 
-    const style: React.CSSProperties = {
-      color: selected ? selectedYellow : screenWhite
-    }
-
     return (
-      <div className={classNames([classes.row,{selected}])} key={item.id} data-fleet-id={isWorld ? null : item.id} onClick={this.handleRowClick}>
+      <div className={classNames([classes.row, { selected }])} key={item.id} data-fleet-id={isWorld ? null : item.id} onClick={this.handleRowClick}>
         {topIcon} <span style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</span> · {this.padSpaces(item.ships)} ► · {this.padSpaces(item.metal)} ▮ · {item.status}<br />
       </div>
     )

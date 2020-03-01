@@ -10,7 +10,6 @@ const classes = createClasses({
     color: 'rgba(114, 130, 135, 029)',
     backgroundColor: screenWhite,
     padding: '0.25em 0.5em',
-    margin: '0.75em 0.5em',
     borderRadius: '0.5em',
     fontWeight: 'bold',
     fontSize: "100%",
@@ -18,28 +17,46 @@ const classes = createClasses({
     border: 0,
     boxShadow: 'rgba(255, 255, 255, 0.5) 0px 0px 5px',
     textShadow: 'rgba(114, 130, 135, 029) 0px 0px 5px',
-    "&:active:hover": {
+    "&:active:hover:not[.disabled]": {
       backgroundColor: selectedYellow,
       outline: "none !important",
     },
-    "&:hover": {
+    "&:hover:not[.disabled]": {
       backgroundColor: hoverYellow,
       outline: "none !important",
     },
     "&:focus, &:active": {
       outline: "none !important",
-    }
-  }
+    },
+    "&.disabled": {
+      opacity: 0.5
+    },
+    "&.spaceLeft": {
+      marginLeft: '0.5em'
+    },
+    "&.spaceRight": {
+      marginRight: '0.5em'
+    },
+  },
 });
 
 export class Button extends React.Component<{
-  onClick?: () => void
+  onClick?: () => void,
+  disabled?: boolean,
+  spaceLeft?: boolean,
+  spaceRight?: boolean,
+  style?: React.CSSProperties
 }> {
   render() {
 
+    const { spaceLeft, spaceRight, disabled,style } = this.props;
 
     return (
-      <button className={classNames([classes.button])} onClick={this.props.onClick}>{this.props.children}</button>
+      <button
+        disabled={this.props.disabled} 
+        style={style}
+        className={classNames([classes.button, { spaceLeft, spaceRight, disabled }])} 
+        onClick={this.props.onClick}>{this.props.children}</button>
     )
   }
 }

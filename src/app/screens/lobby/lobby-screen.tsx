@@ -89,7 +89,7 @@ export class LobbyScreen extends React.Component<{
           )}
           <PanelDivider />
           {game.state === 'STARTED' && this.playerHasJoinedGame() && (
-            <Button onClick={this.handleViewClick}>VIEW</Button>
+            <Button onClick={this.handleViewClick} spaceRight>VIEW</Button>
           )}
           <Button onClick={this.handleBackClick}>BACK</Button>
         </div>

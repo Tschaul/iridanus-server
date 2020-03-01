@@ -68,7 +68,7 @@ export class LoginPanel extends React.Component<{
           <div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
               {this.props.vm.loginError && <small className={classNames('fade-in-screen')} style={{ flex: 1, color: errorRed }}>username or password is incorrect</small>}
-              <Button onClick={this.handleSignUpClick}>SIGN UP</Button>
+              <Button onClick={this.handleSignUpClick} spaceRight>SIGN UP</Button>
               <Button onClick={this.handleLoginClick}>LOGIN</Button>
             </div>
           </div>

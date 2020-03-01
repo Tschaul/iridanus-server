@@ -4,6 +4,14 @@ import preset from 'jss-preset-default'
 
 jss.setup(preset())
 
-export function createClasses(styles: Partial<Styles<string>>) {
-  return jss.createStyleSheet(styles).attach().classes;
+export interface StyleSheet {
+  [className: string]: React.CSSProperties
+}
+
+export type ClassNames<TStyleSheet> = {
+  [className in keyof TStyleSheet]: string
+}
+
+export function createClasses<TSheet extends StyleSheet>(styles: TSheet) {
+  return jss.createStyleSheet(styles as any).attach().classes as ClassNames<TSheet>;
 }

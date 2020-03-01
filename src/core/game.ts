@@ -38,6 +38,13 @@ export class Game {
         if (event === null) {
           if (this.setup.endGameLoopWhenNoEventIsQueued) {
             resolve(this.store.finalize() as GameState)
+            return
+          } else {
+            const now = this.clock.getTimestamp()
+            const setTimestampAction = setTimestamp(now);
+            this.store.dispatch(setTimestampAction)
+            this.logger.logAction(setTimestampAction);
+            this.store.commit();
           }
           return;
         }

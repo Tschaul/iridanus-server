@@ -84,6 +84,7 @@ export class GameStageForeground extends React.Component<{
             textAnchor="middle"
             fill={color}
             fontSize={33}
+            style={{transform: "translateY(1px)"}}
           >{/*world.id*/}◉</text>
           {fleetOwners.map(ownerId => {
             const playerInfo = this.props.vm.playerInfos[ownerId];

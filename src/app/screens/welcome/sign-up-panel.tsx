@@ -60,7 +60,7 @@ export class SignUpPanel extends React.Component<{
                 ><InputString value={wrapObservable(this.props.vm, 'passwordRepeated')} /><br />
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button onClick={this.handleBackClick}>BACK</Button>
+                <Button onClick={this.handleBackClick} spaceRight>BACK</Button>
                 <Button onClick={this.handleSubmitClick}>SUBMIT</Button>
               </div>
           </Panel>

@@ -8,6 +8,7 @@ export class Panel extends React.Component<{
   panelStyle?: React.CSSProperties,
   contentStyle?: React.CSSProperties,
   contentClassName?: string,
+  panelClassName?: string,
   fadeDirection: 'top' | 'bottom' | 'left' | 'right'
 }> {
   content: HTMLDivElement | null;
@@ -46,7 +47,7 @@ export class Panel extends React.Component<{
     }
 
     return (
-      <div style={panelStyle} className={this.getFadeInAnimationName()} ref={elem => this.panel = elem}>
+      <div style={panelStyle} className={classNames(this.getFadeInAnimationName(), this.props.panelClassName)} ref={elem => this.panel = elem}>
         <div className={classNames(this.props.contentClassName)} style={this.props.contentStyle} ref={elem => this.content = elem}>
           {this.props.children}
         </div>

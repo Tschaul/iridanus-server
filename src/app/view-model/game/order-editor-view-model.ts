@@ -22,6 +22,10 @@ export class OrderEditorViewModel {
     )
   }
 
+  @computed get updatedOrdersCount() {
+    return this.fleetOrderDrafts.size + this.worldOrderDrafts.size;
+  }
+
   @computed get selectionType() {
     if (this.gameViewModel.selectedFleet) {
       return 'FLEET';
@@ -29,6 +33,16 @@ export class OrderEditorViewModel {
       return 'WORLD';
     } else {
       return 'NONE'
+    }
+  }
+
+  @computed get selectedWorldOrFleetId() {
+    if (this.gameViewModel.selectedFleet) {
+      return this.gameViewModel.selectedFleet.id;
+    } else if (this.gameViewModel.selectedWorld) {
+      return this.gameViewModel.selectedWorld.id;
+    } else {
+      return null
     }
   }
 
@@ -64,6 +78,17 @@ export class OrderEditorViewModel {
 
       this.fleetOrderDrafts.set(fleet.id, orders);
     })
+  }
+
+  public async saveOrderDrafts() {
+    for (const [worldId, orderDrafts] of this.worldOrderDrafts) {
+      await this.orderService.updateWorldOrders(this.gameViewModel.gameId!, worldId, orderDrafts);
+    }
+    this.worldOrderDrafts.clear()
+    for (const [fleetid, orderDrafts] of this.fleetOrderDrafts) {
+      await this.orderService.updateFleetOrders(this.gameViewModel.gameId!, fleetid, orderDrafts);
+    }
+    this.fleetOrderDrafts.clear()
   }
 
 }

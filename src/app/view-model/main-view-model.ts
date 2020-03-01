@@ -12,8 +12,8 @@ export class MainViewModel {
     this.welcomeViewModel.password = '123456';
     this.welcomeViewModel.login();
 
-    // this.lobbyViewModel.selectedGameId = 'pojj0g8a0fkq';
-    // this.lobbyViewModel.viewGame();
+    this.lobbyViewModel.selectedGameId = 'pojj0g8a0fkq';
+    this.lobbyViewModel.viewGame();
   }
 
   @computed get activeScreen(): PossibleScreen {
