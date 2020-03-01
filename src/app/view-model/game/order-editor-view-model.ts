@@ -7,23 +7,9 @@ import { WorldOrder } from "../../../shared/model/v1/world-order";
 
 export class OrderEditorViewModel {
 
-  private orderService = resolveFromRegistry(OrderService)
 
-  @observable private fleetOrderDrafts = new Map<string, FleetOrder[]>();
-  @observable private worldOrderDrafts = new Map<string, WorldOrder[]>();
 
   constructor(private gameViewModel: GameViewModel) {
-    reaction(
-      () => this.gameViewModel.gameId,
-      () => {
-        this.fleetOrderDrafts.clear();
-        this.worldOrderDrafts.clear();
-      }
-    )
-  }
-
-  @computed get updatedOrdersCount() {
-    return this.fleetOrderDrafts.size + this.worldOrderDrafts.size;
   }
 
   @computed get selectionType() {
@@ -53,12 +39,12 @@ export class OrderEditorViewModel {
         if (!this.gameViewModel.selectedFleetdId || !this.gameViewModel.selectedFleet) {
           return [];
         }
-        return this.fleetOrderDrafts.get(this.gameViewModel.selectedFleetdId) || this.gameViewModel.selectedFleet.orders;
+        return this.gameViewModel.selectedFleet.orders
       case 'WORLD':
         if (!this.gameViewModel.selectedWorld) {
           return [];
         }
-        return this.worldOrderDrafts.get(this.gameViewModel.selectedWorld.id) || this.gameViewModel.selectedWorld!.orders;
+        return this.gameViewModel.selectedWorld!.orders;
       default:
         return [];
     }
@@ -74,21 +60,8 @@ export class OrderEditorViewModel {
         targetWorldId: worldId
       }
 
-      const orders = [...fleet.orders, warpOrder]
-
-      this.fleetOrderDrafts.set(fleet.id, orders);
+      this.gameViewModel.addFleetOrder(fleet.id, warpOrder);
     })
-  }
-
-  public async saveOrderDrafts() {
-    for (const [worldId, orderDrafts] of this.worldOrderDrafts) {
-      await this.orderService.updateWorldOrders(this.gameViewModel.gameId!, worldId, orderDrafts);
-    }
-    this.worldOrderDrafts.clear()
-    for (const [fleetid, orderDrafts] of this.fleetOrderDrafts) {
-      await this.orderService.updateFleetOrders(this.gameViewModel.gameId!, fleetid, orderDrafts);
-    }
-    this.fleetOrderDrafts.clear()
   }
 
 }

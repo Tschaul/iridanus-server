@@ -9,7 +9,8 @@
     "start-app:dev": "webpack-dev-server",
     "start-server:dev": "node build/server/server.js",
     "build:watch": "tsc --watch",
-    "generate:schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd -o request-schema.json .\\tsconfig.json RequestMessage"
+    "generate:request-schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd --required -o request-schema.json .\\tsconfig.json RequestMessage",
+    "generate:state-schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd --required -o state-schema.json .\\tsconfig.json GameState"
   },
   "mocha": {
     "spec": [

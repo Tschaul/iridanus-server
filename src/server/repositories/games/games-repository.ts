@@ -230,7 +230,7 @@ function getPlayerTemplate(num: number): Partial<PlayerInfo> {
       }
     case 2:
       return {
-        color: 'mediumblue',
+        color: 'deepskyblue',
         fleetDrawingPosition: normalize({ x: 1, y: -1 })
       }
     case 3:

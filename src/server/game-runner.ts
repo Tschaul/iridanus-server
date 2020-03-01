@@ -105,7 +105,7 @@ export class GameRunner {
       setup.initialState = currentState
     }
 
-    store.initialize();
+    await store.initialize();
 
     store.state$.pipe(
       debounceTime(0),

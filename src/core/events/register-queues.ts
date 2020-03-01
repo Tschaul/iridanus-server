@@ -20,6 +20,7 @@ import { WorldFireEventQueue } from "./combat/world-fire";
 import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
+import { TickEventQueue } from "./tick";
 
 export function registerEventQueues(container: Container) {
 
@@ -48,6 +49,8 @@ export function registerEventQueues(container: Container) {
 
   container.bind(CaptureFleetEventQueue).toSelf();
   container.bind(CaptureWorldEventQueue).toSelf();
+
+  container.bind(TickEventQueue).toSelf();
 
   container.bind(CompleteEventQueue).toSelf();
 

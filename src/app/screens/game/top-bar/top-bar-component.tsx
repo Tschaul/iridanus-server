@@ -5,10 +5,11 @@ import classNames from "classnames";
 import { Button } from "../../../ui-components/button/button";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
+import { GameViewModel } from "../../../view-model/game/game-view-model";
 
 @observer
 export class TopBar extends React.Component<{
-  orderEditorVm: OrderEditorViewModel,
+  vm: GameViewModel,
   panelClassName?: string,
 }> {
   render() {
@@ -19,16 +20,16 @@ export class TopBar extends React.Component<{
       >
       <div>
         <Button
-          disabled={this.props.orderEditorVm.updatedOrdersCount === 0}
+          disabled={this.props.vm.updatedOrdersCount === 0}
           style={{transform: 'translateY(-0.25em)'}}
           onClick={this.handleSaveOrders}
-        >Save {this.props.orderEditorVm.updatedOrdersCount} orders</Button>
+        >Save {this.props.vm.updatedOrdersCount} orders</Button>
       </div>
     </Panel>
   }
 
   @autobind
   public handleSaveOrders() {
-    this.props.orderEditorVm.saveOrderDrafts();
+    this.props.vm.saveOrderDrafts();
   }
 }

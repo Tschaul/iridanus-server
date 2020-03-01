@@ -1,0 +1,1052 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "ArrivingFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "ARRIVING"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "BuildIndustryOrder": {
+            "properties": {
+                "amount": {
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "BUILD_INDUSTRY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "BuildShipsOrder": {
+            "properties": {
+                "amount": {
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "BUILD_SHIPS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "BuildingIndustryWorld": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "industry": {
+                    "type": "number"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "mines": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BuildShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/BuildIndustryOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "number"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "BUILDING_INDUSTRY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "industry",
+                "integrity",
+                "metal",
+                "mines",
+                "orders",
+                "ownerId",
+                "population",
+                "readyTimestamp",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "BuildingShipWorld": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "industry": {
+                    "type": "number"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "mines": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BuildShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/BuildIndustryOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "number"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "BUILDING_SHIP"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "industry",
+                "integrity",
+                "metal",
+                "mines",
+                "orders",
+                "ownerId",
+                "population",
+                "readyTimestamp",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "FiringFleet": {
+            "properties": {
+                "combatStatus": {
+                    "enum": [
+                        "FIRING"
+                    ],
+                    "type": "string"
+                },
+                "weaponsReadyTimestamp": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "combatStatus",
+                "weaponsReadyTimestamp"
+            ],
+            "type": "object"
+        },
+        "FiringWorld": {
+            "properties": {
+                "combatStatus": {
+                    "enum": [
+                        "FIRING"
+                    ],
+                    "type": "string"
+                },
+                "weaponsReadyTimestamp": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "combatStatus",
+                "weaponsReadyTimestamp"
+            ],
+            "type": "object"
+        },
+        "FleetAtPeace": {
+            "properties": {
+                "combatStatus": {
+                    "enum": [
+                        "AT_PEACE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "combatStatus"
+            ],
+            "type": "object"
+        },
+        "Gates": {
+            "additionalProperties": {
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "type": "object"
+        },
+        "LeavingFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "LEAVING"
+                    ],
+                    "type": "string"
+                },
+                "targetWorldId": {
+                    "type": "string"
+                },
+                "warpingTimestamp": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "ships",
+                "status",
+                "targetWorldId",
+                "warpingTimestamp"
+            ],
+            "type": "object"
+        },
+        "LostFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "LOST"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "LostWorld": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "industry": {
+                    "type": "number"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "mines": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BuildShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/BuildIndustryOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "population": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "LOST"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "industry",
+                "integrity",
+                "metal",
+                "mines",
+                "orders",
+                "population",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "ReadyFleetBase": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "READY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "ReadyWorldBase": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "industry": {
+                    "type": "number"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "mines": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BuildShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/BuildIndustryOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "READY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "industry",
+                "integrity",
+                "metal",
+                "mines",
+                "orders",
+                "ownerId",
+                "population",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "TransferMetalOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": -99,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "TRANSFER_METAL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "TransferShipsOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": -99,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "TRANSFER_SHIPS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "TransferingMetalFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "TRANSFERING_METAL"
+                    ],
+                    "type": "string"
+                },
+                "transferAmount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status",
+                "transferAmount"
+            ],
+            "type": "object"
+        },
+        "TransferingShipsFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "TRANSFERING_SHIPS"
+                    ],
+                    "type": "string"
+                },
+                "transferAmount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status",
+                "transferAmount"
+            ],
+            "type": "object"
+        },
+        "Universe": {
+            "properties": {
+                "fleets": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/LostFleet"
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ReadyFleetBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FleetAtPeace"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ReadyFleetBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringFleet"
+                                    }
+                                ]
+                            },
+                            {
+                                "$ref": "#/definitions/WaitingFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/LeavingFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/ArrivingFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferingMetalFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferingShipsFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpingFleet"
+                            }
+                        ]
+                    },
+                    "type": "object"
+                },
+                "gates": {
+                    "$ref": "#/definitions/Gates"
+                },
+                "worlds": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ReadyWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ReadyWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "$ref": "#/definitions/BuildingShipWorld"
+                            },
+                            {
+                                "$ref": "#/definitions/BuildingIndustryWorld"
+                            },
+                            {
+                                "$ref": "#/definitions/LostWorld"
+                            }
+                        ]
+                    },
+                    "type": "object"
+                }
+            },
+            "required": [
+                "fleets",
+                "gates",
+                "worlds"
+            ],
+            "type": "object"
+        },
+        "WaitOrder": {
+            "properties": {
+                "amountTime": {
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "type": {
+                    "enum": [
+                        "WAIT"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amountTime",
+                "type"
+            ],
+            "type": "object"
+        },
+        "WaitingFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "WAITING"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status"
+            ],
+            "type": "object"
+        },
+        "WarpOrder": {
+            "properties": {
+                "targetWorldId": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "WARP"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "targetWorldId",
+                "type"
+            ],
+            "type": "object"
+        },
+        "WarpingFleet": {
+            "properties": {
+                "arrivingTimestamp": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "originWorldId": {
+                    "type": "string"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "WARPING"
+                    ],
+                    "type": "string"
+                },
+                "targetWorldId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "arrivingTimestamp",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "originWorldId",
+                "ownerId",
+                "ships",
+                "status",
+                "targetWorldId"
+            ],
+            "type": "object"
+        },
+        "WorldAtPeace": {
+            "properties": {
+                "combatStatus": {
+                    "enum": [
+                        "AT_PEACE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "combatStatus"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "currentTimestamp": {
+            "type": "number"
+        },
+        "gameEndTimestamp": {
+            "type": "number"
+        },
+        "universe": {
+            "$ref": "#/definitions/Universe"
+        }
+    },
+    "required": [
+        "currentTimestamp",
+        "gameEndTimestamp",
+        "universe"
+    ],
+    "type": "object"
+}
+

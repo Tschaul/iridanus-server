@@ -16,6 +16,8 @@ setupContainerRegistry();
 
 const vm = new MainViewModel();
 
+(window as any).vm = vm;
+
 @observer
 class App extends React.Component<{
   vm: MainViewModel

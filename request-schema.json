@@ -16,6 +16,11 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "password",
+                "type",
+                "userId"
+            ],
             "type": "object"
         },
         {
@@ -58,6 +63,11 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "command",
+                "commandId",
+                "type"
+            ],
             "type": "object"
         },
         {
@@ -94,6 +104,11 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "id",
+                "subscription",
+                "type"
+            ],
             "type": "object"
         },
         {
@@ -108,12 +123,20 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "id",
+                "type"
+            ],
             "type": "object"
         }
     ],
     "definitions": {
         "BuildIndustryOrder": {
             "properties": {
+                "amount": {
+                    "minimum": 1,
+                    "type": "integer"
+                },
                 "type": {
                     "enum": [
                         "BUILD_INDUSTRY"
@@ -121,17 +144,29 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "amount",
+                "type"
+            ],
             "type": "object"
         },
-        "BuildShipOrder": {
+        "BuildShipsOrder": {
             "properties": {
+                "amount": {
+                    "minimum": 1,
+                    "type": "integer"
+                },
                 "type": {
                     "enum": [
-                        "BUILD_SHIP"
+                        "BUILD_SHIPS"
                     ],
                     "type": "string"
                 }
             },
+            "required": [
+                "amount",
+                "type"
+            ],
             "type": "object"
         },
         "CreateGameCommand": {
@@ -146,6 +181,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "gameId",
+                "type"
+            ],
             "type": "object"
         },
         "GameInfoSubscription": {
@@ -157,6 +196,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "GameMetaDataSubscription": {
@@ -168,6 +210,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "GameStateSubscription": {
@@ -179,6 +224,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "GamesListAllSubscription": {
@@ -190,6 +238,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "JoinGameCommand": {
@@ -204,6 +255,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "gameId",
+                "type"
+            ],
             "type": "object"
         },
         "ReadyForGameCommand": {
@@ -218,6 +273,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "gameId",
+                "type"
+            ],
             "type": "object"
         },
         "SignUpUserCommand": {
@@ -238,12 +297,20 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "email",
+                "id",
+                "password",
+                "type"
+            ],
             "type": "object"
         },
         "TransferMetalOrder": {
             "properties": {
                 "amount": {
-                    "type": "number"
+                    "maximum": 99,
+                    "minimum": -99,
+                    "type": "integer"
                 },
                 "type": {
                     "enum": [
@@ -252,12 +319,18 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "amount",
+                "type"
+            ],
             "type": "object"
         },
         "TransferShipsOrder": {
             "properties": {
                 "amount": {
-                    "type": "number"
+                    "maximum": 99,
+                    "minimum": -99,
+                    "type": "integer"
                 },
                 "type": {
                     "enum": [
@@ -266,6 +339,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "amount",
+                "type"
+            ],
             "type": "object"
         },
         "UpdateFleetOrdersCommand": {
@@ -299,6 +376,11 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "fleetId",
+                "orders",
+                "type"
+            ],
             "type": "object"
         },
         "UpdateWorldOrdersCommand": {
@@ -307,7 +389,7 @@
                     "items": {
                         "anyOf": [
                             {
-                                "$ref": "#/definitions/BuildShipOrder"
+                                "$ref": "#/definitions/BuildShipsOrder"
                             },
                             {
                                 "$ref": "#/definitions/BuildIndustryOrder"
@@ -326,14 +408,18 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "orders",
+                "type",
+                "worldId"
+            ],
             "type": "object"
         },
         "WaitOrder": {
             "properties": {
                 "amountTime": {
-                    "maximum": 99,
                     "minimum": 0,
-                    "type": "integer"
+                    "type": "number"
                 },
                 "type": {
                     "enum": [
@@ -342,6 +428,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "amountTime",
+                "type"
+            ],
             "type": "object"
         },
         "WarpOrder": {
@@ -356,6 +446,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "targetWorldId",
+                "type"
+            ],
             "type": "object"
         }
     }

@@ -1,23 +1,28 @@
-import { GameState } from "../../shared/model/v1/state";
-import { GameEvent } from "./event";
+import { GameEvent, GameEventQueue } from "./event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { TimeProjector } from "../projectors/time-projector";
+import { injectable } from "inversify";
 
-export function upcomingTickEvent(state$: Observable<GameState>): Observable<TickEvent> {
-    return state$.pipe(
-        map(state => state.currentTimestamp),
-        map(currentTimestamp => {
-            const nextTick = Math.floor(currentTimestamp / 1000) * 1000 + 1000;
-            return new TickEvent(nextTick);
-        }),
-    )
-}
+@injectable()
+export class TickEventQueue implements GameEventQueue {
+    public upcomingEvent$: Observable<GameEvent | null>;
 
-export class TickEvent implements GameEvent {
-
-    constructor(public timestamp: number){}
-
-    happen() {
-        return []
+    constructor(
+        private time: TimeProjector,
+    ){
+        this.upcomingEvent$ = this.time.currentTimestamp$.pipe(
+            map(currentTimestamp => {
+                const nextTick = Math.floor(currentTimestamp / 1000) * 1000 + 1000;
+                return {
+                    timestamp: nextTick,
+                    happen: () => {
+                      return [
+                      ];
+                    }
+                  }
+            })
+        )
     }
+
 }

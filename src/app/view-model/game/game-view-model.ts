@@ -1,4 +1,4 @@
-import { observable, computed, when } from "mobx";
+import { observable, computed, when, reaction } from "mobx";
 import { Universe } from "../../../shared/model/v1/universe";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
 import { MainViewModel } from "../main-view-model";
@@ -14,6 +14,9 @@ import { IStreamListener, fromStream } from "mobx-utils";
 import { empty } from "rxjs";
 import { GameInfo, StartedGameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
 import { GameState } from "../../../shared/model/v1/state";
+import { OrderService } from "../../client/orders/order-service";
+import { FleetOrder } from "../../../shared/model/v1/fleet-orders";
+import { WorldOrder } from "../../../shared/model/v1/world-order";
 
 export type StageSelection = {
   type: 'WORLD',
@@ -55,10 +58,17 @@ const dummyInfo: GameInfo = {
 export class GameViewModel {
 
   private gameStateService = resolveFromRegistry(GameStateService);
-
+  private orderService = resolveFromRegistry(OrderService)
   gameStageViewModel = new GameStageViewModel(this);
   selectedWorldViewModel = new SelectedWorldViewModel(this);
   orderEditorViewModel = new OrderEditorViewModel(this);
+
+  @observable private fleetOrderDrafts = new Map<string, FleetOrder[]>();
+  @observable private worldOrderDrafts = new Map<string, WorldOrder[]>();
+
+  @computed get updatedOrdersCount() {
+    return this.fleetOrderDrafts.size + this.worldOrderDrafts.size;
+  }
 
   @observable public gameInfo: IStreamListener<GameInfo> = fromStream(empty(), dummyInfo);
 
@@ -85,7 +95,15 @@ export class GameViewModel {
     return this.gameState.current.universe;
   }
 
-  constructor(private mainViewModel: MainViewModel) { }
+  constructor(private mainViewModel: MainViewModel) {
+    reaction(
+      () => this.gameId,
+      () => {
+        this.fleetOrderDrafts.clear();
+        this.worldOrderDrafts.clear();
+      }
+    )
+  }
 
   public focus() {
     const gameId = this.mainViewModel.activeGameId as string;
@@ -113,7 +131,16 @@ export class GameViewModel {
 
   @computed public get selectedWorld() {
     if (this.stageSelection.type === 'WORLD') {
-      return this.universe.worlds[this.stageSelection.id];
+      const world = this.universe.worlds[this.stageSelection.id];
+      const orderDrafts = this.worldOrderDrafts.get(this.stageSelection.id);
+      if (orderDrafts) {
+        return {
+          ...world,
+          orders: orderDrafts
+        }
+      } else {
+        return world
+      }
     } else {
       return null;
     }
@@ -121,7 +148,16 @@ export class GameViewModel {
 
   @computed get selectedFleet() {
     if (this.selectedFleetdId) {
-      return this.universe.fleets[this.selectedFleetdId];
+      const fleet = this.universe.fleets[this.selectedFleetdId];
+      const orderDrafts = this.fleetOrderDrafts.get(this.selectedFleetdId);
+      if (orderDrafts) {
+        return {
+          ...fleet,
+          orders: orderDrafts
+        }
+      } else {
+        return fleet
+      }
     } else {
       return null;
     }
@@ -174,5 +210,22 @@ export class GameViewModel {
 
   requestWorldTargetSelection(description: string, callback: (worldId: string) => void) {
     this.gameStageViewModel.requestWorldTargetSelection(description, callback);
+  }
+
+
+  public async saveOrderDrafts() {
+    for (const [worldId, orderDrafts] of this.worldOrderDrafts) {
+      await this.orderService.updateWorldOrders(this.gameId!, worldId, orderDrafts);
+    }
+    this.worldOrderDrafts.clear()
+    for (const [fleetid, orderDrafts] of this.fleetOrderDrafts) {
+      await this.orderService.updateFleetOrders(this.gameId!, fleetid, orderDrafts);
+    }
+    this.fleetOrderDrafts.clear()
+  }
+
+  addFleetOrder(fleetId: string, order: FleetOrder) {
+    const currentOrders = this.fleetOrderDrafts.get(fleetId) || this.universe.fleets[fleetId].orders;
+    this.fleetOrderDrafts.set(fleetId, [...currentOrders, order]);
   }
 }

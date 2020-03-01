@@ -63,7 +63,7 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }> implement
     return (
       <div className={classNames(classes.grid)}>
         <TopBar
-          orderEditorVm={this.props.vm.orderEditorViewModel}
+          vm={this.props.vm}
           panelClassName={classNames(classes.topLeft)}
         ></TopBar>
         <SelectedWorldPanel

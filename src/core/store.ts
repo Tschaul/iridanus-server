@@ -4,6 +4,7 @@ import { injectable, inject } from 'inversify';
 import { Action } from './actions/action';
 import { GameState } from '../shared/model/v1/state';
 import { GameSetupProvider } from './game-setup-provider';
+import { GameStateValidator } from './infrastructure/game- state-message-validator';
 
 @injectable()
 export class Store {
@@ -20,10 +21,15 @@ export class Store {
     shareReplay(1)
   );
 
-  constructor(private setup: GameSetupProvider) { 
+  constructor(
+    private setup: GameSetupProvider,
+    private validator: GameStateValidator
+    ) { 
   }
 
-  public initialize() {
+  public async initialize() {
+    await this.validator.initialize();
+
     this.actions$$.pipe(
       scan((state: GameState, action: Action) => {
         const nextState = action.apply(state);
@@ -32,7 +38,8 @@ export class Store {
       sample(this.commits$$),
       startWith(this.setup.initialState),
       tap(state => {
-        this.lastState = state
+        this.lastState = state;
+        this.validator.assertGameStateValid(state)
       }),
     ).subscribe(state => this.stateInternal$$.next(state))
   }

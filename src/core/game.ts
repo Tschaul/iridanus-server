@@ -1,10 +1,10 @@
 import { Store } from "./store";
-import { combineLatest, Subject } from "rxjs";
+import { combineLatest, Subject, interval } from "rxjs";
 import { injectable } from 'inversify'
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
 import { GameState } from "../shared/model/v1/state";
-import { map, distinctUntilChanged, take, debounceTime } from "rxjs/operators";
+import { distinctUntilChanged, debounceTime } from "rxjs/operators";
 import { ActionLogger } from "./infrastructure/action-logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";
 import { setTimestamp } from "./actions/set-timestamp";
@@ -39,13 +39,14 @@ export class Game {
           if (this.setup.endGameLoopWhenNoEventIsQueued) {
             resolve(this.store.finalize() as GameState)
             return
-          } else {
-            const now = this.clock.getTimestamp()
-            const setTimestampAction = setTimestamp(now);
-            this.store.dispatch(setTimestampAction)
-            this.logger.logAction(setTimestampAction);
-            this.store.commit();
           }
+          // } else {
+          //   const now = this.clock.getTimestamp()
+          //   const setTimestampAction = setTimestamp(now);
+          //   this.store.dispatch(setTimestampAction)
+          //   this.logger.logAction(setTimestampAction);
+          //   this.store.commit();
+          // }
           return;
         }
 

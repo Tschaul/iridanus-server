@@ -22,6 +22,7 @@ import { WorldFireEventQueue } from "./combat/world-fire";
 import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { CaptureFleetEventQueue } from "./capture/capture-fleet";
+import { TickEventQueue } from "./tick";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -49,6 +50,7 @@ export class CompleteEventQueue implements GameEventQueue {
     worldStopFiring: WorldStopFiringEventQueue,
     captureFleet: CaptureFleetEventQueue,
     captureWorld: CaptureWorldEventQueue,
+    tick: TickEventQueue
   ) {
 
     const allEventQueues = [
@@ -71,7 +73,8 @@ export class CompleteEventQueue implements GameEventQueue {
       worldFire,
       worldStopFiring,
       captureFleet,
-      captureWorld
+      captureWorld,
+      tick
     ]
 
     this.upcomingEvent$ = combineLatest(

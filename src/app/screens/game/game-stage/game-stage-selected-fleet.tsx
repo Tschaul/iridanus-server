@@ -37,6 +37,13 @@ export class GameStageSelectedFleet extends React.Component<{
 
     const warpOrders = fleet.orders.filter(order => order.type === 'WARP') as WarpOrder[];
 
+    if (fleet.status === 'LEAVING') {
+      warpOrders.unshift({
+        targetWorldId: fleet.targetWorldId,
+        type: 'WARP'
+      })
+    }
+
     const result = [];
 
     for (const warpOrder of warpOrders) {

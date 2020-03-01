@@ -37,6 +37,7 @@ export class GameStageForeground extends React.Component<{
   private renderFleets() {
     return this.props.vm.warpingFleetOwnersByBothWorlds.map(([id1, world1Pos, id2, world2Pos, fleetOwners]) => {
 
+      console.log({id1, world1Pos, id2, world2Pos, fleetOwners})
       const meanPosition = middle(world1Pos, world2Pos);
 
       const delta = diff(world1Pos, world2Pos);
