@@ -74,7 +74,7 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStopFiring,
       captureFleet,
       captureWorld,
-      tick
+      // tick
     ]
 
     this.upcomingEvent$ = combineLatest(

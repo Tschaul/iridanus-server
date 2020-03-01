@@ -5,6 +5,8 @@ import { Environment } from '../environment/environment';
 import produce from "immer";
 import { ReplaySubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { Queue } from '../infrastructure/queue/queue';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @injectable()
 export class DataHandleRegistry {
@@ -56,22 +58,22 @@ export type Transaction<TData> = (data: Readonly<TData>) => Promise<Update<TData
 
 export class DataHandle<TData> {
 
-  existsForSure = false;
+  private existsForSure = false;
+
+  private queue = new Queue();
 
   constructor(private path: string, private environment: Environment) {
   }
 
   public initialize() {
-    // Lock object
-    return this.exists().then(fileExists => {
+    return this.queue.addJoined(() => this.exists().then(fileExists => {
       if (fileExists) {
         this.existsForSure = true;
         return this.readFileAtFullpath();
       } else {
         return Promise.resolve()
       }
-    });
-    // Release object
+    }))
   }
 
   private async readFileAtFullpath() {
@@ -112,15 +114,14 @@ export class DataHandle<TData> {
       throw new Error(`file for data handle '${this.path}' noes not exist`)
     }
 
-    // TODO asynchronously lock data object
+    await this.queue.addJoined(async () => {
 
-    const data = await this.read()
+      const data = await this.read()
 
-    const update = await transaction(data);
-
-    await this.writeFileAtFullpath(produce(data, update));
-
-    // TODO release lock
+      const update = await transaction(data);
+  
+      await this.writeFileAtFullpath(produce(data, update));
+    })
   }
 
   public async exists() {
@@ -138,18 +139,19 @@ export class DataHandle<TData> {
   }
 
   public async create(data: TData) {
-    // TODO lock here
     if (await this.exists()) {
       throw new Error(`file for data handle '${this.path}' allready exists`)
     }
-
-    const dir = dirname(this.fullpath);
-
-    // TODO dont block thread while creating directory
-    mkdirSync(dir, { recursive: true })
-
-    await this.writeFileAtFullpath(data);
-    // TODO release here
+    
+    await this.queue.addJoined(async () => {
+  
+      const dir = dirname(this.fullpath);
+  
+      // TODO dont block thread while creating directory
+      mkdirSync(dir, { recursive: true })
+  
+      await this.writeFileAtFullpath(data);
+    })
   }
 
   public async createIfMissing(data: TData) {

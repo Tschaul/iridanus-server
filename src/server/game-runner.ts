@@ -113,13 +113,14 @@ export class GameRunner {
       this.errorHandler.catchPromise(this.gameRepository.setGameState(gameInfo.id, newState));
     })
     
-    store.actionLog$.pipe(
-      debounceTime(0),
-    ).subscribe(message => {
+    store.actionLog$.subscribe(message => {
       this.errorHandler.catchPromise(this.gameRepository.appendGameLog(gameInfo.id, message));
     })
 
+    // store.commit();
+
     await game.startGameLoop();
+
   }
 
   instantiateMap(gameInfo: Readonly<GameInfo>, map: Readonly<GameMap>): GameState {

@@ -74,11 +74,7 @@ export class Game {
     const actions = event.happen();
     for (const action of actions) {
       this.store.dispatch(action);
-      this.logger.logAction(action);
     }
-    const setTimestampAction = setTimestamp(event.timestamp);
-    this.store.dispatch(setTimestampAction)
-    this.logger.logAction(setTimestampAction);
     this.store.commit();
   }
 }

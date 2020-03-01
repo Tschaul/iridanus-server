@@ -5,6 +5,10 @@ import { Action } from './actions/action';
 import { GameState } from '../shared/model/v1/state';
 import { GameSetupProvider } from './game-setup-provider';
 import { GameStateValidator } from './infrastructure/game- state-message-validator';
+import { Clock } from './infrastructure/clock';
+import { Logger } from './infrastructure/logger';
+import { ActionLogger } from './infrastructure/action-logger';
+import { setTimestamp } from './actions/set-timestamp';
 
 @injectable()
 export class Store {
@@ -23,7 +27,9 @@ export class Store {
 
   constructor(
     private setup: GameSetupProvider,
-    private validator: GameStateValidator
+    private validator: GameStateValidator,
+    private clock: Clock,
+    private logger: ActionLogger
     ) { 
   }
 
@@ -32,6 +38,7 @@ export class Store {
 
     this.actions$$.pipe(
       scan((state: GameState, action: Action) => {
+        this.logger.logAction(action);
         const nextState = action.apply(state);
         return nextState;
       }, this.setup.initialState),
@@ -49,6 +56,8 @@ export class Store {
   }
 
   public commit() {
+    const setTimestampAction = setTimestamp(this.clock.getTimestamp());
+    this.dispatch(setTimestampAction)
     this.commits$$.next();
   }
 
