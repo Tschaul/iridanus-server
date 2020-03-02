@@ -64,6 +64,7 @@ export class GameStageSelectedFleet extends React.Component<{
 
       result.push(
         <line
+          key={destinationWorldId}
           x1={arrowStart.x}
           y1={arrowStart.y}
           x2={arrowEnd.x}

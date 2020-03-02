@@ -2,7 +2,7 @@ import { GameViewModel } from "./game-view-model";
 import { computed, observable, reaction } from "mobx";
 import { OrderService } from "../../client/orders/order-service";
 import { resolveFromRegistry } from "../../container-registry";
-import { WarpOrder, FleetOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, TransferMetalOrder, TransferShipsOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
@@ -82,6 +82,24 @@ export class OrderEditorViewModel {
     })
   }
 
+  public newTransferMetalOrder(amount: number) {
+      const fleet = this.selection.selectedFleet!;
+      const order: TransferMetalOrder = {
+        type: 'TRANSFER_METAL',
+        amount
+      }
+      this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
+  public newTransferShipsOrder(amount: number) {
+      const fleet = this.selection.selectedFleet!;
+      const order: TransferShipsOrder = {
+        type: 'TRANSFER_SHIPS',
+        amount
+      }
+      this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
   worldsWithHints: string[];
 
   public showHintsForOrder(order: FleetOrder | WorldOrder) {
@@ -97,6 +115,16 @@ export class OrderEditorViewModel {
 
   public clearHints() {
     this.worldHints.clearHints();
+  }
+
+  deleteOrder(index: number) {
+    if (this.selectionType === 'FLEET') {
+      this.gameOrders.deleteFleetOrder(this.selectedWorldOrFleetId as string, index)
+    }
+    if (this.selectionType === 'WORLD') {
+      this.gameOrders.deleteWorldOrder(this.selectedWorldOrFleetId as string, index)
+    }
+    this.clearHints();
   }
 
 }

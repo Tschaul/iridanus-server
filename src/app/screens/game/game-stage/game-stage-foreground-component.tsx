@@ -77,9 +77,6 @@ export class GameStageForeground extends React.Component<{
       const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
-      if (hint) {
-        console.log({ hint, world })
-      }
       return (
         <g key={world.id}>
           <text
@@ -158,9 +155,6 @@ export class GameStageForeground extends React.Component<{
     if (world.status === 'LOST') {
       return 'lightgray'
     } else {
-      if (!this.props.vm.playerInfos[world.ownerId]) {
-        console.log({ world })
-      }
       return this.props.vm.playerInfos[world.ownerId].color;
     }
   }

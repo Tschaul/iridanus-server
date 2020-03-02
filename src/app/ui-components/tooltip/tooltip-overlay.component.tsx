@@ -84,8 +84,9 @@ export class TooltipOverlay extends React.Component<{}, {
       items: [],
       mouseItem: null
     }
+  }
 
-
+  componentDidMount() {
     this.handle.mouseItem$.subscribe(mouseItem => {
       this.setState({
         mouseItem
@@ -97,10 +98,6 @@ export class TooltipOverlay extends React.Component<{}, {
         items
       })
     })
-
-  }
-
-  componentDidMount() {
     window.addEventListener('mousemove', this.handleMouseMove);
   }
 

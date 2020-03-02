@@ -108,9 +108,6 @@ export class GameStageViewModel {
     return Array.from(gatesSet).map(([keyFrom, keyTo]) => {
       const positionFrom = this.drawingPositons[keyFrom];
       const positionTo = this.drawingPositons[keyTo];
-      if (!positionFrom || !positionTo) {
-        console.log({ keyFrom, keyTo })
-      }
       return {
         xStart: positionFrom.x,
         yStart: positionFrom.y,

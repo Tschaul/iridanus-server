@@ -55,4 +55,21 @@ export class GameOrders {
   public orderDraftsForFleet(id: string) {
     return this.fleetOrderDrafts.get(id);
   }
+
+  public deleteWorldOrder(worldId: string, index: number) {
+    const currentOrders = this.worldOrderDrafts.get(worldId) || this.gameData.worlds[worldId].orders;
+    this.worldOrderDrafts.set(worldId, currentOrders.filter((_, i) => i !== index));
+  }
+
+  public deleteFleetOrder(fleetId: string, index: number) {
+    const currentOrders = this.fleetOrderDrafts.get(fleetId) || this.gameData.fleets[fleetId].orders;
+    const warpOrderGetsDeleted = currentOrders[index].type === 'WARP';
+    this.fleetOrderDrafts.set(fleetId, currentOrders.filter((order, i) =>
+      i !== index
+      && !(
+        warpOrderGetsDeleted
+        && order.type === 'WARP'
+        && i > index
+      )));
+  }
 }

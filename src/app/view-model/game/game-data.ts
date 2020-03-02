@@ -116,7 +116,6 @@ export class GameData {
     when(
       () => !!Object.values(this.gameState.current.universe.worlds),
       () => {
-        console.log("doneLoading")
         this.doneLoading = true;
       }
     )

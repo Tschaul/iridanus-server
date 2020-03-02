@@ -11,12 +11,22 @@ import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 import { createClasses } from "../../../ui-components/setup-jss";
 import classNames from "classnames";
 import { getClosestAttribute } from "../../helper/get-attribute";
+import { WarpOrderEditor } from "./warp-order-component";
+import { hoverYellow } from "../../../ui-components/colors/colors";
+import { TransferOrderEditor } from "./transfer-oder-component";
 
 const classes = createClasses({
   panel: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column'
+  },
+  deleteHandle: {
+    transition: 'color 0.3s',
+    cursor: 'pointer',
+    "&:hover": {
+      color: hoverYellow
+    }
   }
 });
 
@@ -49,18 +59,18 @@ export class OrderEditor extends React.Component<{
       case 'FLEET':
         return this.renderFleetOrderEditor(this.props.vm.orders as FleetOrder[])
       default:
-        return this.renderPanel([<span>nothing selected</span>])
+        return this.renderPanel([<span key="a">nothing selected</span>])
     }
   }
 
   renderWorldOrderEditor(orders: WorldOrder[]) {
 
     return this.renderPanel([
-      <div>
+      <div key="a">
         World orders
           <PanelDivider></PanelDivider>
       </div>,
-      <div>
+      <div key="b">
         {orders.map(order => {
           switch (order.type) {
             case 'BUILD_INDUSTRY':
@@ -79,25 +89,34 @@ export class OrderEditor extends React.Component<{
       onMouseLeave: this.handleMouseLeave
     }
     return this.renderPanel([
-      <div>
+      <div key="a">
         Fleet orders
           <PanelDivider></PanelDivider>
       </div>,
-      <div style={{ flex: 1 }}>
-        {orders.map(order => {
+      <div style={{ flex: 1 }} key="b">
+        {orders.map((order, index) => {
           switch (order.type) {
             case 'TRANSFER_METAL':
-              return `${order.type} (${order.amount}▮)`
+              return <TransferOrderEditor order={order}></TransferOrderEditor>
             case 'TRANSFER_SHIPS':
-              return `${order.type} (${order.amount}►)`
+              return <TransferOrderEditor order={order}></TransferOrderEditor>
             case 'WAIT':
               return `${order.type} (${order.amountTime}ms)`
             case 'WARP':
-              return `${order.type}`
+              return <WarpOrderEditor order={order}></WarpOrderEditor>
           }
-        }).map((str, index) => <div {...mouseHandler} data-order-index={index}>{str}</div>)}
+        }).map((content, index) => (
+          <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>
+            <div style={{ flex: 1 }}>{content}</div>
+            <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>
+          </div>
+        ))}
       </div>,
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex' }} key="c">
+        <Button onClick={this.handleNewDropMetalOrder} spaceRight>🠣▮</Button>
+        <Button onClick={this.handleNewLoadMetalOrder} spaceRight>🠡▮</Button>
+        <Button onClick={this.handleNewDropShipsOrder} spaceRight>🠣►</Button>
+        <Button onClick={this.handleNewLoadShipsOrder} spaceRight>🠡►</Button>
         <Button onClick={this.handleNewWarpOrder}>➠</Button>
       </div>
     ])
@@ -117,6 +136,12 @@ export class OrderEditor extends React.Component<{
     this.props.vm.clearHints();
   }
 
+  @autobind
+  private handleDelete(event: React.MouseEvent<HTMLDivElement>) {
+    const index = parseInt(getClosestAttribute(event, 'data-order-index') || '')
+    this.props.vm.deleteOrder(index);
+  }
+
   renderPanel(content: React.ReactElement[]) {
     return <Panel panelClassName={classNames(this.props.panelClassName)} contentClassName={classNames(classes.panel)} fadeDirection="right" ref={elem => this.panel = elem}>
       {content}
@@ -126,6 +151,26 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewWarpOrder() {
     this.props.vm.newWarpOrder()
+  }
+
+  @autobind
+  handleNewLoadMetalOrder() {
+    this.props.vm.newTransferMetalOrder(99)
+  }
+
+  @autobind
+  handleNewDropMetalOrder() {
+    this.props.vm.newTransferMetalOrder(-99)
+  }
+
+  @autobind
+  handleNewLoadShipsOrder() {
+    this.props.vm.newTransferShipsOrder(99)
+  }
+
+  @autobind
+  handleNewDropShipsOrder() {
+    this.props.vm.newTransferShipsOrder(-99)
   }
 
 }

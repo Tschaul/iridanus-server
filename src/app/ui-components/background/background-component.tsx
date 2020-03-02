@@ -6,7 +6,6 @@ export class Background extends React.Component {
   canvas: HTMLCanvasElement | null;
 
   componentDidMount() {
-    console.log("background")
     if (this.canvas) {
       const canvas = this.canvas;
       canvas.width = canvas.clientWidth;
