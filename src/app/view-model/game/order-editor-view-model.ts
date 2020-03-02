@@ -4,12 +4,14 @@ import { OrderService } from "../../client/orders/order-service";
 import { resolveFromRegistry } from "../../container-registry";
 import { WarpOrder, FleetOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder } from "../../../shared/model/v1/world-order";
+import { GameOrders } from "./game-orders";
 
 export class OrderEditorViewModel {
 
-
-
-  constructor(private gameViewModel: GameViewModel) {
+  constructor(
+    private gameViewModel: GameViewModel,
+    private gameOrders: GameOrders,
+  ) {
   }
 
   @computed get selectionType() {
@@ -29,6 +31,18 @@ export class OrderEditorViewModel {
       return this.gameViewModel.selectedWorld.id;
     } else {
       return null
+    }
+  }
+
+  @computed get selectedWorldOrFleetIsOwnedByUser() {
+    if (this.gameViewModel.selectedFleet) {
+      const fleet = this.gameViewModel.selectedFleet;
+      return fleet.status !== 'LOST' && fleet.ownerId === this.gameViewModel.selfPlayerId;
+    } else if (this.gameViewModel.selectedWorld) {
+      const world = this.gameViewModel.selectedWorld;
+      return world.status !== 'LOST' && world.ownerId === this.gameViewModel.selfPlayerId;
+    } else {
+      return true
     }
   }
 
@@ -60,7 +74,7 @@ export class OrderEditorViewModel {
         targetWorldId: worldId
       }
 
-      this.gameViewModel.addFleetOrder(fleet.id, warpOrder);
+      this.gameOrders.addFleetOrder(fleet.id, warpOrder);
     })
   }
 

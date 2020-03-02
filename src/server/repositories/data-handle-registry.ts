@@ -1,12 +1,11 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs'
+import { mkdir, readdir, Dirent, readFile, writeFile, exists } from 'fs';
 import { dirname, join } from 'path'
 import { injectable } from 'inversify';
 import { Environment } from '../environment/environment';
 import produce from "immer";
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, Subject, concat } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Queue } from '../infrastructure/queue/queue';
-import { async } from 'rxjs/internal/scheduler/async';
 
 @injectable()
 export class DataHandleRegistry {
@@ -34,16 +33,16 @@ export class DataHandleRegistry {
       throw new Error(`Path '${path}' is invalid.`)
     }
     const dir = join(this.environment.dataPath, path);
-    // TODO dont block thread while creating directory
-    mkdirSync(dir, { recursive: true })
-    // TODO dont block thread while reading folder list
-    return readdirSync(dir, { withFileTypes: true })
+
+    await mkdirPromise(dir)
+
+    return (await readdirPromise(dir))
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name)
   }
 
   private validateFilePath(path: string) {
-    return path.endsWith('.json') && this.validateDirectoryPath(path.slice(0,-5));
+    return path.endsWith('.json') && this.validateDirectoryPath(path.slice(0, -5));
   }
 
   private validateDirectoryPath(path: string) {
@@ -62,6 +61,8 @@ export class DataHandle<TData> {
 
   private queue = new Queue();
 
+  initialization = new Subject<never>();
+
   constructor(private path: string, private environment: Environment) {
   }
 
@@ -73,19 +74,19 @@ export class DataHandle<TData> {
       } else {
         return Promise.resolve()
       }
+    }).then(() => {
+      this.initialization.complete();
     }))
   }
 
   private async readFileAtFullpath() {
-    // TODO dont block thread while reading
-    const data = JSON.parse(readFileSync(this.fullpath, 'utf8'));
+    const data = JSON.parse(await readFilePromise(this.fullpath));
     this._data$.next(data);
   }
 
   private async writeFileAtFullpath(data: TData) {
-    // TODO dont block thread while writing
     this._data$.next(data);
-    writeFileSync(this.fullpath, JSON.stringify(data, null, 4), 'utf8');
+    await writeFilePromise(this.fullpath, JSON.stringify(data, null, 4));
     this.existsForSure = true;
   }
 
@@ -105,7 +106,7 @@ export class DataHandle<TData> {
 
   public asObservable() {
     // TODO keep track of subscription count in order to free memory
-    return this._data$ as Observable<Readonly<TData>>;
+    return concat(this.initialization, this._data$) as Observable<Readonly<TData>>;
   }
 
   public async do(transaction: Transaction<TData>) {
@@ -119,7 +120,7 @@ export class DataHandle<TData> {
       const data = await this.read()
 
       const update = await transaction(data);
-  
+
       await this.writeFileAtFullpath(produce(data, update));
     })
   }
@@ -129,8 +130,7 @@ export class DataHandle<TData> {
       return true;
     }
 
-    // TODO dont block thread
-    if (existsSync(this.fullpath)) {
+    if (await existsPromise(this.fullpath)) {
       this.existsForSure = true;
       return true;
     } else {
@@ -142,14 +142,13 @@ export class DataHandle<TData> {
     if (await this.exists()) {
       throw new Error(`file for data handle '${this.path}' allready exists`)
     }
-    
+
     await this.queue.addJoined(async () => {
-  
+
       const dir = dirname(this.fullpath);
-  
-      // TODO dont block thread while creating directory
-      mkdirSync(dir, { recursive: true })
-  
+
+      await mkdirPromise(dir)
+
       await this.writeFileAtFullpath(data);
     })
   }
@@ -160,3 +159,60 @@ export class DataHandle<TData> {
     }
   }
 }
+
+function mkdirPromise(dir: string) {
+  return new Promise((resolve, reject) => {
+    mkdir(dir, { recursive: true }, (error) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve();
+      }
+    })
+  })
+}
+
+function readdirPromise(dir: string): Promise<Dirent[]> {
+  return new Promise((resolve, reject) => {
+    readdir(dir, { withFileTypes: true }, (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result);
+      }
+    })
+  })
+}
+
+function readFilePromise(dir: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    readFile(dir, 'utf8', (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result);
+      }
+    })
+  })
+}
+
+function writeFilePromise(dir: string, data: any): Promise<void> {
+  return new Promise((resolve, reject) => {
+    writeFile(dir, data, 'utf8', (error) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve();
+      }
+    })
+  })
+}
+
+function existsPromise(dir: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    exists(dir, (result) => {
+      resolve(result);
+    })
+  })
+}
+

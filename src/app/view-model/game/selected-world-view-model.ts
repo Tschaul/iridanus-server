@@ -3,15 +3,19 @@ import { computed } from "mobx";
 import { worldhasOwner, World } from "../../../shared/model/v1/world";
 import { fleetHasOwner, Fleet } from "../../../shared/model/v1/fleet";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
+import { GameData } from "./game-data";
 
 export class SelectedWorldViewModel {
 
-  constructor(private gameViewModel: GameViewModel) { }
+  constructor(
+    private gameViewModel: GameViewModel,
+    private gameData: GameData,
+    ) { }
 
 
   @computed public get playerInfoOfSelectedWorld() {
     if (this.gameViewModel.selectedWorld && worldhasOwner(this.gameViewModel.selectedWorld)) {
-      return this.gameViewModel.playerInfos[this.gameViewModel.selectedWorld.ownerId];
+      return this.gameData.playerInfos[this.gameViewModel.selectedWorld.ownerId];
     } else {
       return null;
     }
@@ -21,9 +25,9 @@ export class SelectedWorldViewModel {
     switch (this.gameViewModel.stageSelection.type) {
       case 'WORLD':
         const id = this.gameViewModel.stageSelection.id;
-        if (this.gameViewModel.fleetsByWorldId[id]) {
-          return this.gameViewModel.fleetsByWorldId[id].map(fleet => {
-            const owner = fleetHasOwner(fleet) ? this.gameViewModel.playerInfos[fleet.ownerId] : null;
+        if (this.gameData.fleetsByWorldId[id]) {
+          return this.gameData.fleetsByWorldId[id].map(fleet => {
+            const owner = fleetHasOwner(fleet) ? this.gameData.playerInfos[fleet.ownerId] : null;
             return {
               ...fleet,
               owner
@@ -33,12 +37,12 @@ export class SelectedWorldViewModel {
           return [];
         }
       case 'GATE':
-        const fleetMap = this.gameViewModel.warpingFleetsByBothWorlds;
+        const fleetMap = this.gameData.warpingFleetsByBothWorlds;
         const id1 = this.gameViewModel.stageSelection.id1;
         const id2 = this.gameViewModel.stageSelection.id2;
         if (fleetMap[id1] && fleetMap[id1][id2]) {
           return fleetMap[id1][id2].map(fleet => {
-            const owner = this.gameViewModel.playerInfos[fleet.ownerId];
+            const owner = this.gameData.playerInfos[fleet.ownerId];
             return {
               ...fleet,
               owner

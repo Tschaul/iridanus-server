@@ -6,10 +6,11 @@ import { Button } from "../../../ui-components/button/button";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
 import { GameViewModel } from "../../../view-model/game/game-view-model";
+import { GameOrders } from "../../../view-model/game/game-orders";
 
 @observer
 export class TopBar extends React.Component<{
-  vm: GameViewModel,
+  vm: GameOrders,
   panelClassName?: string,
 }> {
   render() {

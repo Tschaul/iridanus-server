@@ -4,6 +4,7 @@ import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
 import { World } from "../../../shared/model/v1/world";
 import { fleetIsAtWorldAndHasOwner, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
+import { GameData } from "./game-data";
 
 export type GameStageMode = {
   type: 'NORMAL'
@@ -30,14 +31,17 @@ export type GateWithStartAndEndPosition = {
 
 export class GameStageViewModel {
 
-  constructor(private gameViewModel: GameViewModel) { }
+  constructor(
+    private gameViewModel: GameViewModel,
+    private gameData: GameData,
+    ) { }
 
   @computed get playerInfos() {
-    return this.gameViewModel.playerInfos;
+    return this.gameData.playerInfos;
   }
 
   @computed get doneLoading() {
-    return this.gameViewModel.doneLoading;
+    return this.gameData.doneLoading;
   }
 
   @observable public mode: GameStageMode = { type: 'NORMAL' };
@@ -54,8 +58,8 @@ export class GameStageViewModel {
   @observable public stageHeight = 0;
 
   @computed get fleetOwnersByWorldId() {
-    return Object.getOwnPropertyNames(this.gameViewModel.fleetsByWorldId).reduce((result, key) => {
-      const owners = this.gameViewModel.fleetsByWorldId[key]
+    return Object.getOwnPropertyNames(this.gameData.fleetsByWorldId).reduce((result, key) => {
+      const owners = this.gameData.fleetsByWorldId[key]
         .filter(fleetIsAtWorldAndHasOwner)
         .map(fleet => fleet.ownerId);
       result[key] = [...new Set(owners)];
@@ -74,13 +78,13 @@ export class GameStageViewModel {
   @computed get drawingPositons() {
     const result: DrawingPositions = {}
 
-    for (const key of Object.getOwnPropertyNames(this.gameViewModel.rawDrawingPositions)) {
+    for (const key of Object.getOwnPropertyNames(this.gameData.rawDrawingPositions)) {
       const xMax = this.stageWidth - STAGE_OFFSET * 2;
       const yMax = this.stageHeight - STAGE_OFFSET * 2;
       const boxSize = Math.min(xMax, yMax);
       const xMin = STAGE_OFFSET + 0.5 * (xMax - boxSize);
       const yMin = STAGE_OFFSET + 0.5 * (yMax - boxSize);
-      const rawPosition = this.gameViewModel.rawDrawingPositions[key];
+      const rawPosition = this.gameData.rawDrawingPositions[key];
       result[key] = {
         x: xMin + boxSize * rawPosition.x,
         y: yMin + boxSize * rawPosition.y,
@@ -91,10 +95,10 @@ export class GameStageViewModel {
   }
 
   @computed get worldsWithKeyAndDisplayPosition(): WorldWithKeyAndDisplayPosition[] {
-    const worldKeys = Object.getOwnPropertyNames(this.gameViewModel.universe.worlds);
+    const worldKeys = Object.getOwnPropertyNames(this.gameData.worlds);
     return worldKeys.map(key => {
       return {
-        ...this.gameViewModel.universe.worlds[key],
+        ...this.gameData.worlds[key],
         ...this.drawingPositons[key],
         key
       }
@@ -102,7 +106,7 @@ export class GameStageViewModel {
   }
 
   @computed get gatesWithDisplayPosition(): GateWithStartAndEndPosition[] {
-    const gates = this.gameViewModel.universe.gates;
+    const gates = this.gameData.gates;
     const gatesSet = new Set<[string, string]>();
     const worldKeys = Object.getOwnPropertyNames(gates);
     for (const key of worldKeys) {
@@ -129,7 +133,7 @@ export class GameStageViewModel {
 
   @computed get warpingFleetOwnersByBothWorlds(): Array<[string, Vec2, string, Vec2, string[]]> {
 
-    const warpingFleetsMap = this.gameViewModel.warpingFleetsByBothWorlds;
+    const warpingFleetsMap = this.gameData.warpingFleetsByBothWorlds;
 
     const result = [] as Array<[string, Vec2, string, Vec2, string[]]>;
 

@@ -13,8 +13,7 @@ import classNames from "classnames";
 
 const classes = createClasses({
   panel: {
-    width: 500,
-    height: 500,
+    height: '100%',
     display: 'flex',
     flexDirection: 'column'
   }
@@ -40,24 +39,27 @@ export class OrderEditor extends React.Component<{
   }
 
   render() {
+    if (!this.props.vm.selectedWorldOrFleetIsOwnedByUser) {
+      return this.renderPanel([<span>not yours</span>])
+    }
     switch (this.props.vm.selectionType) {
       case 'WORLD':
         return this.renderWorldOrderEditor(this.props.vm.orders as WorldOrder[])
       case 'FLEET':
         return this.renderFleetOrderEditor(this.props.vm.orders as FleetOrder[])
       default:
-        return this.renderPanel(
-          <span>nothing selected</span>
-        )
+        return this.renderPanel([<span>nothing selected</span>])
     }
   }
 
   renderWorldOrderEditor(orders: WorldOrder[]) {
 
-    return this.renderPanel(
+    return this.renderPanel([
       <div>
-        World orders <br />
-        ──────────────────────────────── <br />
+        World orders
+          <PanelDivider></PanelDivider>
+      </div>,
+      <div>
         {orders.map(order => {
           switch (order.type) {
             case 'BUILD_INDUSTRY':
@@ -66,39 +68,37 @@ export class OrderEditor extends React.Component<{
           }
         })}
       </div>
-    )
+    ])
   }
 
   renderFleetOrderEditor(orders: FleetOrder[]) {
 
-    return this.renderPanel(
+    return this.renderPanel([
       <div>
-        <div>
-          Fleet orders
+        Fleet orders
           <PanelDivider></PanelDivider>
-        </div>
-        <div style={{ flex: 1 }}>
-          {orders.map(order => {
-            switch (order.type) {
-              case 'TRANSFER_METAL':
-                return `${order.type} (${order.amount}▮)`
-              case 'TRANSFER_SHIPS':
-                return `${order.type} (${order.amount}►)`
-              case 'WAIT':
-                return `${order.type} (${order.amountTime}ms)`
-              case 'WARP':
-                return `${order.type}`
-            }
-          }).map(str => <div>{str}</div>)}
-        </div>
-        <div style={{ display: 'flex' }}>
-          <Button onClick={this.handleNewWarpOrder}>➠</Button>
-        </div>
+      </div>,
+      <div style={{ flex: 1 }}>
+        {orders.map(order => {
+          switch (order.type) {
+            case 'TRANSFER_METAL':
+              return `${order.type} (${order.amount}▮)`
+            case 'TRANSFER_SHIPS':
+              return `${order.type} (${order.amount}►)`
+            case 'WAIT':
+              return `${order.type} (${order.amountTime}ms)`
+            case 'WARP':
+              return `${order.type}`
+          }
+        }).map(str => <div>{str}</div>)}
+      </div>,
+      <div style={{ display: 'flex' }}>
+        <Button onClick={this.handleNewWarpOrder}>➠</Button>
       </div>
-    )
+    ])
   }
 
-  renderPanel(content: React.ReactElement) {
+  renderPanel(content: React.ReactElement[]) {
     return <Panel panelClassName={classNames(this.props.panelClassName)} contentClassName={classNames(classes.panel)} fadeDirection="right" ref={elem => this.panel = elem}>
       {content}
     </Panel>
