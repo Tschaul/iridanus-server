@@ -1,6 +1,6 @@
 import { GameRules } from "../../shared/model/v1/rules";
 
-const oneMinute = 1000 * 60;
+const oneMinute = 1000 * 5;
 
 export const testConfig: GameRules = {
   combat: {

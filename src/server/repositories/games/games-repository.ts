@@ -175,29 +175,30 @@ export class GameRepository {
       await historyHandle.create({
         version: 1,
         stateHistory: {
-          [this.clock.getTimestamp()]: newState
+          [newState.currentTimestamp]: newState
         }
       })
     } else {
       await historyHandle.do(async () => draft => {
-        draft.stateHistory[this.clock.getTimestamp()] = newState;
+        draft.stateHistory[newState.currentTimestamp] = newState;
       })
     }
   }
 
-  public async appendGameLog(gameId: string, message: string) {
+  public async appendGameLog(gameId: string, message: string, timestamp: number) {
     const logHandle = await this.handleForGameLogById(gameId);
     const stateExists = await logHandle.exists()
     if (!stateExists) {
       await logHandle.create({
         version: 1,
         actionLog: {
-          [this.clock.getTimestamp()]: message
+          [timestamp]: [message]
         }
       })
     } else {
       await logHandle.do(async () => draft => {
-        draft.actionLog[this.clock.getTimestamp()] = message;
+        draft.actionLog[timestamp] = draft.actionLog[timestamp] || [];
+        draft.actionLog[timestamp] = [...draft.actionLog[timestamp], message];
       })
     }
   }

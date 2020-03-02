@@ -26,6 +26,6 @@ export interface GameHistorySchema {
 export interface GameLogSchema {
   version: 1;
   actionLog: {
-    [timestamp: number]: string
+    [timestamp: number]: string[]
   }
 }

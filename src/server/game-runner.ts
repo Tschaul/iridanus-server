@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { ContainerRegistry } from "./container-registry";
 import { GameRepository } from "./repositories/games/games-repository";
-import { first, debounceTime, pairwise, filter } from "rxjs/operators";
+import { first, debounceTime, pairwise, filter, withLatestFrom } from "rxjs/operators";
 import { Game } from "../core/game";
 import { GlobalErrorHandler } from "./infrastructure/error-handling/global-error-handler";
 import { GameSetupProvider } from "../core/game-setup-provider";
@@ -62,6 +62,7 @@ export class GameRunner {
           if (this.gameShouldStart(newGameInfo)) {
             const oldGame = oldGameInfos.find(info => info.id === newGameInfo.id);
             if (!this.gameShouldStart(oldGame)) {
+              this.logger.debug('new game just started' + newGameInfo.id);
               this.errorHandler.catchPromise(this.runGame(newGameInfo));
             }
           }
@@ -71,8 +72,8 @@ export class GameRunner {
   }
 
   private gameShouldStart(game: GameInfo | undefined): boolean {
-    return !!game 
-      && game.state === 'PROPOSED' 
+    return !!game
+      && game.state === 'PROPOSED'
       && !Object.values(game.players).some(player => player.state !== 'READY')
       && Object.values(game.players).length > 1;
   }
@@ -112,9 +113,11 @@ export class GameRunner {
     ).subscribe(newState => {
       this.errorHandler.catchPromise(this.gameRepository.setGameState(gameInfo.id, newState));
     })
-    
-    store.actionLog$.subscribe(message => {
-      this.errorHandler.catchPromise(this.gameRepository.appendGameLog(gameInfo.id, message));
+
+    store.actionLog$.pipe(
+      withLatestFrom(store.state$)
+    ).subscribe(([message, state]) => {
+      this.errorHandler.catchPromise(this.gameRepository.appendGameLog(gameInfo.id, message, state.currentTimestamp));
     })
 
     // store.commit();
@@ -133,7 +136,7 @@ export class GameRunner {
           if (worldhasOwner(world) && world.ownerId === seat) {
             if (player) {
               world.ownerId = player;
-            }  else {
+            } else {
               state.worlds[worldId] = {
                 status: 'LOST',
                 ...baseWorld(world)
@@ -146,7 +149,7 @@ export class GameRunner {
           if (fleetHasOwner(fleet) && fleet.ownerId === seat) {
             if (player) {
               fleet.ownerId = player;
-            }  else {
+            } else {
               state.fleets[fleetId] = {
                 status: 'LOST',
                 ...baseFleet(fleet),
