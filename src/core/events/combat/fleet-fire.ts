@@ -27,11 +27,14 @@ export class FleetFireEventQueue implements GameEventQueue {
         if (!fleet) {
           return null;
         }
+        console.log('fleet fire event for ', fleet.weaponsReadyTimestamp)
         return {
           timestamp: fleet.weaponsReadyTimestamp,
           happen: () => {
 
             const weaponsReadyTimestamp = fleet.weaponsReadyTimestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval
+            
+            console.log("weaponsReadyTimestamp", weaponsReadyTimestamp)
 
             const world = worldsById[fleet.currentWorldId];
 

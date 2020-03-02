@@ -34,6 +34,7 @@ export class FleetStopFiringEventQueue implements GameEventQueue {
         if(!fleet) {
           return null;
         }
+        console.log('fleet stop firing event for ',timestamp)
         return {
           timestamp,
           happen: () => {

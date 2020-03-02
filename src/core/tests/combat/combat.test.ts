@@ -6,11 +6,9 @@ describe("combat", () => {
 
   it("does combat", async () => {
     
-
     const state = await runMap(map);
 
   })
-
   
 })
 

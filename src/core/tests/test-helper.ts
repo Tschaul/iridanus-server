@@ -12,8 +12,9 @@ import { RandomNumberGenerator, NotSoRandomNumberGenerator } from "../infrastruc
 import { GameSetupProvider } from "../game-setup-provider";
 import { ActionLogger } from '../infrastructure/action-logger';
 import { map } from 'rxjs/operators';
+import { GameStateValidator } from '../infrastructure/game- state-message-validator';
 
-export function runMap(testMap: GameState, watcher: null | ((state: GameState) => string | number | boolean) = null): Promise<GameState> {
+export async function runMap(testMap: GameState, watcher: null | ((state: GameState) => string | number | boolean) = null): Promise<GameState> {
 
   let container = new Container({
     defaultScope: "Singleton"
@@ -28,6 +29,7 @@ export function runMap(testMap: GameState, watcher: null | ((state: GameState) =
   container.bind(ReadonlyStore).toSelf();
   container.bind(Game).toSelf();
   container.bind(GameSetupProvider).toSelf();
+  container.bind(GameStateValidator).toSelf();
 
   const setup = container.get(GameSetupProvider);
   setup.rules = simpleRules;
@@ -39,7 +41,9 @@ export function runMap(testMap: GameState, watcher: null | ((state: GameState) =
 
   const store = container.get(Store);
 
-  store.initialize();
+  await store.initialize();
+
+  store.commit();
 
   if (watcher) {
     const logger = container.get(Logger);
@@ -52,6 +56,6 @@ export function runMap(testMap: GameState, watcher: null | ((state: GameState) =
 
   const game = container.get(Game);
 
-  return game.startGameLoop();
+  return await game.startGameLoop();
 
 }

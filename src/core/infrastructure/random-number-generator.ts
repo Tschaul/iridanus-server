@@ -11,7 +11,9 @@ export class RandomNumberGenerator {
   }
 
   public exponential() {
-    return -1 * Math.log(this.equal());
+    const value = -1 * Math.log(this.equal())
+    console.log("exponential", value)
+    return value;
   }
 }
 

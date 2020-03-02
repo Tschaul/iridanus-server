@@ -1,6 +1,6 @@
 import { GameRules } from "../../shared/model/v1/rules";
 
-const second = 1000;
+const second = 100;
 
 export const simpleRules: GameRules = {
   combat: {
