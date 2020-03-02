@@ -5,14 +5,9 @@ import { World } from "../../../shared/model/v1/world";
 import { fleetIsAtWorldAndHasOwner, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 import { GameData } from "./game-data";
+import { StageSelection, GameStageSelection } from "./stage-selection";
+import { WorldHints } from "./world-hints";
 
-export type GameStageMode = {
-  type: 'NORMAL'
-} | {
-  type: 'SELECT_WORLD_TARGET',
-  description: string,
-  callback: (worldId: string) => void
-}
 
 const STAGE_OFFSET = 75;
 
@@ -30,10 +25,14 @@ export type GateWithStartAndEndPosition = {
 }
 
 export class GameStageViewModel {
+  @computed get mode() {
+    return this.selection.mode;
+  }
 
   constructor(
-    private gameViewModel: GameViewModel,
     private gameData: GameData,
+    private selection: GameStageSelection,
+    private worldHints: WorldHints
     ) { }
 
   @computed get playerInfos() {
@@ -42,16 +41,6 @@ export class GameStageViewModel {
 
   @computed get doneLoading() {
     return this.gameData.doneLoading;
-  }
-
-  @observable public mode: GameStageMode = { type: 'NORMAL' };
-
-  public requestWorldTargetSelection(description: string, callback: (worldId: string) => void) {
-    this.mode = {
-      type: 'SELECT_WORLD_TARGET',
-      description,
-      callback
-    }
   }
 
   @observable public stageWidth = 0;
@@ -68,11 +57,11 @@ export class GameStageViewModel {
   }
 
   @computed get selectedFleet() {
-    return this.gameViewModel.selectedFleet;
+    return this.selection.selectedFleet;
   }
 
   @computed get selectedWorld() {
-    return this.gameViewModel.selectedWorld;
+    return this.selection.selectedWorld;
   }
 
   @computed get drawingPositons() {
@@ -151,32 +140,14 @@ export class GameStageViewModel {
   }
 
   public selectWorld(id: string | null) {
-    if (this.mode.type === 'SELECT_WORLD_TARGET') {
-      if (id) {
-        this.mode.callback(id);
-      }
-      this.mode = { type: 'NORMAL' }
-      return;
-    }
-    if (id) {
-      this.gameViewModel.stageSelection = {
-        type: 'WORLD',
-        id
-      }
-    } else {
-      this.gameViewModel.stageSelection = {
-        type: 'NONE',
-      }
-    }
-    this.gameViewModel.selectedFleetdId = null;
+    this.selection.selectWorld(id)
   }
 
   public selectGate(id1: string, id2: string) {
-    this.gameViewModel.stageSelection = {
-      type: 'GATE',
-      id1,
-      id2
-    }
-    this.gameViewModel.selectedFleetdId = null;
+    this.selection.selectGate(id1, id2);
+  }
+
+  public hintForWorld(id: string): string | null {
+    return this.worldHints.getHintForWorld(id);
   }
 }

@@ -2,7 +2,7 @@ import * as React from "react";
 import { TooltipContext } from "./tooltip-overlay.component";
 import autobind from "autobind-decorator";
 
-export class Tooltip extends React.Component<{
+export class HoverTooltip extends React.Component<{
   svg?: boolean,
   content: string | JSX.Element,
 }> {

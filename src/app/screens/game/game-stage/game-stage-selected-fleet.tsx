@@ -69,8 +69,8 @@ export class GameStageSelectedFleet extends React.Component<{
           x2={arrowEnd.x}
           y2={arrowEnd.y}
           stroke={screenWhite}
-          stroke-width="3"
-          marker-end="url(#arrow)"
+          strokeWidth="3"
+          markerEnd="url(#arrow)"
         />
       )
 
@@ -99,8 +99,8 @@ export class GameStageSelectedFleet extends React.Component<{
         x2={arrowEnd.x}
         y2={arrowEnd.y}
         stroke={screenWhite}
-        stroke-width="3"
-        marker-end="url(#arrow)"
+        strokeWidth="3"
+        markerEnd="url(#arrow)"
       />
 
     } else {

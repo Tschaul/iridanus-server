@@ -7,7 +7,8 @@ import { getClosestAttribute } from '../../helper/get-attribute';
 import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
 import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';
 import { screenWhite, selectedYellow } from '../../../ui-components/colors/colors';
-import { Tooltip } from '../../../ui-components/tooltip/tooltip.component';
+import { HoverTooltip } from '../../../ui-components/tooltip/hover-tooltip.component';
+import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.component';
 
 
 @observer
@@ -37,7 +38,6 @@ export class GameStageForeground extends React.Component<{
   private renderFleets() {
     return this.props.vm.warpingFleetOwnersByBothWorlds.map(([id1, world1Pos, id2, world2Pos, fleetOwners]) => {
 
-      console.log({id1, world1Pos, id2, world2Pos, fleetOwners})
       const meanPosition = middle(world1Pos, world2Pos);
 
       const delta = diff(world1Pos, world2Pos);
@@ -76,6 +76,10 @@ export class GameStageForeground extends React.Component<{
       const color = this.getColorForWorld(world);
       const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
+      const hint = this.props.vm.hintForWorld(world.id);
+      if (hint) {
+        console.log({ hint, world })
+      }
       return (
         <g key={world.id}>
           <text
@@ -85,7 +89,7 @@ export class GameStageForeground extends React.Component<{
             textAnchor="middle"
             fill={color}
             fontSize={33}
-            style={{transform: "translateY(1px)"}}
+            style={{ transform: "translateY(1px)" }}
           >{/*world.id*/}◉</text>
           {fleetOwners.map(ownerId => {
             const playerInfo = this.props.vm.playerInfos[ownerId];
@@ -100,35 +104,37 @@ export class GameStageForeground extends React.Component<{
                 fontSize={22}
               >►</text>);
           })}
-          <Tooltip
+          <HoverTooltip
             svg={true}
             content={this.getTooltipForWorld(world)}
           >
-            {selected && (
+            <StaticTooltip svg content={hint}>
+              {selected && (
+                <circle
+                  cx={world.x}
+                  cy={world.y}
+                  r={WORLD_OUTER_RADIUS}
+                  opacity="1"
+                  stroke={selectedYellow}
+                  fill="none"
+                  strokeWidth="3"
+                  strokeDasharray="10,10"
+                  data-world-id={world.id}
+                  onClick={this.handleWorldClick}
+                  style={{ cursor: 'pointer' }}
+                />
+              )}
               <circle
                 cx={world.x}
                 cy={world.y}
                 r={WORLD_OUTER_RADIUS}
-                opacity="1"
-                stroke={selectedYellow}
-                fill="none"
-                stroke-width="3"
-                stroke-dasharray="10,10"
+                opacity="0"
                 data-world-id={world.id}
                 onClick={this.handleWorldClick}
                 style={{ cursor: 'pointer' }}
               />
-            )}
-            <circle
-              cx={world.x}
-              cy={world.y}
-              r={WORLD_OUTER_RADIUS}
-              opacity="0"
-              data-world-id={world.id}
-              onClick={this.handleWorldClick}
-              style={{ cursor: 'pointer' }}
-            />
-          </Tooltip>
+            </StaticTooltip>
+          </HoverTooltip>
         </g>);
     });
   }

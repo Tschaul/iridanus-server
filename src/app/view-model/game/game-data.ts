@@ -4,12 +4,16 @@ import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
 import { empty } from "rxjs";
 import { GameState } from "../../../shared/model/v1/state";
 import { PlayerInfos } from "../../../shared/model/v1/player-info";
-import { Universe } from "../../../shared/model/v1/universe";
-import { GameViewModel, FleetByTwoWorlds } from "./game-view-model";
+import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
 import { GameStateService } from "../../client/game-state/game-state.service";
 import { FleetWithOwnerAtWorld, LostFleet, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
 
+export type FleetByTwoWorlds = {
+  [worldId1: string]: {
+    [worldId2: string]: WarpingFleet[];
+  };
+};
 
 const dummyState: GameState = {
   currentTimestamp: 0,
@@ -36,7 +40,6 @@ export class GameData {
   private gameStateService = resolveFromRegistry(GameStateService);
 
   @observable private gameInfo: IStreamListener<GameInfo> = fromStream(empty(), dummyInfo);
-
   @observable private gameState: IStreamListener<GameState> = fromStream(empty(), dummyState);
   @observable private metaData: IStreamListener<GameMetaData> = fromStream(empty(), dummyMetaData);;
 
@@ -101,7 +104,6 @@ export class GameData {
   }
 
   focus() {
-
     const gameId = this.gameViewModel.gameId as string;
     this.gameInfo = fromStream(this.gameStateService.getGameInfoById(gameId), dummyInfo);
     this.metaData = fromStream(this.gameStateService.getGameMetaDataById(gameId), dummyMetaData);
@@ -119,9 +121,10 @@ export class GameData {
       }
     )
   }
-  unfocus() {
 
+  unfocus() {
     this.gameState.dispose();
+    this.metaData.dispose();
     this.gameInfo.dispose();
   }
 }

@@ -10,6 +10,7 @@ import { reaction } from "mobx";
 import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 import { createClasses } from "../../../ui-components/setup-jss";
 import classNames from "classnames";
+import { getClosestAttribute } from "../../helper/get-attribute";
 
 const classes = createClasses({
   panel: {
@@ -73,6 +74,10 @@ export class OrderEditor extends React.Component<{
 
   renderFleetOrderEditor(orders: FleetOrder[]) {
 
+    const mouseHandler = {
+      onMouseEnter: this.handleMouseEnter,
+      onMouseLeave: this.handleMouseLeave
+    }
     return this.renderPanel([
       <div>
         Fleet orders
@@ -90,12 +95,26 @@ export class OrderEditor extends React.Component<{
             case 'WARP':
               return `${order.type}`
           }
-        }).map(str => <div>{str}</div>)}
+        }).map((str, index) => <div {...mouseHandler} data-order-index={index}>{str}</div>)}
       </div>,
       <div style={{ display: 'flex' }}>
         <Button onClick={this.handleNewWarpOrder}>➠</Button>
       </div>
     ])
+  }
+
+  @autobind
+  private handleMouseEnter(event: React.MouseEvent<HTMLDivElement>) {
+    const index = parseInt(getClosestAttribute(event, 'data-order-index') || '')
+    if (!isNaN(index)) {
+      const order = this.props.vm.orders[index]
+      this.props.vm.showHintsForOrder(order);
+    }
+  }
+
+  @autobind
+  private handleMouseLeave() {
+    this.props.vm.clearHints();
   }
 
   renderPanel(content: React.ReactElement[]) {

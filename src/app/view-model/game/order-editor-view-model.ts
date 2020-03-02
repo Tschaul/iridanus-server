@@ -5,19 +5,23 @@ import { resolveFromRegistry } from "../../container-registry";
 import { WarpOrder, FleetOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
+import { GameStageSelection } from "./stage-selection";
+import { WorldHints } from "./world-hints";
 
 export class OrderEditorViewModel {
 
   constructor(
     private gameViewModel: GameViewModel,
     private gameOrders: GameOrders,
+    private selection: GameStageSelection,
+    private worldHints: WorldHints,
   ) {
   }
 
   @computed get selectionType() {
-    if (this.gameViewModel.selectedFleet) {
+    if (this.selection.selectedFleet) {
       return 'FLEET';
-    } else if (this.gameViewModel.selectedWorld) {
+    } else if (this.selection.selectedWorld) {
       return 'WORLD';
     } else {
       return 'NONE'
@@ -25,21 +29,21 @@ export class OrderEditorViewModel {
   }
 
   @computed get selectedWorldOrFleetId() {
-    if (this.gameViewModel.selectedFleet) {
-      return this.gameViewModel.selectedFleet.id;
-    } else if (this.gameViewModel.selectedWorld) {
-      return this.gameViewModel.selectedWorld.id;
+    if (this.selection.selectedFleet) {
+      return this.selection.selectedFleet.id;
+    } else if (this.selection.selectedWorld) {
+      return this.selection.selectedWorld.id;
     } else {
       return null
     }
   }
 
   @computed get selectedWorldOrFleetIsOwnedByUser() {
-    if (this.gameViewModel.selectedFleet) {
-      const fleet = this.gameViewModel.selectedFleet;
+    if (this.selection.selectedFleet) {
+      const fleet = this.selection.selectedFleet;
       return fleet.status !== 'LOST' && fleet.ownerId === this.gameViewModel.selfPlayerId;
-    } else if (this.gameViewModel.selectedWorld) {
-      const world = this.gameViewModel.selectedWorld;
+    } else if (this.selection.selectedWorld) {
+      const world = this.selection.selectedWorld;
       return world.status !== 'LOST' && world.ownerId === this.gameViewModel.selfPlayerId;
     } else {
       return true
@@ -50,24 +54,24 @@ export class OrderEditorViewModel {
 
     switch (this.selectionType) {
       case 'FLEET':
-        if (!this.gameViewModel.selectedFleetdId || !this.gameViewModel.selectedFleet) {
+        if (!this.selection.selectedFleetdId || !this.selection.selectedFleet) {
           return [];
         }
-        return this.gameViewModel.selectedFleet.orders
+        return this.selection.selectedFleet.orders
       case 'WORLD':
-        if (!this.gameViewModel.selectedWorld) {
+        if (!this.selection.selectedWorld) {
           return [];
         }
-        return this.gameViewModel.selectedWorld!.orders;
+        return this.selection.selectedWorld!.orders;
       default:
         return [];
     }
   }
 
   public newWarpOrder() {
-    this.gameViewModel.requestWorldTargetSelection('Select warp target!', (worldId) => {
+    this.selection.requestWorldTargetSelection('Select warp target!', (worldId) => {
 
-      const fleet = this.gameViewModel.selectedFleet!;
+      const fleet = this.selection.selectedFleet!;
 
       const warpOrder: WarpOrder = {
         type: 'WARP',
@@ -76,6 +80,23 @@ export class OrderEditorViewModel {
 
       this.gameOrders.addFleetOrder(fleet.id, warpOrder);
     })
+  }
+
+  worldsWithHints: string[];
+
+  public showHintsForOrder(order: FleetOrder | WorldOrder) {
+    switch (order.type) {
+      case 'WARP':
+        this.worldHints.showHints([{ worldId: order.targetWorldId, hint: 'Target world' }]);
+        return;
+      default:
+        this.worldHints.clearHints();
+        return;
+    }
+  }
+
+  public clearHints() {
+    this.worldHints.clearHints();
   }
 
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import autobind from "autobind-decorator";
 import { screenWhite, screenPseudoTransparent, overlayBackground } from "../colors/colors";
-import { ReplaySubject, combineLatest } from "rxjs";
+import { ReplaySubject, combineLatest, BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 import { KeyExportOptions } from "crypto";
 
@@ -9,11 +9,14 @@ export interface TooltipContent {
   posX: number;
   posY: number;
   text: string | JSX.Element;
+  id: string;
 }
+
+let id = 0;
 
 export class TooltipHandle {
 
-  private items$$ = new ReplaySubject<TooltipContent[]>(1);
+  private items$$ = new BehaviorSubject<TooltipContent[]>([]);
 
   public items$ = this.items$$.asObservable();
 
@@ -32,6 +35,24 @@ export class TooltipHandle {
       this.mouseItemText$$.next(null);
   }
 
+  public showStaticItem(posX: number, posY: number, text: string): string {
+    const item: TooltipContent = {
+      id: (id++) + '',
+      posX,
+      posY,
+      text
+    }
+
+    const items = [...this.items$$.value, item]
+    this.items$$.next(items);
+    return item.id;
+  }
+
+  public removeStaticItem(id: string) {
+    const items = this.items$$.value.filter(item => item.id !== id);
+    this.items$$.next(items);
+  }
+
   public mouseItem$ = combineLatest([
     this.mouseItemText$$,
     this.mousePosition$$
@@ -39,7 +60,7 @@ export class TooltipHandle {
     map(([text, [posX, posY]]) => {
       if (text) {
         return {
-          posX, posY, text
+          posX, posY, text, id: 'mouse_item'
         }
       } else {
         return null;
@@ -70,13 +91,17 @@ export class TooltipOverlay extends React.Component<{}, {
         mouseItem
       })
     })
+    
+    this.handle.items$.subscribe(items => {
+      this.setState({
+        items
+      })
+    })
 
   }
 
   componentDidMount() {
     window.addEventListener('mousemove', this.handleMouseMove);
-    // this.handle.showMouseItem('Hello World!');
-    // this.handle.updateMousePosition(300, 300);
   }
 
   componentWillUnmount() {
