@@ -7,14 +7,14 @@ import { injectable, inject } from "inversify";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { TransferMetalOrder } from "../../../shared/model/v1/fleet-orders";
+import { DropShipsOrder } from "../../../shared/model/v1/fleet-orders";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
-import { transferMetal } from "../../actions/fleet/transfer-metal";
-import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
+import { dropShips } from "../../actions/fleet/drop-ships";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
 
 @injectable()
-export class BeginTransferMetalEventQueue implements GameEventQueue {
+export class BeginDroppingShipsEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
 
@@ -24,9 +24,9 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
     private time: TimeProjector, 
     private setup: GameSetupProvider) {
 
-    const readyFleetWithTransferMetalOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, TransferMetalOrder>('READY', 'TRANSFER_METAL')
+    const readyFleetWithTransferShipsOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, DropShipsOrder>('READY', 'DROP_SHIPS')
 
-    this.upcomingEvent$ = readyFleetWithTransferMetalOrder$.pipe(
+    this.upcomingEvent$ = readyFleetWithTransferShipsOrder$.pipe(
       withLatestFrom(this.worlds.byId$, this.time.currentTimestamp$),
       map(([[fleet, order], worlds, timestamp]) => {
         if (!fleet || !order) {
@@ -43,11 +43,7 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
                 ]
               }
 
-              let trueAmount = getTrueTransferAmount(fleet.metal, world.metal, order.amount)
-
-              if (fleet.metal + trueAmount > fleet.ships) {
-                trueAmount = fleet.ships - fleet.metal;
-              }
+              let trueAmount = getTrueTransferAmount(world.ships, fleet.ships, order.amount)
 
               if (trueAmount === 0) {
                 return [
@@ -56,8 +52,8 @@ export class BeginTransferMetalEventQueue implements GameEventQueue {
               }
 
               return [
-                transferMetal(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferMetalDelay),
-                giveOrTakeWorldMetal(world.id, -1 * trueAmount),
+                dropShips(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferShipsDelay),
+                giveOrTakeFleetShips(fleet.id, -1 * trueAmount),
                 popFleetOrder(fleet.id)
               ];
             }

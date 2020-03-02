@@ -1,22 +1,22 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
-import { baseFleet, LeavingFleet, ArrivingFleet, ReadyFleet, TransferingMetalFleet } from "../../../shared/model/v1/fleet";
+import { baseFleet, ReadyFleet, DroppingShipsFleet } from "../../../shared/model/v1/fleet";
 import { updateFleet } from "./update-fleet";
 
-export function transferMetal(
+export function dropShips(
   fleetId: string,
   amount: number,
   readyTimestamp: number
 ): Action {
   return {
-    describe: () => `TransferMetal ${JSON.stringify({ fleetId, readyTimestamp })}`,
+    describe: () => `DropShips ${JSON.stringify({ fleetId, readyTimestamp, amount })}`,
     apply: (state: GameState) => {
 
-      return updateFleet<ReadyFleet, TransferingMetalFleet>(state, fleetId, (oldFleet) => {
+      return updateFleet<ReadyFleet, DroppingShipsFleet>(state, fleetId, (oldFleet) => {
         return {
           ...baseFleet(oldFleet),
           currentWorldId: oldFleet.currentWorldId,
-          status: 'TRANSFERING_METAL',
+          status: 'DROPPING_SHIPS',
           readyTimestamp: readyTimestamp,
           ownerId: oldFleet.ownerId,
           transferAmount: amount

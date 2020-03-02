@@ -1,8 +1,10 @@
 export type FleetOrder =
   WaitOrder
   | WarpOrder
-  | TransferMetalOrder
-  | TransferShipsOrder;
+  | LoadMetalOrder
+  | DropMetalOrder
+  | LoadShipsOrder
+  | DropShipsOrder;
 
 export interface WaitOrder {
   type: 'WAIT',
@@ -17,20 +19,40 @@ export interface WarpOrder {
   targetWorldId: string;
 }
 
-export interface TransferMetalOrder {
-  type: 'TRANSFER_METAL',
+export interface LoadMetalOrder {
+  type: 'LOAD_METAL',
   /**
-   * @minimum -99
+   * @minimum 1
    * @maximum 99
    * @type integer
    */
   amount: number;
 }
 
-export interface TransferShipsOrder {
-  type: 'TRANSFER_SHIPS',
+export interface DropMetalOrder {
+  type: 'DROP_METAL',
   /**
-   * @minimum -99
+   * @minimum 1
+   * @maximum 99
+   * @type integer
+   */
+  amount: number;
+}
+
+export interface LoadShipsOrder {
+  type: 'LOAD_SHIPS',
+  /**
+   * @minimum 1
+   * @maximum 99
+   * @type integer
+   */
+  amount: number;
+}
+
+export interface DropShipsOrder {
+  type: 'DROP_SHIPS',
+  /**
+   * @minimum 1
    * @maximum 99
    * @type integer
    */

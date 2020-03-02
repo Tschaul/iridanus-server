@@ -96,9 +96,9 @@ export class OrderEditor extends React.Component<{
       <div style={{ flex: 1 }} key="b">
         {orders.map((order, index) => {
           switch (order.type) {
-            case 'TRANSFER_METAL':
+            case 'LOAD_METAL':
               return <TransferOrderEditor order={order}></TransferOrderEditor>
-            case 'TRANSFER_SHIPS':
+            case 'LOAD_SHIPS':
               return <TransferOrderEditor order={order}></TransferOrderEditor>
             case 'WAIT':
               return `${order.type} (${order.amountTime}ms)`

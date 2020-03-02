@@ -187,6 +187,46 @@
             ],
             "type": "object"
         },
+        "DropMetalOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "DROP_METAL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "DropShipsOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "DROP_SHIPS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
         "GameInfoSubscription": {
             "properties": {
                 "type": {
@@ -261,6 +301,46 @@
             ],
             "type": "object"
         },
+        "LoadMetalOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "LOAD_METAL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "LoadShipsOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "LOAD_SHIPS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
         "ReadyForGameCommand": {
             "properties": {
                 "gameId": {
@@ -305,46 +385,6 @@
             ],
             "type": "object"
         },
-        "TransferMetalOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": -99,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "TRANSFER_METAL"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "TransferShipsOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": -99,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "TRANSFER_SHIPS"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
         "UpdateFleetOrdersCommand": {
             "properties": {
                 "fleetId": {
@@ -360,10 +400,16 @@
                                 "$ref": "#/definitions/WarpOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferMetalOrder"
+                                "$ref": "#/definitions/LoadMetalOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferShipsOrder"
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
                             }
                         ]
                     },

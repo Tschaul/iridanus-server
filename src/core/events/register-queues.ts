@@ -1,9 +1,9 @@
 import { Container } from "inversify";
-import { BeginTransferMetalEventQueue } from "./transfer/begin-transfer-metal";
+import { BeginLoadingMetalEventQueue } from "./transfer/begin-loading-metal";
 import { CompleteEventQueue } from "./complete-event-queue";
-import { BeginTransferShipsEventQueue } from "./transfer/begin-transfer-ships";
-import { EndTransferMetalEventQueue } from "./transfer/end-transfer-metal";
-import { EndTransferShipsEventQueue } from "./transfer/end-transfer-ships";
+import { BeginLoadingShipsEventQueue } from "./transfer/begin-loading-ships";
+import { EndLoadMetalEventQueue } from "./transfer/end-loading-metal";
+import { EndLoadingShipsEventQueue } from "./transfer/end-loading-ships";
 import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
@@ -21,13 +21,22 @@ import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { TickEventQueue } from "./tick";
+import { BeginDroppingMetalEventQueue } from "./transfer/begin-dropping-metal";
+import { BeginDroppingShipsEventQueue } from "./transfer/begin-dropping-ships";
+import { EndDroppingMetalEventQueue } from "./transfer/end-dropping-metal";
+import { EndDroppingShipsEventQueue } from "./transfer/end-dropping-ships";
 
 export function registerEventQueues(container: Container) {
 
-  container.bind(BeginTransferMetalEventQueue).toSelf();
-  container.bind(BeginTransferShipsEventQueue).toSelf();
-  container.bind(EndTransferMetalEventQueue).toSelf();
-  container.bind(EndTransferShipsEventQueue).toSelf();
+  container.bind(BeginLoadingMetalEventQueue).toSelf();
+  container.bind(BeginLoadingShipsEventQueue).toSelf();
+  container.bind(EndLoadMetalEventQueue).toSelf();
+  container.bind(EndLoadingShipsEventQueue).toSelf();
+
+  container.bind(BeginDroppingMetalEventQueue).toSelf();
+  container.bind(BeginDroppingShipsEventQueue).toSelf();
+  container.bind(EndDroppingMetalEventQueue).toSelf();
+  container.bind(EndDroppingShipsEventQueue).toSelf();
 
   container.bind(ArriveAtWorldEventQueue).toSelf();
   container.bind(BeginWarpEventQueue).toSelf();

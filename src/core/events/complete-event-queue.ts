@@ -1,11 +1,11 @@
 import { injectable } from "inversify";
 import { GameEventQueue, GameEvent } from "./event";
-import { BeginTransferMetalEventQueue } from "./transfer/begin-transfer-metal";
+import { BeginLoadingMetalEventQueue } from "./transfer/begin-loading-metal";
 import { Observable, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import { BeginTransferShipsEventQueue } from "./transfer/begin-transfer-ships";
-import { EndTransferMetalEventQueue } from "./transfer/end-transfer-metal";
-import { EndTransferShipsEventQueue } from "./transfer/end-transfer-ships";
+import { BeginLoadingShipsEventQueue } from "./transfer/begin-loading-ships";
+import { EndLoadMetalEventQueue } from "./transfer/end-loading-metal";
+import { EndLoadingShipsEventQueue } from "./transfer/end-loading-ships";
 import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
@@ -23,6 +23,10 @@ import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { TickEventQueue } from "./tick";
+import { BeginDroppingMetalEventQueue } from "./transfer/begin-dropping-metal";
+import { BeginDroppingShipsEventQueue } from "./transfer/begin-dropping-ships";
+import { EndDroppingMetalEventQueue } from "./transfer/end-dropping-metal";
+import { EndDroppingShipsEventQueue } from "./transfer/end-dropping-ships";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -30,10 +34,14 @@ export class CompleteEventQueue implements GameEventQueue {
   upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    beginTransferMetal: BeginTransferMetalEventQueue,
-    beginTransferShips: BeginTransferShipsEventQueue,
-    endTransferMetal: EndTransferMetalEventQueue,
-    endTransfertShips: EndTransferShipsEventQueue,
+    beginLoadMetal: BeginLoadingMetalEventQueue,
+    beginLoadShips: BeginLoadingShipsEventQueue,
+    endLoadMetal: EndLoadMetalEventQueue,
+    endLoadShips: EndLoadingShipsEventQueue,
+    beginDropMetal: BeginDroppingMetalEventQueue,
+    beginDropShips: BeginDroppingShipsEventQueue,
+    endDropMetal: EndDroppingMetalEventQueue,
+    endDropShips: EndDroppingShipsEventQueue,
     arriveAtWorld: ArriveAtWorldEventQueue,
     beginWarp: BeginWarpEventQueue,
     endWarp: EndWarpEventQueue,
@@ -50,14 +58,17 @@ export class CompleteEventQueue implements GameEventQueue {
     worldStopFiring: WorldStopFiringEventQueue,
     captureFleet: CaptureFleetEventQueue,
     captureWorld: CaptureWorldEventQueue,
-    tick: TickEventQueue
   ) {
 
     const allEventQueues = [
-      beginTransferMetal,
-      beginTransferShips,
-      endTransferMetal,
-      endTransfertShips,
+      beginLoadMetal,
+      beginLoadShips,
+      endLoadMetal,
+      endLoadShips,
+      beginDropMetal,
+      beginDropShips,
+      endDropShips,
+      endDropMetal,
       arriveAtWorld,
       beginWarp,
       endWarp,
@@ -74,7 +85,6 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStopFiring,
       captureFleet,
       captureWorld,
-      // tick
     ]
 
     this.upcomingEvent$ = combineLatest(

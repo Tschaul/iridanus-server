@@ -2,7 +2,7 @@ import { GameViewModel } from "./game-view-model";
 import { computed, observable, reaction } from "mobx";
 import { OrderService } from "../../client/orders/order-service";
 import { resolveFromRegistry } from "../../container-registry";
-import { WarpOrder, FleetOrder, TransferMetalOrder, TransferShipsOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, LoadMetalOrder, LoadShipsOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
@@ -84,8 +84,8 @@ export class OrderEditorViewModel {
 
   public newTransferMetalOrder(amount: number) {
       const fleet = this.selection.selectedFleet!;
-      const order: TransferMetalOrder = {
-        type: 'TRANSFER_METAL',
+      const order: LoadMetalOrder = {
+        type: 'LOAD_METAL',
         amount
       }
       this.gameOrders.addFleetOrder(fleet.id, order);
@@ -93,8 +93,8 @@ export class OrderEditorViewModel {
 
   public newTransferShipsOrder(amount: number) {
       const fleet = this.selection.selectedFleet!;
-      const order: TransferShipsOrder = {
-        type: 'TRANSFER_SHIPS',
+      const order: LoadShipsOrder = {
+        type: 'LOAD_SHIPS',
         amount
       }
       this.gameOrders.addFleetOrder(fleet.id, order);

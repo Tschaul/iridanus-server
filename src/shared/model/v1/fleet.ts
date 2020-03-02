@@ -10,8 +10,10 @@ export type FleetWithOwnerAtWorld =
     | WaitingFleet
     | LeavingFleet
     | ArrivingFleet
-    | TransferingMetalFleet
-    | TransferingShipsFleet;
+    | LoadingMetalFleet
+    | LoadingShipsFleet
+    | DroppingMetalFleet
+    | DroppingShipsFleet;
 
 export function fleetIsAtWorld(fleet: Fleet): fleet is FleetWithOwnerAtWorld | LostFleet {
     return fleet.status !== 'WARPING';
@@ -99,16 +101,32 @@ export interface ArrivingFleet extends BaseFleet {
     ownerId: string;
 }
 
-export interface TransferingMetalFleet extends BaseFleet {
-    status: 'TRANSFERING_METAL'
+export interface LoadingMetalFleet extends BaseFleet {
+    status: 'LOADING_METAL'
     currentWorldId: string;
     transferAmount: number;
     readyTimestamp: number;
     ownerId: string;
 }
 
-export interface TransferingShipsFleet extends BaseFleet {
-    status: 'TRANSFERING_SHIPS'
+export interface DroppingMetalFleet extends BaseFleet {
+    status: 'DROPPING_METAL'
+    currentWorldId: string;
+    transferAmount: number;
+    readyTimestamp: number;
+    ownerId: string;
+}
+
+export interface LoadingShipsFleet extends BaseFleet {
+    status: 'LOADING_SHIPS'
+    currentWorldId: string;
+    transferAmount: number;
+    readyTimestamp: number;
+    ownerId: string;
+}
+
+export interface DroppingShipsFleet extends BaseFleet {
+    status: 'DROPPING_SHIPS'
     currentWorldId: string;
     transferAmount: number;
     readyTimestamp: number;

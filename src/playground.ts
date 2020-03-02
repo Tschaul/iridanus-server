@@ -11,10 +11,10 @@ map.universe.fleets["f1"].orders.push({
   targetWorldId: "w2"
 })
 
-map.universe.fleets["f1"].orders.push({
-  type: 'TRANSFER_METAL',
-  amount: -100,
-})
+// map.universe.fleets["f1"].orders.push({
+//   type: 'TRANSFER_METAL',
+//   amount: -100,
+// })
 
 map.universe.fleets["f1"].orders.push({
   type: 'WARP',

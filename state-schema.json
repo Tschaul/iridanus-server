@@ -25,10 +25,16 @@
                                 "$ref": "#/definitions/WarpOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferMetalOrder"
+                                "$ref": "#/definitions/LoadMetalOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferShipsOrder"
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
                             }
                         ]
                     },
@@ -229,6 +235,190 @@
             ],
             "type": "object"
         },
+        "DropMetalOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "DROP_METAL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "DropShipsOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "DROP_SHIPS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "DroppingMetalFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "DROPPING_METAL"
+                    ],
+                    "type": "string"
+                },
+                "transferAmount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status",
+                "transferAmount"
+            ],
+            "type": "object"
+        },
+        "DroppingShipsFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "DROPPING_SHIPS"
+                    ],
+                    "type": "string"
+                },
+                "transferAmount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status",
+                "transferAmount"
+            ],
+            "type": "object"
+        },
         "FiringFleet": {
             "properties": {
                 "combatStatus": {
@@ -312,10 +502,16 @@
                                 "$ref": "#/definitions/WarpOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferMetalOrder"
+                                "$ref": "#/definitions/LoadMetalOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferShipsOrder"
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
                             }
                         ]
                     },
@@ -354,6 +550,190 @@
             ],
             "type": "object"
         },
+        "LoadMetalOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "LOAD_METAL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "LoadShipsOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "LOAD_SHIPS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "LoadingMetalFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "LOADING_METAL"
+                    ],
+                    "type": "string"
+                },
+                "transferAmount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status",
+                "transferAmount"
+            ],
+            "type": "object"
+        },
+        "LoadingShipsFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "LOADING_SHIPS"
+                    ],
+                    "type": "string"
+                },
+                "transferAmount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status",
+                "transferAmount"
+            ],
+            "type": "object"
+        },
         "LostFleet": {
             "properties": {
                 "currentWorldId": {
@@ -378,10 +758,16 @@
                                 "$ref": "#/definitions/WarpOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferMetalOrder"
+                                "$ref": "#/definitions/LoadMetalOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferShipsOrder"
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
                             }
                         ]
                     },
@@ -488,10 +874,16 @@
                                 "$ref": "#/definitions/WarpOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferMetalOrder"
+                                "$ref": "#/definitions/LoadMetalOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferShipsOrder"
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
                             }
                         ]
                     },
@@ -582,178 +974,6 @@
             ],
             "type": "object"
         },
-        "TransferMetalOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": -99,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "TRANSFER_METAL"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "TransferShipsOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": -99,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "TRANSFER_SHIPS"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "TransferingMetalFleet": {
-            "properties": {
-                "currentWorldId": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "integrity": {
-                    "type": "number"
-                },
-                "metal": {
-                    "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/WaitOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/WarpOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/TransferMetalOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/TransferShipsOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "ownerId": {
-                    "type": "string"
-                },
-                "readyTimestamp": {
-                    "type": "number"
-                },
-                "ships": {
-                    "type": "number"
-                },
-                "status": {
-                    "enum": [
-                        "TRANSFERING_METAL"
-                    ],
-                    "type": "string"
-                },
-                "transferAmount": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "currentWorldId",
-                "id",
-                "integrity",
-                "metal",
-                "orders",
-                "ownerId",
-                "readyTimestamp",
-                "ships",
-                "status",
-                "transferAmount"
-            ],
-            "type": "object"
-        },
-        "TransferingShipsFleet": {
-            "properties": {
-                "currentWorldId": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "integrity": {
-                    "type": "number"
-                },
-                "metal": {
-                    "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/WaitOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/WarpOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/TransferMetalOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/TransferShipsOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "ownerId": {
-                    "type": "string"
-                },
-                "readyTimestamp": {
-                    "type": "number"
-                },
-                "ships": {
-                    "type": "number"
-                },
-                "status": {
-                    "enum": [
-                        "TRANSFERING_SHIPS"
-                    ],
-                    "type": "string"
-                },
-                "transferAmount": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "currentWorldId",
-                "id",
-                "integrity",
-                "metal",
-                "orders",
-                "ownerId",
-                "readyTimestamp",
-                "ships",
-                "status",
-                "transferAmount"
-            ],
-            "type": "object"
-        },
         "Universe": {
             "properties": {
                 "fleets": {
@@ -792,10 +1012,16 @@
                                 "$ref": "#/definitions/ArrivingFleet"
                             },
                             {
-                                "$ref": "#/definitions/TransferingMetalFleet"
+                                "$ref": "#/definitions/LoadingMetalFleet"
                             },
                             {
-                                "$ref": "#/definitions/TransferingShipsFleet"
+                                "$ref": "#/definitions/LoadingShipsFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/DroppingMetalFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/DroppingShipsFleet"
                             },
                             {
                                 "$ref": "#/definitions/WarpingFleet"
@@ -894,10 +1120,16 @@
                                 "$ref": "#/definitions/WarpOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferMetalOrder"
+                                "$ref": "#/definitions/LoadMetalOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferShipsOrder"
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
                             }
                         ]
                     },
@@ -974,10 +1206,16 @@
                                 "$ref": "#/definitions/WarpOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferMetalOrder"
+                                "$ref": "#/definitions/LoadMetalOrder"
                             },
                             {
-                                "$ref": "#/definitions/TransferShipsOrder"
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
                             }
                         ]
                     },

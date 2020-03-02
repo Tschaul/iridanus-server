@@ -14,7 +14,7 @@ describe("transfer", () => {
     const map = produce(warpTestMap, draft => {
 
       draft.universe.fleets["f1"].orders.push({
-        type: 'TRANSFER_METAL',
+        type: 'LOAD_METAL',
         amount: 5
       })
   
@@ -31,11 +31,11 @@ describe("transfer", () => {
     const map = produce(warpTestMap, draft => {
 
       draft.universe.fleets["f1"].orders.push({
-        type: 'TRANSFER_METAL',
+        type: 'LOAD_METAL',
         amount: 10
       })
       draft.universe.fleets["f2"].orders.push({
-        type: 'TRANSFER_METAL',
+        type: 'LOAD_METAL',
         amount: 10
       })
   
@@ -52,8 +52,8 @@ describe("transfer", () => {
     const map = produce(warpTestMap, draft => {
 
       draft.universe.fleets["f1"].orders.push({
-        type: 'TRANSFER_METAL',
-        amount: -5
+        type: 'DROP_METAL',
+        amount: 5
       })
   
     });
@@ -68,7 +68,7 @@ describe("transfer", () => {
     const map = produce(warpTestMap, draft => {
 
       draft.universe.fleets["f1"].orders.push({
-        type: 'TRANSFER_SHIPS',
+        type: 'LOAD_SHIPS',
         amount: 5
       })
   
@@ -84,8 +84,8 @@ describe("transfer", () => {
     const map = produce(warpTestMap, draft => {
 
       draft.universe.fleets["f1"].orders.push({
-        type: 'TRANSFER_SHIPS',
-        amount: -5
+        type: 'DROP_SHIPS',
+        amount: 5
       })
   
     });
@@ -100,11 +100,11 @@ describe("transfer", () => {
     const map = produce(warpTestMap, draft => {
 
       draft.universe.fleets["f1"].orders.push({
-        type: 'TRANSFER_SHIPS',
-        amount: -99
+        type: 'DROP_SHIPS',
+        amount: 99
       })
       draft.universe.fleets["f1"].orders.push({
-        type: 'TRANSFER_SHIPS',
+        type: 'LOAD_SHIPS',
         amount: 99
       })
   

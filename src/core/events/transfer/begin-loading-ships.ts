@@ -7,14 +7,14 @@ import { injectable, inject } from "inversify";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { TransferShipsOrder } from "../../../shared/model/v1/fleet-orders";
+import { LoadShipsOrder } from "../../../shared/model/v1/fleet-orders";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
-import { transferShips } from "../../actions/fleet/transfer-ships";
+import { loadShips } from "../../actions/fleet/load-ships";
 import { GameSetupProvider } from "../../game-setup-provider";
 
 @injectable()
-export class BeginTransferShipsEventQueue implements GameEventQueue {
+export class BeginLoadingShipsEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
 
@@ -25,7 +25,7 @@ export class BeginTransferShipsEventQueue implements GameEventQueue {
     private setup: GameSetupProvider
   ) {
 
-    const readyFleetWithTransferShipsOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, TransferShipsOrder>('READY','TRANSFER_SHIPS')
+    const readyFleetWithTransferShipsOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, LoadShipsOrder>('READY','LOAD_SHIPS')
 
     this.upcomingEvent$ = readyFleetWithTransferShipsOrder$.pipe(
       withLatestFrom(this.worlds.byId$, this.time.currentTimestamp$),
@@ -53,7 +53,7 @@ export class BeginTransferShipsEventQueue implements GameEventQueue {
               }
           
               return [
-                transferShips(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferShipsDelay),
+                loadShips(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferShipsDelay),
                 giveOrTakeWorldShips(world.id, -1 * trueAmount),
                 popFleetOrder(fleet.id)
               ];
