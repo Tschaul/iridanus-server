@@ -2,7 +2,7 @@ import { GameViewModel } from "./game-view-model";
 import { computed, observable, reaction } from "mobx";
 import { OrderService } from "../../client/orders/order-service";
 import { resolveFromRegistry } from "../../container-registry";
-import { WarpOrder, FleetOrder, LoadMetalOrder, LoadShipsOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, LoadMetalOrder, LoadShipsOrder, DropShipsOrder, DropMetalOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
@@ -82,7 +82,7 @@ export class OrderEditorViewModel {
     })
   }
 
-  public newTransferMetalOrder(amount: number) {
+  public newLoadMetalOrder(amount: number) {
       const fleet = this.selection.selectedFleet!;
       const order: LoadMetalOrder = {
         type: 'LOAD_METAL',
@@ -91,10 +91,28 @@ export class OrderEditorViewModel {
       this.gameOrders.addFleetOrder(fleet.id, order);
   }
 
-  public newTransferShipsOrder(amount: number) {
+  public newLoadShipsOrder(amount: number) {
       const fleet = this.selection.selectedFleet!;
       const order: LoadShipsOrder = {
         type: 'LOAD_SHIPS',
+        amount
+      }
+      this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
+  public newDropMetalOrder(amount: number) {
+      const fleet = this.selection.selectedFleet!;
+      const order: DropMetalOrder = {
+        type: 'DROP_METAL',
+        amount
+      }
+      this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
+  public newDropShipsOrder(amount: number) {
+      const fleet = this.selection.selectedFleet!;
+      const order: DropShipsOrder = {
+        type: 'DROP_SHIPS',
         amount
       }
       this.gameOrders.addFleetOrder(fleet.id, order);

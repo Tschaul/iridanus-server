@@ -97,8 +97,9 @@ export class OrderEditor extends React.Component<{
         {orders.map((order, index) => {
           switch (order.type) {
             case 'LOAD_METAL':
-              return <TransferOrderEditor order={order}></TransferOrderEditor>
             case 'LOAD_SHIPS':
+            case 'DROP_SHIPS':
+            case 'DROP_METAL':
               return <TransferOrderEditor order={order}></TransferOrderEditor>
             case 'WAIT':
               return `${order.type} (${order.amountTime}ms)`
@@ -155,22 +156,22 @@ export class OrderEditor extends React.Component<{
 
   @autobind
   handleNewLoadMetalOrder() {
-    this.props.vm.newTransferMetalOrder(99)
+    this.props.vm.newLoadMetalOrder(99)
   }
 
   @autobind
   handleNewDropMetalOrder() {
-    this.props.vm.newTransferMetalOrder(-99)
+    this.props.vm.newDropMetalOrder(99)
   }
 
   @autobind
   handleNewLoadShipsOrder() {
-    this.props.vm.newTransferShipsOrder(99)
+    this.props.vm.newLoadShipsOrder(99)
   }
 
   @autobind
   handleNewDropShipsOrder() {
-    this.props.vm.newTransferShipsOrder(-99)
+    this.props.vm.newDropShipsOrder(99)
   }
 
 }

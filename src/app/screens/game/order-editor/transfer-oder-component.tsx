@@ -1,11 +1,11 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
-import { WarpOrder, LoadMetalOrder, LoadShipsOrder } from "../../../../shared/model/v1/fleet-orders";
+import { WarpOrder, LoadMetalOrder, LoadShipsOrder, DropMetalOrder, DropShipsOrder } from "../../../../shared/model/v1/fleet-orders";
 
 @observer
 export class TransferOrderEditor extends React.Component<{
-  order: LoadMetalOrder | LoadShipsOrder,
+  order: LoadMetalOrder | LoadShipsOrder | DropMetalOrder | DropShipsOrder,
 }>{
   render() {
     return (
