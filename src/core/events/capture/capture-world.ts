@@ -1,5 +1,5 @@
 import { GameEvent, GameEventQueue } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
 import { injectable } from "inversify";
 import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
@@ -15,8 +15,10 @@ export class CaptureWorldEventQueue implements GameEventQueue {
     public capture: CombatAndCaptureProjector,
     public time: TimeProjector,
   ) {
-    this.upcomingEvent$ = this.capture.nextCapturedWorld$.pipe(
-      withLatestFrom(this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      this.capture.nextCapturedWorld$,
+      this.time.currentTimestamp$
+    ).pipe(
       map(([[world, newOwnerId], timestamp]) => {
         if (!world) {
           return null

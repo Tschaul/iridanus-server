@@ -2,7 +2,7 @@ import { GameViewModel } from "./game-view-model";
 import { computed, observable, reaction } from "mobx";
 import { OrderService } from "../../client/orders/order-service";
 import { resolveFromRegistry } from "../../container-registry";
-import { WarpOrder, FleetOrder, LoadMetalOrder, LoadShipsOrder, DropShipsOrder, DropMetalOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, LoadMetalOrder, LoadShipsOrder, DropShipsOrder, DropMetalOrder, ScrapShipsForIndustryOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder, BuildIndustryOrder, BuildShipsOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
@@ -129,6 +129,15 @@ export class OrderEditorViewModel {
         amount
       }
       this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
+  public newScrapShipsOrder(amount: number) {      
+    const fleet = this.selection.selectedFleet!;
+    const order: ScrapShipsForIndustryOrder = {
+      type: 'SCRAP_SHIPS_FOR_INDUSTRY',
+      amount
+    }
+    this.gameOrders.addFleetOrder(fleet.id, order);
   }
 
   public newBuildIndustryOrder(amount: number) {

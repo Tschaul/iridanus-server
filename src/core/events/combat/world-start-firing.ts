@@ -32,10 +32,12 @@ export class WorldStartFiringEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = startFiringWorld$.pipe(
-      withLatestFrom(this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      startFiringWorld$,
+      this.time.currentTimestamp$
+    ).pipe(
       map(([world, timestamp]) => {
-        if(!world) {
+        if (!world) {
           return null;
         }
         return {

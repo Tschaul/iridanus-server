@@ -12,16 +12,18 @@ describe("build", () => {
 
       draft.universe.worlds["w1"].orders.push({
         type: 'BUILD_SHIPS',
-        amount: 1
+        amount: 3
       })
 
     });
     expect((map.universe.worlds["w1"] as World).metal).to.equal(40)
 
-    const state = await runMap(map) //), { watcher: state => (state.universe.worlds["w1"] as World).metal });
+    const now = new Date().getTime();
 
-    expect((state.universe.worlds["w1"] as World).ships).to.equal(6)
-    expect((state.universe.worlds["w1"] as World).metal).to.equal(39)
+    const state = await runMap(map, { watcher: state => (state.currentTimestamp - now) });
+
+    expect((state.universe.worlds["w1"] as World).ships).to.equal(8)
+    expect((state.universe.worlds["w1"] as World).metal).to.equal(37)
   })
 
   it("builds industry", async () => {

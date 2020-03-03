@@ -1,5 +1,5 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { injectable, inject } from "inversify";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
@@ -17,8 +17,10 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(private worlds: WorldProjector, private time: TimeProjector, private setup: GameSetupProvider) {
-    this.upcomingEvent$ = worlds.firstByStatusAndNextOrderType<ReadyWorld, BuildShipsOrder>('READY', 'BUILD_SHIPS').pipe(
-      withLatestFrom(this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      worlds.firstByStatusAndNextOrderType<ReadyWorld, BuildShipsOrder>('READY', 'BUILD_SHIPS'),
+      this.time.currentTimestamp$
+    ).pipe(
       map(([[world, order], timestamp]) => {
         if (!world || !order) {
           return null
@@ -31,6 +33,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
                   popWorldOrder(world.id)
                 ];
               } else {
+                console.log("delay:", this.setup.rules.building.buildShipDelay / Math.min(world.industry, world.population))
                 return [
                   buildShip(world.id, timestamp + this.setup.rules.building.buildShipDelay / Math.min(world.industry, world.population)),
                   giveOrTakeWorldMetal(world.id, -1),

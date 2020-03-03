@@ -177,6 +177,7 @@ export class SelectedWorldPanel extends React.Component<{
       case 'LOADING_SHIPS': return '⮁►';
       case 'WARPING': return '🠲';
       case 'LEAVING': return '🠲';
+      case 'SCRAPPING_SHIPS': return '🠣I';
       default: return ' ';
     }
   }

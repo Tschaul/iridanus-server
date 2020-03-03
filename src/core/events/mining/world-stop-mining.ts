@@ -1,5 +1,5 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
 import { TimeProjector } from "../../projectors/time-projector";
 import { map, withLatestFrom } from "rxjs/operators";
@@ -30,8 +30,10 @@ export class WorldStopMiningEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = stopMiningWorld$.pipe(
-      withLatestFrom(this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      stopMiningWorld$,
+      this.time.currentTimestamp$
+    ).pipe(
       map(([world, timestamp]) => {
         if (!world) {
           return null;

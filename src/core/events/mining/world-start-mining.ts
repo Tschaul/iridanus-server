@@ -17,7 +17,7 @@ export class WorldStartMiningEventQueue implements GameEventQueue {
     private worlds: WorldProjector,
     private time: TimeProjector,
     private setup: GameSetupProvider) {
-      
+
     const startMiningWorld$ = this.worlds.byId$.pipe(
       map((worldsById) => {
 
@@ -32,8 +32,10 @@ export class WorldStartMiningEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = startMiningWorld$.pipe(
-      withLatestFrom(this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      startMiningWorld$,
+      this.time.currentTimestamp$
+    ).pipe(
       map(([world, timestamp]) => {
         if (!world) {
           return null;

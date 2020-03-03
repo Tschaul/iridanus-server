@@ -110,6 +110,7 @@ export class OrderEditor extends React.Component<{
             case 'LOAD_SHIPS':
             case 'DROP_SHIPS':
             case 'DROP_METAL':
+            case 'SCRAP_SHIPS_FOR_INDUSTRY':
               return <TransferOrderEditor order={order} index={index} update={this.handleOrderUpdate}></TransferOrderEditor>
             case 'WAIT':
               return `${order.type} (${order.amountTime}ms)`
@@ -124,6 +125,7 @@ export class OrderEditor extends React.Component<{
         ))}
       </div>,
       <div style={{ display: 'flex' }} key="c">
+        <Button onClick={this.handleNewScrapShipsOrder} spaceRight>🠣I</Button>
         <Button onClick={this.handleNewDropMetalOrder} spaceRight>🠣▮</Button>
         <Button onClick={this.handleNewLoadMetalOrder} spaceRight>🠡▮</Button>
         <Button onClick={this.handleNewDropShipsOrder} spaceRight>🠣►</Button>
@@ -192,6 +194,11 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewBuildIndustryOrder() {
     this.props.vm.newBuildIndustryOrder(1)
+  }
+
+  @autobind
+  handleNewScrapShipsOrder() {
+    this.props.vm.newScrapShipsOrder(1)
   }
 
   @autobind

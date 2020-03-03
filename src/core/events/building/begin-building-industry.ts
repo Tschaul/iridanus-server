@@ -1,5 +1,5 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { injectable, inject } from "inversify";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
@@ -17,8 +17,10 @@ export class BeginBuildingIndustryEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(private worlds: WorldProjector, private time: TimeProjector, private setup: GameSetupProvider) {
-    this.upcomingEvent$ = worlds.firstByStatusAndNextOrderType<ReadyWorld, BuildIndustryOrder>('READY', 'BUILD_INDUSTRY').pipe(
-      withLatestFrom(this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      worlds.firstByStatusAndNextOrderType<ReadyWorld, BuildIndustryOrder>('READY', 'BUILD_INDUSTRY'),
+      this.time.currentTimestamp$
+    ).pipe(
       map(([[world, order], timestamp]) => {
         if (!world || !order) {
           return null

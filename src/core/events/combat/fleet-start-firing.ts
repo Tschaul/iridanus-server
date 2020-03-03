@@ -32,10 +32,12 @@ export class FleetStartFiringEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = startFiringFleet$.pipe(
-      withLatestFrom(this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      startFiringFleet$,
+      this.time.currentTimestamp$
+    ).pipe(
       map(([fleet, timestamp]) => {
-        if(!fleet) {
+        if (!fleet) {
           return null;
         }
         return {
