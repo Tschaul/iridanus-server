@@ -12,18 +12,24 @@ import { reaction } from "mobx";
 import * as classNames from 'classnames'
 import { createClasses, StyleSheet } from "../../../ui-components/setup-jss";
 import { PanelDivider } from "../../../ui-components/panel/panel-divider";
+import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
 
 const classes = createClasses({
   row: {
     transition: "color 0.3s",
     cursor: 'pointer',
     color: screenWhite,
+    display: 'flex',
     "&.selected": {
       color: selectedYellow
     },
     "&:hover:not(.selected)": {
       color: hoverYellow
-    }
+    },
+  },
+  col: {
+    textAlign: 'right',
+    marginLeft: '1ex'
   }
 });
 
@@ -39,7 +45,7 @@ export class SelectedWorldPanel extends React.Component<{
       <div>
         {this.renderWorldHeader()}
         {this.props.vm.fleetsAtStageSelection.map(fleet => {
-          return this.renderTableRow(fleet, false, fleet.owner);
+          return this.renderFleetRow(fleet, fleet.owner);
         })}
       </div>
     )
@@ -71,7 +77,7 @@ export class SelectedWorldPanel extends React.Component<{
             <div>{this.padSpaces(world.mines)} M &nbsp;</div>
           </div>
           <PanelDivider></PanelDivider>
-          {this.renderTableRow(world, true, this.props.vm.playerInfoOfSelectedWorld)}
+          {this.renderWorldRow(world, this.props.vm.fleetsAtStageSelection, this.props.vm.playerInfoOfSelectedWorld)}
         </div>
       )
     }
@@ -83,17 +89,59 @@ export class SelectedWorldPanel extends React.Component<{
     </Panel>
   }
 
-  renderTableRow(item: World | Fleet, isWorld: boolean, owner: PlayerInfo | null) {
-    const selected = this.props.vm.isWorldOrFleetSelected(isWorld, item);
+  renderFleetRow(fleet: Fleet, owner: PlayerInfo | null) {
+    const selected = this.props.vm.isWorldOrFleetSelected(false, fleet);
     const topIcon = selected ? '■' : '·';
 
     const color = owner ? owner.color : screenWhite;
 
-    const icon = isWorld ? '◉' : '◈'
+    const icon = '◈'
+
+    const deltaMetalAmount = fleet.status === 'LOADING_METAL' ? fleet.transferAmount : 0;
+    const deltaShipsAmount = fleet.status === 'LOADING_SHIPS' ? fleet.transferAmount : 0;
 
     return (
-      <div className={classNames([classes.row, { selected }])} key={item.id} data-fleet-id={isWorld ? null : item.id} onClick={this.handleRowClick}>
-        {topIcon} <span style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</span> · {this.padSpaces(item.ships)} ► · {this.padSpaces(item.metal)} ▮ · {item.status}<br />
+      <div className={classNames([classes.row, { selected }])} key={fleet.id} data-fleet-id={fleet.id} onClick={this.handleRowClick}>
+        <div>{topIcon} </div>
+        <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
+        {this.tableAmount(fleet.ships, deltaShipsAmount, '►')}
+        {this.tableAmount(fleet.metal, deltaMetalAmount, '▮')}
+        <div className={classes.col}>
+          <HoverTooltip content={fleet.status}>
+            {this.fleetStatusIcon(fleet.status)}
+          </HoverTooltip>
+        </div>
+      </div>
+    )
+  }
+
+  renderWorldRow(world: World, fleets: Fleet[], owner: PlayerInfo | null) {
+    const selected = this.props.vm.isWorldOrFleetSelected(true, world);
+    const topIcon = selected ? '■' : '·';
+
+    const color = owner ? owner.color : screenWhite;
+
+    const icon = '◉';
+
+    const deltaMetalAmount = fleets.reduce((sum, fleet) => {
+      return sum + (fleet.status === 'DROPPING_METAL' ? fleet.transferAmount : 0)
+    }, 0)
+
+    const deltaShipsAmount = fleets.reduce((sum, fleet) => {
+      return sum + (fleet.status === 'DROPPING_SHIPS' ? fleet.transferAmount : 0)
+    }, 0)
+
+    return (
+      <div className={classNames([classes.row, { selected }])} key={world.id} data-fleet-id={null} onClick={this.handleRowClick}>
+        <div>{topIcon} </div>
+        <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
+        {this.tableAmount(world.ships, deltaShipsAmount, '►')}
+        {this.tableAmount(world.metal, deltaMetalAmount, '▮')}
+        <div className={classes.col}>
+          <HoverTooltip content={world.status}>
+            {this.worldStatusIcon(world.status)}
+          </HoverTooltip>
+        </div>
       </div>
     )
   }
@@ -109,6 +157,35 @@ export class SelectedWorldPanel extends React.Component<{
       return <span>&nbsp;{num}</span>;
     } else {
       return <span>{num}</span>;
+    }
+  }
+
+  tableAmount(amount: number, delta: number, symbol: string) {
+    return <div className={classes.col} style={{ width: '8ex' }}>
+      {amount}
+      {delta !== 0 && ('+' + delta)}
+      {' ' + symbol}
+    </div>
+  }
+
+  fleetStatusIcon(status: Fleet['status']) {
+    switch (status) {
+      case 'ARRIVING': return '🠰';
+      case 'DROPPING_METAL':
+      case 'LOADING_METAL': return '⮁▮';
+      case 'DROPPING_SHIPS':
+      case 'LOADING_SHIPS': return '⮁►';
+      case 'WARPING': return '🠲';
+      case 'LEAVING': return '🠲';
+      default: return ' ';
+    }
+  }
+
+  worldStatusIcon(status: World['status']) {
+    switch (status) {
+      case 'BUILDING_INDUSTRY': return '+I';
+      case 'BUILDING_SHIP': return '+►';
+      default: return ' ';
     }
   }
 }
