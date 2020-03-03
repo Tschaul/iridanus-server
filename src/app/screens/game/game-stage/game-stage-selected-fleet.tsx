@@ -64,7 +64,7 @@ export class GameStageSelectedFleet extends React.Component<{
 
       result.push(
         <line
-          key={destinationWorldId}
+          key={result.length}
           x1={arrowStart.x}
           y1={arrowStart.y}
           x2={arrowEnd.x}
@@ -95,6 +95,7 @@ export class GameStageSelectedFleet extends React.Component<{
       const arrowEnd = add(arrowStart, delta);
 
       return <line
+        key="current"
         x1={arrowStart.x}
         y1={arrowStart.y}
         x2={arrowEnd.x}
