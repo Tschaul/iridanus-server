@@ -107,7 +107,7 @@
             ],
             "type": "object"
         },
-        "BuildingIndustryWorld": {
+        "BuildingIndustryWorldBase": {
             "properties": {
                 "id": {
                     "type": "string"
@@ -171,7 +171,7 @@
             ],
             "type": "object"
         },
-        "BuildingShipWorld": {
+        "BuildingShipWorldBase": {
             "properties": {
                 "id": {
                     "type": "string"
@@ -850,6 +850,38 @@
             ],
             "type": "object"
         },
+        "MiningWorld": {
+            "properties": {
+                "miningStatus": {
+                    "enum": [
+                        "MINING"
+                    ],
+                    "type": "string"
+                },
+                "nextMetalMinedTimestamp": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "miningStatus",
+                "nextMetalMinedTimestamp"
+            ],
+            "type": "object"
+        },
+        "NotMiningWorld": {
+            "properties": {
+                "miningStatus": {
+                    "enum": [
+                        "NOT_MINING"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "miningStatus"
+            ],
+            "type": "object"
+        },
         "ReadyFleetBase": {
             "properties": {
                 "currentWorldId": {
@@ -1043,6 +1075,22 @@
                                     },
                                     {
                                         "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ReadyWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
                                     }
                                 ]
                             },
@@ -1053,14 +1101,128 @@
                                     },
                                     {
                                         "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
                                     }
                                 ]
                             },
                             {
-                                "$ref": "#/definitions/BuildingShipWorld"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ReadyWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    }
+                                ]
                             },
                             {
-                                "$ref": "#/definitions/BuildingIndustryWorld"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingShipWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingShipWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingShipWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingShipWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    }
+                                ]
                             },
                             {
                                 "$ref": "#/definitions/LostWorld"

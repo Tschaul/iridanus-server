@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, WorldWithOwner } from "../../../shared/model/v1/world";
+import { baseWorld, ReadyWorld, WorldWithOwner, combatAndMiningStatus } from "../../../shared/model/v1/world";
 
 export function worldStopFiring(
   worldId: string,
@@ -13,6 +13,7 @@ export function worldStopFiring(
       return updateWorld<WorldWithOwner, ReadyWorld>(state, worldId, (oldWorld) => {
         return {
           ...baseWorld(oldWorld),
+          ...combatAndMiningStatus(oldWorld),
           status: 'READY',
           combatStatus: 'AT_PEACE',
           ownerId: oldWorld.ownerId

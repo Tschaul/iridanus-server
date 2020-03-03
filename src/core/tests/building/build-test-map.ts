@@ -18,7 +18,8 @@ export const buildTestMap: GameState = {
         population: 25,
         ships: 5,
         integrity: 1,
-        combatStatus: 'AT_PEACE'
+        combatStatus: 'AT_PEACE',
+        miningStatus: 'NOT_MINING'
       },
     },
     gates: {

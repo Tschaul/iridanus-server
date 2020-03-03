@@ -16,7 +16,8 @@ export function captureWorld(
           ...baseWorld(oldWorld),
           status: 'READY',
           combatStatus: 'AT_PEACE',
-          ownerId: ownerId
+          ownerId: ownerId,
+          miningStatus: 'NOT_MINING'
         }
       })
     }

@@ -46,7 +46,8 @@ export const mockUniverse: Universe = {
       population: 25,
       ships: 5,
       integrity: 1,
-      combatStatus: 'AT_PEACE'
+      combatStatus: 'AT_PEACE',
+      miningStatus: 'NOT_MINING'
     },
     "w2": {
       status: 'READY',
@@ -59,7 +60,8 @@ export const mockUniverse: Universe = {
       population: 25,
       ships: 5,
       integrity: 1,
-      combatStatus: 'AT_PEACE'
+      combatStatus: 'AT_PEACE',
+      miningStatus: 'NOT_MINING'
     },
     "w3": {
       status: 'READY',
@@ -72,7 +74,8 @@ export const mockUniverse: Universe = {
       population: 25,
       ships: 5,
       integrity: 1,
-      combatStatus: 'AT_PEACE'
+      combatStatus: 'AT_PEACE',
+      miningStatus: 'NOT_MINING'
     }
   },
   gates: {

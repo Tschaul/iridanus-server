@@ -40,7 +40,8 @@ export const map: GameState = {
         ships: 5,
         orders: [],
         integrity: 1,
-        combatStatus: 'AT_PEACE'
+        combatStatus: 'AT_PEACE',
+        miningStatus: 'NOT_MINING'
       }
     },
     gates: {

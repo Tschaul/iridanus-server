@@ -1,5 +1,5 @@
 import { ReadyFleet, Fleet } from "../../../shared/model/v1/fleet";
-import { ReadyWorld, World } from "../../../shared/model/v1/world";
+import { ReadyWorld, World, WorldWithOwner } from "../../../shared/model/v1/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { GameRules } from "../../../shared/model/v1/rules";
 import { Action } from "../../actions/action";
@@ -9,14 +9,14 @@ import { looseFleet } from "../../actions/fleet/loose-fleet";
 import { setWorldIntegrity } from "../../actions/world/set-integrity";
 import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 
-export function handleFiring(attacker: ReadyFleet | ReadyWorld, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
+export function handleFiring(attacker: ReadyFleet | WorldWithOwner, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
   const [targetType, target] = determineTarget(attacker, world, fleetsByCurrentworldId[world.id], random);
   const [newShips, newIntegrity] = determineDamage(attacker, target, config);
   const damageActions = makeActions(targetType, newShips, target, newIntegrity);
   return damageActions;
 }
 
-function determineTarget(attacker: ReadyFleet | ReadyWorld, world: World, otherFleetsAtWorld: Fleet[], random: RandomNumberGenerator): ['WORLD', World] | ['FLEET', Fleet] {
+function determineTarget(attacker: ReadyFleet | WorldWithOwner, world: World, otherFleetsAtWorld: Fleet[], random: RandomNumberGenerator): ['WORLD', World] | ['FLEET', Fleet] {
   const enemyFleets = otherFleetsAtWorld.filter(otherFleet =>
     otherFleet.status !== 'LOST'
     && otherFleet.ownerId !== attacker.ownerId);

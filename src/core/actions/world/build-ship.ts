@@ -1,6 +1,6 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
-import { ReadyWorld, BuildingShipWorld, baseWorld } from "../../../shared/model/v1/world";
+import { ReadyWorld, BuildingShipWorld, baseWorld, combatAndMiningStatus } from "../../../shared/model/v1/world";
 import { updateWorld } from "./update-world";
 
 export function buildShip(
@@ -14,6 +14,7 @@ export function buildShip(
       return updateWorld<ReadyWorld, BuildingShipWorld>(state, worldId, (oldWorld) => {
         return {
           ...baseWorld(oldWorld),
+          ...combatAndMiningStatus(oldWorld),
           status: 'BUILDING_SHIP',
           readyTimestamp: readyTimestamp,
           ownerId: oldWorld.ownerId,

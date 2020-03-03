@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, WorldWithOwner } from "../../../shared/model/v1/world";
+import { baseWorld, ReadyWorld, WorldWithOwner, combatAndMiningStatus } from "../../../shared/model/v1/world";
 
 export function worldStartFiring(
   worldId: string,
@@ -14,6 +14,7 @@ export function worldStartFiring(
       return updateWorld<WorldWithOwner, ReadyWorld>(state, worldId, (oldWorld) => {
         return {
           ...baseWorld(oldWorld),
+          ...combatAndMiningStatus(oldWorld),
           status: 'READY',
           combatStatus: 'FIRING',
           weaponsReadyTimestamp,

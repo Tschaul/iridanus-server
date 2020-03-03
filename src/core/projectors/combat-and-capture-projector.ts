@@ -4,7 +4,7 @@ import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Fleet, ReadyFleetBase, FiringFleet, LostFleet } from "../../shared/model/v1/fleet";
-import { World, FiringWorld, ReadyWorldBase, LostWorld } from "../../shared/model/v1/world";
+import { World, FiringWorld, ReadyWorldBase, LostWorld, WorldWithOwner } from "../../shared/model/v1/world";
 
 @injectable()
 export class CombatAndCaptureProjector {
@@ -13,7 +13,7 @@ export class CombatAndCaptureProjector {
   public playersAtWorldById$: Observable<{ [k: string]: string[] }>;
 
   public nextFiringFleet$: Observable<(ReadyFleetBase & FiringFleet) | null>;
-  public nextFiringWorld$: Observable<(ReadyWorldBase & FiringWorld) | null>;
+  public nextFiringWorld$: Observable<(WorldWithOwner & FiringWorld) | null>;
 
   public nextCapturedWorld$: Observable<[LostWorld | null, string]>;
   public nextCapturedFleet$: Observable<[LostFleet | null, string]>;
@@ -41,7 +41,7 @@ export class CombatAndCaptureProjector {
           .filter(world =>
             world.status === 'READY'
             && world.combatStatus === 'FIRING'
-          ) as Array<(ReadyWorldBase & FiringWorld)>)
+          ) as Array<(WorldWithOwner & FiringWorld)>)
           .sort((a, b) =>
             a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
           )[0] || null
