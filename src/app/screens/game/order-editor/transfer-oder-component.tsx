@@ -25,7 +25,7 @@ export class TransferOrderEditor extends React.Component<TransferOrderEditorProp
     }
   }
 
-  componentDidUpdate(props: BuildOrderEditorProps) {
+  componentDidUpdate(props: TransferOrderEditorProps) {
     if (this.state.value !== props.order.amount) {
       this.setState({
         lastGoodValue: props.order.amount,
