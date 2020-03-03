@@ -3,7 +3,7 @@ import * as React from "react";
 import { WelcomeViewModel } from "../../view-model/welcome/welcome-view-model";
 import { HasExitAnimation } from "../../ui-components/animatable-components";
 import { Panel } from "../../ui-components/panel/panel-component";
-import { InputString } from "../../ui-components/input/input-component";
+import { Input } from "../../ui-components/input/input-component";
 import { wrapObservable } from "../helper/wrap-observable";
 import { Button } from "../../ui-components/button/button";
 import autobind from "autobind-decorator";
@@ -48,16 +48,16 @@ export class SignUpPanel extends React.Component<{
                 <br />
                 <br />
                 please enter username<br />
-                ><InputString value={wrapObservable(this.props.vm, 'username')} /><br />
+                ><Input type="text" value={wrapObservable(this.props.vm, 'username')} /><br />
                 <br />
                 please enter email<br />
-                ><InputString value={wrapObservable(this.props.vm, 'email')} /><br />
+                ><Input type="text" value={wrapObservable(this.props.vm, 'email')} /><br />
                 <br />
                 please enter password<br />
-                ><InputString value={wrapObservable(this.props.vm, 'password')} /><br />
+                ><Input type="text" value={wrapObservable(this.props.vm, 'password')} /><br />
                 <br />
                 please enter password again<br />
-                ><InputString value={wrapObservable(this.props.vm, 'passwordRepeated')} /><br />
+                ><Input type="text" value={wrapObservable(this.props.vm, 'passwordRepeated')} /><br />
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button onClick={this.handleBackClick} spaceRight>BACK</Button>

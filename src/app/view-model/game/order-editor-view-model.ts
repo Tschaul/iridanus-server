@@ -68,6 +68,19 @@ export class OrderEditorViewModel {
     }
   }
 
+  public updateOrder(order: FleetOrder | WorldOrder, index: number) {
+    if (this.selectionType === 'FLEET') {
+      const newOrders = this.orders.slice(0) as FleetOrder[];
+      newOrders[index] = order as FleetOrder;
+      this.gameOrders.updateFleetOrders(this.selectedWorldOrFleetId as string, newOrders);
+    } else {
+      const newOrders = this.orders.slice(0) as WorldOrder[];
+      newOrders[index] = order as WorldOrder;
+      this.gameOrders.updateWorldOrders(this.selectedWorldOrFleetId as string, newOrders);
+
+    }
+  }
+
   public newWarpOrder() {
     this.selection.requestWorldTargetSelection('Select warp target!', (worldId) => {
 

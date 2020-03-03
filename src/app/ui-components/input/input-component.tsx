@@ -20,21 +20,31 @@ const classes = createClasses({
 })
 
 @observer
-export class InputString extends React.Component<{
+export class Input extends React.Component<{
   value: WrappedObservable<string>,
   isPassword?: boolean,
-  onEnterKey?: () => void
+  type: 'password' | 'text' | 'number',
+  min?: number,
+  max?: number,
+  onEnterKey?: () => void,
+  onBlur?: () => void,
+  style?: React.CSSProperties
 }> {
-  
+
   render() {
 
     return (
-      <input 
-        type={this.props.isPassword ? "password" : "text"}
+      <input
+        style={this.props.style}
+        type={this.props.type}
         className={classNames(classes.input)}
-        value={this.props.value.get()} 
+        value={this.props.value.get()}
         onChange={this.handleChange}
         onKeyDown={this.handleKeyDown}
+        onBlur={this.props.onBlur}
+        min={this.props.min}
+        max={this.props.max}
+        step={this.props.type === 'number' ? 1 : undefined}
       />
     )
   }
@@ -47,7 +57,7 @@ export class InputString extends React.Component<{
 
   @autobind
   handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if(event.keyCode === 13 && this.props.onEnterKey) {
+    if (event.keyCode === 13 && this.props.onEnterKey) {
       this.props.onEnterKey();
       event.defaultPrevented = true;
     }

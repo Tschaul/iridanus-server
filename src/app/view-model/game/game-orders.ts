@@ -72,4 +72,12 @@ export class GameOrders {
         && i > index
       )));
   }
+
+  public updateFleetOrders(fleetId: string, orders: FleetOrder[]) {
+    this.fleetOrderDrafts.set(fleetId, orders);
+  }
+
+  public updateWorldOrders(fleetId: string, orders: WorldOrder[]) {
+    this.worldOrderDrafts.set(fleetId, orders);
+  }
 }

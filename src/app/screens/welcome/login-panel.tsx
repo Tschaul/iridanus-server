@@ -3,7 +3,7 @@ import * as React from "react";
 import { WelcomeViewModel } from "../../view-model/welcome/welcome-view-model";
 import { HasExitAnimation } from "../../ui-components/animatable-components";
 import { Panel } from "../../ui-components/panel/panel-component";
-import { InputString } from "../../ui-components/input/input-component";
+import { Input } from "../../ui-components/input/input-component";
 import { wrapObservable } from "../helper/wrap-observable";
 import classNames from "classnames";
 import { Button } from "../../ui-components/button/button";
@@ -59,11 +59,11 @@ export class LoginPanel extends React.Component<{
             Welcome to {iridanusAscii}
             <br />
             please enter login<br />
-            ><InputString value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
+            ><Input type="text" value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
             <br />
             <br />
             please enter password<br />
-            ><InputString isPassword value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
+            ><Input type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
           </div>
           <div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>

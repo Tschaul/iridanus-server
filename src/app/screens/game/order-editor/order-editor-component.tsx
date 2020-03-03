@@ -100,7 +100,7 @@ export class OrderEditor extends React.Component<{
             case 'LOAD_SHIPS':
             case 'DROP_SHIPS':
             case 'DROP_METAL':
-              return <TransferOrderEditor order={order}></TransferOrderEditor>
+              return <TransferOrderEditor order={order} index={index} update={this.handleOrderUpdate}></TransferOrderEditor>
             case 'WAIT':
               return `${order.type} (${order.amountTime}ms)`
             case 'WARP':
@@ -172,6 +172,11 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewDropShipsOrder() {
     this.props.vm.newDropShipsOrder(99)
+  }
+
+  @autobind
+  handleOrderUpdate(order: FleetOrder | WorldOrder, index: number) {
+    this.props.vm.updateOrder(order, index);
   }
 
 }
