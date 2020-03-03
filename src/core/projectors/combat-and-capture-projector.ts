@@ -39,7 +39,7 @@ export class CombatAndCaptureProjector {
       map(worldsById => {
         return (Object.values(worldsById)
           .filter(world =>
-            world.status === 'READY'
+            'combatStatus' in world
             && world.combatStatus === 'FIRING'
           ) as Array<(WorldWithOwner & FiringWorld)>)
           .sort((a, b) =>

@@ -14,16 +14,16 @@ describe("build", () => {
         type: 'BUILD_SHIPS',
         amount: 1
       })
-  
+
     });
     expect((map.universe.worlds["w1"] as World).metal).to.equal(40)
 
-    const state = await runMap(map, state => (state.universe.worlds["w1"] as World).metal);
+    const state = await runMap(map) //), { watcher: state => (state.universe.worlds["w1"] as World).metal });
 
     expect((state.universe.worlds["w1"] as World).ships).to.equal(6)
     expect((state.universe.worlds["w1"] as World).metal).to.equal(39)
   })
-  
+
   it("builds industry", async () => {
     const map = produce(buildTestMap, draft => {
 
@@ -31,7 +31,7 @@ describe("build", () => {
         type: 'BUILD_INDUSTRY',
         amount: 1
       })
-  
+
     });
 
     const state = await runMap(map);

@@ -3,24 +3,20 @@ import { GameState } from "../../../shared/model/v1/state";
 import { updateWorld } from "./update-world";
 import { baseWorld, ReadyWorld, WorldWithOwner, combatAndMiningStatus } from "../../../shared/model/v1/world";
 
-export function worldStopFiring(
+export function worldStartMining(
   worldId: string,
+  nextMetalMinedTimestamp: number
 ): Action {
   return {
-    describe: () => `WorldStopFiring ${JSON.stringify({ worldId })}`,
+    describe: () => `WorldStartMining ${JSON.stringify({ worldId, nextMetalMinedTimestamp })}`,
     apply: (state: GameState) => {
 
       return updateWorld<WorldWithOwner, WorldWithOwner>(state, worldId, (oldWorld) => {
-        const newWorld = {
+        return {
           ...oldWorld,
-          combatStatus: 'AT_PEACE',
+          miningStatus: 'MINING',
+          nextMetalMinedTimestamp,
         }
-
-        if ('weaponsReadyTimestamp' in newWorld) {
-          delete newWorld.weaponsReadyTimestamp;
-        }
-
-        return newWorld as WorldWithOwner;
       })
     }
   }

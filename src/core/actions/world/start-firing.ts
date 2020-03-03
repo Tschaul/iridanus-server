@@ -11,14 +11,11 @@ export function worldStartFiring(
     describe: () => `WorldStartFiring ${JSON.stringify({ worldId,weaponsReadyTimestamp })}`,
     apply: (state: GameState) => {
 
-      return updateWorld<WorldWithOwner, ReadyWorld>(state, worldId, (oldWorld) => {
+      return updateWorld<WorldWithOwner, WorldWithOwner>(state, worldId, (oldWorld) => {
         return {
-          ...baseWorld(oldWorld),
-          ...combatAndMiningStatus(oldWorld),
-          status: 'READY',
+          ...oldWorld,
           combatStatus: 'FIRING',
           weaponsReadyTimestamp,
-          ownerId: oldWorld.ownerId
         }
       })
     }

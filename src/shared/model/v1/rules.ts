@@ -16,6 +16,10 @@ export interface GameRules {
     leaveWorldDelay: number;
     warpToWorldDelay: number;
     arriveWorldDelay: number;
+  },
+  mining: {
+    miningDelay: number;
+    maximumMetal: number;
   }
 }
 

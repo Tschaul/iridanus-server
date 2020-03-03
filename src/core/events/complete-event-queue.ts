@@ -27,6 +27,9 @@ import { BeginDroppingMetalEventQueue } from "./transfer/begin-dropping-metal";
 import { BeginDroppingShipsEventQueue } from "./transfer/begin-dropping-ships";
 import { EndDroppingMetalEventQueue } from "./transfer/end-dropping-metal";
 import { EndDroppingShipsEventQueue } from "./transfer/end-dropping-ships";
+import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
+import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
+import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -42,20 +45,29 @@ export class CompleteEventQueue implements GameEventQueue {
     beginDropShips: BeginDroppingShipsEventQueue,
     endDropMetal: EndDroppingMetalEventQueue,
     endDropShips: EndDroppingShipsEventQueue,
+
     arriveAtWorld: ArriveAtWorldEventQueue,
     beginWarp: BeginWarpEventQueue,
     endWarp: EndWarpEventQueue,
     leaveWorld: LeaveWorldEventQueue,
+
     beginBuildShips: BeginBuildingShipEventQueue,
     endBuildShips: EndBuildShipsEventQueue,
     beginBuildIndustry: BeginBuildingIndustryEventQueue,
     endBuildIndustry: EndBuildIndustryEventQueue,
+
     fleetStartFiring: FleetStartFiringEventQueue,
     fleetFire: FleetFireEventQueue,
     fleetStopFiring: FleetStopFiringEventQueue,
+
     worldStartFiring: WorldStartFiringEventQueue,
     worldFire: WorldFireEventQueue,
     worldStopFiring: WorldStopFiringEventQueue,
+
+    worldStartMining: WorldStartMiningEventQueue,
+    worldMinesMetal: WorldMinesMetalEventQueue,
+    worldStopMining: WorldStopMiningEventQueue,
+
     captureFleet: CaptureFleetEventQueue,
     captureWorld: CaptureWorldEventQueue,
   ) {
@@ -85,6 +97,9 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStopFiring,
       captureFleet,
       captureWorld,
+      worldStartMining,
+      worldMinesMetal,
+      worldStopMining
     ]
 
     this.upcomingEvent$ = combineLatest(

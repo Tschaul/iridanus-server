@@ -5,7 +5,7 @@ import { Game } from "../game";
 import { Logger } from "../infrastructure/logger";
 import { Store, ReadonlyStore } from "../store";
 import { Container } from "inversify";
-import { simpleRules } from "./test-config";
+import { testRules } from "./test-config";
 import { registerEventQueues } from "../events/register-queues";
 import { registerProjectors } from "../projectors/register-projectors";
 import { RandomNumberGenerator, NotSoRandomNumberGenerator } from "../infrastructure/random-number-generator";
@@ -13,8 +13,12 @@ import { GameSetupProvider } from "../game-setup-provider";
 import { ActionLogger } from '../infrastructure/action-logger';
 import { map } from 'rxjs/operators';
 import { GameStateValidator } from '../infrastructure/game- state-message-validator';
+import { GameRules } from '../../shared/model/v1/rules';
 
-export async function runMap(testMap: GameState, watcher: null | ((state: GameState) => string | number | boolean) = null): Promise<GameState> {
+export async function runMap(testMap: GameState, options?: {
+  watcher?: null | ((state: GameState) => string | number | boolean),
+  rules?: GameRules
+}): Promise<GameState> {
 
   let container = new Container({
     defaultScope: "Singleton"
@@ -32,7 +36,7 @@ export async function runMap(testMap: GameState, watcher: null | ((state: GameSt
   container.bind(GameStateValidator).toSelf();
 
   const setup = container.get(GameSetupProvider);
-  setup.rules = simpleRules;
+  setup.rules = (options && options.rules) || testRules;
   setup.initialState = testMap;
   setup.endGameLoopWhenNoEventIsQueued = true;
 
@@ -45,10 +49,10 @@ export async function runMap(testMap: GameState, watcher: null | ((state: GameSt
 
   store.commit();
 
-  if (watcher) {
+  if (options && options.watcher) {
     const logger = container.get(Logger);
     store.state$.pipe(
-      map(watcher)
+      map(options.watcher)
     ).subscribe(message => {
       logger.debug(`watcher: ${message}`)
     })

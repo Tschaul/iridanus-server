@@ -1,39 +1,54 @@
-// import { GameEvent, GameEventQueue } from "../event";
-// import { Observable } from "rxjs";
-// import { map, withLatestFrom } from "rxjs/operators";
-// import { injectable } from "inversify";
-// import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
-// import { TimeProjector } from "../../projectors/time-projector";
-// import { captureWorld } from "../../actions/world/capture";
-// import { WorldProjector } from "../../projectors/world-projector";
+import { GameEventQueue, GameEvent } from "../event";
+import { Observable } from "rxjs";
+import { injectable } from "inversify";
+import { map } from "rxjs/operators";
+import { worldStartMining } from "../../actions/world/start-mining";
+import { GameSetupProvider } from "../../game-setup-provider";
+import { WorldProjector } from "../../projectors/world-projector";
+import { MiningWorld, BaseWorld } from "../../../shared/model/v1/world";
+import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 
-// @injectable()
-// export class CaptureWorldEventQueue implements GameEventQueue {
+@injectable()
+export class WorldMinesMetalEventQueue implements GameEventQueue {
+  public upcomingEvent$: Observable<GameEvent | null>;
 
-//   public upcomingEvent$: Observable<GameEvent | null>;
+  constructor(
+    private worlds: WorldProjector,
+    private setup: GameSetupProvider) {
 
-//   constructor(
-//     public worlds: WorldProjector,
-//     public time: TimeProjector,
-//   ) {
-//     this.upcomingEvent$ = this.worlds.byId$.pipe(
-//       map((worlds) => {
+    const nextMiningWorld$ = this.worlds.byId$.pipe(
+      map((worldsById) => {
+
+        const worlds = Object.values(worldsById);
+
+        return (worlds.filter(world =>
+          'miningStatus' in world
+          && world.miningStatus === 'MINING'
+        ) as Array<MiningWorld & BaseWorld>).sort((a, b) => a.nextMetalMinedTimestamp - b.nextMetalMinedTimestamp)[0] || null
+      })
+    )
+
+    this.upcomingEvent$ = nextMiningWorld$.pipe(
+      map((world) => {
+        if (!world) {
+          return null;
+        }
+        return {
+          timestamp: world.nextMetalMinedTimestamp,
+          happen: () => {
+
+            const weaponsReadyTimestamp = world.nextMetalMinedTimestamp + this.setup.rules.mining.miningDelay / world.mines
 
 
+            return [
+              giveOrTakeWorldMetal(world.id, 1),
+              worldStartMining(world.id, weaponsReadyTimestamp)
+            ]
+          }
+        }
+      })
+    )
+  }
 
-//         if (!world) {
-//           return null
-//         } else {
-//           return {
-//             timestamp,
-//             happen: () => {
-//               return [
-//                 captureWorld(world.id, newOwnerId),
-//               ];
-//             }
-//           }
-//         }
-//       })
-//     )
-//   }
-// }
+}
+
