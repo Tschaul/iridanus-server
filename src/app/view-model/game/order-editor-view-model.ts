@@ -3,7 +3,7 @@ import { computed, observable, reaction } from "mobx";
 import { OrderService } from "../../client/orders/order-service";
 import { resolveFromRegistry } from "../../container-registry";
 import { WarpOrder, FleetOrder, LoadMetalOrder, LoadShipsOrder, DropShipsOrder, DropMetalOrder } from "../../../shared/model/v1/fleet-orders";
-import { WorldOrder } from "../../../shared/model/v1/world-order";
+import { WorldOrder, BuildIndustryOrder, BuildShipsOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
@@ -129,6 +129,24 @@ export class OrderEditorViewModel {
         amount
       }
       this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
+  public newBuildIndustryOrder(amount: number) {
+    const world = this.selection.selectedWorld!;
+    const order: BuildIndustryOrder = {
+      type: 'BUILD_INDUSTRY',
+      amount
+    }
+    this.gameOrders.addWorldOrder(world.id, order);
+  }
+  
+  public newBuildShipsOrder(amount: number) {
+    const world = this.selection.selectedWorld!;
+    const order: BuildShipsOrder = {
+      type: 'BUILD_SHIPS',
+      amount
+    }
+    this.gameOrders.addWorldOrder(world.id, order);
   }
 
   worldsWithHints: string[];

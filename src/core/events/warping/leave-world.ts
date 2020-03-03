@@ -10,6 +10,8 @@ import { injectable } from "inversify";
 import { leaveWorld } from "../../actions/fleet/leave-world";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { Gates } from "../../../shared/model/v1/universe";
+import { GatesProjector } from "../../projectors/gates-projector";
 
 @injectable()
 export class LeaveWorldEventQueue implements GameEventQueue {
@@ -19,14 +21,27 @@ export class LeaveWorldEventQueue implements GameEventQueue {
   constructor(
     public fleets: FleetProjector,
     public time: TimeProjector,
-    private setup: GameSetupProvider
+    private setup: GameSetupProvider,
+    private gates: GatesProjector
   ) {
     this.upcomingEvent$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, WarpOrder>('READY', 'WARP').pipe(
-      withLatestFrom(this.time.currentTimestamp$),
-      map(([[fleet, order], timestamp]) => {
+      withLatestFrom(this.time.currentTimestamp$, this.gates.all$),
+      map(([[fleet, order], timestamp, gates]) => {
         if (!fleet || !order) {
           return null
         } else {
+
+          if (!gates[fleet.currentWorldId].includes(order.targetWorldId)) {
+            return {
+              timestamp,
+              happen: () => {
+                return [
+                  popFleetOrder(fleet.id)
+                ]
+              }
+            }
+          }
+
           return {
             timestamp,
             happen: () => {

@@ -14,6 +14,7 @@ import { getClosestAttribute } from "../../helper/get-attribute";
 import { WarpOrderEditor } from "./warp-order-component";
 import { hoverYellow } from "../../../ui-components/colors/colors";
 import { TransferOrderEditor } from "./transfer-oder-component";
+import { BuildOrderEditor } from "./build-oder-component";
 
 const classes = createClasses({
   panel: {
@@ -70,14 +71,23 @@ export class OrderEditor extends React.Component<{
         World orders
           <PanelDivider></PanelDivider>
       </div>,
-      <div key="b">
-        {orders.map(order => {
+      <div key="b" style={{ flex: 1 }}>
+        {orders.map((order, index) => {
           switch (order.type) {
             case 'BUILD_INDUSTRY':
             case 'BUILD_SHIPS':
-              return order.type;
+              return <BuildOrderEditor order={order} index={index} update={this.handleOrderUpdate}></BuildOrderEditor>
           }
-        })}
+        }).map((content, index) => (
+          <div key={index} data-order-index={index} style={{ display: 'flex' }}>
+            <div style={{ flex: 1 }}>{content}</div>
+            <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>
+          </div>
+        ))}
+      </div>,
+      <div style={{ display: 'flex' }} key="c">
+        <Button onClick={this.handleNewBuildIndustryOrder} spaceRight>+I</Button>
+        <Button onClick={this.handleNewBuildShipsOrder} spaceRight>+►</Button>
       </div>
     ])
   }
@@ -172,6 +182,16 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewDropShipsOrder() {
     this.props.vm.newDropShipsOrder(99)
+  }
+
+  @autobind
+  handleNewBuildShipsOrder() {
+    this.props.vm.newBuildShipsOrder(1)
+  }
+
+  @autobind
+  handleNewBuildIndustryOrder() {
+    this.props.vm.newBuildIndustryOrder(1)
   }
 
   @autobind

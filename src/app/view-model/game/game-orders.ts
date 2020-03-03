@@ -48,6 +48,11 @@ export class GameOrders {
     this.fleetOrderDrafts.set(fleetId, [...currentOrders, order]);
   }
 
+  public addWorldOrder(worldId: string, order: WorldOrder) {
+    const currentOrders = this.worldOrderDrafts.get(worldId) || this.gameData.worlds[worldId].orders;
+    this.worldOrderDrafts.set(worldId, [...currentOrders, order]);
+  }
+
   public orderDraftsForWorld(id: string) {
     return this.worldOrderDrafts.get(id);
   }

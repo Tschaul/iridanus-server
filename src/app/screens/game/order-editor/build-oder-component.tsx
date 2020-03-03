@@ -1,23 +1,23 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
-import { WarpOrder, LoadMetalOrder, LoadShipsOrder, DropMetalOrder, DropShipsOrder } from "../../../../shared/model/v1/fleet-orders";
 import { WrappedObservable } from "../../helper/wrap-observable";
 import { Input } from "../../../ui-components/input/input-component";
+import { BuildIndustryOrder, BuildShipsOrder } from "../../../../shared/model/v1/world-order";
 
-export interface TransferOrderEditorProps {
-  order: LoadMetalOrder | LoadShipsOrder | DropMetalOrder | DropShipsOrder,
+export interface BuildOrderEditorProps {
+  order: BuildIndustryOrder | BuildShipsOrder,
   index: number,
-  update: (order: LoadMetalOrder | LoadShipsOrder | DropMetalOrder | DropShipsOrder, index: number) => void
+  update: (order: BuildIndustryOrder | BuildShipsOrder, index: number) => void
 }
 
 @observer
-export class TransferOrderEditor extends React.Component<TransferOrderEditorProps,{
+export class BuildOrderEditor extends React.Component<BuildOrderEditorProps, {
   lastGoodValue: number;
   value: number;
 }>{
 
-  constructor(props: TransferOrderEditorProps) {
+  constructor(props: BuildOrderEditorProps) {
     super(props);
     this.state = {
       lastGoodValue: props.order.amount,
@@ -38,7 +38,7 @@ export class TransferOrderEditor extends React.Component<TransferOrderEditorProp
 
     const value: WrappedObservable<string> = {
       get: () => {
-        return this.state.value+'';
+        return this.state.value + '';
       },
       set: (value) => {
         this.handleAmountUpdate(value);
@@ -51,7 +51,7 @@ export class TransferOrderEditor extends React.Component<TransferOrderEditorProp
           {this.props.order.type}
         </div>
         <div>
-          &nbsp; <Input onBlur={this.resetValue} style={{width: '4ex'}} type="number" value={value} min={1} max={99} /> {this.symbol()}
+          &nbsp; <Input onBlur={this.resetValue} style={{ width: '4ex' }} type="number" value={value} min={1} max={99} /> {this.symbol()}
         </div>
         <div style={{ flex: 1 }}></div>
       </div>
@@ -60,8 +60,8 @@ export class TransferOrderEditor extends React.Component<TransferOrderEditorProp
 
   symbol() {
 
-    if (this.props.order.type.indexOf('METAL') !== -1) {
-      return '▮'
+    if (this.props.order.type.indexOf('INDUSTRY') !== -1) {
+      return 'I'
     } else {
       return '►'
     }
@@ -72,7 +72,7 @@ export class TransferOrderEditor extends React.Component<TransferOrderEditorProp
 
     const value = parseInt(valueString);
 
-    this.setState({value})
+    this.setState({ value })
 
     if (!isNaN(value) && value && value >= 1 && value <= 99) {
       this.setState({
