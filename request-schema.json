@@ -359,6 +359,26 @@
             ],
             "type": "object"
         },
+        "ScrapShipsForIndustryOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "SCRAP_SHIPS_FOR_INDUSTRY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
         "SignUpUserCommand": {
             "properties": {
                 "email": {
@@ -410,6 +430,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },

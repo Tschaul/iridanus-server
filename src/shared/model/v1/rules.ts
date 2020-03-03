@@ -1,4 +1,7 @@
 export interface GameRules {
+  global: {
+    maxAmount: number;
+  },
   combat: {
     meanFiringInterval: number;
     integrityDamagePerShip: number;
@@ -20,6 +23,10 @@ export interface GameRules {
   mining: {
     miningDelay: number;
     maximumMetal: number;
+  },
+  scrapping: {
+    shipsPerIndustry: number;
+    scrappingDelay: number;
   }
 }
 

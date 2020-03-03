@@ -4,7 +4,8 @@ export type FleetOrder =
   | LoadMetalOrder
   | DropMetalOrder
   | LoadShipsOrder
-  | DropShipsOrder;
+  | DropShipsOrder
+  | ScrapShipsForIndustryOrder;
 
 export interface WaitOrder {
   type: 'WAIT',
@@ -51,6 +52,16 @@ export interface LoadShipsOrder {
 
 export interface DropShipsOrder {
   type: 'DROP_SHIPS',
+  /**
+   * @minimum 1
+   * @maximum 99
+   * @type integer
+   */
+  amount: number;
+}
+
+export interface ScrapShipsForIndustryOrder {
+  type: 'SCRAP_SHIPS_FOR_INDUSTRY',
   /**
    * @minimum 1
    * @maximum 99

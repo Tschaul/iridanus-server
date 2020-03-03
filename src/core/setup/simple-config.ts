@@ -24,5 +24,12 @@ export const testConfig: GameRules = {
   mining: {
     miningDelay: 3 * fiveSeconds,
     maximumMetal: 10
+  },
+  scrapping: {
+    scrappingDelay:  1 * fiveSeconds,
+    shipsPerIndustry: 6
+  },
+  global: {
+    maxAmount: 99
   }
 }

@@ -43,7 +43,7 @@ export class BeginDroppingShipsEventQueue implements GameEventQueue {
                 ]
               }
 
-              let trueAmount = getTrueTransferAmount(world.ships, fleet.ships, order.amount)
+              let trueAmount = getTrueTransferAmount(world.ships, fleet.ships, order.amount, this.setup.rules.global.maxAmount)
 
               if (trueAmount === 0) {
                 return [

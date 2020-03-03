@@ -35,6 +35,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -309,6 +312,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -381,6 +387,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -512,6 +521,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -624,6 +636,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -696,6 +711,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -768,6 +786,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -916,6 +937,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -1006,6 +1030,101 @@
             ],
             "type": "object"
         },
+        "ScrapShipsForIndustryOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "SCRAP_SHIPS_FOR_INDUSTRY"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "ScrappingShipsFleet": {
+            "properties": {
+                "currentWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WaitOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropMetalOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "readyTimestamp": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "SCRAPPING_SHIPS"
+                    ],
+                    "type": "string"
+                },
+                "transferAmount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "currentWorldId",
+                "id",
+                "integrity",
+                "metal",
+                "orders",
+                "ownerId",
+                "readyTimestamp",
+                "ships",
+                "status",
+                "transferAmount"
+            ],
+            "type": "object"
+        },
         "Universe": {
             "properties": {
                 "fleets": {
@@ -1054,6 +1173,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DroppingShipsFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrappingShipsFleet"
                             },
                             {
                                 "$ref": "#/definitions/WarpingFleet"
@@ -1292,6 +1414,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -1378,6 +1503,9 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },

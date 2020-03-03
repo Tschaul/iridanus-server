@@ -43,7 +43,7 @@ export class BeginDroppingMetalEventQueue implements GameEventQueue {
                 ]
               }
 
-              let trueAmount = getTrueTransferAmount(world.metal, fleet.metal, order.amount)
+              let trueAmount = getTrueTransferAmount(world.metal, fleet.metal, order.amount, this.setup.rules.global.maxAmount)
 
               if (trueAmount === 0) {
                 return [
