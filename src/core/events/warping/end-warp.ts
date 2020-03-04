@@ -1,5 +1,5 @@
 import { GameEvent, GameEventQueue } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { WarpingFleet } from "../../../shared/model/v1/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
@@ -7,6 +7,8 @@ import { inject } from "inversify";
 import { injectable } from "inversify";
 import { arriveAtWorld } from "../../actions/fleet/arrive-at-world";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { WorldProjector } from "../../projectors/world-projector";
+import { worldhasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class EndWarpEventQueue implements GameEventQueue {
@@ -14,19 +16,31 @@ export class EndWarpEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    public fleets: FleetProjector, 
-    private setup: GameSetupProvider
+    public fleets: FleetProjector,
+    private setup: GameSetupProvider,
+    public worlds: WorldProjector,
   ) {
-    this.upcomingEvent$ = this.fleets.firstByStatus<WarpingFleet>('WARPING').pipe(
-      map((fleet) => {
+    this.upcomingEvent$ = combineLatest(
+      this.fleets.firstByStatus<WarpingFleet>('WARPING'),
+      this.worlds.byId$
+    ).pipe(
+      map(([fleet, worlds]) => {
         if (!fleet) {
           return null
         } else {
+
+          let delay = this.setup.rules.warping.leaveWorldDelay;
+
+          const targetWorld = worlds[fleet.targetWorldId];
+          if (worldhasOwner(targetWorld) && targetWorld.ownerId === fleet.ownerId) {
+            delay = 0;
+          }
+
           return {
             timestamp: fleet.arrivingTimestamp,
             happen: () => {
               return [
-                arriveAtWorld(fleet.id, fleet.arrivingTimestamp + this.setup.rules.warping.arriveWorldDelay),
+                arriveAtWorld(fleet.id, fleet.arrivingTimestamp + delay),
               ];
             }
           }

@@ -15,7 +15,7 @@ export const testConfig: GameRules = {
   warping: {
     arriveWorldDelay: 1 * fiveSeconds,
     leaveWorldDelay: 1 * fiveSeconds,
-    warpToWorldDelay: 1 * fiveSeconds,
+    warpToWorldDelay: 2.5 * fiveSeconds,
   },
   transfering: {
     transferMetalDelay: 1 * fiveSeconds,

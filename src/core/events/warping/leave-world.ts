@@ -12,6 +12,8 @@ import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { Gates } from "../../../shared/model/v1/universe";
 import { GatesProjector } from "../../projectors/gates-projector";
+import { WorldProjector } from "../../projectors/world-projector";
+import { worldhasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class LeaveWorldEventQueue implements GameEventQueue {
@@ -20,6 +22,7 @@ export class LeaveWorldEventQueue implements GameEventQueue {
 
   constructor(
     public fleets: FleetProjector,
+    public worlds: WorldProjector,
     public time: TimeProjector,
     private setup: GameSetupProvider,
     private gates: GatesProjector
@@ -27,9 +30,10 @@ export class LeaveWorldEventQueue implements GameEventQueue {
     this.upcomingEvent$ = combineLatest(
       this.fleets.firstByStatusAndNextOrderType<ReadyFleet, WarpOrder>('READY', 'WARP'),
       this.time.currentTimestamp$,
-      this.gates.all$
+      this.gates.all$,
+      this.worlds.byId$
     ).pipe(
-      map(([[fleet, order], timestamp, gates]) => {
+      map(([[fleet, order], timestamp, gates, worlds]) => {
         if (!fleet || !order) {
           return null
         } else {
@@ -45,11 +49,18 @@ export class LeaveWorldEventQueue implements GameEventQueue {
             }
           }
 
+          let delay = this.setup.rules.warping.leaveWorldDelay;
+
+          const currentWorld = worlds[fleet.currentWorldId];
+          if (worldhasOwner(currentWorld) &&  currentWorld.ownerId === fleet.ownerId) {
+            delay = 0;
+          } 
+
           return {
             timestamp,
             happen: () => {
               return [
-                leaveWorld(fleet.id, order.targetWorldId, timestamp + this.setup.rules.warping.leaveWorldDelay),
+                leaveWorld(fleet.id, order.targetWorldId, timestamp + delay),
                 popFleetOrder(fleet.id)
               ];
             }
