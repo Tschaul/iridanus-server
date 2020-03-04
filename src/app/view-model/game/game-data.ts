@@ -19,6 +19,10 @@ const dummyState: GameState = {
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_SAFE_INTEGER,
   universe: {
+    visibility: {
+      p1: {},
+      p2: {}
+    },
     fleets: {},
     worlds: {},
     gates: {}

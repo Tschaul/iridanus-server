@@ -1,5 +1,6 @@
 import { GameInfo, GameMetaData } from "../model/v1/game-info";
 import { GameState } from "../model/v1/state";
+import { VisibleState } from "../model/v1/visible-state";
 
 export type SubscriptionResult = GameListAllSubscriptionResult
   | GameStateSubscriptionResult
@@ -13,7 +14,7 @@ export interface GameListAllSubscriptionResult {
 
 export interface GameStateSubscriptionResult {
   type: 'GAME/STATE',
-  state: GameState
+  state: VisibleState
 }
 
 export interface GameInfoSubscriptionResult {

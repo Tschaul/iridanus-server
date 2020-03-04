@@ -4,16 +4,18 @@ import { map } from "rxjs/operators";
 import { DataProvider } from "../data-provider";
 import { GameStateSubscription } from "../../../../shared/messages/subscriptions";
 import { GameStateSubscriptionResult } from "../../../../shared/messages/subscription-result";
-import { ReadonlyStore } from "../../../../core/store";
+import { VisibilityProjector } from "../../../../core/projectors/visibility-projector";
 
 @injectable()
 export class GameStateDataProvider implements DataProvider {
   authenticationRequired = true;
 
-  constructor(private store: ReadonlyStore){}
+  constructor(
+    private visibility: VisibilityProjector
+  ){}
 
-  getObservable(subscription: GameStateSubscription): Observable<GameStateSubscriptionResult> {
-    return this.store.state$.pipe(
+  getObservable(subscription: GameStateSubscription, playerId: string): Observable<GameStateSubscriptionResult> {
+    return this.visibility.visibleUniverseForPlayer(playerId).pipe(
       map(state => {
         return {
           type: 'GAME/STATE',

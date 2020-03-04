@@ -12,6 +12,7 @@ export function makeGomeisaSix(): GameMap {
     fleets: {},
     worlds: {},
     gates,
+    visibility: {}
   }
 
   const drawingPositions: DrawingPositions = {};

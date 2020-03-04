@@ -44,7 +44,7 @@ export class SubscriptionHandler {
       return;
     }
 
-    dataProvider.getObservable(subcription).pipe(takeUntil(race(cancelSubject$$, connectionClosed$))).subscribe(data => {
+    dataProvider.getObservable(subcription, userId as string).pipe(takeUntil(race(cancelSubject$$, connectionClosed$))).subscribe(data => {
       const response: ResponseMessage = {
         type: 'SUBSCRIPTION_RESULT',
         id,

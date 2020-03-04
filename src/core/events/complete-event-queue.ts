@@ -32,6 +32,8 @@ import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
 import { BeginScrappingShipsEventQueue } from "./scrapping/begin-Scrapping-ships";
 import { EndScrappingShipsEventQueue } from "./scrapping/end-scrapping-ships";
+import { RevealWorldEventQueue } from "./visibility/reveal-world";
+import { RememberWorldEventQueue } from "./visibility/remember-world";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -75,6 +77,9 @@ export class CompleteEventQueue implements GameEventQueue {
 
     captureFleet: CaptureFleetEventQueue,
     captureWorld: CaptureWorldEventQueue,
+
+    revealWorld: RevealWorldEventQueue,
+    remeberWorld: RememberWorldEventQueue,
   ) {
 
     const allEventQueues = [
@@ -106,7 +111,9 @@ export class CompleteEventQueue implements GameEventQueue {
       captureWorld,
       worldStartMining,
       worldMinesMetal,
-      worldStopMining
+      worldStopMining,
+      revealWorld,
+      remeberWorld
     ]
 
     this.upcomingEvent$ = combineLatest(

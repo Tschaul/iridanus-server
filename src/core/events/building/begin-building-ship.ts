@@ -33,7 +33,6 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
                   popWorldOrder(world.id)
                 ];
               } else {
-                console.log("delay:", this.setup.rules.building.buildShipDelay / Math.min(world.industry, world.population))
                 return [
                   buildShip(world.id, timestamp + this.setup.rules.building.buildShipDelay / Math.min(world.industry, world.population)),
                   giveOrTakeWorldMetal(world.id, -1),

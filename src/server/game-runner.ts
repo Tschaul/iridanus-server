@@ -131,6 +131,7 @@ export class GameRunner {
       const players = Object.getOwnPropertyNames(gameInfo.players);
       map.seats.forEach((seat, index) => {
         const player = players[index];
+        state.visibility[player] = {};
         Object.getOwnPropertyNames(state.worlds).forEach(worldId => {
           const world = state.worlds[worldId];
           if (worldhasOwner(world) && world.ownerId === seat) {

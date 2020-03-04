@@ -5,7 +5,7 @@ const tick = 100;
 export const testRules: GameRules = {
   combat: {
     integrityDamagePerShip: 0.456789,
-    meanFiringInterval: 3 * tick
+    meanFiringInterval: 5 * tick
   },
   building: {
     buildIndustryDelay: 50 * tick,

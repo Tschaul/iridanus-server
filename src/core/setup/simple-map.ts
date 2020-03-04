@@ -4,6 +4,10 @@ export const simpleMap: GameState = {
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_VALUE,
   universe: {
+    visibility: {
+      p1: {},
+      p2: {}
+    },
     fleets: {
       "f1": {
         id: "f1",

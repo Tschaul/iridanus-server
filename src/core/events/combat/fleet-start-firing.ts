@@ -45,7 +45,6 @@ export class FleetStartFiringEventQueue implements GameEventQueue {
           happen: () => {
 
             const weaponsReadyTimestamp = timestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval
-            console.log("start firing weaponsReadyTimestamp", weaponsReadyTimestamp)
 
             return [
               fleetStartFiring(fleet.id, weaponsReadyTimestamp)

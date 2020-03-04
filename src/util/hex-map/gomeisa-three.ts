@@ -20,6 +20,7 @@ export function makeGomeisaThree(): GameMap {
     fleets: {},
     worlds: {},
     gates,
+    visibility: {}
   }
 
   let fleetKeyNumber = 1;

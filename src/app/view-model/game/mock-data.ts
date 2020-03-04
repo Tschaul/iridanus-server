@@ -3,6 +3,10 @@ import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { normalize } from "../../../shared/math/vec2";
 
 export const mockUniverse: Universe = {
+  visibility: {
+    p1: {},
+    p2: {}
+  },
   fleets: {
     "f1": {
       id: "f1",
