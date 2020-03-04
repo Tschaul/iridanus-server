@@ -1,5 +1,5 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { injectable, inject } from "inversify";
 import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
@@ -21,34 +21,38 @@ export class FleetFireEventQueue implements GameEventQueue {
     private random: RandomNumberGenerator,
     private setup: GameSetupProvider) {
 
-    this.upcomingEvent$ = this.combat.nextFiringFleet$.pipe(
-      withLatestFrom(this.worlds.byId$, this.fleets.byCurrentWorldId$),
-      map(([fleet, worldsById, fleetsByCurrentworldId]) => {
-        if (!fleet) {
-          return null;
-        }
-        console.log('fleet fire event for ', fleet.weaponsReadyTimestamp)
-        return {
-          timestamp: fleet.weaponsReadyTimestamp,
-          happen: () => {
-
-            const weaponsReadyTimestamp = fleet.weaponsReadyTimestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval
-            
-            console.log("weaponsReadyTimestamp", weaponsReadyTimestamp)
-
-            const world = worldsById[fleet.currentWorldId];
-
-            const damageActions = handleFiring(fleet, world, fleetsByCurrentworldId, this.setup.rules, this.random);
-
-            return [
-              ...damageActions, 
-              fleetStartFiring(fleet.id, weaponsReadyTimestamp)
-            ]
-
+    this.upcomingEvent$ =
+      combineLatest(
+        this.combat.nextFiringFleet$,
+        this.worlds.byId$,
+        this.fleets.byCurrentWorldId$
+      ).pipe(
+        map(([fleet, worldsById, fleetsByCurrentworldId]) => {
+          if (!fleet) {
+            return null;
           }
-        }
-      })
-    )
+          console.log('fleet fire event for ', fleet.weaponsReadyTimestamp)
+          return {
+            timestamp: fleet.weaponsReadyTimestamp,
+            happen: () => {
+
+              const weaponsReadyTimestamp = fleet.weaponsReadyTimestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval
+
+              console.log("weaponsReadyTimestamp", weaponsReadyTimestamp)
+
+              const world = worldsById[fleet.currentWorldId];
+
+              const damageActions = handleFiring(fleet, world, fleetsByCurrentworldId, this.setup.rules, this.random);
+
+              return [
+                ...damageActions,
+                fleetStartFiring(fleet.id, weaponsReadyTimestamp)
+              ]
+
+            }
+          }
+        })
+      )
   }
 
 

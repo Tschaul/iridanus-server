@@ -1,5 +1,5 @@
 import { GameEvent, GameEventQueue } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
 import { ReadyFleetBase, ReadyFleet } from "../../../shared/model/v1/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
@@ -19,16 +19,19 @@ export class BeginLoadingShipsEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    private fleets: FleetProjector, 
-    private worlds: WorldProjector, 
-    private time: TimeProjector, 
+    private fleets: FleetProjector,
+    private worlds: WorldProjector,
+    private time: TimeProjector,
     private setup: GameSetupProvider
   ) {
 
-    const readyFleetWithTransferShipsOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, LoadShipsOrder>('READY','LOAD_SHIPS')
+    const readyFleetWithTransferShipsOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, LoadShipsOrder>('READY', 'LOAD_SHIPS')
 
-    this.upcomingEvent$ = readyFleetWithTransferShipsOrder$.pipe(
-      withLatestFrom(this.worlds.byId$, this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      readyFleetWithTransferShipsOrder$,
+      this.worlds.byId$,
+      this.time.currentTimestamp$
+    ).pipe(
       map(([[fleet, order], worlds, timestamp]) => {
         if (!fleet || !order) {
           return null
@@ -43,15 +46,15 @@ export class BeginLoadingShipsEventQueue implements GameEventQueue {
                   popFleetOrder(fleet.id)
                 ]
               }
-          
+
               const trueAmount = getTrueTransferAmount(fleet.ships, world.ships, order.amount, this.setup.rules.global.maxAmount)
-          
+
               if (trueAmount === 0) {
                 return [
                   popFleetOrder(fleet.id)
                 ]
               }
-          
+
               return [
                 loadShips(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferShipsDelay),
                 giveOrTakeWorldShips(world.id, -1 * trueAmount),

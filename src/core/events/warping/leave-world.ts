@@ -1,5 +1,5 @@
 import { GameEvent, GameEventQueue } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
 import { ReadyFleetBase, ReadyFleet } from "../../../shared/model/v1/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
@@ -24,8 +24,11 @@ export class LeaveWorldEventQueue implements GameEventQueue {
     private setup: GameSetupProvider,
     private gates: GatesProjector
   ) {
-    this.upcomingEvent$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, WarpOrder>('READY', 'WARP').pipe(
-      withLatestFrom(this.time.currentTimestamp$, this.gates.all$),
+    this.upcomingEvent$ = combineLatest(
+      this.fleets.firstByStatusAndNextOrderType<ReadyFleet, WarpOrder>('READY', 'WARP'),
+      this.time.currentTimestamp$,
+      this.gates.all$
+    ).pipe(
       map(([[fleet, order], timestamp, gates]) => {
         if (!fleet || !order) {
           return null

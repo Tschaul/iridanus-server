@@ -1,5 +1,5 @@
 import { GameEvent, GameEventQueue } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
 import { ReadyFleetBase, ReadyFleet } from "../../../shared/model/v1/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
@@ -19,15 +19,18 @@ export class BeginDroppingMetalEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    private fleets: FleetProjector, 
-    private worlds: WorldProjector, 
-    private time: TimeProjector, 
+    private fleets: FleetProjector,
+    private worlds: WorldProjector,
+    private time: TimeProjector,
     private setup: GameSetupProvider) {
 
     const readyFleetWithTransferMetalOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, DropMetalOrder>('READY', 'DROP_METAL')
 
-    this.upcomingEvent$ = readyFleetWithTransferMetalOrder$.pipe(
-      withLatestFrom(this.worlds.byId$, this.time.currentTimestamp$),
+    this.upcomingEvent$ = combineLatest(
+      readyFleetWithTransferMetalOrder$,
+      this.worlds.byId$,
+      this.time.currentTimestamp$
+    ).pipe(
       map(([[fleet, order], worlds, timestamp]) => {
         if (!fleet || !order) {
           return null

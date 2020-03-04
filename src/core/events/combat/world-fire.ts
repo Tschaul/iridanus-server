@@ -1,5 +1,5 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
 import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
@@ -19,8 +19,10 @@ export class WorldFireEventQueue implements GameEventQueue {
     private random: RandomNumberGenerator,
     private setup: GameSetupProvider) {
 
-    this.upcomingEvent$ = this.combat.nextFiringWorld$.pipe(
-      withLatestFrom(this.fleets.byCurrentWorldId$),
+    this.upcomingEvent$ = combineLatest(
+      this.combat.nextFiringWorld$,
+      this.fleets.byCurrentWorldId$
+    ).pipe(
       map(([world, fleetsByCurrentworldId]) => {
         if (!world) {
           return null;
@@ -34,7 +36,7 @@ export class WorldFireEventQueue implements GameEventQueue {
             const damageActions = handleFiring(world, world, fleetsByCurrentworldId, this.setup.rules, this.random);
 
             return [
-              ...damageActions, 
+              ...damageActions,
               worldStartFiring(world.id, weaponsReadyTimestamp)
             ]
           }
