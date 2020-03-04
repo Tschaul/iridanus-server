@@ -6,6 +6,7 @@ import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { GameState } from "../../../shared/model/v1/state";
 import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
+import { VisibleState } from "../../../shared/model/v1/visible-state";
 
 @injectable()
 export class GameStateService {
@@ -19,7 +20,7 @@ export class GameStateService {
       type: 'GAME/STATE'
     }, gameId).pipe(
       map(result => result.state)
-    ) as Observable<GameState>
+    ) as Observable<VisibleState>
   }
 
   getGameInfoById(gameId: string) {

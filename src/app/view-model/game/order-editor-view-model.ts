@@ -5,6 +5,8 @@ import { WorldOrder, BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryO
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
+import { visibleWorldIsWorld, visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
+import { fleetHasOwner } from "../../../shared/model/v1/fleet";
 
 export class OrderEditorViewModel {
 
@@ -39,10 +41,10 @@ export class OrderEditorViewModel {
   @computed get selectedWorldOrFleetIsOwnedByUser() {
     if (this.selection.selectedFleet) {
       const fleet = this.selection.selectedFleet;
-      return fleet.status !== 'LOST' && fleet.ownerId === this.gameViewModel.selfPlayerId;
+      return fleetHasOwner(fleet) && fleet.ownerId === this.gameViewModel.selfPlayerId;
     } else if (this.selection.selectedWorld) {
       const world = this.selection.selectedWorld;
-      return world.status !== 'LOST' && world.ownerId === this.gameViewModel.selfPlayerId;
+      return visibleWorldhasOwner(world) && world.ownerId === this.gameViewModel.selfPlayerId;
     } else {
       return true
     }
@@ -60,7 +62,10 @@ export class OrderEditorViewModel {
         if (!this.selection.selectedWorld) {
           return [];
         }
-        return this.selection.selectedWorld!.orders;
+        if (visibleWorldIsWorld(this.selection.selectedWorld!)) {
+          return this.selection.selectedWorld!.orders;
+        }
+        return [];
       default:
         return [];
     }

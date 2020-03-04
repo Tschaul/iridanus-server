@@ -8,6 +8,7 @@ import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
 import { GameStateService } from "../../client/game-state/game-state.service";
 import { FleetWithOwnerAtWorld, LostFleet, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
+import { VisibleState } from "../../../shared/model/v1/visible-state";
 
 export type FleetByTwoWorlds = {
   [worldId1: string]: {
@@ -44,7 +45,7 @@ export class GameData {
   private gameStateService = resolveFromRegistry(GameStateService);
 
   @observable private gameInfo: IStreamListener<GameInfo> = fromStream(empty(), dummyInfo);
-  @observable private gameState: IStreamListener<GameState> = fromStream(empty(), dummyState);
+  @observable private gameState: IStreamListener<VisibleState> = fromStream(empty(), dummyState);
   @observable private metaData: IStreamListener<GameMetaData> = fromStream(empty(), dummyMetaData);;
 
   @observable public doneLoading = false;

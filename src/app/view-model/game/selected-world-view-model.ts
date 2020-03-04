@@ -5,6 +5,7 @@ import { fleetHasOwner, Fleet } from "../../../shared/model/v1/fleet";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
+import { visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
 
 export class SelectedWorldViewModel {
 
@@ -15,7 +16,7 @@ export class SelectedWorldViewModel {
 
 
   @computed public get playerInfoOfSelectedWorld() {
-    if (this.selection.selectedWorld && worldhasOwner(this.selection.selectedWorld)) {
+    if (this.selection.selectedWorld && visibleWorldhasOwner(this.selection.selectedWorld)) {
       return this.gameData.playerInfos[this.selection.selectedWorld.ownerId];
     } else {
       return null;

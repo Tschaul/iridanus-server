@@ -5,6 +5,7 @@ import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
 import { OrderService } from "../../client/orders/order-service";
 import { GameData } from "./game-data";
+import { World } from "../../../shared/model/v1/world";
 
 export class GameOrders {
 
@@ -49,7 +50,8 @@ export class GameOrders {
   }
 
   public addWorldOrder(worldId: string, order: WorldOrder) {
-    const currentOrders = this.worldOrderDrafts.get(worldId) || this.gameData.worlds[worldId].orders;
+    const world = this.gameData.worlds[worldId] as World;
+    const currentOrders = this.worldOrderDrafts.get(worldId) || world.orders;
     this.worldOrderDrafts.set(worldId, [...currentOrders, order]);
   }
 
@@ -62,7 +64,8 @@ export class GameOrders {
   }
 
   public deleteWorldOrder(worldId: string, index: number) {
-    const currentOrders = this.worldOrderDrafts.get(worldId) || this.gameData.worlds[worldId].orders;
+    const world = this.gameData.worlds[worldId] as World;
+    const currentOrders = this.worldOrderDrafts.get(worldId) || world.orders;
     this.worldOrderDrafts.set(worldId, currentOrders.filter((_, i) => i !== index));
   }
 

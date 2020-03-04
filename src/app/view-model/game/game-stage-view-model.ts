@@ -1,17 +1,16 @@
-import { GameViewModel } from "./game-view-model";
 import { observable, computed } from "mobx";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
-import { World } from "../../../shared/model/v1/world";
-import { fleetIsAtWorldAndHasOwner, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
+import { fleetIsAtWorldAndHasOwner } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 import { GameData } from "./game-data";
-import { StageSelection, GameStageSelection } from "./stage-selection";
+import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
+import { VisibleWorld } from "../../../shared/model/v1/visible-state";
 
 
 const STAGE_OFFSET = 75;
 
-export type WorldWithKeyAndDisplayPosition = World & {
+export type WorldWithKeyAndDisplayPosition = VisibleWorld & {
   key: string,
   x: number,
   y: number

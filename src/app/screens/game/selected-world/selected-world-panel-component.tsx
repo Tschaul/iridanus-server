@@ -13,6 +13,7 @@ import * as classNames from 'classnames'
 import { createClasses, StyleSheet } from "../../../ui-components/setup-jss";
 import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
+import { VisibleWorld } from "../../../../shared/model/v1/visible-state";
 
 const classes = createClasses({
   row: {
@@ -68,7 +69,10 @@ export class SelectedWorldPanel extends React.Component<{
       return (
         <span />
       )
-    } else {
+    } else if (world.status === 'UNKNOWN') {
+      return <div>unknown world</div>
+    }
+    else {
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -77,7 +81,7 @@ export class SelectedWorldPanel extends React.Component<{
             <div>{this.padSpaces(world.mines)} M &nbsp;</div>
           </div>
           <PanelDivider></PanelDivider>
-          {this.renderWorldRow(world, this.props.vm.fleetsAtStageSelection, this.props.vm.playerInfoOfSelectedWorld)}
+          {world.status !== 'REMEBERED' && this.renderWorldRow(world, this.props.vm.fleetsAtStageSelection, this.props.vm.playerInfoOfSelectedWorld)}
         </div>
       )
     }

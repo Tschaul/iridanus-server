@@ -32,7 +32,9 @@ export class HoverTooltip extends React.Component<{
 
   @autobind
   private handleMouseEnter() {
-    this.context.showMouseItem(this.props.content);
+    if (this.props.content) {
+      this.context.showMouseItem(this.props.content);
+    }
   }
 
   @autobind

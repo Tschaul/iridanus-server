@@ -9,6 +9,7 @@ import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './
 import { screenWhite, selectedYellow } from '../../../ui-components/colors/colors';
 import { HoverTooltip } from '../../../ui-components/tooltip/hover-tooltip.component';
 import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.component';
+import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
 
 
 @observer
@@ -77,6 +78,7 @@ export class GameStageForeground extends React.Component<{
       const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
+      const opacity =  world.status === 'UNKNOWN' || world.status === 'REMEBERED' ? 0.5 : 1
       return (
         <g key={world.id}>
           <text
@@ -87,6 +89,7 @@ export class GameStageForeground extends React.Component<{
             fill={color}
             fontSize={33}
             style={{ transform: "translateY(1px)" }}
+            opacity={opacity}
           >{/*world.id*/}◉</text>
           {fleetOwners.map(ownerId => {
             const playerInfo = this.props.vm.playerInfos[ownerId];
@@ -151,18 +154,20 @@ export class GameStageForeground extends React.Component<{
     }
   }
 
-  getColorForWorld(world: World) {
-    if (world.status === 'LOST') {
+  getColorForWorld(world: VisibleWorld) {
+    if (!visibleWorldhasOwner(world)) {
       return 'lightgray'
     } else {
       return this.props.vm.playerInfos[world.ownerId].color;
     }
   }
 
-  getTooltipForWorld(world: World) {
+  getTooltipForWorld(world: VisibleWorld) {
+    if (world.status === 'UNKNOWN') {
+      return '';
+    }
     return <span>
       {world.population} P {world.industry} I {world.mines} M <br />
-
     </span>
   }
 }

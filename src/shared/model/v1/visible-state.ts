@@ -1,5 +1,5 @@
 import { Gates } from "./universe";
-import { World } from "./world";
+import { World, WorldWithOwner } from "./world";
 import { Fleet } from "./fleet";
 import { RemeberedWorld } from "./visibility-status";
 
@@ -27,4 +27,13 @@ export type VisibleWorld =
 export interface UnknownWorld {
   id: string
   status: 'UNKNOWN'
+}
+
+
+export function visibleWorldhasOwner(world: VisibleWorld): world is WorldWithOwner | RemeberedWorld & {ownerid: string} {
+  return world.status !== 'LOST' && world.status !== 'UNKNOWN' && !!world.ownerId;
+}
+
+export function visibleWorldIsWorld(world: VisibleWorld): world is World {
+  return world.status !== 'UNKNOWN' && world.status !== 'REMEBERED';
 }

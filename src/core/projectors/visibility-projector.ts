@@ -80,9 +80,12 @@ export class VisibilityProjector {
             if (!visibilityForPlayer[fleet.originWorldId] || !visibilityForPlayer[fleet.targetWorldId]) {
               delete fleets[fleet.id]
             }
-          } else {
-            if (!visibilityForPlayer[fleet.currentWorldId]) {
-              delete fleets[fleet.id]
+          } else if (!visibilityForPlayer[fleet.currentWorldId]) {
+            delete fleets[fleet.id]
+          } else if (fleetHasOwner(fleet) && fleet.ownerId !== playerId) {
+            fleets[fleet.id] = {
+              ...fleets[fleet.id],
+              orders: []
             }
           }
         })
@@ -97,10 +100,14 @@ export class VisibilityProjector {
               status: 'UNKNOWN',
               id: world.id
             }
-          }
-          if (visibilityForPlayer[world.id].status === 'REMEBERED') {
+          } else if (visibilityForPlayer[world.id].status === 'REMEBERED') {
             const rememberedWorld = visibilityForPlayer[world.id];
             worlds[world.id] = rememberedWorld as RemeberedWorld;
+          } else if (worldhasOwner(world) && world.ownerId !== playerId) {
+            worlds[world.id] = {
+              ...worlds[world.id],
+              orders: []
+            } as World
           }
         })
 
