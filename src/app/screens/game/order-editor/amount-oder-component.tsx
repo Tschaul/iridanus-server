@@ -1,23 +1,33 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
+import { LoadMetalOrder, LoadShipsOrder, DropMetalOrder, DropShipsOrder } from "../../../../shared/model/v1/fleet-orders";
 import { WrappedObservable } from "../../helper/wrap-observable";
 import { Input } from "../../../ui-components/input/input-component";
-import { BuildIndustryOrder, BuildShipsOrder } from "../../../../shared/model/v1/world-order";
+import { BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryOrder } from "../../../../shared/model/v1/world-order";
 
-export interface BuildOrderEditorProps {
-  order: BuildIndustryOrder | BuildShipsOrder,
+export type AmountOrderEditorOrder =
+  LoadMetalOrder
+  | LoadShipsOrder
+  | DropMetalOrder
+  | DropShipsOrder
+  | ScrapShipsForIndustryOrder
+  | BuildIndustryOrder
+  | BuildShipsOrder;
+
+export interface AmountOrderEditorProps {
+  order: AmountOrderEditorOrder,
   index: number,
-  update: (order: BuildIndustryOrder | BuildShipsOrder, index: number) => void
+  update: (order: AmountOrderEditorOrder, index: number) => void
 }
 
 @observer
-export class BuildOrderEditor extends React.Component<BuildOrderEditorProps, {
+export class AmountOrderEditor extends React.Component<AmountOrderEditorProps, {
   lastGoodValue: number;
   value: number;
 }>{
 
-  constructor(props: BuildOrderEditorProps) {
+  constructor(props: AmountOrderEditorProps) {
     super(props);
     this.state = {
       lastGoodValue: props.order.amount,
@@ -25,7 +35,7 @@ export class BuildOrderEditor extends React.Component<BuildOrderEditorProps, {
     }
   }
 
-  componentDidUpdate(props: BuildOrderEditorProps) {
+  componentDidUpdate(props: AmountOrderEditorProps) {
     if (this.state.value !== props.order.amount) {
       this.setState({
         lastGoodValue: props.order.amount,
@@ -48,7 +58,7 @@ export class BuildOrderEditor extends React.Component<BuildOrderEditorProps, {
     return (
       <div style={{ display: 'flex' }}>
         <div>
-          {this.props.order.type}
+          {this.displayText()}
         </div>
         <div>
           &nbsp; <Input onBlur={this.resetValue} style={{ width: '4ex' }} type="number" value={value} min={1} max={99} /> {this.symbol()}
@@ -59,11 +69,36 @@ export class BuildOrderEditor extends React.Component<BuildOrderEditorProps, {
   }
 
   symbol() {
+    switch (this.props.order.type) {
+      case 'DROP_METAL':
+      case 'LOAD_METAL':
+        return '▮';
+      case 'DROP_SHIPS':
+      case 'LOAD_SHIPS':
+      case 'BUILD_SHIPS':
+        return '►';
+      case 'BUILD_INDUSTRY':
+      case 'SCRAP_SHIPS_FOR_INDUSTRY':
+        return 'I';
+    }
+  }
 
-    if (this.props.order.type.indexOf('INDUSTRY') !== -1) {
-      return 'I'
-    } else {
-      return '►'
+  displayText() {
+    switch (this.props.order.type) {
+      case 'DROP_METAL':
+        return 'Drop Metal';
+      case 'LOAD_METAL':
+        return 'Load Metal';
+      case 'DROP_SHIPS':
+        return 'Drop Ships';
+      case 'LOAD_SHIPS':
+        return 'Load Ships';
+      case 'SCRAP_SHIPS_FOR_INDUSTRY':
+        return 'Scrap Ships';
+      case 'BUILD_INDUSTRY':
+        return 'Build Industry'
+      case 'BUILD_SHIPS':
+        return 'Build Ships'
     }
   }
 

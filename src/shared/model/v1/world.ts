@@ -5,9 +5,10 @@ export type World =
     | LostWorld;
 
 export type WorldWithOwner =
-    (ReadyWorld
+    ReadyWorld
         | BuildingShipWorld
-        | BuildingIndustryWorld)
+        | BuildingIndustryWorld
+        | ScrappingShipsWorld
 
 export interface BaseWorld {
     id: string;
@@ -106,5 +107,15 @@ export interface ReadyWorldBase extends BaseWorld {
 }
 
 export type ReadyWorld = ReadyWorldBase
+    & WorldWithCombatStatus
+    & WorldWithMiningStatus;
+
+export interface ScrappingShipsWorldBase extends BaseWorld {
+    status: 'SCRAPPING_SHIPS'
+    readyTimestamp: number;
+    ownerId: string;
+}
+
+export type ScrappingShipsWorld = ScrappingShipsWorldBase
     & WorldWithCombatStatus
     & WorldWithMiningStatus;

@@ -430,9 +430,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -462,6 +459,9 @@
                             },
                             {
                                 "$ref": "#/definitions/BuildIndustryOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },

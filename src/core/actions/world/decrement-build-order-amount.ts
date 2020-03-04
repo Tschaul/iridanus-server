@@ -4,7 +4,7 @@ import { updateWorld } from "./update-world";
 
 export function decrementBuildOrderAmount(
   worldId: string,
-  orderType: 'BUILD_INDUSTRY' | 'BUILD_SHIPS'
+  orderType: 'BUILD_INDUSTRY' | 'BUILD_SHIPS' | 'SCRAP_SHIPS_FOR_INDUSTRY'
 ): Action {
   return {
     describe: () => `DecrementBuildOrderAmount ${JSON.stringify({ orderType, worldId })}`,

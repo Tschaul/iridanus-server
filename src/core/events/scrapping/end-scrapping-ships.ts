@@ -1,28 +1,28 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ScrappingShipsFleet } from "../../../shared/model/v1/fleet";
-import { FleetProjector } from "../../projectors/fleet-projector";
+import { ScrappingShipsWorld } from "../../../shared/model/v1/world";
+import { WorldProjector } from "../../projectors/world-projector";
 import { injectable } from "inversify";
-import { fleetReady } from "../../actions/fleet/fleet-ready";
+import { worldReady } from "../../actions/world/world-ready";
 import { giveOrTakeWorldIndustry } from "../../actions/world/give-or-take-industry";
 
 @injectable()
 export class EndScrappingShipsEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
-  constructor(public fleets: FleetProjector) {
-    this.upcomingEvent$ = this.fleets.firstByStatus<ScrappingShipsFleet>('SCRAPPING_SHIPS').pipe(
-      map((fleet) => {
-        if (!fleet) {
+  constructor(public worlds: WorldProjector) {
+    this.upcomingEvent$ = this.worlds.firstByStatus<ScrappingShipsWorld>('SCRAPPING_SHIPS').pipe(
+      map((world) => {
+        if (!world) {
           return null
         } else {
           return {
-            timestamp: fleet.readyTimestamp,
+            timestamp: world.readyTimestamp,
             happen: () => {
               return [
-                giveOrTakeWorldIndustry(fleet.currentWorldId, fleet.transferAmount),
-                fleetReady(fleet.id),
+                giveOrTakeWorldIndustry(world.id, 1),
+                worldReady(world.id),
               ];
             }
           }

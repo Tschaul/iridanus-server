@@ -35,9 +35,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -135,6 +132,9 @@
                             },
                             {
                                 "$ref": "#/definitions/BuildIndustryOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -199,6 +199,9 @@
                             },
                             {
                                 "$ref": "#/definitions/BuildIndustryOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -312,9 +315,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -387,9 +387,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -521,9 +518,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -636,9 +630,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -711,9 +702,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -786,9 +774,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -840,6 +825,9 @@
                             },
                             {
                                 "$ref": "#/definitions/BuildIndustryOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -937,9 +925,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -995,6 +980,9 @@
                             },
                             {
                                 "$ref": "#/definitions/BuildIndustryOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -1050,13 +1038,13 @@
             ],
             "type": "object"
         },
-        "ScrappingShipsFleet": {
+        "ScrappingShipsWorldBase": {
             "properties": {
-                "currentWorldId": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
+                },
+                "industry": {
+                    "type": "number"
                 },
                 "integrity": {
                     "type": "number"
@@ -1064,26 +1052,17 @@
                 "metal": {
                     "type": "number"
                 },
+                "mines": {
+                    "type": "number"
+                },
                 "orders": {
                     "items": {
                         "anyOf": [
                             {
-                                "$ref": "#/definitions/WaitOrder"
+                                "$ref": "#/definitions/BuildShipsOrder"
                             },
                             {
-                                "$ref": "#/definitions/WarpOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/LoadMetalOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/DropMetalOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/LoadShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/DropShipsOrder"
+                                "$ref": "#/definitions/BuildIndustryOrder"
                             },
                             {
                                 "$ref": "#/definitions/ScrapShipsForIndustryOrder"
@@ -1094,6 +1073,9 @@
                 },
                 "ownerId": {
                     "type": "string"
+                },
+                "population": {
+                    "type": "number"
                 },
                 "readyTimestamp": {
                     "type": "number"
@@ -1106,22 +1088,20 @@
                         "SCRAPPING_SHIPS"
                     ],
                     "type": "string"
-                },
-                "transferAmount": {
-                    "type": "number"
                 }
             },
             "required": [
-                "currentWorldId",
                 "id",
+                "industry",
                 "integrity",
                 "metal",
+                "mines",
                 "orders",
                 "ownerId",
+                "population",
                 "readyTimestamp",
                 "ships",
-                "status",
-                "transferAmount"
+                "status"
             ],
             "type": "object"
         },
@@ -1173,9 +1153,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DroppingShipsFleet"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrappingShipsFleet"
                             },
                             {
                                 "$ref": "#/definitions/WarpingFleet"
@@ -1347,6 +1324,58 @@
                                 ]
                             },
                             {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    }
+                                ]
+                            },
+                            {
                                 "$ref": "#/definitions/LostWorld"
                             }
                         ]
@@ -1414,9 +1443,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },
@@ -1503,9 +1529,6 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
                             }
                         ]
                     },

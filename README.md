@@ -3,24 +3,13 @@
 # Iridanus-server
 Server for Iridanus
 
-# MVP
+# Remaining Todos for MVP scope
 
-Core:
-- Warping
-- Transfering
-- Building
-- Capture
-- Battle
-- Repeat Orders
-- Probes
-
-Server:
-- User management
-- Setup new game
-- Persitence of game state
-- Only one map (1v1)
-- API for querying state
-- API for putting orders
+- Scraping ships as world order
+- extra damage for loaded ships
+- less damage from home fleet?
+- jettison metal
+- attacking industry/population
 
 # Roadmap and ideas
 

@@ -13,8 +13,7 @@ import classNames from "classnames";
 import { getClosestAttribute } from "../../helper/get-attribute";
 import { WarpOrderEditor } from "./warp-order-component";
 import { hoverYellow } from "../../../ui-components/colors/colors";
-import { TransferOrderEditor } from "./transfer-oder-component";
-import { BuildOrderEditor } from "./build-oder-component";
+import { AmountOrderEditor } from "./amount-oder-component";
 
 const classes = createClasses({
   panel: {
@@ -76,7 +75,8 @@ export class OrderEditor extends React.Component<{
           switch (order.type) {
             case 'BUILD_INDUSTRY':
             case 'BUILD_SHIPS':
-              return <BuildOrderEditor order={order} index={index} update={this.handleOrderUpdate}></BuildOrderEditor>
+            case 'SCRAP_SHIPS_FOR_INDUSTRY':
+              return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
           }
         }).map((content, index) => (
           <div key={index} data-order-index={index} style={{ display: 'flex' }}>
@@ -88,6 +88,7 @@ export class OrderEditor extends React.Component<{
       <div style={{ display: 'flex' }} key="c">
         <Button onClick={this.handleNewBuildIndustryOrder} spaceRight>+I</Button>
         <Button onClick={this.handleNewBuildShipsOrder} spaceRight>+►</Button>
+        <Button onClick={this.handleNewScrapShipsOrder} spaceRight>⮂I</Button>
       </div>
     ])
   }
@@ -110,8 +111,7 @@ export class OrderEditor extends React.Component<{
             case 'LOAD_SHIPS':
             case 'DROP_SHIPS':
             case 'DROP_METAL':
-            case 'SCRAP_SHIPS_FOR_INDUSTRY':
-              return <TransferOrderEditor order={order} index={index} update={this.handleOrderUpdate}></TransferOrderEditor>
+              return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
             case 'WAIT':
               return `${order.type} (${order.amountTime}ms)`
             case 'WARP':
@@ -125,7 +125,6 @@ export class OrderEditor extends React.Component<{
         ))}
       </div>,
       <div style={{ display: 'flex' }} key="c">
-        <Button onClick={this.handleNewScrapShipsOrder} spaceRight>🠣I</Button>
         <Button onClick={this.handleNewDropMetalOrder} spaceRight>🠣▮</Button>
         <Button onClick={this.handleNewLoadMetalOrder} spaceRight>🠡▮</Button>
         <Button onClick={this.handleNewDropShipsOrder} spaceRight>🠣►</Button>

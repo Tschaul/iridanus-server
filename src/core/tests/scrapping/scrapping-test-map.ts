@@ -13,7 +13,7 @@ export const scrappingTestMap: GameState = {
         metal: 0,
         orders: [],
         ownerId: "p1",
-        ships: 20,
+        ships: 5,
         integrity: 1,
       }
     },
@@ -26,7 +26,7 @@ export const scrappingTestMap: GameState = {
         mines: 1,
         ownerId: "p1",
         population: 25,
-        ships: 5,
+        ships: 20,
         orders: [],
         integrity: 1,
         combatStatus: 'AT_PEACE',
