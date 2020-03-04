@@ -11,7 +11,7 @@ import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 
 export function handleFiring(attacker: ReadyFleet | WorldWithOwner, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
   const [targetType, target] = determineTarget(attacker, world, fleetsByCurrentworldId[world.id], random);
-  const [newShips, newIntegrity] = determineDamage(attacker, target, config);
+  const [newShips, newIntegrity] = determineDamage(attacker, target, targetType, config);
   const damageActions = makeActions(targetType, newShips, target, newIntegrity);
   return damageActions;
 }
@@ -49,13 +49,15 @@ function determineTarget(attacker: ReadyFleet | WorldWithOwner, world: World, ot
   throw new Error('Could not determine target.')
 }
 
-function determineDamage(attacker: Fleet | World, defender: Fleet | World, config: GameRules): [ number, number] {
-  
-  const damage = attacker.ships * config.combat.integrityDamagePerShip;
+function determineDamage(attacker: Fleet | World, defender: Fleet | World, targetType: 'WORLD' | 'FLEET', config: GameRules): [number, number] {
+
+  const damageMultiplier = (targetType === 'FLEET' && defender.ships === defender.metal) ? 2 : 1
+
+  const damage = attacker.ships * config.combat.integrityDamagePerShip * damageMultiplier;
 
   let newShipsPlusIntegrity = defender.ships + defender.integrity - damage;
 
-  if(newShipsPlusIntegrity < 0) {
+  if (newShipsPlusIntegrity < 0) {
     newShipsPlusIntegrity = 0;
   }
 

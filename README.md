@@ -5,11 +5,9 @@ Server for Iridanus
 
 # Remaining Todos for MVP scope
 
-- Scraping ships as world order
-- extra damage for loaded ships
 - less damage from home fleet?
-- jettison metal
 - attacking industry/population
+- faster warping from and to owned worlds
 
 # Roadmap and ideas
 
