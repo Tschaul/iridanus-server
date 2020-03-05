@@ -12,8 +12,8 @@ import { TopBar } from "./top-bar/top-bar-component";
 const TOP_BAR_HEIGHT = 75;
 const RIGHT_PANEL_WIDTH = 420;
 
-const MIDDLE_PANEL_HEIGHT = 500;
-const BOTTOM_PANEL_HEIGHT = 300;
+const MIDDLE_PANEL_HEIGHT = 300;
+const BOTTOM_PANEL_HEIGHT = 500;
 
 
 const classes = createClasses({

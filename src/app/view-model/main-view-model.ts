@@ -8,12 +8,12 @@ export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
 export class MainViewModel {
   
   constructor() {
-    // this.welcomeViewModel.username = 'tschaul';
-    // this.welcomeViewModel.password = '123456';
-    // this.welcomeViewModel.login();
+    this.welcomeViewModel.username = 'tschaul';
+    this.welcomeViewModel.password = '123456';
+    this.welcomeViewModel.login();
 
-    // this.lobbyViewModel.selectedGameId = 'ld25anwbebc3';
-    // this.lobbyViewModel.viewGame();
+    this.lobbyViewModel.selectedGameId = 't0ns1sm4iaop';
+    this.lobbyViewModel.viewGame();
   }
 
   @computed get activeScreen(): PossibleScreen {

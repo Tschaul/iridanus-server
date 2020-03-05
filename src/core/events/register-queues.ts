@@ -32,6 +32,7 @@ import { BeginScrappingShipsEventQueue } from "./scrapping/begin-Scrapping-ships
 import { EndScrappingShipsEventQueue } from "./scrapping/end-scrapping-ships";
 import { RevealWorldEventQueue } from "./visibility/reveal-world";
 import { RememberWorldEventQueue } from "./visibility/remember-world";
+import { LooseFleetEventQueue } from "./capture/loose-fleet";
 
 export function registerEventQueues(container: Container) {
 
@@ -72,6 +73,7 @@ export function registerEventQueues(container: Container) {
 
   container.bind(CaptureFleetEventQueue).toSelf();
   container.bind(CaptureWorldEventQueue).toSelf();
+  container.bind(LooseFleetEventQueue).toSelf();
 
   container.bind(RevealWorldEventQueue).toSelf();
   container.bind(RememberWorldEventQueue).toSelf();

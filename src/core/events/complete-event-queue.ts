@@ -34,6 +34,8 @@ import { BeginScrappingShipsEventQueue } from "./scrapping/begin-Scrapping-ships
 import { EndScrappingShipsEventQueue } from "./scrapping/end-scrapping-ships";
 import { RevealWorldEventQueue } from "./visibility/reveal-world";
 import { RememberWorldEventQueue } from "./visibility/remember-world";
+import { looseFleet } from "../actions/fleet/loose-fleet";
+import { LooseFleetEventQueue } from "./capture/loose-fleet";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -77,6 +79,7 @@ export class CompleteEventQueue implements GameEventQueue {
 
     captureFleet: CaptureFleetEventQueue,
     captureWorld: CaptureWorldEventQueue,
+    looseFleet: LooseFleetEventQueue,
 
     revealWorld: RevealWorldEventQueue,
     remeberWorld: RememberWorldEventQueue,
@@ -109,6 +112,7 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStopFiring,
       captureFleet,
       captureWorld,
+      looseFleet,
       worldStartMining,
       worldMinesMetal,
       worldStopMining,

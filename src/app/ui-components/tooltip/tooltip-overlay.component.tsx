@@ -113,16 +113,6 @@ export class TooltipOverlay extends React.Component<{}, {
       fontSize: '0.75em'
     }
 
-    const tooltipStyle: React.CSSProperties = {
-      position: 'fixed',
-      color: screenWhite,
-      backgroundColor: overlayBackground,
-      margin: '1em',
-      padding: '0.25em 0.5em',
-      borderRadius: '0.25em',
-      border: '1px solid '+ screenWhite
-    }
-
     return [
       <div key="content">
         <TooltipContext.Provider value={this.handle}>
@@ -131,10 +121,10 @@ export class TooltipOverlay extends React.Component<{}, {
       </div>,
       <div style={tooltipOverlayStyle} key="tooltip">
         {this.state.mouseItem && (
-          <div className="fade-in-fast" style={{ ...tooltipStyle, top: this.state.mouseItem.posY, left: this.state.mouseItem.posX }}>{this.state.mouseItem.text}</div>
+          <TooltipItem item={this.state.mouseItem} />
         )}
         {this.state.items.map((item, index) => {
-          return <div key={index} style={{ ...tooltipStyle, top: item.posY, left: item.posX }}>{item.text}</div>
+          return <TooltipItem key={index} item={item} />
         })}
       </div>
     ]
@@ -146,4 +136,82 @@ export class TooltipOverlay extends React.Component<{}, {
     this.handle.updateMousePosition(event.pageX, event.pageY);
   }
 
+}
+
+class TooltipItem extends React.Component<{
+  item: TooltipContent
+},{
+  elemWidth: number;
+  elemHeight: number;
+  windowWidth: number;
+  windowHeight: number;
+}> {
+
+  state = {
+    elemWidth: 0,
+    elemHeight: 0,
+    windowWidth: 0,
+    windowHeight: 0,
+  }
+
+  elem: HTMLDivElement | null;
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleWindowResize)
+    if (this.elem) {
+      this.handleElemResize();
+    }
+    this.handleWindowResize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowResize)
+  }
+
+  @autobind
+  handleWindowResize() {
+    this.setState({
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+    })
+    console.log(window.innerHeight, window.innerHeight)
+  }
+
+  @autobind
+  handleElemResize() {
+    if (this.elem) {
+      this.setState({
+        elemWidth: this.elem.offsetWidth,
+        elemHeight: this.elem.offsetHeight,
+      })
+      console.log(this.elem.offsetWidth, this.elem.offsetHeight)
+    }
+  }
+
+  render() {
+
+    const tooltipStyle: React.CSSProperties = {
+      position: 'fixed',
+      color: screenWhite,
+      backgroundColor: overlayBackground,
+      margin: '1em',
+      padding: '0.25em 0.5em',
+      borderRadius: '0.25em',
+      border: '1px solid '+ screenWhite
+    }
+
+    let { posX, posY} = this.props.item;
+
+    if (posX + this.state.elemWidth - this.state.windowWidth > -32) {
+      posX -= this.state.elemWidth;
+    }
+
+    if (posY + this.state.elemHeight - this.state.windowHeight > -32) {
+      posY -= this.state.elemHeight;
+    }
+
+    return (
+      <div ref={elem => this.elem = elem} className="fade-in-fast" style={{ ...tooltipStyle, top: posY, left: posX }}>{this.props.item.text}</div>
+    )
+  }
 }

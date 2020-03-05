@@ -8,7 +8,7 @@ export function captureFleet(
   ownerId: string,
 ): Action {
   return {
-    describe: () => `CaptureFleet ${JSON.stringify({ fleetId })}`,
+    describe: () => `CaptureFleet ${JSON.stringify({ fleetId, ownerId })}`,
     apply: (state: GameState) => {
 
       return updateFleet<LostFleet, ReadyFleet>(state, fleetId, (oldFleet) => {

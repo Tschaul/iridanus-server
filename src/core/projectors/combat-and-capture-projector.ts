@@ -3,8 +3,8 @@ import { injectable } from "inversify";
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
-import { Fleet, ReadyFleetBase, FiringFleet, LostFleet } from "../../shared/model/v1/fleet";
-import { World, FiringWorld, ReadyWorldBase, LostWorld, WorldWithOwner } from "../../shared/model/v1/world";
+import { Fleet, ReadyFleetBase, FiringFleet, LostFleet, fleetHasOwner, FleetWithOwnerAtWorld, fleetIsAtWorldAndHasOwner } from "../../shared/model/v1/fleet";
+import { World, FiringWorld, ReadyWorldBase, LostWorld, WorldWithOwner, worldhasOwner } from "../../shared/model/v1/world";
 
 @injectable()
 export class CombatAndCaptureProjector {
@@ -15,8 +15,9 @@ export class CombatAndCaptureProjector {
   public nextFiringFleet$: Observable<(ReadyFleetBase & FiringFleet) | null>;
   public nextFiringWorld$: Observable<(WorldWithOwner & FiringWorld) | null>;
 
-  public nextCapturedWorld$: Observable<[LostWorld | null, string]>;
+  public nextCapturedWorld$: Observable<[World | null, string]>;
   public nextCapturedFleet$: Observable<[LostFleet | null, string]>;
+  public nextLostFleet$: Observable<Fleet | null>;
 
   constructor(
     private worlds: WorldProjector,
@@ -79,30 +80,64 @@ export class CombatAndCaptureProjector {
     this.nextCapturedFleet$ = combineLatest(this.fleets.byId$, this.playersAtWorldById$).pipe(
       map(([fleetsById, playersAtWorldById]) => {
         const lostFleets = Object.values(fleetsById).filter(fleet => fleet.status === 'LOST') as LostFleet[];
-        const capturedFleet = lostFleets.find(fleet => {
+        const capturedLostFleet = lostFleets.find(fleet => {
           const players = playersAtWorldById[fleet.currentWorldId] || [];
           return players.length === 1;
         });
-        if (capturedFleet) {
-          return [capturedFleet, playersAtWorldById[capturedFleet.currentWorldId][0]]
-        } else {
-          return [null, '']
+        if (capturedLostFleet) {
+          return [capturedLostFleet, playersAtWorldById[capturedLostFleet.currentWorldId][0]]
         }
+
+        return [null, '']
+
       })
     )
 
-    this.nextCapturedWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$).pipe(
-      map(([worldsById, playersAtWorldById]) => {
-        const lostWorlds = Object.values(worldsById).filter(fleet => fleet.status === 'LOST') as LostWorld[];
-        const capturedFleet = lostWorlds.find(world => {
+    this.nextLostFleet$ = combineLatest(this.fleets.byId$, this.fleets.byCurrentWorldId$, this.worlds.byId$).pipe(
+      map(([fleetsById, fleetsByWorldId, worldsById]) => {
+
+        const ownedFleetsWithoutShips = Object.values(fleetsById).filter(fleet => fleet.ships === 0 && fleetIsAtWorldAndHasOwner(fleet)) as FleetWithOwnerAtWorld[];
+        const lostOwnedFleet = ownedFleetsWithoutShips.find(fleet => {
+          const noOtherFleetsAtWorld = !(fleetsByWorldId[fleet.currentWorldId] || []).some(otherFleet => otherFleet.ships !== 0 && fleetHasOwner(otherFleet) && otherFleet.ownerId === fleet.ownerId)
+          const world = worldsById[fleet.currentWorldId];
+          const worldIsNotOwned = !worldhasOwner(world) || world.ownerId !== fleet.ownerId;
+          return noOtherFleetsAtWorld && worldIsNotOwned;
+        });
+        if (lostOwnedFleet) {
+          return lostOwnedFleet;
+        }
+
+        return null
+
+      })
+    )
+
+    this.nextCapturedWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
+      map(([worldsById, playersAtWorldById, fleetsByWorldId]) => {
+        const lostWorlds = Object.values(worldsById).filter(world => world.status === 'LOST') as World[];
+        const capturedLostWorld = lostWorlds.find(world => {
           const players = playersAtWorldById[world.id] || [];
           return players.length === 1;
         });
-        if (capturedFleet) {
-          return [capturedFleet, playersAtWorldById[capturedFleet.id][0]]
-        } else {
-          return [null, '']
+
+        if (capturedLostWorld) {
+          return [capturedLostWorld, playersAtWorldById[capturedLostWorld.id][0]]
         }
+
+        const ownedWorlds = Object.values(worldsById).filter(world => worldhasOwner(world)) as WorldWithOwner[];
+        const capturedOwnedWorld = ownedWorlds.find(world => {
+          const players = playersAtWorldById[world.id] || [];
+          const noOtherOwner = players.filter(id => id !== world.ownerId).length === 1;
+          const noFleetsAtWorld = !(fleetsByWorldId[world.id] || []).some(fleet => fleet.ships !== 0 && fleetHasOwner(fleet) && fleet.ownerId === world.ownerId)
+          return world.ships === 0 && noOtherOwner && noFleetsAtWorld;
+        });
+
+        if (capturedOwnedWorld) {
+          return [capturedOwnedWorld, playersAtWorldById[capturedOwnedWorld.id].find(id => id !== capturedOwnedWorld.ownerId) || '']
+        }
+
+        return [null, '']
+
       })
     )
   }
