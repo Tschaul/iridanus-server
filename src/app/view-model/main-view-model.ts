@@ -12,7 +12,7 @@ export class MainViewModel {
     this.welcomeViewModel.password = '123456';
     this.welcomeViewModel.login();
 
-    this.lobbyViewModel.selectedGameId = 't0ns1sm4iaop';
+    this.lobbyViewModel.selectedGameId = 'rp883hg9ymcd';
     this.lobbyViewModel.viewGame();
   }
 

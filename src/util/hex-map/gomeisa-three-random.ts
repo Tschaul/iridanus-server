@@ -87,22 +87,22 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
 
   // const amount = 5 - rank;
 
-  const random = randomSphericArray(6);
+  const random = randomSphericArray(4);
 
 
   const world: LostWorld = {
     id,
-    industry: Math.round(random[0] * 4),
+    industry: Math.round(random[0] * 3),
     integrity: 0,
-    metal: Math.round(random[1] * 10),
-    mines: Math.round(random[2] * 10),
+    metal: 0,
+    mines: Math.round(random[1] * 6),
     orders: [],
-    population: Math.round(random[3] * 40),
+    population: Math.round(random[2] * 30),
     ships: 0,
     status: 'LOST'
   }
 
-  const fleetAmount = Math.round(random[5] * 2)
+  const fleetAmount = Math.round(random[3])
 
   const fleets: LostFleet[] = Array.from(Array(fleetAmount).keys()).map(_ => {
     const fleetId = 'w' + id + 'f' + fleetKeyNumber++;
@@ -127,7 +127,7 @@ function randomSphericArray(length: number) {
     return acc += num * num;
   }, 0)
 
-  return equal.map(num => num / squared);
+  return equal.map(num => num / Math.sqrt(squared));
 
 }
 

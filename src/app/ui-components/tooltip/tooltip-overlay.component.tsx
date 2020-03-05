@@ -174,7 +174,6 @@ class TooltipItem extends React.Component<{
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
     })
-    console.log(window.innerHeight, window.innerHeight)
   }
 
   @autobind
@@ -184,7 +183,6 @@ class TooltipItem extends React.Component<{
         elemWidth: this.elem.offsetWidth,
         elemHeight: this.elem.offsetHeight,
       })
-      console.log(this.elem.offsetWidth, this.elem.offsetHeight)
     }
   }
 
