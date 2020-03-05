@@ -17,7 +17,7 @@ import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
 import { Initializer } from "./infrastructure/initialisation/initializer";
 import { testConfig } from "../core/setup/simple-config";
-import { makeGomeisaThree } from "../util/hex-map/gomeisa-three";
+import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
 
 @injectable()
 export class GameRunner {
@@ -92,7 +92,7 @@ export class GameRunner {
 
       this.logger.info('game runner: starting game ' + gameInfo.id);
 
-      const map = makeGomeisaThree()
+      const map = makeGomeisaThreeRandom()
 
       const state = this.instantiateMap(gameInfo, map);
 
