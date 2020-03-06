@@ -166,7 +166,7 @@ export class OrderEditorViewModel {
   public showHintsForOrder(order: FleetOrder | WorldOrder) {
     switch (order.type) {
       case 'WARP':
-        this.worldHints.showHints([{ worldId: order.targetWorldId, hint: 'Target world' }]);
+        this.worldHints.showHints([{ type: 'WORLD', worldId: order.targetWorldId, hint: 'Target world' }]);
         return;
       default:
         this.worldHints.clearHints();

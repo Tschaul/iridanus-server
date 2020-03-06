@@ -22,7 +22,7 @@ export class GameStageForeground extends React.Component<{
       <g opacity="1">
         {this.renderModeHint()}
         {this.renderWorlds()}
-        {this.renderFleets()}
+        {this.renderWarppingFleets()}
       </g>
     )
   }
@@ -36,7 +36,7 @@ export class GameStageForeground extends React.Component<{
     }
   }
 
-  private renderFleets() {
+  private renderWarppingFleets() {
     return this.props.vm.warpingFleetOwnersByBothWorlds.map(([id1, world1Pos, id2, world2Pos, fleetOwners]) => {
 
       const meanPosition = middle(world1Pos, world2Pos);
@@ -48,24 +48,29 @@ export class GameStageForeground extends React.Component<{
       const offsetPoint = diff(meanPosition, mul(n, offset));
       const step = mul(n, FLEET_SPREAD_DURING_WARP);
 
+      const hint = this.props.vm.hintForGate(id1, id2);
+
+
       return <g key={`${id1}:${id2}`}>
         {fleetOwners.map((ownerId, index) => {
           const playerInfo = this.props.vm.playerInfos[ownerId];
           const pos = add(offsetPoint, mul(step, index))
           return (
-            <text
-              key={ownerId}
-              x={pos.x}
-              y={pos.y}
-              dominantBaseline="middle"
-              textAnchor="middle"
-              fill={playerInfo.color}
-              fontSize={22}
-              data-world-id1={id1}
-              data-world-id2={id2}
-              onClick={this.handleGateClick}
-              cursor='pointer'
-            >►</text>
+            <StaticTooltip svg content={hint}>
+              <text
+                key={ownerId}
+                x={pos.x}
+                y={pos.y}
+                dominantBaseline="middle"
+                textAnchor="middle"
+                fill={playerInfo.color}
+                fontSize={22}
+                data-world-id1={id1}
+                data-world-id2={id2}
+                onClick={this.handleGateClick}
+                cursor='pointer'
+              >►</text>
+            </StaticTooltip>
           );
         })}
       </g>
@@ -78,7 +83,7 @@ export class GameStageForeground extends React.Component<{
       const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
-      const opacity =  world.status === 'UNKNOWN' || world.status === 'REMEBERED' ? 0.5 : 1
+      const opacity = world.status === 'UNKNOWN' || world.status === 'REMEBERED' ? 0.5 : 1
       return (
         <g key={world.id}>
           <text
@@ -167,7 +172,7 @@ export class GameStageForeground extends React.Component<{
       return '';
     }
     return <span>
-      {world.population} P {world.industry} I {world.mines} M <br />
+      {world.population} P {world.industry} I {world.mines} M <br />
     </span>
   }
 }

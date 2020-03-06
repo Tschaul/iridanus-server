@@ -32,7 +32,7 @@ export class GameStageViewModel {
     private gameData: GameData,
     private selection: GameStageSelection,
     private worldHints: WorldHints
-    ) { }
+  ) { }
 
   @computed get playerInfos() {
     return this.gameData.playerInfos;
@@ -145,5 +145,9 @@ export class GameStageViewModel {
 
   public hintForWorld(id: string): string | null {
     return this.worldHints.getHintForWorld(id);
+  }
+
+  public hintForGate(id1: string, id2: string) {
+    return this.worldHints.getHintForGate(id1, id2)
   }
 }

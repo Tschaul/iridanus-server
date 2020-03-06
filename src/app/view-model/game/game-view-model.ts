@@ -7,19 +7,22 @@ import { GameOrders } from "./game-orders";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
+import { GameStats } from "./game-stats";
+import { TopBarViewModel } from "./top-bar-view-model";
 
 
 export class GameViewModel {
-
 
   gameData = new GameData(this);
   gameOrders = new GameOrders(this, this.gameData);
   selection = new GameStageSelection(this.gameData, this.gameOrders);
   worldHints = new WorldHints();
+  gameStats = new GameStats(this, this.gameData, this.worldHints);
 
   gameStageViewModel = new GameStageViewModel(this.gameData, this.selection, this.worldHints);
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection);
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints);
+  topBarViewModel = new TopBarViewModel(this, this.gameOrders, this.gameStats);
 
   @computed public get gameId() {
     return this.mainViewModel.activeGameId;
