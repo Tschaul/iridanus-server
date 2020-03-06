@@ -14,16 +14,20 @@ export class SocketConnection {
 
   private requests$$ = new ReplaySubject<RequestMessage>();
   private responses$$ = new ReplaySubject<ResponseMessage>();
+  private isConnected$$ = new ReplaySubject<boolean>(1);
 
   public responses$ = this.responses$$.asObservable();
+  public isConnected$ = this.isConnected$$.asObservable();
 
   constructor() {
     this.socket = new WebSocket('ws://localhost:8999');
 
     this.socket.onopen = () => this.initializeSocket();
+    this.socket.onclose = () => this.isConnected$$.next(false);
   }
 
   private initializeSocket() {
+    this.isConnected$$.next(true);
     this.socket.onmessage = (msg) => {
       this.responses$$.next(JSON.parse(msg.data));
     }

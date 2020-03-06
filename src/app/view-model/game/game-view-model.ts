@@ -28,6 +28,10 @@ export class GameViewModel {
     return this.mainViewModel.activeGameId;
   }
 
+  @computed public get isConnected() {
+    return this.mainViewModel.connectionStatus.isConnected;
+  }
+
   constructor(private mainViewModel: MainViewModel) {
   }
 

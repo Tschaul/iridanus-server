@@ -16,6 +16,10 @@ export class TopBarViewModel {
     return this.gameViewModel.gameId;
   }
 
+  @computed public get isConnected() {
+    return this.gameViewModel.isConnected;
+  }
+
   @computed get updatedOrdersCount() {
     return this.gameOrders.updatedOrdersCount
   }

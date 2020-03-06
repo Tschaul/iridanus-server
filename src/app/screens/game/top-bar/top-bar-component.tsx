@@ -9,7 +9,7 @@ import { TopBarViewModel } from "../../../view-model/game/top-bar-view-model";
 import { createClasses } from "../../../ui-components/setup-jss";
 import { getClosestAttribute } from "../../helper/get-attribute";
 import { StatType } from "../../../view-model/game/game-stats";
-import { hoverYellow } from "../../../ui-components/colors/colors";
+import { hoverYellow, errorRed } from "../../../ui-components/colors/colors";
 
 const classes = createClasses({
   statsItem: {
@@ -56,7 +56,7 @@ export class TopBar extends React.Component<{
         <span {...mouseHandler} data-stat={'FLEET_KEYS'} className={classNames(classes.statsItem)}>{stats.fleetKeys} ◈</span>
       </div>
       <div>
-        {this.props.vm.gameId}
+        {this.props.vm.isConnected ? this.props.vm.gameId : <span style={{ color: errorRed }}>DISCONNECTED</span>}
       </div>
     </Panel>
   }
