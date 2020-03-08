@@ -5,9 +5,16 @@ Server for Iridanus
 
 # Remaining Todos for MVP scope
 
-- less damage from home fleet?
-- attacking industry/population
-- faster warping from and to owned worlds
+- population growth
+- migrating population (with ships?)
+- attacking industry/population with ships
+- scoring victoriy points based on population & upkeep
+- win condition based on victory points
+- scrapping industry to metal
+- notifications for important events
+- send notifications via email
+- account activation mail and password reset mail
+- delayed start of event loop after game starts
 
 # Roadmap and ideas
 

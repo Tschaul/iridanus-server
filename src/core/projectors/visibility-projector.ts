@@ -150,14 +150,14 @@ export class VisibilityProjector {
           if (this.worldOwnedByPlayer(world, playerId)) {
             return true;
           }
-          if (this.playerHasFleetAtWorld(allFleets, playerId, world)) {
+          if (this.playerHasFleetKeyAtWorld(allFleets, playerId, world)) {
             return true;
           }
           const neighboringWorldIds = gates[world.id];
           if (neighboringWorldIds && neighboringWorldIds.some(id => {
             const neighboringWorld = worldsById[id];
             return this.worldOwnedByPlayer(neighboringWorld, playerId)
-              && (neighboringWorld.ships > 0 || this.playerHasFleetAtWorld(allFleets, playerId, neighboringWorld))
+              && this.playerHasFleetKeyAtWorld(allFleets, playerId, neighboringWorld)
           })) {
             return true;
           }
@@ -167,7 +167,7 @@ export class VisibilityProjector {
     )
   }
 
-  private playerHasFleetAtWorld(allFleets: Fleet[], playerId: string, world: World) {
+  private playerHasFleetKeyAtWorld(allFleets: Fleet[], playerId: string, world: World) {
     return allFleets.some(fleet => this.fleetOwnedByPlayer(fleet, playerId) && fleetIsAtWorld(fleet) && fleet.currentWorldId === world.id);
   }
 
