@@ -6,5 +6,5 @@ export const WORLD_STROKE = 'rgba(230, 230, 230, 1)';
 
 export const WARP_LANE_WIDTH = 15;
 
-export const FLEET_DISTANCE = 33;
+export const FLEET_DISTANCE = 28;
 export const FLEET_SPREAD_DURING_WARP = 22;

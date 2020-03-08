@@ -45,11 +45,19 @@ export class SelectedWorldPanel extends React.Component<{
     return this.renderPanel(
       <div>
         {this.renderWorldHeader()}
-        {this.props.vm.fleetsAtStageSelection.map(fleet => {
-          return this.renderFleetRow(fleet, fleet.owner);
-        })}
+        {this.renderFleets()}
       </div>
     )
+  }
+
+  private renderFleets(): React.ReactNode {
+    const world = this.props.vm.selectedWorld
+    if (world?.status === 'REMEBERED') {
+      return <span>world not in sight</span>
+    }
+    return this.props.vm.fleetsAtStageSelection.map(fleet => {
+      return this.renderFleetRow(fleet, fleet.owner);
+    });
   }
 
   componentDidMount() {

@@ -69,7 +69,7 @@ export class GameStageForeground extends React.Component<{
                 data-world-id2={id2}
                 onClick={this.handleGateClick}
                 cursor='pointer'
-              >►</text>
+              >◈</text>
             </StaticTooltip>
           );
         })}
@@ -107,7 +107,7 @@ export class GameStageForeground extends React.Component<{
                 textAnchor="middle"
                 fill={playerInfo.color}
                 fontSize={22}
-              >►</text>);
+              >◈</text>);
           })}
           <HoverTooltip
             svg={true}
