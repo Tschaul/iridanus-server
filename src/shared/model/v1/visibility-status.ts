@@ -7,6 +7,7 @@ export interface RemeberedWorld {
   industry: number,
   mines: number,
   population: number,
+  populationLimit: number,
   remeberedTimestamp: number,
 }
 

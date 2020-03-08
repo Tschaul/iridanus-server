@@ -172,7 +172,7 @@ export class GameStageForeground extends React.Component<{
       return '';
     }
     return <span>
-      {world.population} P {world.industry} I {world.mines} M <br />
+      {world.population}/{world.populationLimit} P {world.industry} I {world.mines} M <br />
     </span>
   }
 }

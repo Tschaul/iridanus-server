@@ -84,7 +84,7 @@ export class SelectedWorldPanel extends React.Component<{
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div>{this.padSpaces(world.population)} P &nbsp;</div>
+            <div>{this.padSpaces(world.population)}/{this.padSpaces(world.populationLimit)} P &nbsp;</div>
             <div>{this.padSpaces(world.industry)} I &nbsp;</div>
             <div>{this.padSpaces(world.mines)} M &nbsp;</div>
           </div>

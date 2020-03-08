@@ -69,6 +69,62 @@
             ],
             "type": "object"
         },
+        "BaseWorld": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "industry": {
+                    "type": "number"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "metal": {
+                    "type": "number"
+                },
+                "mines": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BuildShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/BuildIndustryOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "population": {
+                    "type": "number"
+                },
+                "populationLimit": {
+                    "type": "number"
+                },
+                "ships": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "id",
+                "industry",
+                "integrity",
+                "metal",
+                "mines",
+                "orders",
+                "population",
+                "populationLimit",
+                "ships"
+            ],
+            "type": "object"
+        },
         "BuildIndustryOrder": {
             "properties": {
                 "amount": {
@@ -104,140 +160,6 @@
             "required": [
                 "amount",
                 "type"
-            ],
-            "type": "object"
-        },
-        "BuildingIndustryWorldBase": {
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "industry": {
-                    "type": "number"
-                },
-                "integrity": {
-                    "type": "number"
-                },
-                "metal": {
-                    "type": "number"
-                },
-                "mines": {
-                    "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/BuildShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/BuildIndustryOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "ownerId": {
-                    "type": "string"
-                },
-                "population": {
-                    "type": "number"
-                },
-                "readyTimestamp": {
-                    "type": "number"
-                },
-                "ships": {
-                    "type": "number"
-                },
-                "status": {
-                    "enum": [
-                        "BUILDING_INDUSTRY"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "industry",
-                "integrity",
-                "metal",
-                "mines",
-                "orders",
-                "ownerId",
-                "population",
-                "readyTimestamp",
-                "ships",
-                "status"
-            ],
-            "type": "object"
-        },
-        "BuildingShipWorldBase": {
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "industry": {
-                    "type": "number"
-                },
-                "integrity": {
-                    "type": "number"
-                },
-                "metal": {
-                    "type": "number"
-                },
-                "mines": {
-                    "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/BuildShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/BuildIndustryOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "ownerId": {
-                    "type": "string"
-                },
-                "population": {
-                    "type": "number"
-                },
-                "readyTimestamp": {
-                    "type": "number"
-                },
-                "ships": {
-                    "type": "number"
-                },
-                "status": {
-                    "enum": [
-                        "BUILDING_SHIP"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "industry",
-                "integrity",
-                "metal",
-                "mines",
-                "orders",
-                "ownerId",
-                "population",
-                "readyTimestamp",
-                "ships",
-                "status"
             ],
             "type": "object"
         },
@@ -482,6 +404,24 @@
                 },
                 "type": "array"
             },
+            "type": "object"
+        },
+        "GrowingWorld": {
+            "properties": {
+                "nextPopulationGrowthTimestamp": {
+                    "type": "number"
+                },
+                "populationGrowthStatus": {
+                    "enum": [
+                        "GROWING"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "nextPopulationGrowthTimestamp",
+                "populationGrowthStatus"
+            ],
             "type": "object"
         },
         "LeavingFleet": {
@@ -800,65 +740,6 @@
             ],
             "type": "object"
         },
-        "LostWorld": {
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "industry": {
-                    "type": "number"
-                },
-                "integrity": {
-                    "type": "number"
-                },
-                "metal": {
-                    "type": "number"
-                },
-                "mines": {
-                    "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/BuildShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/BuildIndustryOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "population": {
-                    "type": "number"
-                },
-                "ships": {
-                    "type": "number"
-                },
-                "status": {
-                    "enum": [
-                        "LOST"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "industry",
-                "integrity",
-                "metal",
-                "mines",
-                "orders",
-                "population",
-                "ships",
-                "status"
-            ],
-            "type": "object"
-        },
         "MiningWorld": {
             "properties": {
                 "miningStatus": {
@@ -877,6 +758,20 @@
             ],
             "type": "object"
         },
+        "NotGrowingWorld": {
+            "properties": {
+                "populationGrowthStatus": {
+                    "enum": [
+                        "NOT_GROWING"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "populationGrowthStatus"
+            ],
+            "type": "object"
+        },
         "NotMiningWorld": {
             "properties": {
                 "miningStatus": {
@@ -889,6 +784,37 @@
             "required": [
                 "miningStatus"
             ],
+            "type": "object"
+        },
+        "PlayerVisibilityStatus": {
+            "additionalProperties": {
+                "additionalProperties": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/RemeberedWorld"
+                        },
+                        {
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "enum": [
+                                        "VISIBLE"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "status"
+                            ],
+                            "type": "object"
+                        }
+                    ]
+                },
+                "type": "object"
+            },
             "type": "object"
         },
         "ReadyFleetBase": {
@@ -955,7 +881,7 @@
             ],
             "type": "object"
         },
-        "ReadyWorldBase": {
+        "RemeberedWorld": {
             "properties": {
                 "id": {
                     "type": "string"
@@ -963,30 +889,8 @@
                 "industry": {
                     "type": "number"
                 },
-                "integrity": {
-                    "type": "number"
-                },
-                "metal": {
-                    "type": "number"
-                },
                 "mines": {
                     "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/BuildShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/BuildIndustryOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
                 },
                 "ownerId": {
                     "type": "string"
@@ -994,12 +898,12 @@
                 "population": {
                     "type": "number"
                 },
-                "ships": {
+                "remeberedTimestamp": {
                     "type": "number"
                 },
                 "status": {
                     "enum": [
-                        "READY"
+                        "REMEBERED"
                     ],
                     "type": "string"
                 }
@@ -1007,13 +911,9 @@
             "required": [
                 "id",
                 "industry",
-                "integrity",
-                "metal",
                 "mines",
-                "orders",
-                "ownerId",
                 "population",
-                "ships",
+                "remeberedTimestamp",
                 "status"
             ],
             "type": "object"
@@ -1035,73 +935,6 @@
             "required": [
                 "amount",
                 "type"
-            ],
-            "type": "object"
-        },
-        "ScrappingShipsWorldBase": {
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "industry": {
-                    "type": "number"
-                },
-                "integrity": {
-                    "type": "number"
-                },
-                "metal": {
-                    "type": "number"
-                },
-                "mines": {
-                    "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/BuildShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/BuildIndustryOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "ownerId": {
-                    "type": "string"
-                },
-                "population": {
-                    "type": "number"
-                },
-                "readyTimestamp": {
-                    "type": "number"
-                },
-                "ships": {
-                    "type": "number"
-                },
-                "status": {
-                    "enum": [
-                        "SCRAPPING_SHIPS"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "industry",
-                "integrity",
-                "metal",
-                "mines",
-                "orders",
-                "ownerId",
-                "population",
-                "readyTimestamp",
-                "ships",
-                "status"
             ],
             "type": "object"
         },
@@ -1164,219 +997,1216 @@
                 "gates": {
                     "$ref": "#/definitions/Gates"
                 },
+                "visibility": {
+                    "$ref": "#/definitions/PlayerVisibilityStatus"
+                },
                 "worlds": {
                     "additionalProperties": {
                         "anyOf": [
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/ReadyWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/ReadyWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldAtPeace"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/ReadyWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/FiringWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/ReadyWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/FiringWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BuildingShipWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/BuildingShipWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/BuildingShipWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/FiringWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BuildingShipWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/FiringWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldAtPeace"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/FiringWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/BuildingIndustryWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/FiringWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/FiringWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/ScrappingShipsWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/FiringWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
                                     }
                                 ]
                             },
                             {
-                                "$ref": "#/definitions/LostWorld"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIP"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_INDUSTRY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "SCRAPPING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "status": {
+                                                "enum": [
+                                                    "LOST"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -1386,6 +2216,7 @@
             "required": [
                 "fleets",
                 "gates",
+                "visibility",
                 "worlds"
             ],
             "type": "object"
