@@ -17,7 +17,8 @@ export function captureWorld(
           status: 'READY',
           combatStatus: 'AT_PEACE',
           ownerId: ownerId,
-          miningStatus: 'NOT_MINING'
+          miningStatus: 'NOT_MINING',
+          populationGrowthStatus: 'NOT_GROWING'
         }
       })
     }

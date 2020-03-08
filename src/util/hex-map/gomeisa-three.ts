@@ -40,6 +40,7 @@ export function makeGomeisaThree(): GameMap {
         ownerId: seats[worldId],
         combatStatus: 'AT_PEACE',
         miningStatus: 'NOT_MINING',
+        populationGrowthStatus: 'NOT_GROWING',
         industry: 30,
         population: 100,
         ships: 2
@@ -98,7 +99,7 @@ function makeWorld(id: string): LostWorld {
     orders: [],
     population: amount*10,
     ships: 0,
-    status: 'LOST'
+    status: 'LOST',
   }
 }
 

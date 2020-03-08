@@ -39,6 +39,7 @@ export function makeGomeisaThreeRandom(): GameMap {
         ownerId: seats[worldId],
         combatStatus: 'AT_PEACE',
         miningStatus: 'NOT_MINING',
+        populationGrowthStatus: 'NOT_GROWING',
         integrity: 0,
         metal: 0,
         mines: 2,
@@ -99,7 +100,7 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
     orders: [],
     population: Math.round(random[2] * 30),
     ships: 0,
-    status: 'LOST'
+    status: 'LOST',
   }
 
   const fleetAmount = Math.round(random[3])

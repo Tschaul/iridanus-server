@@ -5,7 +5,7 @@ export type World =
     | LostWorld;
 
 export type WorldWithOwner =
-    ReadyWorld
+        ReadyWorld
         | BuildingShipWorld
         | BuildingIndustryWorld
         | ScrappingShipsWorld
@@ -21,6 +21,8 @@ export interface BaseWorld {
     integrity: number;
 }
 
+export type WorldWithOwnerBase = BaseWorld & WorldWithCombatStatus & WorldWithMiningStatus & WorldWithPopulationGrowth
+
 export function baseWorld(world: World): BaseWorld {
     return {
         id: world.id,
@@ -34,7 +36,21 @@ export function baseWorld(world: World): BaseWorld {
     }
 }
 
-export function combatAndMiningStatus(world: WorldWithCombatStatus & WorldWithMiningStatus): WorldWithCombatStatus & WorldWithMiningStatus {
+export function baseWorldWithOwner(world: WorldWithOwnerBase): WorldWithOwnerBase {
+    return {
+        id: world.id,
+        industry: world.industry,
+        metal: world.metal,
+        mines: world.mines,
+        orders: world.orders,
+        population: world.population,
+        ships: world.ships,
+        integrity: world.integrity,
+        ...combatAndMiningStatus(world)
+    }
+}
+
+export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithOwnerBase {
     const result = {} as any;
     result.combatStatus = world.combatStatus;
     if (world.combatStatus === 'FIRING') {
@@ -43,6 +59,10 @@ export function combatAndMiningStatus(world: WorldWithCombatStatus & WorldWithMi
     result.miningStatus = world.miningStatus;
     if (world.miningStatus === 'MINING') {
         result.nextMetalMinedTimestamp = world.nextMetalMinedTimestamp;
+    }
+    result.populationGrowthStatus = world.populationGrowthStatus
+    if (world.populationGrowthStatus === 'GROWING') {
+        result.nextPopulationGrowthTimestamp = world.nextPopulationGrowthTimestamp
     }
     return result;
 }
@@ -77,45 +97,42 @@ export interface MiningWorld {
     nextMetalMinedTimestamp: number
 }
 
-export interface LostWorld extends BaseWorld {
+export type WorldWithPopulationGrowth =
+    NotGrowingWorld
+    | GrowingWorld;
+
+export interface NotGrowingWorld {
+    populationGrowthStatus: 'NOT_GROWING'
+}
+
+export interface GrowingWorld {
+    populationGrowthStatus: 'GROWING',
+    nextPopulationGrowthTimestamp: number
+}
+
+export type LostWorld = BaseWorld & {
     status: 'LOST'
 }
 
-export interface BuildingShipWorldBase extends BaseWorld {
+export type BuildingShipWorld = WorldWithOwnerBase & {
     status: 'BUILDING_SHIP'
     ownerId: string;
     readyTimestamp: number;
 }
 
-export type BuildingShipWorld = BuildingShipWorldBase
-    & WorldWithCombatStatus
-    & WorldWithMiningStatus;
-
-export interface BuildingIndustryWorldBase extends BaseWorld {
+export type BuildingIndustryWorld = WorldWithOwnerBase & {
     status: 'BUILDING_INDUSTRY'
     ownerId: string;
     readyTimestamp: number;
 }
 
-export type BuildingIndustryWorld = BuildingIndustryWorldBase
-    & WorldWithCombatStatus
-    & WorldWithMiningStatus;
-
-export interface ReadyWorldBase extends BaseWorld {
+export type ReadyWorld = WorldWithOwnerBase & {
     status: 'READY'
     ownerId: string;
 }
 
-export type ReadyWorld = ReadyWorldBase
-    & WorldWithCombatStatus
-    & WorldWithMiningStatus;
-
-export interface ScrappingShipsWorldBase extends BaseWorld {
+export type ScrappingShipsWorld = WorldWithOwnerBase & {
     status: 'SCRAPPING_SHIPS'
     readyTimestamp: number;
     ownerId: string;
 }
-
-export type ScrappingShipsWorld = ScrappingShipsWorldBase
-    & WorldWithCombatStatus
-    & WorldWithMiningStatus;

@@ -41,7 +41,7 @@ function makeWorld(id: string): LostWorld {
     orders: [],
     population: 0,
     ships: 1,
-    status: 'LOST'
+    status: 'LOST',
   }
 }
 

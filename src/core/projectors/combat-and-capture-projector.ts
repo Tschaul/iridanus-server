@@ -4,7 +4,7 @@ import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Fleet, ReadyFleetBase, FiringFleet, LostFleet, fleetHasOwner, FleetWithOwnerAtWorld, fleetIsAtWorldAndHasOwner } from "../../shared/model/v1/fleet";
-import { World, FiringWorld, ReadyWorldBase, LostWorld, WorldWithOwner, worldhasOwner } from "../../shared/model/v1/world";
+import { World, FiringWorld, WorldWithOwner, worldhasOwner } from "../../shared/model/v1/world";
 
 @injectable()
 export class CombatAndCaptureProjector {
