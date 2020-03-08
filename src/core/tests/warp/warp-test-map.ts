@@ -1,4 +1,5 @@
 import { GameState } from "../../../shared/model/v1/state";
+import { dummyReadyWorld } from '../test-helper';
 
 export const warpTestMap: GameState = {
   currentTimestamp: 0,
@@ -23,51 +24,24 @@ export const warpTestMap: GameState = {
     },
     worlds: {
       "w1": {
-        status: 'READY',
-        orders: [],
+        ...dummyReadyWorld,
         id: "w1",
-        industry: 5,
-        metal: 40,
-        mines: 1,
         ownerId: "p1",
-        population: 25,
-        ships: 5,
-        integrity: 1,
-        combatStatus: 'AT_PEACE',
-        miningStatus: 'NOT_MINING'
       },
       "w2": {
-        status: 'READY',
-        orders: [],
+        ...dummyReadyWorld,
         id: "w2",
-        industry: 5,
-        metal: 40,
-        mines: 1,
         ownerId: "p1",
-        population: 25,
-        ships: 5,
-        integrity: 1,
-        combatStatus: 'AT_PEACE',
-        miningStatus: 'NOT_MINING'
       },
       "w3": {
-        status: 'READY',
-        orders: [],
+        ...dummyReadyWorld,
         id: "w3",
-        industry: 5,
-        metal: 40,
-        mines: 1,
         ownerId: "p1",
-        population: 25,
-        ships: 5,
-        integrity: 1,
-        combatStatus: 'AT_PEACE',
-        miningStatus: 'NOT_MINING'
       }
     },
     gates: {
       "w1": ["w2"],
-      "w2": ["w1","w3"],
+      "w2": ["w1", "w3"],
       "w3": ["w2"]
     }
   }

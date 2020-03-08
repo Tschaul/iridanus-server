@@ -22,7 +22,7 @@ describe("build", () => {
 
     const state = await runMap(map, { watcher: state => (state.currentTimestamp - now) });
 
-    expect((state.universe.worlds["w1"] as World).ships).to.equal(8)
+    expect((state.universe.worlds["w1"] as World).ships).to.equal(3)
     expect((state.universe.worlds["w1"] as World).metal).to.equal(37)
   })
 

@@ -46,11 +46,11 @@ export function makeGomeisaThree(): GameMap {
         ships: 2
       };
 
-      ([1,2,3,4,5]).forEach(() => {
+      ([1, 2, 3, 4, 5]).forEach(() => {
         const fleetId = 'f' + fleetKeyNumber++;
         universe.fleets[fleetId] = {
           status: 'READY',
-          combatStatus:'AT_PEACE',
+          combatStatus: 'AT_PEACE',
           currentWorldId: worldId,
           id: fleetId,
           integrity: 0,
@@ -62,15 +62,15 @@ export function makeGomeisaThree(): GameMap {
       })
     } else {
       const fleetId = 'f' + fleetKeyNumber++;
-        universe.fleets[fleetId] = {
-          status: 'LOST',
-          currentWorldId: worldId,
-          id: fleetId,
-          integrity: 0,
-          metal: 0,
-          orders: [],
-          ships: 6
-        }
+      universe.fleets[fleetId] = {
+        status: 'LOST',
+        currentWorldId: worldId,
+        id: fleetId,
+        integrity: 0,
+        metal: 0,
+        orders: [],
+        ships: 6
+      }
     }
 
     universe.worlds[worldId] = world
@@ -97,7 +97,8 @@ function makeWorld(id: string): LostWorld {
     metal: amount,
     mines: amount,
     orders: [],
-    population: amount*10,
+    population: amount * 10,
+    populationLimit: amount * 20,
     ships: 0,
     status: 'LOST',
   }

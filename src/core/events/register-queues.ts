@@ -33,6 +33,9 @@ import { EndScrappingShipsEventQueue } from "./scrapping/end-scrapping-ships";
 import { RevealWorldEventQueue } from "./visibility/reveal-world";
 import { RememberWorldEventQueue } from "./visibility/remember-world";
 import { LooseFleetEventQueue } from "./capture/loose-fleet";
+import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
+import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
+import { WorldStopGrowingEventQueue } from "./population/world-stop-mining";
 
 export function registerEventQueues(container: Container) {
 
@@ -70,6 +73,10 @@ export function registerEventQueues(container: Container) {
   container.bind(WorldStartMiningEventQueue).toSelf();
   container.bind(WorldMinesMetalEventQueue).toSelf();
   container.bind(WorldStopMiningEventQueue).toSelf();
+
+  container.bind(WorldStartGrowingEventQueue).toSelf();
+  container.bind(WorldPopulationGrowsEventQueue).toSelf();
+  container.bind(WorldStopGrowingEventQueue).toSelf();
 
   container.bind(CaptureFleetEventQueue).toSelf();
   container.bind(CaptureWorldEventQueue).toSelf();

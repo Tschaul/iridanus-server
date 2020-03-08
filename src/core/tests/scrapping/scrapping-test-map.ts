@@ -1,4 +1,5 @@
 import { GameState } from "../../../shared/model/v1/state";
+import { dummyReadyWorld } from "../test-helper";
 
 export const scrappingTestMap: GameState = {
   currentTimestamp: 0,
@@ -23,18 +24,11 @@ export const scrappingTestMap: GameState = {
     },
     worlds: {
       "w1": {
-        status: 'READY',
+        ...dummyReadyWorld,
         id: "w1",
         industry: 0,
-        metal: 10,
-        mines: 1,
         ownerId: "p1",
-        population: 25,
         ships: 20,
-        orders: [],
-        integrity: 1,
-        combatStatus: 'AT_PEACE',
-        miningStatus: 'NOT_MINING'
       }
     },
     gates: {

@@ -2,7 +2,10 @@ import { GameRules } from "../../shared/model/v1/rules";
 
 const fiveSeconds = 1000 * 5;
 
-export const testConfig: GameRules = {
+export const debugConfig: GameRules = {
+  population: {
+    minimumPopulationGrowthDelay: 7 * fiveSeconds
+  },
   combat: {
     integrityDamagePerShip: 0.456789,
     meanFiringInterval: 3 * fiveSeconds

@@ -1,4 +1,5 @@
 import { GameState } from "../../../shared/model/v1/state";
+import { dummyReadyWorld, dummyLostWorld } from "../test-helper";
 
 export const visibilityTestMap: GameState = {
   currentTimestamp: 0,
@@ -23,40 +24,17 @@ export const visibilityTestMap: GameState = {
     },
     worlds: {
       "w1": {
-        status: 'READY',
-        orders: [],
+        ...dummyReadyWorld,
         id: "w1",
-        industry: 5,
-        metal: 40,
-        mines: 1,
         ownerId: "p1",
-        population: 25,
-        ships: 5,
-        integrity: 1,
-        combatStatus: 'AT_PEACE',
-        miningStatus: 'NOT_MINING'
       },
       "w2": {
-        status: 'LOST',
-        orders: [],
+        ...dummyLostWorld,
         id: "w2",
-        industry: 5,
-        metal: 40,
-        mines: 1,
-        population: 25,
-        ships: 0,
-        integrity: 1,
       },
       "w3": {
-        status: 'LOST',
-        orders: [],
+        ...dummyLostWorld,
         id: "w3",
-        industry: 5,
-        metal: 40,
-        mines: 1,
-        population: 25,
-        ships: 0,
-        integrity: 1,
       }
     },
     gates: {

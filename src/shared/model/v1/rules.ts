@@ -1,4 +1,7 @@
 export interface GameRules {
+  population: {
+    minimumPopulationGrowthDelay: number;
+  },
   global: {
     maxAmount: number;
   },

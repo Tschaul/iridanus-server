@@ -14,6 +14,7 @@ import { ActionLogger } from '../infrastructure/action-logger';
 import { map } from 'rxjs/operators';
 import { GameStateValidator } from '../infrastructure/game- state-message-validator';
 import { GameRules } from '../../shared/model/v1/rules';
+import { ReadyWorld, LostWorld } from '../../shared/model/v1/world';
 
 export async function runMap(testMap: GameState, options?: {
   watcher?: null | ((state: GameState) => string | number | boolean),
@@ -62,4 +63,34 @@ export async function runMap(testMap: GameState, options?: {
 
   return await game.startGameLoop();
 
+}
+
+export const dummyReadyWorld: ReadyWorld = {
+  status: 'READY',
+  id: "",
+  industry: 0,
+  metal: 10,
+  mines: 1,
+  ownerId: "",
+  population: 25,
+  populationLimit: 25,
+  ships: 20,
+  orders: [],
+  integrity: 1,
+  combatStatus: 'AT_PEACE',
+  miningStatus: 'NOT_MINING',
+  populationGrowthStatus: 'NOT_GROWING'
+}
+
+export const dummyLostWorld: LostWorld = {
+  status: 'LOST',
+  id: "w1",
+  industry: 0,
+  metal: 10,
+  mines: 1,
+  population: 25,
+  populationLimit: 25,
+  ships: 20,
+  orders: [],
+  integrity: 1,
 }

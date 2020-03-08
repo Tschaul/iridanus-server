@@ -1,7 +1,7 @@
 import { GameState } from "../../../shared/model/v1/state";
 import { dummyReadyWorld } from "../test-helper";
 
-export const miningTestMap: GameState = {
+export const testMap: GameState = {
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_VALUE,
   universe: {
@@ -15,8 +15,8 @@ export const miningTestMap: GameState = {
       "w1": {
         ...dummyReadyWorld,
         id: "w1",
-        metal: 2,
-        mines: 3,
+        population: 1,
+        populationLimit: 2,
         ownerId: "p1",
       },
     },

@@ -46,6 +46,7 @@ export function makeGomeisaThreeRandom(): GameMap {
         orders: [],
         industry: 10,
         population: 30,
+        populationLimit: 30,
         ships: 2
       };
 
@@ -91,14 +92,20 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
   const random = randomSphericArray(4);
 
 
+  const industry = Math.round(random[0] * 3);
+  const mines = Math.round(random[1] * 6);
+  const populationLimit = Math.max(random[2] * 50, mines, industry)
+  const population = Math.round(Math.random() * populationLimit);
+
   const world: LostWorld = {
     id,
-    industry: Math.round(random[0] * 3),
+    industry,
     integrity: 0,
     metal: 0,
-    mines: Math.round(random[1] * 6),
+    mines: mines,
     orders: [],
-    population: Math.round(random[2] * 30),
+    population,
+    populationLimit,
     ships: 0,
     status: 'LOST',
   }

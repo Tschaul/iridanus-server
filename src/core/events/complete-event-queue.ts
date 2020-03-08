@@ -36,6 +36,9 @@ import { RevealWorldEventQueue } from "./visibility/reveal-world";
 import { RememberWorldEventQueue } from "./visibility/remember-world";
 import { looseFleet } from "../actions/fleet/loose-fleet";
 import { LooseFleetEventQueue } from "./capture/loose-fleet";
+import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
+import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
+import { WorldStopGrowingEventQueue } from "./population/world-stop-mining";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -77,6 +80,10 @@ export class CompleteEventQueue implements GameEventQueue {
     worldMinesMetal: WorldMinesMetalEventQueue,
     worldStopMining: WorldStopMiningEventQueue,
 
+    worldStartGrowing: WorldStartGrowingEventQueue,
+    worldGrows: WorldPopulationGrowsEventQueue,
+    worldStopsGrowing: WorldStopGrowingEventQueue,
+
     captureFleet: CaptureFleetEventQueue,
     captureWorld: CaptureWorldEventQueue,
     looseFleet: LooseFleetEventQueue,
@@ -116,6 +123,9 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStartMining,
       worldMinesMetal,
       worldStopMining,
+      worldStartGrowing,
+      worldStopsGrowing,
+      worldGrows,
       revealWorld,
       remeberWorld
     ]

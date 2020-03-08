@@ -40,6 +40,7 @@ function makeWorld(id: string): LostWorld {
     mines: 0,
     orders: [],
     population: 0,
+    populationLimit: 0,
     ships: 1,
     status: 'LOST',
   }

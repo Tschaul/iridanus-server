@@ -3,6 +3,9 @@ import { GameRules } from "../../shared/model/v1/rules";
 const tick = 100;
 
 export const testRules: GameRules = {
+  population: {
+    minimumPopulationGrowthDelay: 7 * tick
+  },
   combat: {
     integrityDamagePerShip: 0.456789,
     meanFiringInterval: 5 * tick

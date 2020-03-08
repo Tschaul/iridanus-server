@@ -16,7 +16,7 @@ import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
 import { Initializer } from "./infrastructure/initialisation/initializer";
-import { testConfig } from "../core/setup/simple-config";
+import { debugConfig } from "../core/setup/simple-config";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
 
 @injectable()
@@ -84,7 +84,7 @@ export class GameRunner {
     const setup = container.get(GameSetupProvider);
     const store = container.get(Store);
 
-    setup.rules = testConfig;
+    setup.rules = debugConfig;
 
     const currentState = await this.gameRepository.getGameState(gameInfo.id);
 
