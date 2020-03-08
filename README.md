@@ -5,7 +5,6 @@ Server for Iridanus
 
 # Remaining Todos for MVP scope
 
-- population growth
 - migrating population (with ships?)
 - attacking industry/population with ships
 - scoring victoriy points based on population & upkeep

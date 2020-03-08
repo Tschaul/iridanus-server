@@ -28,7 +28,7 @@ import { EndDroppingShipsEventQueue } from "./transfer/end-dropping-ships";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
-import { BeginScrappingShipsEventQueue } from "./scrapping/begin-Scrapping-ships";
+import { BeginScrappingShipsEventQueue } from "./scrapping/begin-scrapping-ships";
 import { EndScrappingShipsEventQueue } from "./scrapping/end-scrapping-ships";
 import { RevealWorldEventQueue } from "./visibility/reveal-world";
 import { RememberWorldEventQueue } from "./visibility/remember-world";
