@@ -5,9 +5,7 @@ Server for Iridanus
 
 # Remaining Todos for MVP scope
 
-- migrating population (with ships?)
 - delayed capturing worlds??
-- attacking industry/population with ships
 - scoring victoriy points based on population & upkeep
 - win condition based on victory points
 - scrapping industry to metal

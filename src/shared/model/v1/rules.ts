@@ -8,6 +8,8 @@ export interface GameRules {
   combat: {
     meanFiringInterval: number;
     integrityDamagePerShip: number;
+    industryDamageChancePerShip: number;
+    populationDamageChancePerShip: number;
   },
   building: {
     buildIndustryCost: number;
