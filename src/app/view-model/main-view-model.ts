@@ -11,12 +11,12 @@ export class MainViewModel {
   public connectionStatus = new ConnectionStatus();
 
   constructor() {
-    // this.welcomeViewModel.username = 'tschaul';
-    // this.welcomeViewModel.password = '123456';
-    // this.welcomeViewModel.login();
+    this.welcomeViewModel.username = 'tschaul';
+    this.welcomeViewModel.password = '123456';
+    this.welcomeViewModel.login();
 
-    // this.lobbyViewModel.selectedGameId = 'rp883hg9ymcd';
-    // this.lobbyViewModel.viewGame();
+    this.lobbyViewModel.selectedGameId = '3h6vzl3lusfr';
+    this.lobbyViewModel.viewGame();
   }
 
   @computed get activeScreen(): PossibleScreen {

@@ -15,6 +15,7 @@ export const simpleMap: GameState = {
         combatStatus: 'AT_PEACE',
         currentWorldId: "w1",
         metal: 0,
+        population: 0,
         orders: [{
           type: 'WARP',
           targetWorldId: 'w2'

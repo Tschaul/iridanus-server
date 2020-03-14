@@ -6,13 +6,25 @@ export function giveOrTakeFleetShips(fleetid: string, amount: number): Action {
   return {
     describe: () => `GiveOrTakeFleetShips ${JSON.stringify({fleetid, amount})}`,
     apply: (state: GameState) => {
-      return updateFleet(state, fleetid, oldFleet => {
-        const newShipsAmount = oldFleet.ships + amount;
+      return updateFleet(state, fleetid, fleet => {
+        const ships = fleet.ships + amount;
+        let metal = fleet.metal;
+        let population = fleet.population;
+        // overloaded metal and population gets discared (mainly during combat)
+        const overload = metal + population - ships;
+        if (overload > 0) {
+          if (overload > metal) {
+            metal = 0;
+            population -= overload - metal;
+          } else {
+            metal -= overload;
+          }
+        }
         return {
-          ...oldFleet,
-          ships: newShipsAmount,
-          // overloaded metal gets discared (mainly during combat)
-          metal: Math.min(newShipsAmount, oldFleet.metal)
+          ...fleet,
+          ships,
+          metal,
+          population
         }
       })
     }

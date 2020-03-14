@@ -16,6 +16,7 @@ export const warpTestMap: GameState = {
         combatStatus: 'AT_PEACE',
         currentWorldId: "w1",
         metal: 0,
+        population: 0,
         orders: [],
         ownerId: "p1",
         ships: 10,

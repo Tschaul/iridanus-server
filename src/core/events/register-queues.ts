@@ -36,18 +36,26 @@ import { LooseFleetEventQueue } from "./capture/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
 import { WorldStopGrowingEventQueue } from "./population/world-stop-mining";
+import { BeginLoadingPopulationEventQueue } from "./transfer/begin-loading-population";
+import { EndLoadPopulationEventQueue } from "./transfer/end-loading-population";
+import { BeginDroppingPopulationEventQueue } from "./transfer/begin-dropping-population";
+import { EndDroppingPopulationEventQueue } from "./transfer/end-dropping-population";
 
 export function registerEventQueues(container: Container) {
 
   container.bind(BeginLoadingMetalEventQueue).toSelf();
   container.bind(BeginLoadingShipsEventQueue).toSelf();
+  container.bind(BeginLoadingPopulationEventQueue).toSelf();
   container.bind(EndLoadMetalEventQueue).toSelf();
   container.bind(EndLoadingShipsEventQueue).toSelf();
+  container.bind(EndLoadPopulationEventQueue).toSelf();
 
   container.bind(BeginDroppingMetalEventQueue).toSelf();
   container.bind(BeginDroppingShipsEventQueue).toSelf();
+  container.bind(BeginDroppingPopulationEventQueue).toSelf();
   container.bind(EndDroppingMetalEventQueue).toSelf();
   container.bind(EndDroppingShipsEventQueue).toSelf();
+  container.bind(EndDroppingPopulationEventQueue).toSelf();
 
   container.bind(BeginScrappingShipsEventQueue).toSelf();
   container.bind(EndScrappingShipsEventQueue).toSelf();

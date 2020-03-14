@@ -38,6 +38,10 @@ import { LooseFleetEventQueue } from "./capture/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
 import { WorldStopGrowingEventQueue } from "./population/world-stop-mining";
+import { BeginLoadingPopulationEventQueue } from "./transfer/begin-loading-population";
+import { EndLoadPopulationEventQueue } from "./transfer/end-loading-population";
+import { BeginDroppingPopulationEventQueue } from "./transfer/begin-dropping-population";
+import { EndDroppingPopulationEventQueue } from "./transfer/end-dropping-population";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -47,12 +51,16 @@ export class CompleteEventQueue implements GameEventQueue {
   constructor(
     beginLoadMetal: BeginLoadingMetalEventQueue,
     beginLoadShips: BeginLoadingShipsEventQueue,
+    beginLoadPopulation: BeginLoadingPopulationEventQueue,
     endLoadMetal: EndLoadMetalEventQueue,
     endLoadShips: EndLoadingShipsEventQueue,
+    endLoadPopulation: EndLoadPopulationEventQueue,
     beginDropMetal: BeginDroppingMetalEventQueue,
     beginDropShips: BeginDroppingShipsEventQueue,
+    beginDropPopulation: BeginDroppingPopulationEventQueue,
     endDropMetal: EndDroppingMetalEventQueue,
     endDropShips: EndDroppingShipsEventQueue,
+    endDropPopulation: EndDroppingPopulationEventQueue,
 
     arriveAtWorld: ArriveAtWorldEventQueue,
     beginWarp: BeginWarpEventQueue,
@@ -100,6 +108,10 @@ export class CompleteEventQueue implements GameEventQueue {
       beginDropShips,
       endDropShips,
       endDropMetal,
+      beginLoadPopulation,
+      beginDropPopulation,
+      endLoadPopulation,
+      endDropPopulation,
       beginScrappingShips,
       endScrappingShips,
       arriveAtWorld,

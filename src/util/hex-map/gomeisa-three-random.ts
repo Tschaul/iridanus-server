@@ -59,6 +59,7 @@ export function makeGomeisaThreeRandom(): GameMap {
           id: fleetId,
           integrity: 0,
           metal: 0,
+          population: 0,
           orders: [],
           ownerId: seats[worldId],
           ships: 6
@@ -119,6 +120,7 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
       currentWorldId: id,
       id: fleetId,
       integrity: 0,
+      population: 0,
       metal: 0,
       orders: [],
       ships: 0

@@ -46,7 +46,7 @@ export class BeginLoadingMetalEventQueue implements GameEventQueue {
                 ]
               }
 
-              let trueAmount = getTrueTransferAmount(fleet.metal, world.metal, order.amount, this.setup.rules.global.maxAmount)
+              let trueAmount = getTrueTransferAmount(world.metal, fleet.metal, order.amount, fleet.ships - fleet.population)
 
               if (fleet.metal + trueAmount > fleet.ships) {
                 trueAmount = fleet.ships - fleet.metal;

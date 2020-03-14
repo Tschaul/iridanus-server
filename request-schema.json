@@ -207,6 +207,26 @@
             ],
             "type": "object"
         },
+        "DropPopulationOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "DROP_POPULATION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
         "DropShipsOrder": {
             "properties": {
                 "amount": {
@@ -311,6 +331,26 @@
                 "type": {
                     "enum": [
                         "LOAD_METAL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "LoadPopulationOrder": {
+            "properties": {
+                "amount": {
+                    "maximum": 99,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "type": {
+                    "enum": [
+                        "LOAD_POPULATION"
                     ],
                     "type": "string"
                 }
@@ -430,6 +470,12 @@
                             },
                             {
                                 "$ref": "#/definitions/DropShipsOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/LoadPopulationOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DropPopulationOrder"
                             }
                         ]
                     },

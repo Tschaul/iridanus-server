@@ -1,20 +1,20 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable, combineLatest } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
-import { ReadyFleetBase, ReadyFleet } from "../../../shared/model/v1/fleet";
+import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import { getTrueTransferAmount } from "./amount-helper";
 import { injectable, inject } from "inversify";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { DropMetalOrder } from "../../../shared/model/v1/fleet-orders";
+import { LoadPopulationOrder } from "../../../shared/model/v1/fleet-orders";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
+import { loadPopulation } from "../../actions/fleet/load-population";
+import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 import { GameSetupProvider } from "../../game-setup-provider";
-import { giveOrTakeFleetMetal } from "../../actions/fleet/give-or-take-metal";
-import { dropMetal } from "../../actions/fleet/drop-metal";
 
 @injectable()
-export class BeginDroppingMetalEventQueue implements GameEventQueue {
+export class BeginLoadingPopulationEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
 
@@ -24,10 +24,10 @@ export class BeginDroppingMetalEventQueue implements GameEventQueue {
     private time: TimeProjector,
     private setup: GameSetupProvider) {
 
-    const readyFleetWithTransferMetalOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, DropMetalOrder>('READY', 'DROP_METAL')
+    const readyFleetWithTransferPopulationOrder$ = this.fleets.firstByStatusAndNextOrderType<ReadyFleet, LoadPopulationOrder>('READY', 'LOAD_POPULATION')
 
     this.upcomingEvent$ = combineLatest(
-      readyFleetWithTransferMetalOrder$,
+      readyFleetWithTransferPopulationOrder$,
       this.worlds.byId$,
       this.time.currentTimestamp$
     ).pipe(
@@ -46,7 +46,11 @@ export class BeginDroppingMetalEventQueue implements GameEventQueue {
                 ]
               }
 
-              let trueAmount = getTrueTransferAmount(fleet.metal, world.metal, order.amount, this.setup.rules.global.maxAmount)
+              let trueAmount = getTrueTransferAmount(world.population, fleet.population, order.amount, fleet.ships - fleet.metal)
+
+              if (fleet.population + trueAmount > fleet.ships) {
+                trueAmount = fleet.ships - fleet.population;
+              }
 
               if (trueAmount === 0) {
                 return [
@@ -55,8 +59,8 @@ export class BeginDroppingMetalEventQueue implements GameEventQueue {
               }
 
               return [
-                dropMetal(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferMetalDelay),
-                giveOrTakeFleetMetal(fleet.id, -1 * trueAmount),
+                loadPopulation(fleet.id, trueAmount, timestamp + this.setup.rules.transfering.transferPopulationDelay),
+                giveOrTakeWorldPopulation(world.id, -1 * trueAmount),
                 popFleetOrder(fleet.id)
               ];
             }

@@ -23,6 +23,7 @@ export const debugConfig: GameRules = {
   transfering: {
     transferMetalDelay: 1 * fiveSeconds,
     transferShipsDelay: 1 * fiveSeconds,
+    transferPopulationDelay: 1 * fiveSeconds,
   },
   mining: {
     miningDelay: 3 * fiveSeconds,

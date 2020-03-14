@@ -46,11 +46,11 @@ export class BeginDroppingShipsEventQueue implements GameEventQueue {
                 ]
               }
 
-              // dont transfer ships that still carry metal
-              const availableShips = fleet.ships - fleet.metal;
+              // dont transfer ships that still carry metal or population
+              const availableShips = fleet.ships - fleet.metal - fleet.population;
               const amount = Math.min(availableShips, order.amount);
 
-              const trueAmount = getTrueTransferAmount(world.ships, fleet.ships, amount, this.setup.rules.global.maxAmount)
+              const trueAmount = getTrueTransferAmount(fleet.ships, world.ships, amount, this.setup.rules.global.maxAmount)
 
               if (trueAmount === 0) {
                 return [

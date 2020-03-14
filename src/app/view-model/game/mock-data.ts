@@ -13,6 +13,7 @@ export const mockUniverse: Universe = {
       status: 'READY',
       currentWorldId: "w1",
       metal: 0,
+      population: 0,
       orders: [{
         type: 'WARP',
         targetWorldId: 'w2'
@@ -32,6 +33,7 @@ export const mockUniverse: Universe = {
       targetWorldId: "w2",
       arrivingTimestamp: 0,
       metal: 0,
+      population: 0,
       orders: [],
       ownerId: "p1",
       ships: 10,

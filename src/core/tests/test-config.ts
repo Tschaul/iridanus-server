@@ -23,6 +23,7 @@ export const testRules: GameRules = {
   transfering: {
     transferMetalDelay: 1 * tick,
     transferShipsDelay: 1 * tick,
+    transferPopulationDelay: 1 * tick,
   },
   mining: {
     miningDelay: 3 * tick,

@@ -47,7 +47,7 @@ export class BeginLoadingShipsEventQueue implements GameEventQueue {
                 ]
               }
 
-              const trueAmount = getTrueTransferAmount(fleet.ships, world.ships, order.amount, this.setup.rules.global.maxAmount)
+              const trueAmount = getTrueTransferAmount(world.ships, fleet.ships, order.amount, this.setup.rules.global.maxAmount)
 
               if (trueAmount === 0) {
                 return [

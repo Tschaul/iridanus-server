@@ -17,6 +17,7 @@ export interface GameRules {
   transfering: {
     transferMetalDelay: number;
     transferShipsDelay: number;
+    transferPopulationDelay: number;
   },
   warping: {
     leaveWorldDelay: number;

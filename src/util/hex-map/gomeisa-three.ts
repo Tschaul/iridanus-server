@@ -55,6 +55,7 @@ export function makeGomeisaThree(): GameMap {
           id: fleetId,
           integrity: 0,
           metal: 0,
+          population: 0,
           orders: [],
           ownerId: seats[worldId],
           ships: 6
@@ -67,6 +68,7 @@ export function makeGomeisaThree(): GameMap {
         currentWorldId: worldId,
         id: fleetId,
         integrity: 0,
+        population: 0,
         metal: 0,
         orders: [],
         ships: 6

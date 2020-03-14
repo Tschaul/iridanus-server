@@ -13,7 +13,7 @@ export function handleFiring(attacker: ReadyFleet | WorldWithOwner, world: World
   const targetResult = determineTarget(attacker, world, fleetsByCurrentworldId[world.id], random);
   if (!targetResult) {
     return []
-  } 
+  }
   const [targetType, target] = targetResult;
   const [newShips, newIntegrity] = determineDamage(attacker, target, targetType, config);
   const damageActions = makeActions(targetType, newShips, target, newIntegrity);
@@ -54,7 +54,7 @@ function determineTarget(attacker: ReadyFleet | WorldWithOwner, world: World, ot
 
 function determineDamage(attacker: Fleet | World, defender: Fleet | World, targetType: 'WORLD' | 'FLEET', config: GameRules): [number, number] {
 
-  const damageMultiplier = (targetType === 'FLEET' && defender.ships === defender.metal) ? 2 : 1
+  const damageMultiplier = (targetType === 'FLEET' && defender.ships === defender.metal + defender.population) ? 2 : 1
 
   const damage = attacker.ships * config.combat.integrityDamagePerShip * damageMultiplier;
 
