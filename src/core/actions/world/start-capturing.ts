@@ -9,7 +9,7 @@ export function startCapturingWorld(
   captureTimestamp: number,
 ): Action {
   return {
-    describe: () => `StartCapturingWorld ${JSON.stringify({ worldId, capturingPlaerId: capturingPlayerId })}`,
+    describe: () => `StartCapturingWorld ${JSON.stringify({ worldId, capturingPlayerId, captureTimestamp })}`,
     apply: (state: GameState) => {
 
       return updateWorld<World, World>(state, worldId, (oldWorld) => {

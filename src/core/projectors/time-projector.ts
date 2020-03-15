@@ -9,7 +9,7 @@ export class TimeProjector {
 
   public currentTimestamp$ = this.store.state$.pipe(
     map(state => state.currentTimestamp),
-    shareReplay(1),
     distinctUntilChanged(),
+    shareReplay(1),
   )
 }

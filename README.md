@@ -3,9 +3,14 @@
 # Iridanus-server
 Server for Iridanus
 
+# Missing tests
+
+- fly by world not captured
+- race for world not captured immediately, but after fight
+- fleet has always visibility for current world
+
 # Remaining Todos for MVP scope
 
-- delayed capturing worlds??
 - scoring victoriy points based on population & upkeep
 - win condition based on victory points
 - scrapping industry to metal

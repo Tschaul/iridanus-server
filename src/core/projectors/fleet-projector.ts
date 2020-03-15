@@ -15,15 +15,15 @@ export class FleetProjector {
     map(state => state.universe.fleets),
     distinctUntilChanged(),
     shareReplay(1)
-  ) as Observable<{[k: string]: Fleet}>
+  ) as Observable<{ [k: string]: Fleet }>
 
   public byCurrentWorldId$ = this.byId$.pipe(
     map(fleetsById => {
-      const result = {} as {[k: string]: Fleet[]};
-      
+      const result = {} as { [k: string]: Fleet[] };
+
       for (const fleet of Object.values(fleetsById)) {
-        if(fleet.status !== 'WARPING') {
-          if(!result[fleet.currentWorldId]) {
+        if (fleet.status !== 'WARPING') {
+          if (!result[fleet.currentWorldId]) {
             result[fleet.currentWorldId] = [];
           }
           result[fleet.currentWorldId].push(fleet);
@@ -32,33 +32,36 @@ export class FleetProjector {
 
       return result;
     }),
-    shareReplay(1)
+    shareReplay(1),
+    distinctUntilChanged(equal)
   )
 
   public firstByStatusAndNextOrderType<TFleetWithStatus extends Fleet, TFleetOrder extends FleetOrder>(
-    status: TFleetWithStatus["status"], 
+    status: TFleetWithStatus["status"],
     orderType: TFleetOrder["type"]): Observable<[TFleetWithStatus | null, TFleetOrder | null]> {
     return this.allByStatusAndNextOrderType(status, orderType).pipe(
       map(fleets => {
         const fleet = fleets.length ? fleets[0] : null;
         return [fleet || null, fleet ? (fleet.orders[0] || null) : null] as any;
       }),
-      distinctUntilChanged(equal));
-    
+      distinctUntilChanged(equal),
+      shareReplay(1)
+    )
   }
 
   public allByStatusAndNextOrderType<TFleetWithStatus extends Fleet, TFleetOrder extends FleetOrder>(
-    status: TFleetWithStatus["status"], 
+    status: TFleetWithStatus["status"],
     orderType: TFleetOrder["type"]): Observable<TFleetWithStatus[]> {
     return this.byId$.pipe(
       map(fleetsById => {
-        return Object.values(fleetsById).filter(fleet => 
+        return Object.values(fleetsById).filter(fleet =>
           fleet.status === status
           && fleet.orders.length
           && fleet.orders[0].type === orderType) as TFleetWithStatus[];
       }),
-      distinctUntilChanged(equal));
-    
+      distinctUntilChanged(equal),
+      shareReplay(1)
+    );
   }
 
   public firstByStatus<TFleetWithStatus extends Fleet>(status: Fleet["status"]): Observable<TFleetWithStatus | null> {
@@ -67,6 +70,8 @@ export class FleetProjector {
         const fleet = Object.values(fleets).find(fleet => fleet.status === status);
         return fleet as TFleetWithStatus || null;
       }),
-      distinctUntilChanged());
+      distinctUntilChanged(),
+      shareReplay(1)
+    );
   }
 }

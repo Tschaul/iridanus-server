@@ -5,10 +5,10 @@ import { baseWorld, ReadyWorld, LostWorld, World, WorldBeingCaptured, WorldNotBe
 
 export function captureWorld(
   worldId: string,
-  ownerId: string,
+  newOwnerId: string,
 ): Action {
   return {
-    describe: () => `CaptureWorld ${JSON.stringify({ worldId })}`,
+    describe: () => `CaptureWorld ${JSON.stringify({ worldId, newOwnerId })}`,
     apply: (state: GameState) => {
 
       return updateWorld<World & WorldBeingCaptured, ReadyWorld & WorldNotBeingCaptured>(state, worldId, (oldWorld) => {
@@ -16,7 +16,7 @@ export function captureWorld(
           ...baseWorld(oldWorld),
           status: 'READY',
           combatStatus: 'AT_PEACE',
-          ownerId: ownerId,
+          ownerId: newOwnerId,
           miningStatus: 'NOT_MINING',
           populationGrowthStatus: 'NOT_GROWING',
           captureStatus: 'NOT_BEING_CAPTURED',

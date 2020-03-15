@@ -24,7 +24,7 @@ export class CaptureWorldEventQueue implements GameEventQueue {
           return null
         } else {
           return {
-            timestamp,
+            timestamp: world.captureTimestamp,
             happen: () => {
               return [
                 captureWorld(world.id, newOwnerId),

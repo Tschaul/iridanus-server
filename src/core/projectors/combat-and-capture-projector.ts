@@ -16,7 +16,7 @@ export class CombatAndCaptureProjector {
   public nextFiringFleet$: Observable<(ReadyFleetBase & FiringFleet) | null>;
   public nextFiringWorld$: Observable<(WorldWithOwner & FiringWorld) | null>;
 
-  public nextCapturedWorld$: Observable<[World | null, string]>;
+  public nextCapturedWorld$: Observable<[(World & WorldBeingCaptured) | null, string]>;
   public nextStartCapturingWorld$: Observable<[World | null, string]>;
   public nextStopCapturingWorld$: Observable<World | null>;
   public nextCapturedFleet$: Observable<[LostFleet | null, string]>;
@@ -37,7 +37,8 @@ export class CombatAndCaptureProjector {
             a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
           )[0] || null
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
 
     this.nextFiringWorld$ = worlds.byId$.pipe(
@@ -51,7 +52,8 @@ export class CombatAndCaptureProjector {
             a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
           )[0] || null
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
 
     this.playersAtWorldById$ = combineLatest(this.worlds.byId$, this.fleets.byId$).pipe(
@@ -79,7 +81,8 @@ export class CombatAndCaptureProjector {
 
         return [combatWorldIds, nonCombatWorldIds] as [string[], string[]];
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
 
     this.nextCapturedFleet$ = combineLatest(this.fleets.byId$, this.playersAtWorldById$).pipe(
@@ -96,7 +99,8 @@ export class CombatAndCaptureProjector {
         return [null, '']
 
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
 
     this.nextLostFleet$ = combineLatest(this.fleets.byId$, this.fleets.byCurrentWorldId$, this.worlds.byId$).pipe(
@@ -116,7 +120,8 @@ export class CombatAndCaptureProjector {
         return null
 
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
 
     this.nextStartCapturingWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
@@ -148,20 +153,26 @@ export class CombatAndCaptureProjector {
         return [null, '']
 
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
 
     this.nextStopCapturingWorld$ = combineLatest([
       this.worlds.byId$,
-      this.worldIdsAtPeaceAndAtWar$,
+      this.playersAtWorldById$,
     ]).pipe(
-      map(([worldsbyId, [_, worldsAtWar]]) => {
+      map(([worldsbyId, playersAtWorldById]) => {
         const worldsBeingCaptured = Object.values(worldsbyId).filter(world => world.captureStatus === 'BEING_CAPTURED') as (World & WorldBeingCaptured)[]
 
-        const nextWorld = worldsBeingCaptured.find(world => worldsAtWar.includes(world.id));
+        const nextWorld = worldsBeingCaptured.find(world => {
+          const playersAtWorld = playersAtWorldById[world.id];
+          return playersAtWorld.length !== 1 || playersAtWorld[0] !== world.capturingPlayerId;
+        });
 
         return nextWorld || null;
-      })
+      }),
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
 
     this.nextCapturedWorld$ = this.worlds.byId$.pipe(
@@ -170,8 +181,10 @@ export class CombatAndCaptureProjector {
 
         const nextWorld = worldsBeingCaptured.sort((a, b) => b.captureTimestamp - a.captureTimestamp)[0] || null;
 
-        return nextWorld ? [nextWorld as World, nextWorld.capturingPlayerId] : [null, '']
-      })
+        return nextWorld ? [nextWorld as (World & WorldBeingCaptured), nextWorld.capturingPlayerId] : [null, '']
+      }),
+      distinctUntilChanged(equal),
+      shareReplay(1)
     )
   }
 

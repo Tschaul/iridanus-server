@@ -3,7 +3,7 @@ import { ReadonlyStore } from "../store";
 import { FleetProjector } from "./fleet-projector";
 import { combineLatest, zip, Observable } from "rxjs";
 import { WorldProjector } from "./world-projector";
-import { map, switchMap, startWith, distinctUntilChanged } from "rxjs/operators";
+import { map, switchMap, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { worldhasOwner, World } from "../../shared/model/v1/world";
 import { Fleet, fleetHasOwner, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
@@ -46,7 +46,8 @@ export class VisibilityProjector {
         })
       )
     }),
-    distinctUntilChanged(equal)
+    distinctUntilChanged(equal),
+    shareReplay(1),
   )
 
   public nextWorldToHide$ = this.visiblity$.pipe(
@@ -68,7 +69,8 @@ export class VisibilityProjector {
         })
       )
     }),
-    distinctUntilChanged(equal)
+    distinctUntilChanged(equal),
+    shareReplay(1),
   )
 
   public visibleUniverseForPlayer(playerId: string) {
@@ -129,7 +131,8 @@ export class VisibilityProjector {
 
         return result;
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1),
     )
   }
 
@@ -168,7 +171,8 @@ export class VisibilityProjector {
           return false;
         })
       }),
-      distinctUntilChanged(equal)
+      distinctUntilChanged(equal),
+      shareReplay(1),
     )
   }
 

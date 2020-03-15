@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
-import { map, distinctUntilChanged } from "rxjs/operators";
+import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 
 @injectable()
 export class GatesProjector {
@@ -8,6 +8,7 @@ export class GatesProjector {
 
   public all$ = this.store.state$.pipe(
     map(state => state.universe.gates),
-    distinctUntilChanged()
+    distinctUntilChanged(),
+    shareReplay(1)
   );
 }
