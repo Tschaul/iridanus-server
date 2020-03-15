@@ -7,7 +7,6 @@ export type Fleet =
 
 export type FleetWithOwnerAtWorld =
     ReadyFleet
-    | WaitingFleet
     | LeavingFleet
     | ArrivingFleet
     | LoadingMetalFleet
@@ -74,13 +73,6 @@ export interface FiringFleet {
     combatStatus: 'FIRING',
     weaponsReadyTimestamp: number
 }
-
-export interface WaitingFleet extends BaseFleet {
-    status: 'WAITING'
-    currentWorldId: string;
-    readyTimestamp: number;
-    ownerId: string;
-};
 
 export interface LeavingFleet extends BaseFleet {
     status: 'LEAVING'

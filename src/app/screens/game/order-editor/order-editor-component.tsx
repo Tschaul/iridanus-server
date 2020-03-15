@@ -114,8 +114,6 @@ export class OrderEditor extends React.Component<{
             case 'LOAD_POPULATION':
             case 'DROP_POPULATION':
               return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
-            case 'WAIT':
-              return `${order.type} (${order.amountTime}ms)`
             case 'WARP':
               return <WarpOrderEditor order={order}></WarpOrderEditor>
           }

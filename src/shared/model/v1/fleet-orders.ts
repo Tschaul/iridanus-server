@@ -1,5 +1,5 @@
 export type FleetOrder =
-  WaitOrder
+  AwaitCaptureOrder
   | WarpOrder
   | LoadMetalOrder
   | DropMetalOrder
@@ -8,12 +8,8 @@ export type FleetOrder =
   | LoadPopulationOrder
   | DropPopulationOrder
 
-export interface WaitOrder {
-  type: 'WAIT',
-  /**
-   * @minimum 0
-   */
-  amountTime: number;
+export interface AwaitCaptureOrder {
+  type: 'AWAIT_CAPTURE',
 }
 
 export interface WarpOrder {

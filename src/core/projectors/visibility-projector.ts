@@ -1,14 +1,15 @@
 import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
 import { FleetProjector } from "./fleet-projector";
-import { combineLatest, zip } from "rxjs";
+import { combineLatest, zip, Observable } from "rxjs";
 import { WorldProjector } from "./world-projector";
-import { map, switchMap, startWith } from "rxjs/operators";
+import { map, switchMap, startWith, distinctUntilChanged } from "rxjs/operators";
 import { worldhasOwner, World } from "../../shared/model/v1/world";
 import { Fleet, fleetHasOwner, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
 import { VisibleWorld, VisibleState } from "../../shared/model/v1/visible-state";
 import { RemeberedWorld } from "../../shared/model/v1/visibility-status";
+import equal from 'deep-equal';
 
 export interface WorldToRevealOrHide {
   worldId: string,
@@ -44,7 +45,8 @@ export class VisibilityProjector {
           return idsToRevealWithPlayerId.find(it => it) || null;
         })
       )
-    })
+    }),
+    distinctUntilChanged(equal)
   )
 
   public nextWorldToHide$ = this.visiblity$.pipe(
@@ -65,7 +67,8 @@ export class VisibilityProjector {
           return idsToRevealWithPlayerId.find(it => it) || null;
         })
       )
-    })
+    }),
+    distinctUntilChanged(equal)
   )
 
   public visibleUniverseForPlayer(playerId: string) {
@@ -125,7 +128,8 @@ export class VisibilityProjector {
         }
 
         return result;
-      })
+      }),
+      distinctUntilChanged(equal)
     )
   }
 
@@ -138,7 +142,7 @@ export class VisibilityProjector {
     }))
   }
 
-  private calculatedVisibleWorldsForPlayer(playerId: string) {
+  private calculatedVisibleWorldsForPlayer(playerId: string): Observable<World[]> {
     return combineLatest(
       this.worlds.byId$,
       this.fleets.byId$,
@@ -163,7 +167,8 @@ export class VisibilityProjector {
           }
           return false;
         })
-      })
+      }),
+      distinctUntilChanged(equal)
     )
   }
 

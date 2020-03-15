@@ -4,6 +4,7 @@ import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { World } from "../../shared/model/v1/world";
 import { WorldOrder } from "../../shared/model/v1/world-order";
 import { Observable } from "rxjs";
+import equal from 'deep-equal';
 
 @injectable()
 export class WorldProjector {
@@ -25,7 +26,7 @@ export class WorldProjector {
           && World.orders[0].type === orderType);
         return [world || null, world ? world.orders[0] : null] as any;
       }),
-      distinctUntilChanged());
+      distinctUntilChanged(equal));
     
   }
 
@@ -35,6 +36,6 @@ export class WorldProjector {
         const world = Object.values(worlds).find(world => world.status === status);
         return world as TWorldWithStatus || null;
       }),
-      distinctUntilChanged());
+      distinctUntilChanged(equal));
   }
 }

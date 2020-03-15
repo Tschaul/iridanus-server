@@ -5,6 +5,7 @@ import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Fleet, ReadyFleetBase, FiringFleet, LostFleet, fleetHasOwner, FleetWithOwnerAtWorld, fleetIsAtWorldAndHasOwner } from "../../shared/model/v1/fleet";
 import { World, FiringWorld, WorldWithOwner, worldhasOwner } from "../../shared/model/v1/world";
+import equal from 'deep-equal';
 
 @injectable()
 export class CombatAndCaptureProjector {
@@ -33,7 +34,8 @@ export class CombatAndCaptureProjector {
           .sort((a, b) =>
             a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
           )[0] || null
-      })
+      }),
+      distinctUntilChanged(equal)
     )
 
     this.nextFiringWorld$ = worlds.byId$.pipe(
@@ -46,7 +48,8 @@ export class CombatAndCaptureProjector {
           .sort((a, b) =>
             a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
           )[0] || null
-      })
+      }),
+      distinctUntilChanged(equal)
     )
 
     this.playersAtWorldById$ = combineLatest(this.worlds.byId$, this.fleets.byId$).pipe(
@@ -57,7 +60,7 @@ export class CombatAndCaptureProjector {
 
         return this.getPlayersAtWorldById(fleets, worlds);
       }),
-      distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+      distinctUntilChanged(equal),
       shareReplay(1)
     );
 
@@ -74,7 +77,7 @@ export class CombatAndCaptureProjector {
 
         return [combatWorldIds, nonCombatWorldIds] as [string[], string[]];
       }),
-      distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      distinctUntilChanged(equal)
     )
 
     this.nextCapturedFleet$ = combineLatest(this.fleets.byId$, this.playersAtWorldById$).pipe(
@@ -90,7 +93,8 @@ export class CombatAndCaptureProjector {
 
         return [null, '']
 
-      })
+      }),
+      distinctUntilChanged(equal)
     )
 
     this.nextLostFleet$ = combineLatest(this.fleets.byId$, this.fleets.byCurrentWorldId$, this.worlds.byId$).pipe(
@@ -109,7 +113,8 @@ export class CombatAndCaptureProjector {
 
         return null
 
-      })
+      }),
+      distinctUntilChanged(equal)
     )
 
     this.nextCapturedWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
@@ -138,7 +143,8 @@ export class CombatAndCaptureProjector {
 
         return [null, '']
 
-      })
+      }),
+      distinctUntilChanged(equal)
     )
   }
 

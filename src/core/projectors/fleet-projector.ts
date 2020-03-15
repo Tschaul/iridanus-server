@@ -4,6 +4,7 @@ import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { Fleet } from "../../shared/model/v1/fleet";
 import { FleetOrder } from "../../shared/model/v1/fleet-orders";
+import equal from 'deep-equal';
 
 @injectable()
 export class FleetProjector {
@@ -36,15 +37,27 @@ export class FleetProjector {
 
   public firstByStatusAndNextOrderType<TFleetWithStatus extends Fleet, TFleetOrder extends FleetOrder>(
     status: TFleetWithStatus["status"], 
-    orderType: FleetOrder["type"]): Observable<[TFleetWithStatus | null, TFleetOrder | null]> {
+    orderType: TFleetOrder["type"]): Observable<[TFleetWithStatus | null, TFleetOrder | null]> {
+    return this.allByStatusAndNextOrderType(status, orderType).pipe(
+      map(fleets => {
+        const fleet = fleets.length ? fleets[0] : null;
+        return [fleet || null, fleet ? (fleet.orders[0] || null) : null] as any;
+      }),
+      distinctUntilChanged(equal));
+    
+  }
+
+  public allByStatusAndNextOrderType<TFleetWithStatus extends Fleet, TFleetOrder extends FleetOrder>(
+    status: TFleetWithStatus["status"], 
+    orderType: TFleetOrder["type"]): Observable<TFleetWithStatus[]> {
     return this.byId$.pipe(
       map(fleetsById => {
-        const fleet = Object.values(fleetsById).find(fleet => fleet.status === status
+        return Object.values(fleetsById).filter(fleet => 
+          fleet.status === status
           && fleet.orders.length
-          && fleet.orders[0].type === orderType);
-        return [fleet || null, fleet ? fleet.orders[0] : null] as any;
+          && fleet.orders[0].type === orderType) as TFleetWithStatus[];
       }),
-      distinctUntilChanged());
+      distinctUntilChanged(equal));
     
   }
 
