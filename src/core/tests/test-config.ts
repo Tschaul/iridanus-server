@@ -7,8 +7,10 @@ export const testRules: GameRules = {
     minimumPopulationGrowthDelay: 7 * tick
   },
   combat: {
-    integrityDamagePerShip: 0.456789,
-    meanFiringInterval: 5 * tick
+    integrityDamagePerShip: 0.094276,
+    meanFiringInterval: 1 * tick,
+    industryDamageChancePerShip:  0.023569,
+    populationDamageChancePerShip: 0.04713,
   },
   building: {
     buildIndustryDelay: 50 * tick,

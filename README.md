@@ -14,6 +14,11 @@ Server for Iridanus
 - account activation mail and password reset mail
 - delayed start of event loop after game starts
 
+# Further Improvements
+
+- show order duration in UI
+- help: context based links into docs
+
 # Roadmap and ideas
 
 ## Battle tactics

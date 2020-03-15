@@ -7,8 +7,10 @@ export const debugConfig: GameRules = {
     minimumPopulationGrowthDelay: 7 * fiveSeconds
   },
   combat: {
-    integrityDamagePerShip: 0.456789,
-    meanFiringInterval: 3 * fiveSeconds
+    integrityDamagePerShip: 0.094276,
+    meanFiringInterval: 1 * fiveSeconds,
+    industryDamageChancePerShip:  0.023569,
+    populationDamageChancePerShip: 0.04713,
   },
   building: {
     buildIndustryDelay: 50 * fiveSeconds,
