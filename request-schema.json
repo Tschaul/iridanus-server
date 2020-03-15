@@ -131,6 +131,20 @@
         }
     ],
     "definitions": {
+        "AwaitCaptureOrder": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "AWAIT_CAPTURE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "BuildIndustryOrder": {
             "properties": {
                 "amount": {
@@ -454,7 +468,7 @@
                     "items": {
                         "anyOf": [
                             {
-                                "$ref": "#/definitions/WaitOrder"
+                                "$ref": "#/definitions/AwaitCaptureOrder"
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
@@ -527,25 +541,6 @@
                 "orders",
                 "type",
                 "worldId"
-            ],
-            "type": "object"
-        },
-        "WaitOrder": {
-            "properties": {
-                "amountTime": {
-                    "minimum": 0,
-                    "type": "number"
-                },
-                "type": {
-                    "enum": [
-                        "WAIT"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amountTime",
-                "type"
             ],
             "type": "object"
         },

@@ -40,6 +40,8 @@ import { BeginLoadingPopulationEventQueue } from "./transfer/begin-loading-popul
 import { EndLoadPopulationEventQueue } from "./transfer/end-loading-population";
 import { BeginDroppingPopulationEventQueue } from "./transfer/begin-dropping-population";
 import { EndDroppingPopulationEventQueue } from "./transfer/end-dropping-population";
+import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
+import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 
 export function registerEventQueues(container: Container) {
 
@@ -87,7 +89,9 @@ export function registerEventQueues(container: Container) {
   container.bind(WorldStopGrowingEventQueue).toSelf();
 
   container.bind(CaptureFleetEventQueue).toSelf();
+  container.bind(StartCapturingWorldEventQueue).toSelf();
   container.bind(CaptureWorldEventQueue).toSelf();
+  container.bind(StopCapturingWorldEventQueue).toSelf();
   container.bind(LooseFleetEventQueue).toSelf();
 
   container.bind(RevealWorldEventQueue).toSelf();

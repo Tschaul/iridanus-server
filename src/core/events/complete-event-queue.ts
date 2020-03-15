@@ -42,6 +42,8 @@ import { BeginLoadingPopulationEventQueue } from "./transfer/begin-loading-popul
 import { EndLoadPopulationEventQueue } from "./transfer/end-loading-population";
 import { BeginDroppingPopulationEventQueue } from "./transfer/begin-dropping-population";
 import { EndDroppingPopulationEventQueue } from "./transfer/end-dropping-population";
+import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
+import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -92,7 +94,9 @@ export class CompleteEventQueue implements GameEventQueue {
     worldStopsGrowing: WorldStopGrowingEventQueue,
 
     captureFleet: CaptureFleetEventQueue,
+    startCapturingWorld: StartCapturingWorldEventQueue,
     captureWorld: CaptureWorldEventQueue,
+    stopCapturingWorld: StopCapturingWorldEventQueue,
     looseFleet: LooseFleetEventQueue,
 
     revealWorld: RevealWorldEventQueue,
@@ -129,7 +133,9 @@ export class CompleteEventQueue implements GameEventQueue {
       worldFire,
       worldStopFiring,
       captureFleet,
+      startCapturingWorld,
       captureWorld,
+      stopCapturingWorld,
       looseFleet,
       worldStartMining,
       worldMinesMetal,

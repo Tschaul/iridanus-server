@@ -3,6 +3,9 @@ import { GameRules } from "../../shared/model/v1/rules";
 const fiveSeconds = 1000 * 5;
 
 export const debugConfig: GameRules = {
+  capture: {
+    captureDelay: 1 * fiveSeconds,
+  },
   population: {
     minimumPopulationGrowthDelay: 7 * fiveSeconds
   },

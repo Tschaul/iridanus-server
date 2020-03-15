@@ -47,7 +47,8 @@ export function makeGomeisaThreeRandom(): GameMap {
         industry: 10,
         population: 30,
         populationLimit: 30,
-        ships: 2
+        ships: 2,
+        captureStatus: 'NOT_BEING_CAPTURED'
       };
 
       ([1, 2, 3]).forEach((index) => {
@@ -109,6 +110,7 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
     populationLimit,
     ships: 0,
     status: 'LOST',
+    captureStatus: 'NOT_BEING_CAPTURED'
   }
 
   const fleetAmount = Math.round(random[3])

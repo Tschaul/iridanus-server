@@ -5,12 +5,12 @@ export type World =
     | LostWorld;
 
 export type WorldWithOwner =
-        ReadyWorld
-        | BuildingShipWorld
-        | BuildingIndustryWorld
-        | ScrappingShipsWorld
+    ReadyWorld
+    | BuildingShipWorld
+    | BuildingIndustryWorld
+    | ScrappingShipsWorld
 
-export interface BaseWorld {
+export interface BaseWorldBase {
     id: string;
     metal: number;
     ships: number;
@@ -22,10 +22,12 @@ export interface BaseWorld {
     integrity: number;
 }
 
+export type BaseWorld = BaseWorldBase & WorldWithCaptureStatus;
+
 export type WorldWithOwnerBase = BaseWorld & WorldWithCombatStatus & WorldWithMiningStatus & WorldWithPopulationGrowth
 
 export function baseWorld(world: World): BaseWorld {
-    return {
+    const result: any = {
         id: world.id,
         industry: world.industry,
         metal: world.metal,
@@ -36,6 +38,14 @@ export function baseWorld(world: World): BaseWorld {
         ships: world.ships,
         integrity: world.integrity,
     }
+
+    result.captureStatus = world.captureStatus
+    if (world.captureStatus === 'BEING_CAPTURED') {
+        result.capturingPlayerId = world.capturingPlayerId;
+        result.captureTimestamp = world.captureTimestamp;
+    }
+
+    return result;
 }
 
 export function baseWorldWithOwner(world: WorldWithOwnerBase): WorldWithOwnerBase {
@@ -54,18 +64,22 @@ export function baseWorldWithOwner(world: WorldWithOwnerBase): WorldWithOwnerBas
 
 export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithOwnerBase {
     const result = {} as any;
+
     result.combatStatus = world.combatStatus;
     if (world.combatStatus === 'FIRING') {
         result.weaponsReadyTimestamp = world.weaponsReadyTimestamp;
     }
+
     result.miningStatus = world.miningStatus;
     if (world.miningStatus === 'MINING') {
         result.nextMetalMinedTimestamp = world.nextMetalMinedTimestamp;
     }
+
     result.populationGrowthStatus = world.populationGrowthStatus
     if (world.populationGrowthStatus === 'GROWING') {
         result.nextPopulationGrowthTimestamp = world.nextPopulationGrowthTimestamp
     }
+
     return result;
 }
 
@@ -84,6 +98,20 @@ export interface WorldAtPeace {
 export interface FiringWorld {
     combatStatus: 'FIRING',
     weaponsReadyTimestamp: number
+}
+
+export type WorldWithCaptureStatus =
+    WorldNotBeingCaptured
+    | WorldBeingCaptured;
+
+export interface WorldNotBeingCaptured {
+    captureStatus: 'NOT_BEING_CAPTURED'
+}
+
+export interface WorldBeingCaptured {
+    captureStatus: 'BEING_CAPTURED',
+    capturingPlayerId: string,
+    captureTimestamp: number,
 }
 
 export type WorldWithMiningStatus =

@@ -3,6 +3,9 @@ import { GameRules } from "../../shared/model/v1/rules";
 const tick = 100;
 
 export const testRules: GameRules = {
+  capture: {
+    captureDelay: 1 * tick,
+  },
   population: {
     minimumPopulationGrowthDelay: 7 * tick
   },

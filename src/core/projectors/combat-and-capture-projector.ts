@@ -4,7 +4,7 @@ import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Fleet, ReadyFleetBase, FiringFleet, LostFleet, fleetHasOwner, FleetWithOwnerAtWorld, fleetIsAtWorldAndHasOwner } from "../../shared/model/v1/fleet";
-import { World, FiringWorld, WorldWithOwner, worldhasOwner } from "../../shared/model/v1/world";
+import { World, FiringWorld, WorldWithOwner, worldhasOwner, WorldBeingCaptured } from "../../shared/model/v1/world";
 import equal from 'deep-equal';
 
 @injectable()
@@ -17,6 +17,8 @@ export class CombatAndCaptureProjector {
   public nextFiringWorld$: Observable<(WorldWithOwner & FiringWorld) | null>;
 
   public nextCapturedWorld$: Observable<[World | null, string]>;
+  public nextStartCapturingWorld$: Observable<[World | null, string]>;
+  public nextStopCapturingWorld$: Observable<World | null>;
   public nextCapturedFleet$: Observable<[LostFleet | null, string]>;
   public nextLostFleet$: Observable<Fleet | null>;
 
@@ -117,9 +119,11 @@ export class CombatAndCaptureProjector {
       distinctUntilChanged(equal)
     )
 
-    this.nextCapturedWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
+    this.nextStartCapturingWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
       map(([worldsById, playersAtWorldById, fleetsByWorldId]) => {
-        const lostWorlds = Object.values(worldsById).filter(world => world.status === 'LOST') as World[];
+        const worldsNotBeingCaptured = Object.values(worldsById).filter(world => world.captureStatus === 'NOT_BEING_CAPTURED');
+        
+        const lostWorlds = worldsNotBeingCaptured.filter(world => world.status === 'LOST') as World[];
         const capturedLostWorld = lostWorlds.find(world => {
           const players = playersAtWorldById[world.id] || [];
           return players.length === 1;
@@ -129,7 +133,7 @@ export class CombatAndCaptureProjector {
           return [capturedLostWorld, playersAtWorldById[capturedLostWorld.id][0]]
         }
 
-        const ownedWorlds = Object.values(worldsById).filter(world => worldhasOwner(world)) as WorldWithOwner[];
+        const ownedWorlds = worldsNotBeingCaptured.filter(world => worldhasOwner(world)) as WorldWithOwner[];
         const capturedOwnedWorld = ownedWorlds.find(world => {
           const players = playersAtWorldById[world.id] || [];
           const noOtherOwner = players.filter(id => id !== world.ownerId).length === 1;
@@ -145,6 +149,29 @@ export class CombatAndCaptureProjector {
 
       }),
       distinctUntilChanged(equal)
+    )
+
+    this.nextStopCapturingWorld$ = combineLatest([
+      this.worlds.byId$,
+      this.worldIdsAtPeaceAndAtWar$,
+    ]).pipe(
+      map(([worldsbyId, [_, worldsAtWar]]) => {
+        const worldsBeingCaptured = Object.values(worldsbyId).filter(world => world.captureStatus === 'BEING_CAPTURED') as (World & WorldBeingCaptured)[]
+
+        const nextWorld = worldsBeingCaptured.find(world => worldsAtWar.includes(world.id));
+
+        return nextWorld || null;
+      })
+    )
+
+    this.nextCapturedWorld$ = this.worlds.byId$.pipe(
+      map(worldsbyId => {
+        const worldsBeingCaptured = Object.values(worldsbyId).filter(world => world.captureStatus === 'BEING_CAPTURED') as WorldBeingCaptured[]
+
+        const nextWorld = worldsBeingCaptured.sort((a, b) => b.captureTimestamp - a.captureTimestamp)[0] || null;
+
+        return nextWorld ? [nextWorld as World, nextWorld.capturingPlayerId] : [null, '']
+      })
     )
   }
 

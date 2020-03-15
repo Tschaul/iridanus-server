@@ -103,6 +103,7 @@ function makeWorld(id: string): LostWorld {
     populationLimit: amount * 20,
     ships: 0,
     status: 'LOST',
+    captureStatus: 'NOT_BEING_CAPTURED'
   }
 }
 

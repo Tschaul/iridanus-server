@@ -79,7 +79,8 @@ export const dummyReadyWorld: ReadyWorld = {
   integrity: 1,
   combatStatus: 'AT_PEACE',
   miningStatus: 'NOT_MINING',
-  populationGrowthStatus: 'NOT_GROWING'
+  populationGrowthStatus: 'NOT_GROWING',
+  captureStatus: 'NOT_BEING_CAPTURED'
 }
 
 export const dummyLostWorld: LostWorld = {
@@ -93,4 +94,5 @@ export const dummyLostWorld: LostWorld = {
   ships: 20,
   orders: [],
   integrity: 1,
+  captureStatus: 'NOT_BEING_CAPTURED'
 }

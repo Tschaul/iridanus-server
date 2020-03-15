@@ -1,4 +1,7 @@
 export interface GameRules {
+  capture: {
+    captureDelay: number;
+  },
   population: {
     minimumPopulationGrowthDelay: number;
   },

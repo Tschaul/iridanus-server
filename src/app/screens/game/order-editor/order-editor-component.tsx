@@ -116,6 +116,8 @@ export class OrderEditor extends React.Component<{
               return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
             case 'WARP':
               return <WarpOrderEditor order={order}></WarpOrderEditor>
+            case 'AWAIT_CAPTURE':
+              return <span>Await Capture</span>
           }
         }).map((content, index) => (
           <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>
@@ -132,6 +134,7 @@ export class OrderEditor extends React.Component<{
         <Button onClick={this.handleNewDropShipsOrder} spaceRight>🠣►</Button>
         <Button onClick={this.handleNewLoadShipsOrder} spaceRight>🠡►</Button>
         <Button onClick={this.handleNewWarpOrder}>➠</Button>
+        <Button onClick={this.handleNewAwaitCaptureOrder}>⚑</Button>
       </div>
     ])
   }
@@ -165,6 +168,11 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewWarpOrder() {
     this.props.vm.newWarpOrder()
+  }
+
+  @autobind
+  handleNewAwaitCaptureOrder() {
+    this.props.vm.newAwaitCaptureOrder()
   }
 
   @autobind
