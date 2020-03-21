@@ -28,13 +28,18 @@ export class BeginBuildingIndustryEventQueue implements GameEventQueue {
           return {
             timestamp,
             happen: () => {
-              if (world.metal < this.setup.rules.building.buildIndustryCost || world.industry === 0) {
+              const availableIndustry = Math.min(world.industry, world.population - world.mines)
+              if (
+                world.metal < this.setup.rules.building.buildIndustryCost
+                || world.industry === 0
+                || availableIndustry < 1
+              ) {
                 return [
                   popWorldOrder(world.id)
                 ];
               } else {
                 return [
-                  buildIndustry(world.id, timestamp + this.setup.rules.building.buildIndustryDelay / Math.min(world.industry, world.population)),
+                  buildIndustry(world.id, timestamp + this.setup.rules.building.buildIndustryDelay / availableIndustry),
                   giveOrTakeWorldMetal(world.id, -1 * this.setup.rules.building.buildIndustryCost),
                   decrementBuildOrderAmount(world.id, 'BUILD_INDUSTRY')
                 ];

@@ -4,7 +4,7 @@ const fiveSeconds = 1000 * 5;
 
 export const debugConfig: GameRules = {
   capture: {
-    captureDelay: 1 * fiveSeconds,
+    captureDelay: 2 * fiveSeconds,
   },
   population: {
     minimumPopulationGrowthDelay: 7 * fiveSeconds

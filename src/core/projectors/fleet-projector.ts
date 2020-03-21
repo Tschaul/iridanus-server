@@ -34,7 +34,7 @@ export class FleetProjector {
     }),
     shareReplay(1),
     distinctUntilChanged(equal)
-  )
+  ) as Observable<{ [k: string]: Fleet[] }>;
 
   public firstByStatusAndNextOrderType<TFleetWithStatus extends Fleet, TFleetOrder extends FleetOrder>(
     status: TFleetWithStatus["status"],
