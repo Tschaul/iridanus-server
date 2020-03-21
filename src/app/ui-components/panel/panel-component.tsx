@@ -42,7 +42,7 @@ export class Panel extends React.Component<{
       padding: 'calc(1em - 10px)',
       textShadow: 'rgba(255, 255, 255, 0.5) 0px 0px 5px',
       boxShadow: 'inset rgba(255, 255, 255, 0.5) 0px 0px 5px',
-      margin: '0.5em',
+      margin: '0.25em',
       userSelect: 'none'
     }
 

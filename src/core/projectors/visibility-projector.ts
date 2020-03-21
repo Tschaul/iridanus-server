@@ -122,6 +122,7 @@ export class VisibilityProjector {
         const result: VisibleState = {
           currentTimestamp: state.currentTimestamp,
           gameEndTimestamp: state.gameEndTimestamp,
+          scorings: state.scorings,
           universe: {
             worlds,
             fleets,

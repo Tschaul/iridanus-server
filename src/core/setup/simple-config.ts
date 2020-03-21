@@ -4,7 +4,7 @@ const fiveSeconds = 1000 * 5;
 
 export const debugConfig: GameRules = {
   scoring: {
-    gameEndingScore: 300000000000
+    gameEndingScore: 3400 * fiveSeconds
   },
   capture: {
     captureDelay: 2 * fiveSeconds,

@@ -58,7 +58,7 @@ export class InfluenceProjector {
           }
         })
 
-        const allPlayerIds = new Set(...[
+        const allPlayerIds = new Set([
           ...Object.getOwnPropertyNames(population),
           ...Object.getOwnPropertyNames(industry),
           ...Object.getOwnPropertyNames(mines),
@@ -84,7 +84,7 @@ export class InfluenceProjector {
   ]).pipe(
     map(([scorings, calculatedInfluence]) => {
       const playerIdToUpdate = Object.getOwnPropertyNames(scorings).find(playerId => {
-        scorings[playerId].influence !== calculatedInfluence[playerId]
+        return scorings[playerId].influence !== calculatedInfluence[playerId]
       })
 
       if (playerIdToUpdate == null) {

@@ -8,12 +8,14 @@ import { HasExitAnimation } from "../../ui-components/animatable-components";
 import classNames from "classnames";
 import { createClasses } from "../../ui-components/setup-jss";
 import { TopBar } from "./top-bar/top-bar-component";
+import { GameInfoPanel } from "./game-info/game-info-panel";
 
-const TOP_BAR_HEIGHT = 75;
-const RIGHT_PANEL_WIDTH = 420;
+const TOP_BAR_HEIGHT = 65;
+const RIGHT_PANEL_WIDTH = 400;
 
 const MIDDLE_PANEL_HEIGHT = 300;
-const BOTTOM_PANEL_HEIGHT = 500;
+const BOTTOM_PANEL_HEIGHT = 300;
+const TOP_PANEL_HEIGHT = 300;
 
 
 const classes = createClasses({
@@ -22,7 +24,7 @@ const classes = createClasses({
     height: '100vh',
     width: '100vw',
     gridTemplateColumns: `[start] auto [panels-start] ${RIGHT_PANEL_WIDTH}px [end]`,
-    gridTemplateRows: `[start] ${TOP_BAR_HEIGHT}px [main-start] auto [middle-start] ${MIDDLE_PANEL_HEIGHT}px [bottom-start] ${BOTTOM_PANEL_HEIGHT}px [end]`,
+    gridTemplateRows: `[start] ${TOP_BAR_HEIGHT}px [main-start] auto [top-start] ${TOP_PANEL_HEIGHT}px [middle-start] ${MIDDLE_PANEL_HEIGHT}px [bottom-start] ${BOTTOM_PANEL_HEIGHT}px [end]`,
     position: 'fixed',
     top: 0,
     left: 0
@@ -30,6 +32,10 @@ const classes = createClasses({
   topLeft: {
     gridColumn: 'start / panels-start',
     gridRow: 'start / main-start',
+  },
+  topRight: {
+    gridColumn: 'panels-start / end',
+    gridRow: 'top-start / middle-start',
   },
   middleRight: {
     gridColumn: 'panels-start / end',
@@ -65,7 +71,11 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }> implement
         <TopBar
           vm={this.props.vm.topBarViewModel}
           panelClassName={classNames(classes.topLeft)}
-        ></TopBar>
+        />
+        <GameInfoPanel
+          vm={this.props.vm.scoringsViewModel}
+          panelClassName={classNames(classes.topRight)}
+        />
         <SelectedWorldPanel
           vm={this.props.vm.selectedWorldViewModel}
           panelClassName={classNames(classes.middleRight)}

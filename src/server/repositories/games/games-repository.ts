@@ -220,6 +220,19 @@ export class GameRepository {
       data: { drawingPositions }
     })
   }
+
+  public async endGame(gameId: string) {
+    const handle = await this.handleForGameInfoById(gameId);
+    handle.do(async (draft) => {
+      if (draft.info.state !== 'STARTED') {
+        throw new Error("Game has not yet started.")
+      }
+      return draft => {
+        const info = draft.info as StartedGameInfo;
+        info.state = 'ENDED';
+      }
+    })
+  }
 }
 
 function getPlayerTemplate(num: number): Partial<PlayerInfo> {

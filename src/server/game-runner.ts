@@ -125,6 +125,10 @@ export class GameRunner {
 
     await game.startGameLoop();
 
+    this.logger.info('game runner: game ' + gameInfo.id + ' has ended');
+
+    await this.gameRepository.endGame(gameInfo.id)
+
   }
 
   instantiateMap(gameInfo: Readonly<GameInfo>, map: Readonly<GameMap>): GameState {
@@ -177,7 +181,7 @@ export class GameRunner {
 
     return {
       currentTimestamp: this.clock.getTimestamp(),
-      gameEndTimestamp: Number.MAX_VALUE,
+      gameEndTimestamp: this.clock.getTimestamp() + 1000 * 60 * 60 * 24,
       universe,
       scorings
     }

@@ -9,6 +9,7 @@ import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
 import { GameStats } from "./game-stats";
 import { TopBarViewModel } from "./top-bar-view-model";
+import { ScoringsViewModel } from "./scorings-view-model";
 
 
 export class GameViewModel {
@@ -23,6 +24,7 @@ export class GameViewModel {
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection);
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints);
   topBarViewModel = new TopBarViewModel(this, this.gameOrders, this.gameStats);
+  scoringsViewModel = new ScoringsViewModel(this.gameData);
 
   @computed public get gameId() {
     return this.mainViewModel.activeGameId;

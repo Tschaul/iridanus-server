@@ -2,11 +2,13 @@ import { Gates } from "./universe";
 import { World, WorldWithOwner } from "./world";
 import { Fleet } from "./fleet";
 import { RemeberedWorld } from "./visibility-status";
+import { Scorings } from "./scoring";
 
 export interface VisibleState {
   currentTimestamp: number;
   gameEndTimestamp: number;
   universe: VisibleUniverse;
+  scorings: Scorings
 }
 
 export interface VisibleUniverse {
