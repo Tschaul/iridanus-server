@@ -12,4 +12,10 @@ export class TimeProjector {
     distinctUntilChanged(),
     shareReplay(1),
   )
+
+  public gameEndTimestamp$ = this.store.state$.pipe(
+    map(state => state.gameEndTimestamp),
+    distinctUntilChanged(),
+    shareReplay(1),
+  )
 }

@@ -4,7 +4,7 @@ import { injectable } from 'inversify'
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
 import { GameState } from "../shared/model/v1/state";
-import { distinctUntilChanged, debounceTime } from "rxjs/operators";
+import { distinctUntilChanged, debounceTime, takeUntil } from "rxjs/operators";
 import { ActionLogger } from "./infrastructure/action-logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";
 import { setTimestamp } from "./actions/set-timestamp";
@@ -33,20 +33,14 @@ export class Game {
       this.completeEventQueue.upcomingEvent$.pipe(
         distinctUntilChanged(),
         debounceTime(0),
+        takeUntil(this.store.finalized$)
       ).subscribe((event) => {
 
         if (event === null) {
           if (this.setup.endGameLoopWhenNoEventIsQueued) {
-            resolve(this.store.finalize() as GameState)
+            this.finalizeAndResolve(resolve)
             return
           }
-          // } else {
-          //   const now = this.clock.getTimestamp()
-          //   const setTimestampAction = setTimestamp(now);
-          //   this.store.dispatch(setTimestampAction)
-          //   this.logger.logAction(setTimestampAction);
-          //   this.store.commit();
-          // }
           return;
         }
 
@@ -55,26 +49,36 @@ export class Game {
 
         const now = this.clock.getTimestamp()
 
-        if (now < event.timestamp) {
+        if (now < event.timestamp && this.setup.awaitClock) {
           this.timeout = setTimeout(() => {
-            this.handleEvent(event);
+            this.handleEvent(event, resolve);
           }, event.timestamp - now)
-
         } else {
-          this.handleEvent(event);
+          this.handleEvent(event, resolve);
+        }
+
+        if (event.endsGame) {
+          return
         }
       })
 
-      this.store.commit();
+      this.store.commit(this.clock.getTimestamp());
     })
 
   }
 
-  private handleEvent(event: GameEvent) {
+  private finalizeAndResolve(resolve: (state: GameState) => void) {
+    resolve(this.store.finalize() as GameState)
+  }
+
+  private handleEvent(event: GameEvent, resolve: (state: GameState) => void) {
     const actions = event.happen();
     for (const action of actions) {
       this.store.dispatch(action);
     }
-    this.store.commit();
+    this.store.commit(event.timestamp);
+    if (event.endsGame) {
+      this.finalizeAndResolve(resolve);
+    }
   }
 }

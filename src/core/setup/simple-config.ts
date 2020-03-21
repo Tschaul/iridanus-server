@@ -3,6 +3,9 @@ import { GameRules } from "../../shared/model/v1/rules";
 const fiveSeconds = 1000 * 5;
 
 export const debugConfig: GameRules = {
+  scoring: {
+    gameEndingScore: 300000000000
+  },
   capture: {
     captureDelay: 2 * fiveSeconds,
   },

@@ -3,6 +3,9 @@ import { GameRules } from "../../shared/model/v1/rules";
 const tick = 100;
 
 export const testRules: GameRules = {
+  scoring: {
+    gameEndingScore: 1000,
+  },
   capture: {
     captureDelay: 1 * tick,
   },

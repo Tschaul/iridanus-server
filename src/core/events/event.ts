@@ -3,6 +3,7 @@ import { Action } from "../actions/action";
 import { Observable } from "rxjs";
 
 export interface GameEvent {
+    endsGame?: boolean,
     timestamp: number,
     happen(): Action[]
 }

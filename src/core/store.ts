@@ -14,11 +14,13 @@ import { setTimestamp } from './actions/set-timestamp';
 export class Store {
   private actions$$: Subject<Action> = new Subject();
   private commits$$: Subject<void> = new Subject();
+  private finalized$$: Subject<void> = new Subject();
   private lastState: GameState | null = null;
 
   private stateInternal$$ = new ReplaySubject<GameState>(1);
 
   public state$: Observable<GameState> = this.stateInternal$$;
+  public finalized$: Observable<void> = this.finalized$$;
 
   public actionLog$: Observable<string> = this.actions$$.pipe(
     map(action => action.describe()),
@@ -55,8 +57,8 @@ export class Store {
     this.actions$$.next(action);
   }
 
-  public commit() {
-    const setTimestampAction = setTimestamp(this.clock.getTimestamp());
+  public commit(timestamp: number) {
+    const setTimestampAction = setTimestamp(timestamp);
     this.dispatch(setTimestampAction)
     this.commits$$.next();
   }
@@ -64,6 +66,8 @@ export class Store {
   public finalize() {
     this.commits$$.complete();
     this.actions$$.complete();
+    this.finalized$$.next();
+    this.finalized$$.complete();
     return this.lastState;
   }
 }

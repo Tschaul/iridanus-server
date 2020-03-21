@@ -1220,6 +1220,29 @@
             ],
             "type": "object"
         },
+        "Scoring": {
+            "properties": {
+                "influence": {
+                    "type": "number"
+                },
+                "lastScoringTimestamp": {
+                    "type": "number"
+                },
+                "playerId": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "influence",
+                "lastScoringTimestamp",
+                "playerId",
+                "score"
+            ],
+            "type": "object"
+        },
         "ScrapShipsForIndustryOrder": {
             "properties": {
                 "amount": {
@@ -4087,6 +4110,12 @@
         "gameEndTimestamp": {
             "type": "number"
         },
+        "scorings": {
+            "additionalProperties": {
+                "$ref": "#/definitions/Scoring"
+            },
+            "type": "object"
+        },
         "universe": {
             "$ref": "#/definitions/Universe"
         }
@@ -4094,6 +4123,7 @@
     "required": [
         "currentTimestamp",
         "gameEndTimestamp",
+        "scorings",
         "universe"
     ],
     "type": "object"

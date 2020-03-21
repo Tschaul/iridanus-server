@@ -42,8 +42,13 @@ import { BeginDroppingPopulationEventQueue } from "./transfer/begin-dropping-pop
 import { EndDroppingPopulationEventQueue } from "./transfer/end-dropping-population";
 import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
 import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
+import { GameEndsEventQueue } from "./scoring/game-ends";
+import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
 
 export function registerEventQueues(container: Container) {
+
+  container.bind(GameEndsEventQueue).toSelf();
+  container.bind(PlayerChangesInfluenceEventQueue).toSelf();
 
   container.bind(BeginLoadingMetalEventQueue).toSelf();
   container.bind(BeginLoadingShipsEventQueue).toSelf();

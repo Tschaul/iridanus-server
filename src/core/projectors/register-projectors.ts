@@ -5,6 +5,7 @@ import { TimeProjector } from "./time-projector";
 import { CombatAndCaptureProjector } from "./combat-and-capture-projector";
 import { GatesProjector } from "./gates-projector";
 import { VisibilityProjector } from "./visibility-projector";
+import { InfluenceProjector } from "./influence-projector";
 
 export function registerProjectors(container: Container) {
   container.bind(FleetProjector).toSelf();
@@ -13,4 +14,5 @@ export function registerProjectors(container: Container) {
   container.bind(CombatAndCaptureProjector).toSelf();
   container.bind(GatesProjector).toSelf();
   container.bind(VisibilityProjector).toSelf();
+  container.bind(InfluenceProjector).toSelf();
 }

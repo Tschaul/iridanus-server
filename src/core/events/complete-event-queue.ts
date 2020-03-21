@@ -44,6 +44,8 @@ import { BeginDroppingPopulationEventQueue } from "./transfer/begin-dropping-pop
 import { EndDroppingPopulationEventQueue } from "./transfer/end-dropping-population";
 import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
 import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
+import { GameEndsEventQueue } from "./scoring/game-ends";
+import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -51,6 +53,10 @@ export class CompleteEventQueue implements GameEventQueue {
   upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
+
+    gameEnds: GameEndsEventQueue,
+    playerChangesInfluence: PlayerChangesInfluenceEventQueue,
+
     beginLoadMetal: BeginLoadingMetalEventQueue,
     beginLoadShips: BeginLoadingShipsEventQueue,
     beginLoadPopulation: BeginLoadingPopulationEventQueue,
@@ -104,6 +110,8 @@ export class CompleteEventQueue implements GameEventQueue {
   ) {
 
     const allEventQueues = [
+      gameEnds,
+      playerChangesInfluence,
       beginLoadMetal,
       beginLoadShips,
       endLoadMetal,

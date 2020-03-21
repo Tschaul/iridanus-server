@@ -1,4 +1,7 @@
 export interface GameRules {
+  scoring: {
+    gameEndingScore: number;
+  },
   capture: {
     captureDelay: number;
   },

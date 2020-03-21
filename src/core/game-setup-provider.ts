@@ -54,5 +54,6 @@ export class GameSetupProvider {
   }
 
   public endGameLoopWhenNoEventIsQueued: boolean = false;
+  public awaitClock: boolean = true;
 
 }

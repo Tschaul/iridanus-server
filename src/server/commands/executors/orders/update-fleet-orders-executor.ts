@@ -4,12 +4,13 @@ import { UpdateFleetOrdersCommand } from "../../../../shared/messages/commands/o
 import { Store } from "../../../../core/store";
 import { putFleetOrders } from "../../../../core/actions/fleet/put-fleet-orders";
 import { first } from "rxjs/operators";
+import { Clock } from "../../../../core/infrastructure/clock";
 
 @injectable()
 export class UpdateFleetOrdersExecutor implements CommandExecutor<UpdateFleetOrdersCommand> {
   authenticationRequired = true;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store, private clock: Clock) { }
 
   async execute(command: UpdateFleetOrdersCommand, userId: string) {
 
@@ -22,7 +23,7 @@ export class UpdateFleetOrdersExecutor implements CommandExecutor<UpdateFleetOrd
     }
 
     this.store.dispatch(putFleetOrders(command.fleetId, command.orders));
-    this.store.commit();
+    this.store.commit(this.clock.getTimestamp());
   }
 
 }

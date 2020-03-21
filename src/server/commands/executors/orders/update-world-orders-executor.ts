@@ -4,12 +4,13 @@ import { UpdateWorldOrdersCommand } from "../../../../shared/messages/commands/o
 import { Store } from "../../../../core/store";
 import { first } from "rxjs/operators";
 import { putWorldOrders } from "../../../../core/actions/world/put-world-orders";
+import { Clock } from "../../../../core/infrastructure/clock";
 
 @injectable()
 export class UpdateWorldOrdersExecutor implements CommandExecutor<UpdateWorldOrdersCommand> {
   authenticationRequired = true;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store, private clock: Clock) { }
 
   async execute(command: UpdateWorldOrdersCommand, userId: string) {
 
@@ -21,8 +22,9 @@ export class UpdateWorldOrdersExecutor implements CommandExecutor<UpdateWorldOrd
       throw new Error('Invalid world order command')
     }
 
-    this.store.dispatch(putWorldOrders(command.worldId, command.orders));
-    this.store.commit();
+    this.store.dispatch(putWorldOrders(command.worldId, command.orders));    
+    this.store.commit(this.clock.getTimestamp());
+
   }
 
 }

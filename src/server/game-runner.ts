@@ -18,6 +18,7 @@ import { Universe } from "../shared/model/v1/universe";
 import { Initializer } from "./infrastructure/initialisation/initializer";
 import { debugConfig } from "../core/setup/simple-config";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
+import { Scorings } from "../shared/model/v1/scoring";
 
 @injectable()
 export class GameRunner {
@@ -127,8 +128,20 @@ export class GameRunner {
   }
 
   instantiateMap(gameInfo: Readonly<GameInfo>, map: Readonly<GameMap>): GameState {
+    const players = Object.getOwnPropertyNames(gameInfo.players);
+
+    const scorings: Scorings = {};
+
+    players.forEach(playerId => {
+      scorings[playerId] = {
+        influence: 0,
+        lastScoringTimestamp: 0,
+        playerId,
+        score: 0
+      }
+    })
+
     const universe = produce(map.universe, (state: Universe) => {
-      const players = Object.getOwnPropertyNames(gameInfo.players);
       map.seats.forEach((seat, index) => {
         const player = players[index];
         state.visibility[player] = {};
@@ -166,6 +179,7 @@ export class GameRunner {
       currentTimestamp: this.clock.getTimestamp(),
       gameEndTimestamp: Number.MAX_VALUE,
       universe,
+      scorings
     }
   }
 

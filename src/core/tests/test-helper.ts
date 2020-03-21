@@ -40,6 +40,7 @@ export async function runMap(testMap: GameState, options?: {
   setup.rules = (options && options.rules) || testRules;
   setup.initialState = testMap;
   setup.endGameLoopWhenNoEventIsQueued = true;
+  setup.awaitClock = false;
 
   registerEventQueues(container);
   registerProjectors(container);
@@ -48,7 +49,9 @@ export async function runMap(testMap: GameState, options?: {
 
   await store.initialize();
 
-  store.commit();
+  const clock = container.get(Clock);
+
+  store.commit(clock.getTimestamp());
 
   if (options && options.watcher) {
     const logger = container.get(Logger);

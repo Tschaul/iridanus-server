@@ -17,6 +17,7 @@ export type FleetByTwoWorlds = {
 };
 
 const dummyState: GameState = {
+  scorings: {},
   currentTimestamp: 0,
   gameEndTimestamp: Number.MAX_SAFE_INTEGER,
   universe: {

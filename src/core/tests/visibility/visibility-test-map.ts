@@ -2,8 +2,9 @@ import { GameState } from "../../../shared/model/v1/state";
 import { dummyReadyWorld, dummyLostWorld } from "../test-helper";
 
 export const visibilityTestMap: GameState = {
+  scorings: {},
   currentTimestamp: 0,
-  gameEndTimestamp: Number.MAX_VALUE,
+  gameEndTimestamp: Number.MAX_SAFE_INTEGER,
   universe: {
     visibility: {
       p1: {},
