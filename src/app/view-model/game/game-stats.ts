@@ -13,9 +13,10 @@ export interface Stats {
   ships: number;
   metal: number;
   fleetKeys: number;
+  influence: number;
 }
 
-export type StatType = 'NONE' | 'INDUSTRY' | 'METAL' | 'MINES' | 'POPULATION' | 'SHIPS' | 'FLEET_KEYS' | 'ALL';
+export type StatType = 'NONE' | 'INDUSTRY' | 'METAL' | 'MINES' | 'POPULATION' | 'SHIPS' | 'FLEET_KEYS' | 'INFLUENCE' | 'ALL';
 
 export class GameStats {
   constructor(
@@ -48,6 +49,9 @@ export class GameStats {
           case 'FLEET_KEYS':
             this.showFleetKeysForAllOwnedWorlds();
             break;
+          case 'INFLUENCE':
+            this.showInfluenceForAllOwnedWorldsAndFleets();
+            break;
         }
       }
     )
@@ -63,6 +67,7 @@ export class GameStats {
       population: 0,
       ships: 0,
       fleetKeys: 0,
+      influence: 0,
     }
 
     const currentPlayer = this.gameViewModel.selfPlayerId;
@@ -85,6 +90,8 @@ export class GameStats {
       }
     })
 
+    stats.influence = this.gameData.scorings[currentPlayer]?.influence || 0;
+
     return stats;
   }
 
@@ -92,10 +99,11 @@ export class GameStats {
     switch (prop) {
       case 'population': return ' P'
       case 'industry': return ' I'
-      case 'mines': return  ' M'
+      case 'mines': return ' M'
       case 'metal': return ' ▮'
       case 'ships': return ' ►'
       case 'fleetKeys': return ' ◈'
+      case 'influence': return ' ⦀'
       default: return ''
     }
   }
@@ -176,7 +184,7 @@ export class GameStats {
   }
 
   private showFleetKeysForAllOwnedWorlds() {
-    
+
     const currentPlayer = this.gameViewModel.selfPlayerId;
 
     const hints: WorldHint[] = []
@@ -205,6 +213,57 @@ export class GameStats {
           hints.push({
             type: 'GATE',
             hint: value + this.symbolForProperty('fleetKey'),
+            worldId1,
+            worldId2
+          })
+        }
+      })
+    })
+
+    this.worldHints.showHints(hints);
+  }
+
+  private showInfluenceForAllOwnedWorldsAndFleets() {
+    const currentPlayer = this.gameViewModel.selfPlayerId;
+
+    const hints: WorldHint[] = []
+
+    Object.values(this.gameData.worlds).forEach(world => {
+
+      let value = 0;
+
+      if (visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
+        value += world.population - world.industry - world.ships - world.mines;
+      }
+
+      const fleetsAtWorld = this.gameData.fleetsByWorldId[world.id] || [];
+
+      fleetsAtWorld.filter(fleet => fleetHasOwner(fleet) && fleet.ownerId === currentPlayer).forEach(fleet => {
+        value -= fleet.ships;
+      })
+
+      if (value !== 0) {
+
+        hints.push({
+          type: 'WORLD',
+          hint: value + this.symbolForProperty('influence'),
+          worldId: world.id
+        })
+      }
+
+    })
+
+    Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds).forEach(worldId1 => {
+      Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds[worldId1]).forEach(worldId2 => {
+        const fleets = this.gameData.warpingFleetsByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
+        if (fleets.length) {
+          let value = 0;
+          fleets.forEach(fleet => {
+            value -= fleet.ships;
+          })
+          hints.push({
+            type: 'GATE',
+            hint: value + this.symbolForProperty('influence'),
             worldId1,
             worldId2
           })

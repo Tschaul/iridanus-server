@@ -1,13 +1,15 @@
 import { computed, observable } from "mobx";
 import { GameData } from "./game-data";
 
-const gameEndingScore = 3400 * 5 * 1000;
+const gameEndingScore = 7000 * 5 * 1000;
+const week = 7 * 5 * 1000;
 
 export interface ScoringDisplay {
   currentScore: number,
   scoreDeltaPerWeek: number,
   id: string,
-  color: string
+  color: string,
+  finalScore: number,
 }
 
 export class ScoringsViewModel {
@@ -28,12 +30,13 @@ export class ScoringsViewModel {
 
     Object.values(this.gameData.scorings).forEach(scoring => {
       const playerInfo = this.gameData.playerInfos[scoring.playerId];
-      const currentScore = scoring.score + (this.timestamp -  scoring.lastScoringTimestamp) * scoring.influence;
+      const currentScore = scoring.score + (this.timestamp - scoring.lastScoringTimestamp) * scoring.influence;
       result.push({
         color: playerInfo.color,
         id: scoring.playerId,
-        currentScore: Math.round(100 * currentScore / gameEndingScore),
-        scoreDeltaPerWeek: Math.round(1000 * (1000 * 5 * scoring.influence) / gameEndingScore)  / 10
+        currentScore: Math.round(currentScore / week),
+        scoreDeltaPerWeek: Math.round((10 * 5 * scoring.influence) / week) / 10,
+        finalScore: Math.round(gameEndingScore / week)
       })
     })
 

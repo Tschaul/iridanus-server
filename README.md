@@ -3,11 +3,6 @@
 # Iridanus-server
 Server for Iridanus
 
-# Missing tests
-
-- winning via score
-- game ends via time
-
 # Remaining Todos for MVP scope
 
 - scrapping industry to metal
