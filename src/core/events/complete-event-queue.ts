@@ -46,6 +46,7 @@ import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
 import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 import { GameEndsEventQueue } from "./scoring/game-ends";
 import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
+import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -104,6 +105,7 @@ export class CompleteEventQueue implements GameEventQueue {
     captureWorld: CaptureWorldEventQueue,
     stopCapturingWorld: StopCapturingWorldEventQueue,
     looseFleet: LooseFleetEventQueue,
+    awaitCapture: AwaitedCaptureEventQueue,
 
     revealWorld: RevealWorldEventQueue,
     remeberWorld: RememberWorldEventQueue,
@@ -145,6 +147,7 @@ export class CompleteEventQueue implements GameEventQueue {
       captureWorld,
       stopCapturingWorld,
       looseFleet,
+      awaitCapture,
       worldStartMining,
       worldMinesMetal,
       worldStopMining,

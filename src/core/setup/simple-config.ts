@@ -7,7 +7,7 @@ export const debugConfig: GameRules = {
     gameEndingScore: 3400 * fiveSeconds
   },
   capture: {
-    captureDelay: 2 * fiveSeconds,
+    captureDelay: 2.5 * fiveSeconds,
   },
   population: {
     minimumPopulationGrowthDelay: 7 * fiveSeconds

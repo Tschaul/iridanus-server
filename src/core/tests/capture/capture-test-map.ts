@@ -25,13 +25,11 @@ export const caputerTestMap: GameState = {
       },
       "f2": {
         id: "f2",
-        status: 'READY',
-        combatStatus: 'AT_PEACE',
+        status: 'LOST',
         currentWorldId: "w1",
         metal: 0,
         population: 0,
         orders: [],
-        ownerId: "p2",
         ships: 10,
         integrity: 1,
       }
@@ -42,9 +40,22 @@ export const caputerTestMap: GameState = {
         id: "w1",
         ownerId: "p1",
         ships: 5,
+      },
+      "w2": {
+        ...dummyReadyWorld,
+        id: "w2",
+        status: 'LOST'
+      },
+      "w3": {
+        ...dummyReadyWorld,
+        id: "w3",
+        status: 'LOST'
       }
     },
     gates: {
+      "w1": ["w2"],
+      "w2": ["w1", "w3"],
+      "w3": ["w2"]
     }
   }
 }

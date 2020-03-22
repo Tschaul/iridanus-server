@@ -127,7 +127,7 @@ export class CombatAndCaptureProjector {
     this.nextStartCapturingWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
       map(([worldsById, playersAtWorldById, fleetsByWorldId]) => {
         const worldsNotBeingCaptured = Object.values(worldsById).filter(world => world.captureStatus === 'NOT_BEING_CAPTURED');
-        
+
         const lostWorlds = worldsNotBeingCaptured.filter(world => world.status === 'LOST') as World[];
         const capturedLostWorld = lostWorlds.find(world => {
           const players = playersAtWorldById[world.id] || [];
@@ -166,7 +166,7 @@ export class CombatAndCaptureProjector {
 
         const nextWorld = worldsBeingCaptured.find(world => {
           const playersAtWorld = playersAtWorldById[world.id];
-          return playersAtWorld.length !== 1 || playersAtWorld[0] !== world.capturingPlayerId;
+          return !playersAtWorld || playersAtWorld.length !== 1 || playersAtWorld[0] !== world.capturingPlayerId;
         });
 
         return nextWorld || null;

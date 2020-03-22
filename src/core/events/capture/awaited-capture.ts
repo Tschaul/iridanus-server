@@ -21,10 +21,10 @@ export class AwaitedCaptureEventQueue implements GameEventQueue {
     private worlds: WorldProjector,
     private time: TimeProjector) {
 
-    const awaitedCaputureFleet$ = combineLatest(
+    const awaitedCaputureFleet$ = combineLatest([
       this.fleets.allByStatusAndNextOrderType<ReadyFleet, AwaitCaptureOrder>("READY", "AWAIT_CAPTURE"),
       this.worlds.byId$
-    ).pipe(
+    ]).pipe(
       map(([waitingFleets, worldsById]) => {
         return waitingFleets.find(fleet => {
           const world = worldsById[fleet.currentWorldId];
@@ -33,10 +33,10 @@ export class AwaitedCaptureEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = combineLatest(
+    this.upcomingEvent$ = combineLatest([
       awaitedCaputureFleet$,
       this.time.currentTimestamp$
-    ).pipe(
+    ]).pipe(
       map(([fleet, timestamp]) => {
         if (!fleet) {
           return null;

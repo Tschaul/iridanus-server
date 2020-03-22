@@ -1,13 +1,13 @@
 import { GameRules } from "../../shared/model/v1/rules";
 
-const tick = 100;
+const tick = 1000;
 
 export const testRules: GameRules = {
   scoring: {
     gameEndingScore: 1000,
   },
   capture: {
-    captureDelay: 1 * tick,
+    captureDelay: 2.5 * tick,
   },
   population: {
     minimumPopulationGrowthDelay: 7 * tick

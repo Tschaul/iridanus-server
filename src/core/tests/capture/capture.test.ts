@@ -11,7 +11,6 @@ describe("capture", () => {
   it("does capture fleet", async () => {
     
     const playedMap = produce(caputerTestMap, draft => {
-      draft.universe.fleets["f2"].status = 'LOST';
     });
 
     const state = await runMap(playedMap);
@@ -24,7 +23,6 @@ describe("capture", () => {
   it("does capture world", async () => {
     
     const playedMap = produce(caputerTestMap, draft => {
-      draft.universe.fleets["f2"].status = 'LOST';
       draft.universe.worlds["w1"].status = 'LOST';
     });
 
@@ -32,6 +30,58 @@ describe("capture", () => {
 
     expect(state.universe.worlds["w1"].status).to.equal('READY');
     expect((state.universe.worlds["w1"] as ReadyWorld).ownerId).to.equal('p1');
+
+  })
+
+  it("does not capture world on fly by", async () => {
+    
+    const playedMap = produce(caputerTestMap, draft => {
+      draft.universe.fleets["f1"].orders = [
+        {
+          type: 'WARP',
+          targetWorldId: 'w2'
+        },
+        {
+          type: 'WARP',
+          targetWorldId: 'w3'
+        }
+      ]
+    });
+
+    const state = await runMap(playedMap);
+
+    expect(state.universe.worlds["w2"].status).to.equal('LOST');
+
+    expect(state.universe.worlds["w3"].status).to.equal('READY');
+    expect((state.universe.worlds["w3"] as ReadyWorld).ownerId).to.equal('p1');
+
+  })
+
+  it.only("awaits capturing a world", async () => {
+    
+    const playedMap = produce(caputerTestMap, draft => {
+      draft.universe.fleets["f1"].orders = [
+        {
+          type: 'WARP',
+          targetWorldId: 'w2'
+        },
+        {
+          type: 'AWAIT_CAPTURE',
+        },
+        {
+          type: 'WARP',
+          targetWorldId: 'w3'
+        }
+      ]
+    });
+
+    const state = await runMap(playedMap);
+
+    expect(state.universe.worlds["w2"].status).to.equal('READY');
+    expect((state.universe.worlds["w2"] as ReadyWorld).ownerId).to.equal('p1');
+
+    expect(state.universe.worlds["w3"].status).to.equal('READY');
+    expect((state.universe.worlds["w3"] as ReadyWorld).ownerId).to.equal('p1');
 
   })
 

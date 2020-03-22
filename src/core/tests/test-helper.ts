@@ -25,7 +25,7 @@ export async function runMap(testMap: GameState, options?: {
     defaultScope: "Singleton"
   });
 
-  container.bind(Clock).toConstantValue(new Clock(0));
+  container.bind(Clock).toConstantValue(new Clock(new Date().getTime()));
   container.bind(Logger).toSelf();
   container.bind(ActionLogger).toSelf();
   // container.bind(Logger).to(TestLogger);
