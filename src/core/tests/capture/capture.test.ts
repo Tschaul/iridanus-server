@@ -1,4 +1,4 @@
-import { caputerTestMap } from "./capture-test-map";
+import { captureTestMap } from "./capture-test-map";
 import produce from "immer";
 
 import { runMap } from "../test-helper";
@@ -10,7 +10,7 @@ describe("capture", () => {
 
   it("does capture fleet", async () => {
     
-    const playedMap = produce(caputerTestMap, draft => {
+    const playedMap = produce(captureTestMap, draft => {
     });
 
     const state = await runMap(playedMap);
@@ -22,7 +22,7 @@ describe("capture", () => {
 
   it("does capture world", async () => {
     
-    const playedMap = produce(caputerTestMap, draft => {
+    const playedMap = produce(captureTestMap, draft => {
       draft.universe.worlds["w1"].status = 'LOST';
     });
 
@@ -35,7 +35,7 @@ describe("capture", () => {
 
   it("does not capture world on fly by", async () => {
     
-    const playedMap = produce(caputerTestMap, draft => {
+    const playedMap = produce(captureTestMap, draft => {
       draft.universe.fleets["f1"].orders = [
         {
           type: 'WARP',
@@ -57,9 +57,9 @@ describe("capture", () => {
 
   })
 
-  it.only("awaits capturing a world", async () => {
+  it("awaits capturing a world", async () => {
     
-    const playedMap = produce(caputerTestMap, draft => {
+    const playedMap = produce(captureTestMap, draft => {
       draft.universe.fleets["f1"].orders = [
         {
           type: 'WARP',

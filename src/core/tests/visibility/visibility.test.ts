@@ -17,6 +17,10 @@ describe("visibility", () => {
       })
   
       draft.universe.fleets["f1"].orders.push({
+        type: 'AWAIT_CAPTURE',
+      })
+  
+      draft.universe.fleets["f1"].orders.push({
         type: 'WARP',
         targetWorldId: "w1"
       })
@@ -24,6 +28,8 @@ describe("visibility", () => {
     });
     
     const state = await runMap(map);
+
+    console.log(state.universe.visibility['p1'])
 
     expect((state.universe.visibility['p1']['w1']).status).to.equal("VISIBLE")
     expect((state.universe.visibility['p1']['w2']).status).to.equal("VISIBLE")

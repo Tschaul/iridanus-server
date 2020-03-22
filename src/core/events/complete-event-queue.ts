@@ -112,6 +112,14 @@ export class CompleteEventQueue implements GameEventQueue {
   ) {
 
     const allEventQueues = [
+      revealWorld,
+      remeberWorld,
+      captureFleet,
+      startCapturingWorld,
+      captureWorld,
+      stopCapturingWorld,
+      looseFleet,
+      awaitCapture,
       gameEnds,
       playerChangesInfluence,
       beginLoadMetal,
@@ -142,20 +150,12 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStartFiring,
       worldFire,
       worldStopFiring,
-      captureFleet,
-      startCapturingWorld,
-      captureWorld,
-      stopCapturingWorld,
-      looseFleet,
-      awaitCapture,
       worldStartMining,
       worldMinesMetal,
       worldStopMining,
       worldStartGrowing,
       worldStopsGrowing,
       worldGrows,
-      revealWorld,
-      remeberWorld
     ]
 
     this.upcomingEvent$ = combineLatest(
