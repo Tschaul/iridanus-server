@@ -39,6 +39,7 @@ export class TopBar extends React.Component<{
       panelClassName={classNames(this.props.panelClassName)}
       fadeDirection="left"
       contentStyle={{ display: 'flex', justifyContent: 'space-between' }}
+      disableScrolling={true}
     >
       <div>
         <Button
