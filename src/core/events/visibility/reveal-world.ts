@@ -7,6 +7,7 @@ import { TimeProjector } from "../../projectors/time-projector";
 import { captureWorld } from "../../actions/world/capture";
 import { VisibilityProjector } from "../../projectors/visibility-projector";
 import { revealWorld } from "../../actions/world/reveal";
+import { GameNotification } from "../../../shared/model/v1/notification";
 
 @injectable()
 export class RevealWorldEventQueue implements GameEventQueue {
@@ -19,13 +20,19 @@ export class RevealWorldEventQueue implements GameEventQueue {
   ) {
     this.upcomingEvent$ = combineLatest(
       this.visibility.nextRevealedWorld$,
-      this.time.currentTimestamp$
+      this.time.currentTimestamp$,
     ).pipe(
       map(([worldToReaveal, timestamp]) => {
         if (!worldToReaveal) {
           return null
         } else {
           return {
+            notifications: worldToReaveal.currentVisibility ? [] : [{
+              type: 'NEW_WORLD_DISCOVERED',
+              playerId: worldToReaveal.playerId,
+              worldId: worldToReaveal.worldId,
+              timestamp
+            }],
             timestamp,
             happen: () => {
               return [

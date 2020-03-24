@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
 import { Observable, combineLatest, from, BehaviorSubject, ReplaySubject, NEVER, merge } from "rxjs";
-import { GameInfoSchema, GameStateSchema, GameHistorySchema, GameLogSchema, GameMetaDataSchema } from "./schema/v1";
+import { GameInfoSchema, GameStateSchema, GameHistorySchema, GameLogSchema, GameMetaDataSchema, GameNotificationsSchema } from "./schema/v1";
 import { take, switchMap, concatMap, map, first, tap, mergeMap } from "rxjs/operators";
 import { Initializer } from "../../infrastructure/initialisation/initializer";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
@@ -10,6 +10,8 @@ import { GameInfo, StartedGameInfo } from "../../../shared/model/v1/game-info";
 import { GameState } from "../../../shared/model/v1/state";
 import { Clock } from "../../../core/infrastructure/clock";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
+import { GameNotification, PersistedGameNotification } from "../../../shared/model/v1/notification";
+import { makeId } from "../../../app/client/make-id";
 
 const BASE_FOLDER = 'games'
 
@@ -18,6 +20,7 @@ const statePathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/state.json`;
 const historyPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/history.json`;
 const logPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/log.json`;
 const metaDataPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/meta-data.json`;
+const notificationsPathById = (gameId: string) => `${BASE_FOLDER}/${gameId}/notifications.json`;
 
 @injectable()
 export class GameRepository {
@@ -65,6 +68,10 @@ export class GameRepository {
 
   private handleForGameMetaDataById(gameId: string) {
     return this.dataHandleRegistry.getDataHandle<GameMetaDataSchema>(metaDataPathById(gameId));
+  }
+
+  private handleForNotificationsById(gameId: string) {
+    return this.dataHandleRegistry.getDataHandle<GameNotificationsSchema>(notificationsPathById(gameId));
   }
 
   public getAllGameInfos() {
@@ -201,6 +208,40 @@ export class GameRepository {
         draft.actionLog[timestamp] = [...draft.actionLog[timestamp], message];
       })
     }
+  }
+
+  public async appendNotification(gameId: string, notification: GameNotification) {
+    const logHandle = await this.handleForNotificationsById(gameId);
+    const exists = await logHandle.exists()
+    const persistedNotificaion: PersistedGameNotification = {
+      ...notification,
+      id: makeId(),
+      markedAsRead: false,
+    }
+    if (!exists) {
+      await logHandle.create({
+        version: 1,
+        notifications: {
+          [notification.playerId]: [persistedNotificaion]
+        }
+      })
+    } else {
+      await logHandle.do(async () => draft => {
+        draft.notifications[notification.playerId] = draft.notifications[notification.playerId] || [];
+        draft.notifications[notification.playerId] = [...draft.notifications[notification.playerId], persistedNotificaion];
+      })
+    }
+  }
+
+  public async markNotificationAsRead(gameId: string, playerId: string, notificationId: string) {
+    const logHandle = await this.handleForNotificationsById(gameId);
+    await logHandle.do(async () => draft => {
+      const notificaton = draft.notifications[playerId].find(it => it.id === notificationId);
+      if (!notificaton) {
+        return;
+      }
+      notificaton.markedAsRead = true;
+    })
   }
 
   public async startGame(gameId: string, drawingPositions: DrawingPositions) {

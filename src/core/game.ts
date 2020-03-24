@@ -5,10 +5,9 @@ import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
 import { GameState } from "../shared/model/v1/state";
 import { distinctUntilChanged, debounceTime, takeUntil } from "rxjs/operators";
-import { ActionLogger } from "./infrastructure/action-logger";
 import { CompleteEventQueue } from "./events/complete-event-queue";
-import { setTimestamp } from "./actions/set-timestamp";
 import { GameSetupProvider } from "./game-setup-provider";
+import { NotificationHandler } from "./infrastructure/notification-handler";
 
 @injectable()
 export class Game {
@@ -20,9 +19,9 @@ export class Game {
   constructor(
     private clock: Clock,
     private store: Store,
-    private logger: ActionLogger,
     private completeEventQueue: CompleteEventQueue,
-    private setup: GameSetupProvider
+    private setup: GameSetupProvider,
+    private notificationHandler: NotificationHandler
   ) {
 
   }
@@ -77,6 +76,7 @@ export class Game {
       this.store.dispatch(action);
     }
     this.store.commit(event.timestamp);
+    this.notificationHandler.handleNotifications(event);
     if (event.endsGame) {
       this.finalizeAndResolve(resolve);
     }

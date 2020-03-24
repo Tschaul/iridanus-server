@@ -15,6 +15,7 @@ import { map } from 'rxjs/operators';
 import { GameStateValidator } from '../infrastructure/game- state-message-validator';
 import { GameRules } from '../../shared/model/v1/rules';
 import { ReadyWorld, LostWorld } from '../../shared/model/v1/world';
+import { NotificationHandler } from '../infrastructure/notification-handler';
 
 export async function runMap(testMap: GameState, options?: {
   watcher?: null | ((state: GameState) => string | number | boolean),
@@ -28,6 +29,7 @@ export async function runMap(testMap: GameState, options?: {
   container.bind(Clock).toConstantValue(new Clock(new Date().getTime()));
   container.bind(Logger).toSelf();
   container.bind(ActionLogger).toSelf();
+  container.bind(NotificationHandler).toSelf();
   // container.bind(Logger).to(TestLogger);
   container.bind(RandomNumberGenerator).to(NotSoRandomNumberGenerator);
   container.bind(Store).toSelf();

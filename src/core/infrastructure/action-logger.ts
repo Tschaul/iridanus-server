@@ -5,14 +5,14 @@ import { Logger } from "./logger";
 @injectable()
 export class ActionLogger {
 
-  constructor(private logger: Logger){}
+  constructor(private logger: Logger) { }
 
   logAction(action: Action) {
-    this.logger.info(action.describe())
+    this.logger.info('Action: ' + action.describe())
   }
 }
 
-export class TestLogger extends ActionLogger {
+export class SilentLogger extends ActionLogger {
   logAction(action: Action) {
     return;
   }

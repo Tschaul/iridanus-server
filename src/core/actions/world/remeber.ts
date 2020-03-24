@@ -21,7 +21,7 @@ export function rememberWorld(
           population: world.population,
           populationLimit: world.populationLimit,
           ownerId: worldhasOwner(world) ? world.ownerId : undefined,
-          remeberedTimestamp: timestampe
+          rememberedTimestamp: timestampe
         };
       })
     }

@@ -8,12 +8,13 @@ import { worldhasOwner, World } from "../../shared/model/v1/world";
 import { Fleet, fleetHasOwner, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
 import { VisibleWorld, VisibleState } from "../../shared/model/v1/visible-state";
-import { RemeberedWorld } from "../../shared/model/v1/visibility-status";
+import { RemeberedWorld, WorldVisibilityStatus } from "../../shared/model/v1/visibility-status";
 import equal from 'deep-equal';
 
 export interface WorldToRevealOrHide {
   worldId: string,
-  playerId: string
+  playerId: string,
+  currentVisibility: WorldVisibilityStatus
 }
 
 @injectable()
@@ -37,7 +38,11 @@ export class VisibilityProjector {
         ).pipe(
           map(([calculatedWorlds, currentlyVisibleIds]) => {
             const idToReveal = calculatedWorlds.find(world => !currentlyVisibleIds.includes(world.id))?.id
-            return idToReveal ? { worldId: idToReveal, playerId } as WorldToRevealOrHide : null;
+            return idToReveal ? {
+              worldId: idToReveal,
+              playerId,
+              currentVisibility: visibility[playerId][idToReveal]
+            } as WorldToRevealOrHide : null;
           })
         )
       })).pipe(
@@ -48,7 +53,7 @@ export class VisibilityProjector {
     }),
     distinctUntilChanged(equal),
     shareReplay(1),
-  )
+  ) as Observable<WorldToRevealOrHide | null>
 
   public nextWorldToHide$ = this.visiblity$.pipe(
     switchMap(visibility => {

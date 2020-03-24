@@ -19,6 +19,7 @@ import { Initializer } from "./infrastructure/initialisation/initializer";
 import { debugConfig } from "../core/setup/simple-config";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
 import { Scorings } from "../shared/model/v1/scoring";
+import { NotificationHandler } from "../core/infrastructure/notification-handler";
 
 @injectable()
 export class GameRunner {
@@ -63,7 +64,7 @@ export class GameRunner {
           if (this.gameShouldStart(newGameInfo)) {
             const oldGame = oldGameInfos.find(info => info.id === newGameInfo.id);
             if (!this.gameShouldStart(oldGame)) {
-              this.logger.debug('new game just started' + newGameInfo.id);
+              this.logger.debug('new game just started ' + newGameInfo.id);
               this.errorHandler.catchPromise(this.runGame(newGameInfo));
             }
           }
@@ -84,6 +85,7 @@ export class GameRunner {
     const game = container.get(Game);
     const setup = container.get(GameSetupProvider);
     const store = container.get(Store);
+    const notificationHandler = container.get(NotificationHandler);
 
     setup.rules = debugConfig;
 
@@ -121,7 +123,9 @@ export class GameRunner {
       this.errorHandler.catchPromise(this.gameRepository.appendGameLog(gameInfo.id, message, state.currentTimestamp));
     })
 
-    // store.commit();
+    notificationHandler.notifications$.subscribe(notification => {
+      this.errorHandler.catchPromise(this.gameRepository.appendNotification(gameInfo.id, notification));
+    })
 
     await game.startGameLoop();
 

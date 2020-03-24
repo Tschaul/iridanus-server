@@ -1199,7 +1199,7 @@
                 "populationLimit": {
                     "type": "number"
                 },
-                "remeberedTimestamp": {
+                "rememberedTimestamp": {
                     "type": "number"
                 },
                 "status": {
@@ -1215,7 +1215,7 @@
                 "mines",
                 "population",
                 "populationLimit",
-                "remeberedTimestamp",
+                "rememberedTimestamp",
                 "status"
             ],
             "type": "object"

@@ -5,7 +5,7 @@ import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import produce from "immer";
 import { runMap } from "../test-helper";
 
-describe("visibility", () => {
+describe.only("visibility", () => {
 
   it("warps back and forth remebers world", async () => {
     

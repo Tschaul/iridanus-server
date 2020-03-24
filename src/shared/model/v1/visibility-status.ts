@@ -8,7 +8,7 @@ export interface RemeberedWorld {
   mines: number,
   population: number,
   populationLimit: number,
-  remeberedTimestamp: number,
+  rememberedTimestamp: number,
 }
 
 export type WorldVisibilityStatus = RemeberedWorld | { id: string; status: 'VISIBLE' }
