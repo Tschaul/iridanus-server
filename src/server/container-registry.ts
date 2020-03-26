@@ -9,7 +9,7 @@ import { Store, ReadonlyStore } from "../core/store";
 import { Game } from "../core/game";
 import { registerEventQueues } from "../core/events/register-queues";
 import { registerProjectors } from "../core/projectors/register-projectors";
-import { registerGlobalDataProviders } from "./subscriptions/providers/register-data-providers";
+import { registerGlobalDataProviders, registerGameDataProviders } from "./subscriptions/providers/register-data-providers";
 import { GameSetupProvider } from "../core/game-setup-provider";
 import { registerGameCommandExecutors, registerGlobalCommandExecutors } from './commands/executors/register-command-executors';
 import { registerRepositories } from './repositories/register-repositories';
@@ -70,6 +70,7 @@ export class ContainerRegistry {
       registerGameCommandExecutors(container);
       registerEventQueues(container);
       registerProjectors(container);
+      registerGameDataProviders(container);
 
       this.containersByGameId.set(gameId, container);
 

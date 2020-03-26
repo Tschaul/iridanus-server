@@ -44,6 +44,9 @@
                         },
                         {
                             "$ref": "#/definitions/UpdateFleetOrdersCommand"
+                        },
+                        {
+                            "$ref": "#/definitions/NotificationMarkAsReadCommand"
                         }
                     ]
                 },
@@ -94,6 +97,9 @@
                         },
                         {
                             "$ref": "#/definitions/GameMetaDataSubscription"
+                        },
+                        {
+                            "$ref": "#/definitions/GameNotificationsSubscription"
                         }
                     ]
                 },
@@ -289,6 +295,20 @@
             ],
             "type": "object"
         },
+        "GameNotificationsSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/NOTIFICATIONS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "GameStateSubscription": {
             "properties": {
                 "type": {
@@ -391,6 +411,27 @@
             },
             "required": [
                 "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "NotificationMarkAsReadCommand": {
+            "properties": {
+                "notificationIds": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "enum": [
+                        "NOTIFICATIONS/MARK_AS_READ"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "notificationIds",
                 "type"
             ],
             "type": "object"

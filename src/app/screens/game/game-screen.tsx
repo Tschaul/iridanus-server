@@ -73,7 +73,7 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }> implement
           panelClassName={classNames(classes.topLeft)}
         />
         <GameInfoPanel
-          vm={this.props.vm.scoringsViewModel}
+          vm={this.props.vm.infoPanelViewModel}
           panelClassName={classNames(classes.topRight)}
         />
         <SelectedWorldPanel

@@ -105,6 +105,15 @@ export class GameRepository {
     );
   }
 
+  public getGameNotificationsByIdAsObservable(gameId: string) {
+    return from(this.handleForNotificationsById(gameId)).pipe(
+      switchMap(handle => {
+        return handle.asObservable();
+      }),
+      map(data => data.notifications)
+    );
+  }
+
   public async createGame(gameId: string) {
     const handle = await this.handleForGameInfoById(gameId);
     await handle.create({
@@ -233,14 +242,17 @@ export class GameRepository {
     }
   }
 
-  public async markNotificationAsRead(gameId: string, playerId: string, notificationId: string) {
+  public async markNotificationsAsRead(gameId: string, playerId: string, notificationIds: string[]) {
     const logHandle = await this.handleForNotificationsById(gameId);
     await logHandle.do(async () => draft => {
-      const notificaton = draft.notifications[playerId].find(it => it.id === notificationId);
-      if (!notificaton) {
-        return;
+      const playerNotifications = draft.notifications[playerId];
+      for (const notificationId of notificationIds) {
+        const notificaton = playerNotifications.find(it => it.id === notificationId);
+        if (!notificaton) {
+          continue;
+        }
+        notificaton.markedAsRead = true;
       }
-      notificaton.markedAsRead = true;
     })
   }
 

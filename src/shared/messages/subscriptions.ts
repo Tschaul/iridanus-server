@@ -1,7 +1,8 @@
 export type Subscription = GamesListAllSubscription
   | GameStateSubscription
   | GameInfoSubscription
-  | GameMetaDataSubscription;
+  | GameMetaDataSubscription
+  | GameNotificationsSubscription;
 
 export interface GamesListAllSubscription {
   type: 'GAME/LIST_ALL'
@@ -17,4 +18,8 @@ export interface GameInfoSubscription {
 
 export interface GameMetaDataSubscription {
   type: 'GAME/META_DATA'
+}
+
+export interface GameNotificationsSubscription {
+  type: 'GAME/NOTIFICATIONS'
 }

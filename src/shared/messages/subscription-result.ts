@@ -1,11 +1,13 @@
 import { GameInfo, GameMetaData } from "../model/v1/game-info";
 import { GameState } from "../model/v1/state";
 import { VisibleState } from "../model/v1/visible-state";
+import { GameNotification, PersistedGameNotification } from "../model/v1/notification";
 
 export type SubscriptionResult = GameListAllSubscriptionResult
   | GameStateSubscriptionResult
   | GameInfoSubscriptionResult
-  | GameMetaDataSubscriptionResult;
+  | GameMetaDataSubscriptionResult
+  | GameNotificationsSubscriptionResult;
 
 export interface GameListAllSubscriptionResult {
   type: 'GAME/LIST_ALL',
@@ -25,4 +27,9 @@ export interface GameInfoSubscriptionResult {
 export interface GameMetaDataSubscriptionResult {
   type: 'GAME/META_DATA',
   data: GameMetaData
+}
+
+export interface GameNotificationsSubscriptionResult {
+  type: 'GAME/NOTIFICATIONS',
+  notifications: PersistedGameNotification[]
 }

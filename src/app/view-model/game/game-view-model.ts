@@ -10,11 +10,14 @@ import { WorldHints } from "./world-hints";
 import { GameStats } from "./game-stats";
 import { TopBarViewModel } from "./top-bar-view-model";
 import { ScoringsViewModel } from "./scorings-view-model";
+import { GameNotifications } from "./game-notifications";
+import { InfoPanelViewModel } from "./info-panel-view-model";
 
 
 export class GameViewModel {
 
   gameData = new GameData(this);
+  gameNotifications = new GameNotifications(this);
   gameOrders = new GameOrders(this, this.gameData);
   selection = new GameStageSelection(this.gameData, this.gameOrders);
   worldHints = new WorldHints();
@@ -24,7 +27,7 @@ export class GameViewModel {
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection);
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints);
   topBarViewModel = new TopBarViewModel(this, this.gameOrders, this.gameStats);
-  scoringsViewModel = new ScoringsViewModel(this.gameData);
+  infoPanelViewModel = new InfoPanelViewModel(this.gameData, this.gameNotifications, this.selection);
 
   @computed public get gameId() {
     return this.mainViewModel.activeGameId;
@@ -39,10 +42,12 @@ export class GameViewModel {
 
   public focus() {
     this.gameData.focus();
+    this.gameNotifications.focus();
   }
 
   public unfocus() {
     this.gameData.unfocus();
+    this.gameNotifications.unfocus();
   }
 
   @computed public get selfPlayerId(): string {

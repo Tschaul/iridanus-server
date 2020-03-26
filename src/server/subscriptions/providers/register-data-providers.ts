@@ -1,6 +1,10 @@
 import { Container } from "inversify";
-import { registerGameSetupDataProviders } from "./game/game-data-provider-registry";
+import { registerGameSetupDataProviders, registerGlobalGameSetupDataProviders } from "./game/game-data-provider-registry";
+
+export function registerGameDataProviders(container: Container) {
+  registerGameSetupDataProviders(container);
+}
 
 export function registerGlobalDataProviders(container: Container) {
-  registerGameSetupDataProviders(container);
+  registerGlobalGameSetupDataProviders(container);
 }
