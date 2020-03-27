@@ -1,11 +1,10 @@
 import { visibilityTestMap } from "./visibility-test-map";
 
 import { expect } from 'chai';
-import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import produce from "immer";
 import { runMap } from "../test-helper";
 
-describe.only("visibility", () => {
+describe("visibility", () => {
 
   it("warps back and forth remebers world", async () => {
     
@@ -28,8 +27,6 @@ describe.only("visibility", () => {
     });
     
     const state = await runMap(map);
-
-    console.log(state.universe.visibility['p1'])
 
     expect((state.universe.visibility['p1']['w1']).status).to.equal("VISIBLE")
     expect((state.universe.visibility['p1']['w2']).status).to.equal("VISIBLE")
