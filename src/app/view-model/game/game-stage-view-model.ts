@@ -6,14 +6,16 @@ import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
 import { VisibleWorld } from "../../../shared/model/v1/visible-state";
+import { GameNotifications } from "./game-notifications";
 
 
 const STAGE_OFFSET = 75;
 
-export type WorldWithKeyAndDisplayPosition = VisibleWorld & {
+export type WorldToDisplay = VisibleWorld & {
   key: string,
   x: number,
-  y: number
+  y: number,
+  hasUnreadNotifications: boolean
 }
 
 export type GateWithStartAndEndPosition = {
@@ -31,7 +33,8 @@ export class GameStageViewModel {
   constructor(
     private gameData: GameData,
     private selection: GameStageSelection,
-    private worldHints: WorldHints
+    private worldHints: WorldHints,
+    private gameNotifcations: GameNotifications
   ) { }
 
   @computed get playerInfos() {
@@ -82,13 +85,16 @@ export class GameStageViewModel {
     return result;
   }
 
-  @computed get worldsWithKeyAndDisplayPosition(): WorldWithKeyAndDisplayPosition[] {
+  @computed get worldsToDisplay(): WorldToDisplay[] {
     const worldKeys = Object.getOwnPropertyNames(this.gameData.worlds);
     return worldKeys.map(key => {
+      const notifications = this.gameNotifcations.notificationsByWorldId[key] || [];
+      const hasUnreadNotifications = notifications.some(it => !it.markedAsRead);
       return {
         ...this.gameData.worlds[key],
         ...this.drawingPositons[key],
-        key
+        key,
+        hasUnreadNotifications
       }
     })
   }

@@ -15,6 +15,7 @@ export class GameStateDataProvider implements DataProvider {
   ){}
 
   getObservable(subscription: GameStateSubscription, playerId: string): Observable<GameStateSubscriptionResult> {
+    console.log('GameStateDataProvider.getObservable')
     return this.visibility.visibleUniverseForPlayer(playerId).pipe(
       map(state => {
         return {

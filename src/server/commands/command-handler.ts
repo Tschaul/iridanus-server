@@ -8,6 +8,7 @@ import { GlobalErrorHandler } from "../infrastructure/error-handling/global-erro
 import { Initializer } from "../infrastructure/initialisation/initializer";
 import { getGameSetupCommandExecutor } from "./executors/game-setup/game-setup-command-executor-registry";
 import { getOrderCommandExecutor } from "./executors/orders/order-command-executor-registry";
+import { getNotificationCommandExecutor } from "./executors/notifications/notifications-command-executor-registry";
 
 @injectable()
 export class CommandHandler {
@@ -63,6 +64,8 @@ export class CommandHandler {
         return getGameSetupCommandExecutor(registry, command, gameId);
       case 'ORDERS':
         return getOrderCommandExecutor(registry, command, gameId);
+      case 'NOTIFICATIONS':
+        return getNotificationCommandExecutor(registry, command, gameId);
       case 'SIGN_UP_USER':
         return container.get(SignUpUserExecutor) as CommandExecutor<Command>;
 

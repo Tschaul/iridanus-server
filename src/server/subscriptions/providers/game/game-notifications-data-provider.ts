@@ -21,7 +21,7 @@ export class GameNotificationsDataProvider implements DataProvider {
       map(notifications => {
         return {
           type: 'GAME/NOTIFICATIONS',
-          notifications: notifications[playerId]
+          notifications: notifications[playerId] || []
         }
       })
     )

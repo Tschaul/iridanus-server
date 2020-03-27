@@ -19,7 +19,7 @@ export class Store {
 
   private stateInternal$$ = new ReplaySubject<GameState>(1);
 
-  public state$: Observable<GameState> = this.stateInternal$$;
+  public state$: Observable<GameState> = this.stateInternal$$.pipe(shareReplay(1));
   public finalized$: Observable<void> = this.finalized$$;
 
   public actionLog$: Observable<string> = this.actions$$.pipe(
@@ -30,9 +30,8 @@ export class Store {
   constructor(
     private setup: GameSetupProvider,
     private validator: GameStateValidator,
-    private clock: Clock,
     private logger: ActionLogger
-    ) { 
+  ) {
   }
 
   public async initialize() {
@@ -51,6 +50,7 @@ export class Store {
         this.validator.assertGameStateValid(state)
       }),
     ).subscribe(state => this.stateInternal$$.next(state))
+
   }
 
   public dispatch(action: Action) {

@@ -13,7 +13,7 @@ export class GameStageBackdrop extends React.Component<{
     return (
       <g opacity="0.29">
         <clipPath id="clipPath">
-          {this.props.vm.worldsWithKeyAndDisplayPosition.map(world => {
+          {this.props.vm.worldsToDisplay.map(world => {
             return (
               <circle
                 key={world.id}

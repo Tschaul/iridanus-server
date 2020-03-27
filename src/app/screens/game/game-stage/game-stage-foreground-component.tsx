@@ -78,7 +78,7 @@ export class GameStageForeground extends React.Component<{
   }
 
   private renderWorlds(): React.ReactNode {
-    return this.props.vm.worldsWithKeyAndDisplayPosition.map(world => {
+    return this.props.vm.worldsToDisplay.map(world => {
       const color = this.getColorForWorld(world);
       const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
@@ -121,6 +121,21 @@ export class GameStageForeground extends React.Component<{
                   r={WORLD_OUTER_RADIUS}
                   opacity="1"
                   stroke={selectedYellow}
+                  fill="none"
+                  strokeWidth="3"
+                  strokeDasharray="10,10"
+                  data-world-id={world.id}
+                  onClick={this.handleWorldClick}
+                  style={{ cursor: 'pointer' }}
+                />
+              )}
+              {world.hasUnreadNotifications && (
+                <circle
+                  cx={world.x}
+                  cy={world.y}
+                  r={WORLD_OUTER_RADIUS}
+                  opacity="1"
+                  stroke={screenWhite.fade(0.5) as any}
                   fill="none"
                   strokeWidth="3"
                   strokeDasharray="10,10"

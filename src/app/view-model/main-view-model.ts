@@ -15,7 +15,7 @@ export class MainViewModel {
     // this.welcomeViewModel.password = '123456';
     // this.welcomeViewModel.login();
 
-    // this.lobbyViewModel.selectedGameId = 'f1l8gpl9h0ii';
+    // this.lobbyViewModel.selectedGameId = '5k85977vccqd';
     // this.lobbyViewModel.viewGame();
   }
 

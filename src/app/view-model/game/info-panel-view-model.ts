@@ -23,8 +23,9 @@ export class InfoPanelViewModel {
         return this.notificationsViewModel.notifications
       },
       (notifications) => {
-        if (notifications.length > 0) {
+        if (notifications.filter(it => !it.markedAsRead).length > 0) {
           this.displayedTab = 'NOTIFICATIONS';
+          this.notificationsViewModel.markAsRead();
         }
       }
     )
