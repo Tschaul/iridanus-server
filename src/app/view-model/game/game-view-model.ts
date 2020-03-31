@@ -27,7 +27,7 @@ export class GameViewModel {
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection);
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints);
   topBarViewModel = new TopBarViewModel(this, this.gameOrders, this.gameStats);
-  infoPanelViewModel = new InfoPanelViewModel(this.gameData, this.gameNotifications, this.selection);
+  infoPanelViewModel = new InfoPanelViewModel(this, this.gameData, this.gameNotifications, this.selection);
 
   @computed public get gameId() {
     return this.mainViewModel.activeGameId;
@@ -35,6 +35,10 @@ export class GameViewModel {
 
   @computed public get isConnected() {
     return this.mainViewModel.connectionStatus.isConnected;
+  }
+
+  @computed public get millisecondsPerDay() {
+    return this.mainViewModel.environment.environmentInfo.millisecondsPerDay;
   }
 
   constructor(private mainViewModel: MainViewModel) {

@@ -5,6 +5,7 @@ import { UserManagementService } from "./user-management/user-management.service
 import { GameStateService } from "./game-state/game-state.service";
 import { OrderService } from "./orders/order-service";
 import { NotificationService } from "./notifications/notification-service";
+import { EnvironmentService } from "./environment.ts/environment.service";
 
 export function registerClient(container: Container) {
   container.bind(SocketConnection).toSelf();
@@ -13,4 +14,5 @@ export function registerClient(container: Container) {
   container.bind(UserManagementService).toSelf();
   container.bind(OrderService).toSelf();
   container.bind(NotificationService).toSelf();
+  container.bind(EnvironmentService).toSelf();
 }

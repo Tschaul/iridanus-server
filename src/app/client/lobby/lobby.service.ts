@@ -1,11 +1,11 @@
 import { injectable } from "inversify";
 import { SocketConnection } from "../socket-connection";
-import { GamesListAllSubscription } from "../../../shared/messages/subscriptions";
-import { GameListAllSubscriptionResult } from "../../../shared/messages/subscription-result";
 import { shareReplay, map, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { GameInfo } from "../../../shared/model/v1/game-info";
 import { makeId } from "../make-id";
+import { GamesListAllSubscription } from "../../../shared/messages/subscriptions/game-subscriptions";
+import { GameListAllSubscriptionResult } from "../../../shared/messages/subscriptions/game-subscription-results";
 
 @injectable()
 export class LobbyService {

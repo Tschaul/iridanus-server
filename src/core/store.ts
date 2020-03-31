@@ -17,6 +17,8 @@ export class Store {
   private finalized$$: Subject<void> = new Subject();
   private lastState: GameState | null = null;
 
+  private currentTransaction: Action[] = [];
+
   private stateInternal$$ = new ReplaySubject<GameState>(1);
 
   public state$: Observable<GameState> = this.stateInternal$$.pipe(shareReplay(1));
@@ -54,12 +56,14 @@ export class Store {
   }
 
   public dispatch(action: Action) {
-    this.actions$$.next(action);
+    this.currentTransaction.push(action);
   }
 
   public commit(timestamp: number) {
     const setTimestampAction = setTimestamp(timestamp);
-    this.dispatch(setTimestampAction)
+    this.actions$$.next(setTimestampAction);
+    this.currentTransaction.forEach(action => this.actions$$.next(action));
+    this.currentTransaction = [];
     this.commits$$.next();
   }
 

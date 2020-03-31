@@ -1,3 +1,4 @@
 export class Environment {
-  dataPath: string
+  dataPath: string;
+  millisecondsPerDay: number;
 }

@@ -1,12 +1,10 @@
 import { injectable } from "inversify";
 import { SocketConnection } from "../socket-connection";
-import { FleetOrder } from "../../../shared/model/v1/fleet-orders";
-import { WorldOrder } from "../../../shared/model/v1/world-order";
-import { GameNotificationsSubscription } from "../../../shared/messages/subscriptions";
-import { GameNotificationsSubscriptionResult } from "../../../shared/messages/subscription-result";
-import { GameNotification, PersistedGameNotification } from "../../../shared/model/v1/notification";
+import { PersistedGameNotification } from "../../../shared/model/v1/notification";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { GameNotificationsSubscription } from "../../../shared/messages/subscriptions/game-subscriptions";
+import { GameNotificationsSubscriptionResult } from "../../../shared/messages/subscriptions/game-subscription-results";
 
 @injectable()
 export class NotificationService {

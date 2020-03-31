@@ -1,25 +1,5 @@
-export type Subscription = GamesListAllSubscription
-  | GameStateSubscription
-  | GameInfoSubscription
-  | GameMetaDataSubscription
-  | GameNotificationsSubscription;
+import { GameSubscription } from "./subscriptions/game-subscriptions";
+import { EnvironmentSubscription } from "./subscriptions/environment-subscriptions";
 
-export interface GamesListAllSubscription {
-  type: 'GAME/LIST_ALL'
-}
-
-export interface GameStateSubscription {
-  type: 'GAME/STATE'
-}
-
-export interface GameInfoSubscription {
-  type: 'GAME/INFO'
-}
-
-export interface GameMetaDataSubscription {
-  type: 'GAME/META_DATA'
-}
-
-export interface GameNotificationsSubscription {
-  type: 'GAME/NOTIFICATIONS'
-}
+export type Subscription = GameSubscription
+  | EnvironmentSubscription;

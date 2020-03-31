@@ -2,10 +2,10 @@ import { Observable } from "rxjs";
 import { injectable } from "inversify";
 import { map } from "rxjs/operators";
 import { DataProvider } from "../data-provider";
-import { GameNotificationsSubscription } from "../../../../shared/messages/subscriptions";
-import { GameNotificationsSubscriptionResult } from "../../../../shared/messages/subscription-result";
 import { GameSetupProvider } from "../../../../core/game-setup-provider";
 import { GameRepository } from "../../../repositories/games/games-repository";
+import { GameNotificationsSubscription } from "../../../../shared/messages/subscriptions/game-subscriptions";
+import { GameNotificationsSubscriptionResult } from "../../../../shared/messages/subscriptions/game-subscription-results";
 
 @injectable()
 export class GameNotificationsDataProvider implements DataProvider {

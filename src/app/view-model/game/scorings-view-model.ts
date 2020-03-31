@@ -1,8 +1,7 @@
 import { computed, observable } from "mobx";
 import { GameData } from "./game-data";
+import { InfoPanelViewModel } from "./info-panel-view-model";
 
-const gameEndingScore = 7000 * 5 * 1000;
-const week = 7 * 5 * 1000;
 
 export interface ScoringDisplay {
   currentScore: number,
@@ -14,6 +13,7 @@ export interface ScoringDisplay {
 
 export class ScoringsViewModel {
   constructor(
+    private infoPanelViewModel: InfoPanelViewModel,
     private gameData: GameData
   ) {
 
@@ -25,6 +25,9 @@ export class ScoringsViewModel {
   @observable public timestamp = new Date().getTime();
 
   @computed public get scoringsDisplay() {
+
+    const gameEndingScore = 7000 * this.infoPanelViewModel.millisecondsPerDay;
+    const week = 7 * this.infoPanelViewModel.millisecondsPerDay;
 
     const result: ScoringDisplay[] = [];
 

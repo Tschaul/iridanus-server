@@ -1,12 +1,11 @@
 import { SocketConnection } from "../socket-connection";
 import { injectable } from "inversify";
-import { GameStateSubscription, GameInfoSubscription, GameMetaDataSubscription } from "../../../shared/messages/subscriptions";
-import { GameStateSubscriptionResult, GameInfoSubscriptionResult, GameMetaDataSubscriptionResult } from "../../../shared/messages/subscription-result";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { GameState } from "../../../shared/model/v1/state";
 import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
 import { VisibleState } from "../../../shared/model/v1/visible-state";
+import { GameStateSubscription, GameInfoSubscription, GameMetaDataSubscription } from "../../../shared/messages/subscriptions/game-subscriptions";
+import { GameStateSubscriptionResult, GameInfoSubscriptionResult, GameMetaDataSubscriptionResult } from "../../../shared/messages/subscriptions/game-subscription-results";
 
 @injectable()
 export class GameStateService {

@@ -81,7 +81,6 @@ export class VisibilityProjector {
   public visibleUniverseForPlayer(playerId: string) {
     return this.store.state$.pipe(
       map(state => {
-        console.log('calculatiing visibility')
         const visibilityForPlayer = state.universe.visibility[playerId];
         const fleets = {
           ...state.universe.fleets

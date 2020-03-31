@@ -6,5 +6,6 @@ export function registerEnvironment(container: Container) {
 }
 
 const environment: Environment = {
-  dataPath: './data'
+  dataPath: './data',
+  millisecondsPerDay: 1000 * 5
 }

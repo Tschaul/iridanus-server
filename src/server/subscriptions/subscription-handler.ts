@@ -6,6 +6,9 @@ import { ContainerRegistry } from "../container-registry";
 import { DataProvider } from "./providers/data-provider";
 import { ResponseMessage } from "../../shared/messages/response-message";
 import { getGameDataProvider } from "./providers/game/game-data-provider-registry";
+import { GameSubscription } from "../../shared/messages/subscriptions/game-subscriptions";
+import { getEnvironmentDataProvider } from "./providers/environment/environment-data-provider-registry";
+import { EnvironmentSubscription } from "../../shared/messages/subscriptions/environment-subscriptions";
 
 @injectable()
 export class SubscriptionHandler {
@@ -69,7 +72,9 @@ export class SubscriptionHandler {
 
     switch (firstPart) {
       case 'GAME':
-        return getGameDataProvider(registry, subscription, gameId);
+        return getGameDataProvider(registry, subscription as GameSubscription, gameId);
+      case 'ENVIRONMENT':
+        return getEnvironmentDataProvider(registry, subscription as EnvironmentSubscription);
     }
 
     throw new Error('unhandled case ' + subscription.type)

@@ -2,9 +2,9 @@ import { Observable } from "rxjs";
 import { injectable } from "inversify";
 import { map } from "rxjs/operators";
 import { DataProvider } from "../data-provider";
-import { GameStateSubscription } from "../../../../shared/messages/subscriptions";
-import { GameStateSubscriptionResult } from "../../../../shared/messages/subscription-result";
 import { VisibilityProjector } from "../../../../core/projectors/visibility-projector";
+import { GameStateSubscription } from "../../../../shared/messages/subscriptions/game-subscriptions";
+import { GameStateSubscriptionResult } from "../../../../shared/messages/subscriptions/game-subscription-results";
 
 @injectable()
 export class GameStateDataProvider implements DataProvider {
@@ -15,7 +15,6 @@ export class GameStateDataProvider implements DataProvider {
   ){}
 
   getObservable(subscription: GameStateSubscription, playerId: string): Observable<GameStateSubscriptionResult> {
-    console.log('GameStateDataProvider.getObservable')
     return this.visibility.visibleUniverseForPlayer(playerId).pipe(
       map(state => {
         return {

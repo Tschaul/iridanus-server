@@ -100,6 +100,9 @@
                         },
                         {
                             "$ref": "#/definitions/GameNotificationsSubscription"
+                        },
+                        {
+                            "$ref": "#/definitions/EnvironmentInfoSubscription"
                         }
                     ]
                 },
@@ -263,6 +266,20 @@
             },
             "required": [
                 "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "EnvironmentInfoSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "ENVIRONMENT/INFO"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
                 "type"
             ],
             "type": "object"

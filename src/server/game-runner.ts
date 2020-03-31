@@ -16,10 +16,11 @@ import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
 import { Initializer } from "./infrastructure/initialisation/initializer";
-import { debugConfig } from "../core/setup/simple-config";
+import { makeConfig } from "../core/setup/simple-config";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
 import { Scorings } from "../shared/model/v1/scoring";
 import { NotificationHandler } from "../core/infrastructure/notification-handler";
+import { Environment } from "./environment/environment";
 
 @injectable()
 export class GameRunner {
@@ -29,6 +30,7 @@ export class GameRunner {
   private readonly clock: Clock;
   private readonly logger: Logger;
   private readonly initializer: Initializer;
+  private readonly environment: Environment;
 
   constructor(
     private registry: ContainerRegistry,
@@ -38,6 +40,7 @@ export class GameRunner {
     this.clock = registry.globalContainer.get(Clock);
     this.logger = registry.globalContainer.get(Logger);
     this.initializer = registry.globalContainer.get(Initializer);
+    this.environment = registry.globalContainer.get(Environment);
   }
 
   run() {
@@ -87,7 +90,7 @@ export class GameRunner {
     const store = container.get(Store);
     const notificationHandler = container.get(NotificationHandler);
 
-    setup.rules = debugConfig;
+    setup.rules = makeConfig(this.environment.millisecondsPerDay);
 
     const currentState = await this.gameRepository.getGameState(gameInfo.id);
 
