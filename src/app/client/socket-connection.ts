@@ -20,7 +20,8 @@ export class SocketConnection {
   public isConnected$ = this.isConnected$$.asObservable();
 
   constructor() {
-    this.socket = new WebSocket('ws://localhost:8999');
+
+    this.socket = new WebSocket("ws://" + location.host);
 
     this.socket.onopen = () => this.initializeSocket();
     this.socket.onclose = () => this.isConnected$$.next(false);

@@ -6,8 +6,21 @@ import { ContainerRegistry } from './container-registry';
 import { ConnectionHandler } from './connection-handler';
 import { RequestMessage } from '../shared/messages/request-message';
 import { GameRunner } from './game-runner';
+import { createProxyServer } from 'http-proxy'
 
 const app = express();
+
+if (true) {
+
+  const apiProxy = createProxyServer();
+  app.all("/*", (req, res) => {
+    apiProxy.web(req, res, { target: 'http://localhost:9000' });
+  });
+} else {
+  app.use(express.static('dist'));
+
+}
+
 
 const server = createServer(app);
 
