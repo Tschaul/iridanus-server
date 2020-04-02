@@ -3,6 +3,8 @@ import { DrawingPositions } from "./drawing-positions";
 
 export type GameInfo = ProposedGameInfo | StartedGameInfo;
 
+// TODO new status: PROPOSED -> SCHEDULED -> STARTED -> ENDED
+
 export interface GameInfoBase {
   id: string;
   players: PlayerInfos;

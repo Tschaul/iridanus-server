@@ -13,7 +13,8 @@ export function setupContainerRegistry() {
 
   containerRegistry.globalContainer.unbind(Environment);
   containerRegistry.globalContainer.bind(Environment).toConstantValue({
-    dataPath: './temp'
+    dataPath: './temp',
+    millisecondsPerDay: 5000
   })
 
   containerRegistry.globalContainer.unbind(CryptoWrapper);
