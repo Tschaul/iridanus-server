@@ -8,9 +8,11 @@
     "test:no-report": "tsc --p tsconfig.tests.json && mocha",
     "run:playground": "tsc && node build/playground.js",
     "start-app:dev": "webpack-dev-server",
-    "start-server:dev": "node build/server/server.js",
+    "start-server:dev": "node ./set-debug-environment.js && node build/server/server.js",
+    "start": "node build/server/server.js",
     "build:watch": "tsc --watch",
     "bundle": "webpack",
+    "docker:build": "tsc && webpack && docker build -t tschaul/iridanus .",
     "generate:request-schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd --required -o request-schema.json .\\tsconfig.json RequestMessage",
     "generate:state-schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd --required -o state-schema.json .\\tsconfig.json GameState"
   },

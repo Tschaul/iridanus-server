@@ -13,8 +13,7 @@ import { shutdown } from './shutdown';
 
 const app = express();
 
-if (true) {
-
+if (process.env.IRIDANUS_USE_PROXY === 'true') {
   const apiProxy = createProxyServer();
   app.all("/*", (req, res) => {
     apiProxy.web(req, res, { target: 'http://localhost:9000' });
