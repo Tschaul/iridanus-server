@@ -3,8 +3,8 @@ import { dirname, join } from 'path'
 import { injectable } from 'inversify';
 import { Environment } from '../environment/environment';
 import produce from "immer";
-import { ReplaySubject, Observable, Subject, concat } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { ReplaySubject, Observable, Subject, concat, forkJoin, combineLatest } from 'rxjs';
+import { take, switchMap, filter, first, map, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { Queue } from '../infrastructure/queue/queue';
 
 @injectable()
@@ -13,6 +13,19 @@ export class DataHandleRegistry {
   constructor(private environment: Environment) { }
 
   private dataHandlesByPath = new Map<string, DataHandle<unknown>>();
+
+  private dataHandleCreated$$ = new ReplaySubject<void>(1);
+
+  public dataHandlesAreBusy$ = this.dataHandleCreated$$.pipe(
+    switchMap(() => {
+      const handles = [...this.dataHandlesByPath.values()];
+      return combineLatest([
+        ...handles.map(handle => handle.busy$)
+      ]).pipe(map(values => values.some(it => it)))
+    }),
+    startWith(false),
+    distinctUntilChanged()
+  )
 
   async getDataHandle<TData>(path: string): Promise<DataHandle<TData>> {
     if (!this.validateFilePath(path)) {
@@ -23,6 +36,7 @@ export class DataHandleRegistry {
     } else {
       const dataHandle = new DataHandle<TData>(path, this.environment);
       this.dataHandlesByPath.set(path, dataHandle);
+      this.dataHandleCreated$$.next();
       await dataHandle.initialize();
       return dataHandle;
     }
@@ -60,6 +74,8 @@ export class DataHandle<TData> {
   private existsForSure = false;
 
   private queue = new Queue();
+
+  public busy$ = this.queue.running$;
 
   initialization = new Subject<never>();
 

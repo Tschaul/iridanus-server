@@ -7,6 +7,9 @@ import { ConnectionHandler } from './connection-handler';
 import { RequestMessage } from '../shared/messages/request-message';
 import { GameRunner } from './game-runner';
 import { createProxyServer } from 'http-proxy'
+import { DataHandleRegistry } from './repositories/data-handle-registry';
+import { debounceTime } from 'rxjs/operators';
+import { shutdown } from './shutdown';
 
 const app = express();
 
@@ -51,3 +54,12 @@ server.listen(process.env.PORT || 8999, () => {
   const address = server.address() as AddressInfo;
   console.log(`Server started on port ${address.port} :)`);
 });
+
+process.on('SIGTERM', () => {
+  shutdown(server, containerRegistry)
+});
+
+process.on('SIGINT', () => {
+  shutdown(server, containerRegistry)
+});
+
