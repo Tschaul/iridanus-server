@@ -10,6 +10,8 @@ import { createProxyServer } from 'http-proxy'
 import { DataHandleRegistry } from './repositories/data-handle-registry';
 import { debounceTime } from 'rxjs/operators';
 import { shutdown } from './shutdown';
+import { MailSender } from './infrastructure/email/mail-sender';
+import { UserRepository } from './repositories/users/user-repository';
 
 const app = express();
 

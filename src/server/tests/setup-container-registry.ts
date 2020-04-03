@@ -14,7 +14,8 @@ export function setupContainerRegistry() {
   containerRegistry.globalContainer.unbind(Environment);
   containerRegistry.globalContainer.bind(Environment).toConstantValue({
     dataPath: './temp',
-    millisecondsPerDay: 5000
+    millisecondsPerDay: 5000,
+    mailSettings: undefined as any
   })
 
   containerRegistry.globalContainer.unbind(CryptoWrapper);

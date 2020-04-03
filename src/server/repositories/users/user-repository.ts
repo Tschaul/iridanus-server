@@ -1,4 +1,4 @@
-import { UsersSchema, initialData } from "./schema/v1";
+import { UsersSchema, initialData, User } from "./schema/v1";
 import { DataHandle, DataHandleRegistry } from "../data-handle-registry";
 import { injectable } from "inversify";
 import { CryptoWrapper } from "../../infrastructure/crypto/crypto-wrapper";
@@ -18,6 +18,11 @@ export class UserRepository {
   async initialize() {
     this.handle = await this.dataHandleRegistry.getDataHandle(USER_DATA_PATH);
     await this.handle.createIfMissing(initialData(await this.crypto.secureRandom()))
+  }
+
+  async getUserInfos(userIds: string[]): Promise<User[]> {
+    const data = await this.handle.read();
+    return userIds.map(id => data.users[id])
   }
 
   async createUser(id: string, email: string, password: string) {
