@@ -14,7 +14,9 @@ export interface UnconfirmedUser extends UserBase {
 
 export interface ConfirmedUser extends UserBase {
   emailConfirmationTimestamp: number,
-  emailConfirmed: true
+  emailConfirmed: true,
+  passwordResetToken: string,
+  passwortResetTokenValidUntil: number
 }
 
 export interface UsersSchema {

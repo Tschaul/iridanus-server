@@ -3,7 +3,7 @@ import { MailSender } from "../infrastructure/mail/mail-sender";
 import { Environment } from "../environment/environment";
 
 @injectable()
-export class AccountConfirmationMail {
+export class PasswordResetMail {
 
   constructor(private mailSender: MailSender, private environment: Environment) {}
 
@@ -12,11 +12,11 @@ export class AccountConfirmationMail {
       recipients: [recipient],
       subject: 'Your Iridanus account',
       text: 
-`Welcome to Iridanus
+`Hi
 
-please click the following link to activate you account and login:
+you requested a password reset. Follow the link below to proceed:
 
-${this.environment.baseUrl}#confirm-email/${recipient}/${token}`
+${this.environment.baseUrl}#reset-password/${recipient}/${token}`
     })
   }
 }

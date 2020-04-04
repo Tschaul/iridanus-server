@@ -9,7 +9,7 @@ import { Button } from "../../ui-components/button/button";
 import autobind from "autobind-decorator";
 
 @observer
-export class SignUpPanel extends React.Component<{
+export class ForgotPasswordPanel extends React.Component<{
   vm: WelcomeViewModel
 }> implements HasExitAnimation {
 
@@ -42,22 +42,15 @@ export class SignUpPanel extends React.Component<{
         <div style={container}>
           <Panel contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
               <div style={{flex: 1}}>
-                Sign up for Iridanus
+                Password forgotten? 
                 <br />
                 <br />
+                Please enter you username an we will send you a password reset link.
                 <br />
                 <br />
                 please enter username<br />
                 ><Input type="text" value={wrapObservable(this.props.vm, 'username')} /><br />
                 <br />
-                please enter email<br />
-                ><Input type="text" value={wrapObservable(this.props.vm, 'email')} /><br />
-                <br />
-                please enter password<br />
-                ><Input type="password" value={wrapObservable(this.props.vm, 'password')} /><br />
-                <br />
-                please enter password again<br />
-                ><Input type="password" value={wrapObservable(this.props.vm, 'passwordRepeated')} /><br />
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button onClick={this.handleBackClick} spaceRight>BACK</Button>
@@ -75,7 +68,7 @@ export class SignUpPanel extends React.Component<{
 
   @autobind
   handleSubmitClick() {
-    this.props.vm.signUp();
+    this.props.vm.forgotPassword();
   }
 
 }

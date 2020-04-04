@@ -7,7 +7,7 @@ import { EnvironmentInfo } from "../../shared/messages/subscriptions/environment
 
 const infoDummy = { millisecondsPerDay: 1 };
 
-export class Environment {
+export class ServerEnvironment {
   private environmentService = resolveFromRegistry(EnvironmentService);
 
   @observable private environmentStream: IStreamListener<EnvironmentInfo> = fromStream(empty(), infoDummy);

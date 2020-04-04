@@ -7,6 +7,9 @@ import { SignUpPanel } from "./sign-up-panel";
 import { reaction } from "mobx";
 import { ConfirmEmailPanel } from "./confirm-email-panel";
 import { EmailConfirmedPanel } from "./email-confirmed-panel";
+import { ForgotPasswordPanel } from "./forgot-password-panel";
+import { ResetPasswordSentPanel } from "./reset-password-sent-panel";
+import { ResetPasswordPanel } from "./reset-password-panel";
 
 @observer
 export class WelcomeScreen extends React.Component<{
@@ -50,6 +53,12 @@ export class WelcomeScreen extends React.Component<{
         return <ConfirmEmailPanel ref={elem => this.panel = elem} vm={this.props.vm}></ConfirmEmailPanel>
       case 'EMAIL_CONFIRMED':
         return <EmailConfirmedPanel ref={elem => this.panel = elem} vm={this.props.vm}></EmailConfirmedPanel>
+      case 'FORGOT_PASSWORD':
+        return <ForgotPasswordPanel ref={elem => this.panel = elem} vm={this.props.vm}></ForgotPasswordPanel>
+      case 'RESET_PASSWORD_MAIL_SENT':
+        return <ResetPasswordSentPanel ref={elem => this.panel = elem} vm={this.props.vm}></ResetPasswordSentPanel>
+      case 'RESET_PASSWORD':
+        return <ResetPasswordPanel ref={elem => this.panel = elem} vm={this.props.vm}></ResetPasswordPanel>
     }
   }
 

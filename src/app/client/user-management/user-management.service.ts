@@ -27,4 +27,20 @@ export class UserManagementService {
     })
   }
 
+  async forgotPassword(userId: string,) {
+    await this.connection.sendCommand({
+      type: 'USER/SEND_PASSWORD_RESET_TOKEN',
+      id: userId,
+    })
+  }
+
+  async resetPassword(userId: string, token: string, password: string) {
+    await this.connection.sendCommand({
+      type: 'USER/RESET_PASSWORD',
+      id: userId,
+      token,
+      password
+    })
+  }
+
 }

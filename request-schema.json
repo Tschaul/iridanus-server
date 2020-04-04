@@ -34,6 +34,12 @@
                             "$ref": "#/definitions/ConfirmEmailAddressCommand"
                         },
                         {
+                            "$ref": "#/definitions/SendPasswordResetTokenCommand"
+                        },
+                        {
+                            "$ref": "#/definitions/ResetPasswordCommand"
+                        },
+                        {
                             "$ref": "#/definitions/CreateGameCommand"
                         },
                         {
@@ -496,6 +502,32 @@
             ],
             "type": "object"
         },
+        "ResetPasswordCommand": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "USER/RESET_PASSWORD"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "password",
+                "token",
+                "type"
+            ],
+            "type": "object"
+        },
         "ScrapShipsForIndustryOrder": {
             "properties": {
                 "amount": {
@@ -512,6 +544,24 @@
             },
             "required": [
                 "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "SendPasswordResetTokenCommand": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "USER/SEND_PASSWORD_RESET_TOKEN"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
                 "type"
             ],
             "type": "object"

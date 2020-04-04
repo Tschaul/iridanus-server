@@ -3,14 +3,14 @@ import { observable, computed, when } from "mobx";
 import { WelcomeViewModel } from "./welcome/welcome-view-model";
 import { LobbyViewModel } from "./lobby/lobby-view-model";
 import { ConnectionStatus } from "./connection-status";
-import { Environment } from "./environment";
+import { ServerEnvironment } from "./server-environment";
 
 export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
 
 export class MainViewModel {
 
   public connectionStatus = new ConnectionStatus();
-  public environment = new Environment();
+  public environment = new ServerEnvironment();
 
   constructor() {
     // this.welcomeViewModel.username = 'tschaul';
@@ -59,9 +59,12 @@ export class MainViewModel {
     const split = hash.slice(1).split('/');
 
     switch (split[0]) {
-      case 'confirm':
+      case 'confirm-email':
         await this.welcomeViewModel.confirmEmail(split[1], split[2])
         break;
+        case 'reset-password':
+          await this.welcomeViewModel.prepareResetPassword(split[1], split[2])
+          break;
       default:
     }
 

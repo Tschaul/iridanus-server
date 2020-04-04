@@ -8,7 +8,7 @@ import { wrapObservable } from "../helper/wrap-observable";
 import classNames from "classnames";
 import { Button } from "../../ui-components/button/button";
 import autobind from "autobind-decorator";
-import { errorRed } from "../../ui-components/colors/colors";
+import { errorRed, hoverYellow } from "../../ui-components/colors/colors";
 
 @observer
 export class LoginPanel extends React.Component<{
@@ -61,9 +61,10 @@ export class LoginPanel extends React.Component<{
             please enter login<br />
             ><Input type="text" value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
             <br />
-            <br />
             please enter password<br />
             ><Input type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
+            <br />
+            <a style={{color: hoverYellow}} href="javascript:void(0)" onClick={this.handlePasswordForgotten}>password forgotten?</a> 
           </div>
           <div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -76,6 +77,11 @@ export class LoginPanel extends React.Component<{
         </Panel>
       </div>
     )
+  }
+
+  @autobind
+  handlePasswordForgotten() {
+    this.props.vm.mode = 'FORGOT_PASSWORD'
   }
 
   @autobind
