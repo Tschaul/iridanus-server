@@ -4110,6 +4110,9 @@
         "gameEndTimestamp": {
             "type": "number"
         },
+        "gameStartTimestamp": {
+            "type": "number"
+        },
         "scorings": {
             "additionalProperties": {
                 "$ref": "#/definitions/Scoring"
@@ -4123,6 +4126,7 @@
     "required": [
         "currentTimestamp",
         "gameEndTimestamp",
+        "gameStartTimestamp",
         "scorings",
         "universe"
     ],

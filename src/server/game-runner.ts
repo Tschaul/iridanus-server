@@ -186,10 +186,14 @@ export class GameRunner {
       })
     })
 
+    const currentTimestamp = this.clock.getTimestamp();
+    const gameStartTimestamp = currentTimestamp + this.environment.millisecondsPerDay * 30;
+    const gameEndTimestamp = gameStartTimestamp + this.environment.millisecondsPerDay * 7 * 8
+
     return {
-      gameStartTimestamp: this.clock.getTimestamp() + this.environment.millisecondsPerDay * 3,
-      currentTimestamp: this.clock.getTimestamp(),
-      gameEndTimestamp: this.clock.getTimestamp() + this.environment.millisecondsPerDay * 7 * 8,
+      currentTimestamp,
+      gameStartTimestamp,
+      gameEndTimestamp,
       universe,
       scorings
     }

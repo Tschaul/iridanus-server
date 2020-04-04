@@ -28,7 +28,7 @@ export class GameStartsEventQueue implements GameEventQueue {
           }
           return of(gameStartEvent)
         } else {
-          return EMPTY;
+          return of(null);
         }
       })
     )

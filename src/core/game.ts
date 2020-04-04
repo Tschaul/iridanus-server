@@ -28,7 +28,21 @@ export class Game {
 
   }
 
-  public startGameLoop(): Promise<GameState> {
+  public async startGameLoop() {
+    const gameStartEvent = await this.gameStarts.upcomingEvent$.toPromise();
+    const now = this.clock.getTimestamp()
+    if (gameStartEvent != null && now < gameStartEvent.timestamp) {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          this.handleEvent(gameStartEvent, resolve);
+          resolve();
+        }, gameStartEvent.timestamp - now)
+      })
+    }
+    return await this.startMainGameLoop();
+  }
+
+  private startMainGameLoop(): Promise<GameState> {
     return new Promise<GameState>((resolve, reject) => {
 
       concat(this.gameStarts.upcomingEvent$, this.completeEventQueue.upcomingEvent$).pipe(
