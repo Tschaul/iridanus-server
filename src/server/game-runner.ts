@@ -152,7 +152,7 @@ export class GameRunner {
       }
     })
 
-    const universe = produce(map.universe, (state: Universe) => {
+    let universe = produce(map.universe, (state: Universe) => {
       map.seats.forEach((seat, index) => {
         const player = players[index];
         state.visibility[player] = {};
@@ -161,12 +161,19 @@ export class GameRunner {
           if (worldhasOwner(world) && world.ownerId === seat) {
             if (player) {
               world.ownerId = player;
+              state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
             } else {
               state.worlds[worldId] = {
                 status: 'LOST',
                 ...baseWorld(world)
               }
             }
+          }
+          if (player && state.gates[worldId].some(neighboringWorldId => {
+            const neighboringWorld = state.worlds[neighboringWorldId];
+            return worldhasOwner(neighboringWorld) && [seat, player].includes(neighboringWorld.ownerId)
+          })) {
+              state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
           }
         })
         Object.getOwnPropertyNames(state.fleets).forEach(fleetId => {
