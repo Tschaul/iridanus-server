@@ -1,5 +1,5 @@
 import { Store } from "./store";
-import { combineLatest, Subject, interval } from "rxjs";
+import { combineLatest, Subject, interval, concat, EMPTY } from "rxjs";
 import { injectable } from 'inversify'
 import { GameEvent } from "./events/event";
 import { Clock } from "./infrastructure/clock";
@@ -8,6 +8,7 @@ import { distinctUntilChanged, debounceTime, takeUntil } from "rxjs/operators";
 import { CompleteEventQueue } from "./events/complete-event-queue";
 import { GameSetupProvider } from "./game-setup-provider";
 import { NotificationHandler } from "./infrastructure/notification-handler";
+import { GameStartsEventQueue } from "./events/start/game-starts";
 
 @injectable()
 export class Game {
@@ -21,7 +22,8 @@ export class Game {
     private store: Store,
     private completeEventQueue: CompleteEventQueue,
     private setup: GameSetupProvider,
-    private notificationHandler: NotificationHandler
+    private notificationHandler: NotificationHandler,
+    private gameStarts: GameStartsEventQueue
   ) {
 
   }
@@ -29,13 +31,13 @@ export class Game {
   public startGameLoop(): Promise<GameState> {
     return new Promise<GameState>((resolve, reject) => {
 
-      this.completeEventQueue.upcomingEvent$.pipe(
+      concat(this.gameStarts.upcomingEvent$, this.completeEventQueue.upcomingEvent$).pipe(
         distinctUntilChanged(),
         debounceTime(0),
         takeUntil(this.store.finalized$)
       ).subscribe((event) => {
 
-        if (event === null) {
+        if (event == null) {
           if (this.setup.endGameLoopWhenNoEventIsQueued) {
             this.finalizeAndResolve(resolve)
             return

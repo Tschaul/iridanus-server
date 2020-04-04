@@ -26,8 +26,10 @@ export class GameNotifications {
     const result: NotificationsByWorldId = {}
 
     for (const notification of notifications) {
-      result[notification.worldId] = result[notification.worldId] || [];
-      result[notification.worldId].push(notification)
+      if ('worldId' in notification) {
+        result[notification.worldId] = result[notification.worldId] || [];
+        result[notification.worldId].push(notification)
+      }
     }
     return result;
   }

@@ -187,8 +187,9 @@ export class GameRunner {
     })
 
     return {
+      gameStartTimestamp: this.clock.getTimestamp() + this.environment.millisecondsPerDay * 3,
       currentTimestamp: this.clock.getTimestamp(),
-      gameEndTimestamp: this.clock.getTimestamp() + 1000 * 60 * 60 * 24,
+      gameEndTimestamp: this.clock.getTimestamp() + this.environment.millisecondsPerDay * 7 * 8,
       universe,
       scorings
     }

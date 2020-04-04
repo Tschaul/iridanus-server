@@ -45,8 +45,11 @@ import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 import { GameEndsEventQueue } from "./scoring/game-ends";
 import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
 import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
+import { GameStartsEventQueue } from "./start/game-starts";
 
 export function registerEventQueues(container: Container) {
+
+  container.bind(GameStartsEventQueue).toSelf()
 
   container.bind(GameEndsEventQueue).toSelf();
   container.bind(PlayerChangesInfluenceEventQueue).toSelf();

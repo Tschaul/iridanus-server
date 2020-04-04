@@ -4,6 +4,7 @@ import { dummyReadyWorld } from "../test-helper";
 export const buildTestMap: GameState = {
   scorings: {},
   currentTimestamp: 0,
+  gameStartTimestamp: 0,
   gameEndTimestamp: Number.MAX_SAFE_INTEGER,
   universe: {
     visibility: {
