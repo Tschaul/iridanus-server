@@ -8,7 +8,7 @@ import { Environment } from "./environment";
 export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
 
 export class MainViewModel {
-  
+
   public connectionStatus = new ConnectionStatus();
   public environment = new Environment();
 
@@ -22,7 +22,11 @@ export class MainViewModel {
 
     when(
       () => this.connectionStatus.isConnected,
-      () => this.environment.initialize()
+      async () => {
+        this.environment.initialize();
+        await this.parseLocation();
+
+      }
     )
   }
 
@@ -46,4 +50,22 @@ export class MainViewModel {
   public welcomeViewModel = new WelcomeViewModel(this);
   public lobbyViewModel = new LobbyViewModel(this);
 
+  private async parseLocation() {
+    const hash = location.hash;
+    if (!hash.startsWith('#')) {
+      return;
+    }
+
+    const split = hash.slice(1).split('/');
+
+    switch (split[0]) {
+      case 'confirm':
+        await this.welcomeViewModel.confirmEmail(split[1], split[2])
+        break;
+      default:
+    }
+
+    history.replaceState("", document.title, location.pathname + location.search);
+
+  }
 }

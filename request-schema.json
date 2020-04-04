@@ -31,6 +31,9 @@
                             "$ref": "#/definitions/SignUpUserCommand"
                         },
                         {
+                            "$ref": "#/definitions/ConfirmEmailAddressCommand"
+                        },
+                        {
                             "$ref": "#/definitions/CreateGameCommand"
                         },
                         {
@@ -188,6 +191,28 @@
             },
             "required": [
                 "amount",
+                "type"
+            ],
+            "type": "object"
+        },
+        "ConfirmEmailAddressCommand": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "USER/CONFIRM_EMAIL_ADDRESS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "token",
                 "type"
             ],
             "type": "object"
@@ -504,7 +529,7 @@
                 },
                 "type": {
                     "enum": [
-                        "SIGN_UP_USER"
+                        "USER/SIGN_UP_USER"
                     ],
                     "type": "string"
                 }

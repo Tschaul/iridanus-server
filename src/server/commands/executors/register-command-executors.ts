@@ -3,6 +3,7 @@ import { SignUpUserExecutor } from "./authentication/sign-up-user-executor";
 import { registerGameSetupCommandExecutors } from "./game-setup/game-setup-command-executor-registry";
 import { registerOrderCommandExecutors } from "./orders/order-command-executor-registry";
 import { registerNotificationCommandExecutors } from "./notifications/notifications-command-executor-registry";
+import { registerAuthenticationCommandExecutors } from "./authentication/authentication-command-executor-registry";
 
 export function registerGameCommandExecutors(container: Container) {
   registerNotificationCommandExecutors(container);
@@ -10,5 +11,5 @@ export function registerGameCommandExecutors(container: Container) {
 }
 export function registerGlobalCommandExecutors(container: Container) {
   registerGameSetupCommandExecutors(container);
-  container.bind(SignUpUserExecutor).toSelf();
+  registerAuthenticationCommandExecutors(container);
 }

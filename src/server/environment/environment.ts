@@ -1,7 +1,8 @@
 export class Environment {
   dataPath: string;
   millisecondsPerDay: number;
-  mailSettings: MailSettings
+  mailSettings: MailSettings;
+  baseUrl: string;
 }
 
 export interface MailSettings {
@@ -10,5 +11,6 @@ export interface MailSettings {
   port: number,
   secure: boolean,
   username: string,
-  password: string
+  password: string,
+  fromAddress: string
 }

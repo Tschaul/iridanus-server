@@ -16,6 +16,7 @@ import { registerRepositories } from './repositories/register-repositories';
 import { registerEnvironment } from './environment/register-environment';
 import { registerGlobalInfrastructure } from './infrastructure/register-infrastructure';
 import { registerCoreInfrastructure } from '../core/infrastructure/register-core-infrastructure';
+import { registerMails } from './mails/register-mails';
 
 @injectable()
 export class ContainerRegistry {
@@ -34,6 +35,7 @@ export class ContainerRegistry {
 
     registerCoreInfrastructure(this.globalContainer);
     registerGlobalInfrastructure(this.globalContainer);
+    registerMails(this.globalContainer);
     registerEnvironment(this.globalContainer);
     registerGlobalDataProviders(this.globalContainer);
     registerGlobalCommandExecutors(this.globalContainer);

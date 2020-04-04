@@ -1,17 +1,18 @@
-import { UsersSchema, initialData, User } from "./schema/v1";
+import { UsersSchema, initialData, User, ConfirmedUser, UnconfirmedUser } from "./schema/v1";
 import { DataHandle, DataHandleRegistry } from "../data-handle-registry";
 import { injectable } from "inversify";
 import { CryptoWrapper } from "../../infrastructure/crypto/crypto-wrapper";
 import { Initializer } from "../../infrastructure/initialisation/initializer";
+import { Clock } from "../../../core/infrastructure/clock";
 
-const USER_DATA_PATH ='users/users.json';
+const USER_DATA_PATH = 'users/users.json';
 
 @injectable()
 export class UserRepository {
 
   private handle: DataHandle<UsersSchema>;
 
-  constructor(private dataHandleRegistry: DataHandleRegistry, private crypto: CryptoWrapper, initilaizer: Initializer) {
+  constructor(private dataHandleRegistry: DataHandleRegistry, private crypto: CryptoWrapper, initilaizer: Initializer, private clock: Clock) {
     initilaizer.requestInitialization(this.initialize());
   }
 
@@ -26,6 +27,7 @@ export class UserRepository {
   }
 
   async createUser(id: string, email: string, password: string) {
+    const token = await this.crypto.secureRandom();
     await this.handle.do(async (data) => {
       if (data.users[id]) {
         throw new Error(`user id '${id}' is allready taken`)
@@ -38,7 +40,33 @@ export class UserRepository {
           email,
           id,
           passwordHash,
-          salt
+          salt,
+          emailConfirmed: false,
+          emailConfirmationToken: token
+        }
+      }
+    })
+    return token;
+  }
+
+  async confirmUserEmail(id: string, token: string) {
+    await this.handle.do(async (data) => {
+      if (!data.users[id]) {
+        throw new Error(`user id '${id}' does not exist`)
+      }
+      const user = data.users[id];
+      if (user.emailConfirmed || user.emailConfirmationToken !== token) {
+        throw new Error(`email for user id '${id}' could not be confirmed`)
+      }
+      return (data) => {
+        const user = data.users[id] as UnconfirmedUser;
+        data.users[id] = {
+          emailConfirmed: true,
+          email: user.email,
+          emailConfirmationTimestamp: this.clock.getTimestamp(),
+          id: user.id,
+          passwordHash: user.passwordHash,
+          salt: user.salt
         }
       }
     })
@@ -46,7 +74,7 @@ export class UserRepository {
 
   async authenticateUser(id: string, password: string) {
     const data = await this.handle.read();
-    if (!data.users[id]) {
+    if (!data.users[id] || !data.users[id].emailConfirmed) {
       return false;
     }
 

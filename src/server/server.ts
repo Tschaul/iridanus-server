@@ -10,7 +10,7 @@ import { createProxyServer } from 'http-proxy'
 import { DataHandleRegistry } from './repositories/data-handle-registry';
 import { debounceTime } from 'rxjs/operators';
 import { shutdown } from './shutdown';
-import { MailSender } from './infrastructure/email/mail-sender';
+import { MailSender } from './infrastructure/mail/mail-sender';
 import { UserRepository } from './repositories/users/user-repository';
 
 const app = express();
@@ -51,7 +51,7 @@ webSocketServer.on('connection', (socket: WebSocket) => {
 })
 
 //start our server
-server.listen(process.env.PORT || 8999, () => {
+server.listen(process.env.IRIDANUS_SERVER_PORT || 8999, () => {
   const address = server.address() as AddressInfo;
   console.log(`Server started on port ${address.port} :)`);
 });

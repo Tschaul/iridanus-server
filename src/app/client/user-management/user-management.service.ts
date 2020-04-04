@@ -12,10 +12,18 @@ export class UserManagementService {
 
   async signUp(userId: string, email: string, password: string) {
     await this.connection.sendCommand({
-      type: 'SIGN_UP_USER',
+      type: 'USER/SIGN_UP_USER',
       id: userId,
       email,
       password
+    })
+  }
+
+  async confirmEmail(userId: string, token: string) {
+    await this.connection.sendCommand({
+      type: 'USER/CONFIRM_EMAIL_ADDRESS',
+      id: userId,
+      token,
     })
   }
 

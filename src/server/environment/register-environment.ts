@@ -10,12 +10,14 @@ const useTestMailAccount = envBoolean('IRIDANUS_USE_TEST_EMAIL_ACCOUNT');
 
 const mailSettings: MailSettings = useTestMailAccount ? {
   useTestAccount: true,
+  fromAddress: envString('IRIDANUS_MAIL_FROM_ADDRESS', true),
   host: "smtp.ethereal.email",
   port: 587,
   secure: false,
   ...undefined as any
 } : {
   useTestAccount: false,
+  fromAddress: envString('IRIDANUS_MAIL_FROM_ADDRESS', true),
   host: envString('IRIDANUS_MAIL_SERVER_HOST', true),
   port: envNumber('IRIDANUS_MAIL_SERVER_PORT', true),
   secure: envBoolean('IRIDANUS_MAIL_SERVER_SECURE', true),
@@ -26,7 +28,8 @@ const mailSettings: MailSettings = useTestMailAccount ? {
 const environment: Environment = {
   dataPath: envString('IRIDANUS_DATA_PATH', true),
   millisecondsPerDay: envNumber('IRIDANUS_MILLISECONDS_PER_DAY', true),
-  mailSettings
+  mailSettings,
+  baseUrl: envString('IRIDANUS_BASE_URL')
 }
 
 if (useTestMailAccount) {

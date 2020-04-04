@@ -1,21 +1,28 @@
 import { injectable } from "inversify";
-import { MailPayload } from "./mails";
 import { createTransport, getTestMessageUrl } from "nodemailer";
 import { Environment } from "../../environment/environment";
 import Mail from "nodemailer/lib/mailer";
 import { UserRepository } from "../../repositories/users/user-repository";
+import { Logger } from "../../../core/infrastructure/logger";
+
+export interface MailPayload {
+  recipients: string[]
+  subject: string,
+  text: string,
+  html?: string,
+}
 
 @injectable()
 export class MailSender {
   transporter: Mail;
-  constructor(private environment: Environment, private userRepository: UserRepository) {
+  constructor(private environment: Environment, private userRepository: UserRepository, private logger: Logger) {
     this.transporter = createTransport({
       host: environment.mailSettings.host,
       port: environment.mailSettings.port,
-      secure: environment.mailSettings.secure, // true for 465, false for other ports
+      secure: environment.mailSettings.secure,
       auth: {
-        user: environment.mailSettings.username, // generated ethereal user
-        pass: environment.mailSettings.password // generated ethereal password
+        user: environment.mailSettings.username,
+        pass: environment.mailSettings.password
       }
     })
   }
@@ -26,17 +33,17 @@ export class MailSender {
     const to = userInfos.map(it => it.email).join(', ');
 
     const info = await this.transporter.sendMail({
-      from: '"Fred Foo 👻" <foo@example.com>', // sender address
-      to, // list of receivers
-      subject: "Hello ✔", // Subject line
-      text: "Hello world?", // plain text body
-      html: "<b>Hello world?</b>" // html body
+      from: this.environment.mailSettings.fromAddress,
+      to,
+      subject: mail.subject,
+      text: mail.text,
+      html: mail.html
     })
 
-    console.log("Message sent: %s", info.messageId);
+    this.logger.info("Message sent: " + info.messageId);
 
     if (this.environment.mailSettings.useTestAccount) {
-      console.log("Preview URL: %s", getTestMessageUrl(info));
+      this.logger.info("Preview URL: " + getTestMessageUrl(info));
     }
   }
 }

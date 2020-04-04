@@ -1,16 +1,18 @@
 import * as React from "react";
-import { WelcomeViewModel } from "../../view-model/welcome/welcome-view-model";
+import { WelcomeViewModel, WelcomScreenMode } from "../../view-model/welcome/welcome-view-model";
 import { observer } from "mobx-react";
 import { HasExitAnimation } from "../../ui-components/animatable-components";
 import { LoginPanel } from "./login-panel";
 import { SignUpPanel } from "./sign-up-panel";
 import { reaction } from "mobx";
+import { ConfirmEmailPanel } from "./confirm-email-panel";
+import { EmailConfirmedPanel } from "./email-confirmed-panel";
 
 @observer
 export class WelcomeScreen extends React.Component<{
   vm: WelcomeViewModel
 }, {
-  activePanel: 'LOGIN' | 'SIGN_UP'
+  activePanel: WelcomScreenMode
 }> implements HasExitAnimation {
   panel: HasExitAnimation | null;
 
@@ -44,6 +46,10 @@ export class WelcomeScreen extends React.Component<{
         return <LoginPanel ref={elem => this.panel = elem} vm={this.props.vm}></LoginPanel>
       case 'SIGN_UP':
         return <SignUpPanel ref={elem => this.panel = elem} vm={this.props.vm}></SignUpPanel>
+      case 'CONFIRM_EMAIL':
+        return <ConfirmEmailPanel ref={elem => this.panel = elem} vm={this.props.vm}></ConfirmEmailPanel>
+      case 'EMAIL_CONFIRMED':
+        return <EmailConfirmedPanel ref={elem => this.panel = elem} vm={this.props.vm}></EmailConfirmedPanel>
     }
   }
 
