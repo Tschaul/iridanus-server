@@ -4,8 +4,8 @@ import { setupContainerRegistry } from '../setup-container-registry';
 import { ContainerRegistry } from '../../container-registry';
 import { ConnectionHandler } from '../../connection-handler';
 import { ResponseMessage } from '../../../shared/messages/response-message';
-import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from './user-management.workflows';
+import { ServerTestBed } from '../server-test-bed';
 
 describe("user registration", () => {
 

@@ -17,6 +17,7 @@ import { registerEnvironment } from './environment/register-environment';
 import { registerGlobalInfrastructure } from './infrastructure/register-infrastructure';
 import { registerCoreInfrastructure } from '../core/infrastructure/register-core-infrastructure';
 import { registerMails } from './mails/register-mails';
+import { Environment } from './environment/environment';
 
 @injectable()
 export class ContainerRegistry {
@@ -24,7 +25,7 @@ export class ContainerRegistry {
   public globalContainer: Container;
   private containersByGameId = new Map<string, Container>();
 
-  constructor() {
+  constructor(environment?: Environment) {
 
     this.globalContainer = new Container({
       defaultScope: "Singleton"
@@ -36,10 +37,15 @@ export class ContainerRegistry {
     registerCoreInfrastructure(this.globalContainer);
     registerGlobalInfrastructure(this.globalContainer);
     registerMails(this.globalContainer);
-    registerEnvironment(this.globalContainer);
     registerGlobalDataProviders(this.globalContainer);
     registerGlobalCommandExecutors(this.globalContainer);
     registerRepositories(this.globalContainer);
+
+    if(!environment) {
+      registerEnvironment(this.globalContainer);
+    } else {
+      this.globalContainer.bind(Environment).toConstantValue(environment);
+    }
   }
 
   public getContainerByGameId(gameId: string | null | undefined): Container {

@@ -1,9 +1,9 @@
 
 import { setupContainerRegistry } from '../setup-container-registry';
 import { ContainerRegistry } from '../../container-registry';
-import { ServerTestBed } from '../../server-test-bed';
 import { signUpAndLogin } from '../user-registration/user-management.workflows';
 import { anything } from '../mocks/anything';
+import { ServerTestBed } from '../server-test-bed';
 
 describe("game setup", () => {
 

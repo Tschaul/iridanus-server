@@ -1,14 +1,16 @@
-import { ContainerRegistry } from "./container-registry";
-import { Environment } from "./environment/environment";
+import { ContainerRegistry } from "../container-registry";
+import { Environment } from "../environment/environment";
 import { mkdirSync, rmdirSync, writeFileSync } from "fs";
-import { ResponseMessage, SubscriptionResponse, CommandResponse, AuthenticationResponse, ErrorReponse } from "../shared/messages/response-message";
-import { ConnectionHandler } from "./connection-handler";
-import { RequestMessage } from "../shared/messages/request-message";
+import { ResponseMessage, SubscriptionResponse, CommandResponse, AuthenticationResponse, ErrorReponse } from "../../shared/messages/response-message";
+import { ConnectionHandler } from "../connection-handler";
+import { RequestMessage } from "../../shared/messages/request-message";
 
 import a from 'assertron';
 import { join, dirname } from "path";
-import { DataHandleRegistry } from "./repositories/data-handle-registry";
-import { Initializer } from "./infrastructure/initialisation/initializer";
+import { DataHandleRegistry } from "../repositories/data-handle-registry";
+import { Initializer } from "../infrastructure/initialisation/initializer";
+import { AccountConfirmationMail } from "../mails/account-confirmation-mail";
+import { AccountConfirmationMailMock } from "./mocks/mail-mocks";
 
 export class ServerTestBed {
   path: string;
@@ -17,11 +19,13 @@ export class ServerTestBed {
   server: ConnectionHandler;
   dataHandleRegistry: DataHandleRegistry;
   initializer: Initializer;
+  accountConfirmationMailMock: AccountConfirmationMailMock;
 
   constructor(private registry: ContainerRegistry) {
     this.path = registry.globalContainer.get(Environment).dataPath;
     this.dataHandleRegistry = registry.globalContainer.get(DataHandleRegistry);
     this.initializer = registry.globalContainer.get(Initializer);
+    this.accountConfirmationMailMock = registry.globalContainer.get(AccountConfirmationMail) as any as AccountConfirmationMailMock;
   }
 
   logout() {
@@ -51,6 +55,10 @@ export class ServerTestBed {
     this.server.handleMessage(message);
     await this.server.settleQueue();
     await new Promise(r => setTimeout(r, 0));
+  }
+
+  getEmailConfirmationToken(userId: string) {
+    return this.accountConfirmationMailMock.tokens.get(userId);
   }
 
   clearResponses() {
