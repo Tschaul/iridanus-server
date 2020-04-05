@@ -12,7 +12,7 @@
     "start": "node build/server/server.js",
     "build:watch": "tsc --watch",
     "bundle": "webpack",
-    "docker:build": "tsc && webpack && docker build -t tschaul/iridanus .",
+    "docker:build": "npm run generate:request-schema && npm run generate:state-schema && tsc && webpack && docker build -t tschaul/iridanus .",
     "generate:request-schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd --required -o request-schema.json .\\tsconfig.json RequestMessage",
     "generate:state-schema": ".\\node_modules\\.bin\\typescript-json-schema.cmd --required -o state-schema.json .\\tsconfig.json GameState"
   },

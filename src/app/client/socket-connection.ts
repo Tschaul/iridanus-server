@@ -21,7 +21,9 @@ export class SocketConnection {
 
   constructor() {
 
-    this.socket = new WebSocket("ws://" + location.host);
+    const wsProtocol = location.protocol === 'https:' ? 'wss' : 'ws'
+
+    this.socket = new WebSocket(wsProtocol + "://" + location.host);
 
     this.socket.onopen = () => this.initializeSocket();
     this.socket.onclose = () => this.isConnected$$.next(false);
