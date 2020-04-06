@@ -186,8 +186,6 @@ export class GameStageForeground extends React.Component<{
     if (world.status === 'UNKNOWN') {
       return '';
     }
-    return <span>
-      {world.population}/{world.populationLimit} P {world.industry} I {world.mines} M <br />
-    </span>
+    return `${world.population}/${world.populationLimit} P ${world.industry} I ${world.mines} M`;
   }
 }

@@ -14,6 +14,7 @@ import { getClosestAttribute } from "../../helper/get-attribute";
 import { WarpOrderEditor } from "./warp-order-component";
 import { hoverYellow } from "../../../ui-components/colors/colors";
 import { AmountOrderEditor } from "./amount-oder-component";
+import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
 
 const classes = createClasses({
   panel: {
@@ -86,9 +87,9 @@ export class OrderEditor extends React.Component<{
         ))}
       </div>,
       <div style={{ display: 'flex' }} key="c">
-        <Button onClick={this.handleNewBuildIndustryOrder} spaceRight>+I</Button>
-        <Button onClick={this.handleNewBuildShipsOrder} spaceRight>+►</Button>
-        <Button onClick={this.handleNewScrapShipsOrder} spaceRight>⮂I</Button>
+        <HoverTooltip content="Build industry"><Button tight onClick={this.handleNewBuildIndustryOrder} spaceRight>+I</Button></HoverTooltip>
+        <HoverTooltip content="Build ships"><Button tight onClick={this.handleNewBuildShipsOrder} spaceRight>+►</Button></HoverTooltip>
+        <HoverTooltip content="Scrap ships for industry"><Button tight onClick={this.handleNewScrapShipsOrder} spaceRight>⮂I</Button></HoverTooltip>
       </div>
     ])
   }
@@ -126,15 +127,15 @@ export class OrderEditor extends React.Component<{
           </div>
         ))}
       </div>,
-      <div style={{ display: 'flex', flexWrap: 'wrap-reverse' }} key="c">
-        <Button onClick={this.handleNewDropPopulationOrder} spaceRight>🠣P</Button>
-        <Button onClick={this.handleNewLoadPopulationOrder} spaceRight>🠡P</Button>
-        <Button onClick={this.handleNewDropMetalOrder} spaceRight>🠣▮</Button>
-        <Button onClick={this.handleNewLoadMetalOrder} spaceRight>🠡▮</Button>
-        <Button onClick={this.handleNewDropShipsOrder} spaceRight>🠣►</Button>
-        <Button onClick={this.handleNewLoadShipsOrder} spaceRight>🠡►</Button>
-        <Button onClick={this.handleNewWarpOrder}>➠</Button>
-        <Button onClick={this.handleNewAwaitCaptureOrder}>⚑</Button>
+      <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between' }} key="c">
+        <HoverTooltip content="Drop population"><Button tight onClick={this.handleNewDropPopulationOrder}>🠣P</Button></HoverTooltip>
+        <HoverTooltip content="Load Population"><Button tight onClick={this.handleNewLoadPopulationOrder}>🠡P</Button></HoverTooltip>
+        <HoverTooltip content="Drop metal"><Button tight onClick={this.handleNewDropMetalOrder}>🠣▮</Button></HoverTooltip>
+        <HoverTooltip content="Load metal"><Button tight onClick={this.handleNewLoadMetalOrder}>🠡▮</Button></HoverTooltip>
+        <HoverTooltip content="Drop ships"><Button tight onClick={this.handleNewDropShipsOrder}>🠣►</Button></HoverTooltip>
+        <HoverTooltip content="Load ships"><Button tight onClick={this.handleNewLoadShipsOrder}>🠡►</Button></HoverTooltip>
+        <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
+        <HoverTooltip content="Await capture"><Button tight onClick={this.handleNewAwaitCaptureOrder}>⚑</Button></HoverTooltip>
       </div>
     ])
   }

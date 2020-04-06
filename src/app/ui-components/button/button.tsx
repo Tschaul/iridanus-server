@@ -16,7 +16,12 @@ const classes = createClasses({
     fontFamily: "inherit",
     border: 0,
     boxShadow: 'rgba(255, 255, 255, 0.5) 0px 0px 5px',
-    textShadow: 'rgba(114, 130, 135, 029) 0px 0px 5px',
+    textShadow: 'rgba(114, 130, 135, 029) 0px 0px 1px',
+    "&.tight": {
+      borderRadius: '0.25em',
+      padding: "0 0.25em", 
+      height: "1.25em",
+    },
     "&.enabled:active:hover": {
       backgroundColor: selectedYellow,
       outline: "none !important",
@@ -43,20 +48,21 @@ const classes = createClasses({
 export class Button extends React.Component<{
   onClick?: () => void,
   disabled?: boolean,
+  tight?: boolean,
   spaceLeft?: boolean,
   spaceRight?: boolean,
   style?: React.CSSProperties
 }> {
   render() {
 
-    const { spaceLeft, spaceRight, disabled, style } = this.props;
+    const { spaceLeft, spaceRight, disabled, style, tight } = this.props;
 
     const enabled = !disabled;
     return (
       <button
         disabled={this.props.disabled}
         style={style}
-        className={classNames([classes.button, { spaceLeft, spaceRight, disabled, enabled }])}
+        className={classNames([classes.button, { spaceLeft, spaceRight, disabled, enabled, tight }])}
         onClick={this.props.onClick}>{this.props.children}</button>
     )
   }

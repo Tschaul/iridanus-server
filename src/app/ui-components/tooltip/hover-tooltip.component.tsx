@@ -4,7 +4,7 @@ import autobind from "autobind-decorator";
 
 export class HoverTooltip extends React.Component<{
   svg?: boolean,
-  content: string | JSX.Element,
+  content: string,
 }> {
   static contextType = TooltipContext;
   declare context: React.ContextType<typeof TooltipContext>

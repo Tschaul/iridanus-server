@@ -11,7 +11,6 @@ export class Panel extends React.Component<{
   contentClassName?: string,
   panelClassName?: string,
   fadeDirection: 'top' | 'bottom' | 'left' | 'right',
-  disableScrolling?: boolean
 }> {
   content: HTMLDivElement | null;
   panel: HTMLDivElement | null;
@@ -29,9 +28,7 @@ export class Panel extends React.Component<{
   }
 
   async fadeOut() {
-    const start = new Date().getTime();
     await animateElement(this.panel, this.getFadeOutAnimationName());
-    const end = new Date().getTime();
   }
 
   render() {
@@ -52,29 +49,24 @@ export class Panel extends React.Component<{
 
     return (
       <div style={panelStyle} className={classNames(this.getFadeInAnimationName(), this.props.panelClassName)} ref={elem => this.panel = elem}>
-        {this.renderScrollAreaOrNot(
-          <div ref={elem => this.content = elem} className={classNames(this.props.contentClassName)} style={this.props.contentStyle}>
-            {this.props.children}
-          </div>
-        )}
+        <div ref={elem => this.content = elem} className={classNames(this.props.contentClassName)} style={this.props.contentStyle}>
+          {this.props.children}
+        </div>
       </div>
     )
   }
 
   private renderScrollAreaOrNot(content: any) {
-    if (this.props.disableScrolling) {
-      return content
-    } else {
-      return <ScrollArea
-        smoothScrolling={true}
-        verticalScrollbarStyle={{
-          backgroundColor: screenWhite,
-          borderRadius: '0.25ex'
-        }}
-      >
-        {content}
-      </ScrollArea>
-    }
+
+    return <ScrollArea
+      smoothScrolling={true}
+      verticalScrollbarStyle={{
+        backgroundColor: screenWhite,
+        borderRadius: '0.25ex'
+      }}
+    >
+      {content}
+    </ScrollArea>
   }
 }
 

@@ -8,7 +8,7 @@ import { KeyExportOptions } from "crypto";
 export interface TooltipContent {
   posX: number;
   posY: number;
-  text: string | JSX.Element;
+  text: string;
   id: string;
 }
 
@@ -21,13 +21,13 @@ export class TooltipHandle {
   public items$ = this.items$$.asObservable();
 
   private mousePosition$$ = new ReplaySubject<[number, number]>(1);
-  private mouseItemText$$ = new ReplaySubject<string | JSX.Element | null>(1);
+  private mouseItemText$$ = new ReplaySubject<string | null>(1);
 
   public updateMousePosition(pageX: number, pageY: number) {
       this.mousePosition$$.next([pageX, pageY]);
   }
 
-  public showMouseItem(text: string | JSX.Element) {
+  public showMouseItem(text: string) {
       this.mouseItemText$$.next(text);
   }
 
@@ -121,7 +121,7 @@ export class TooltipOverlay extends React.Component<{}, {
       </div>,
       <div style={tooltipOverlayStyle} key="tooltip">
         {this.state.mouseItem && (
-          <TooltipItem item={this.state.mouseItem} />
+          <TooltipItem key="a" item={this.state.mouseItem} />
         )}
         {this.state.items.map((item, index) => {
           return <TooltipItem key={index} item={item} />
@@ -201,11 +201,11 @@ class TooltipItem extends React.Component<{
     let { posX, posY} = this.props.item;
 
     if (posX + this.state.elemWidth - this.state.windowWidth > -32) {
-      posX -= this.state.elemWidth;
+      posX -= this.props.item.text.length * 12 + 16;
     }
 
     if (posY + this.state.elemHeight - this.state.windowHeight > -32) {
-      posY -= this.state.elemHeight;
+      posY -= 32;
     }
 
     return (
