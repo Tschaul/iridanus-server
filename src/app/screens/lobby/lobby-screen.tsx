@@ -77,7 +77,7 @@ export class LobbyScreen extends React.Component<{
     return (
       <Panel contentClassName={classNames(classes.panel)} fadeDirection="top" ref={elem => this.panel = elem}>
         <div>
-          GAME {game.id.toUpperCase().slice(0, 5)} [{game.state}]
+          GAME {game.id.toUpperCase().slice(0, 6)} [{game.state}]
         <PanelDivider />
         </div>
         <div style={{ flex: 1 }}>{this.renderPlayerRows()}</div>

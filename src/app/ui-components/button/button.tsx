@@ -17,11 +17,11 @@ const classes = createClasses({
     border: 0,
     boxShadow: 'rgba(255, 255, 255, 0.5) 0px 0px 5px',
     textShadow: 'rgba(114, 130, 135, 029) 0px 0px 5px',
-    "&:active:hover:not[.disabled]": {
+    "&.enabled:active:hover": {
       backgroundColor: selectedYellow,
       outline: "none !important",
     },
-    "&:hover:not[.disabled]": {
+    "&.enabled:hover": {
       backgroundColor: hoverYellow,
       outline: "none !important",
     },
@@ -49,13 +49,14 @@ export class Button extends React.Component<{
 }> {
   render() {
 
-    const { spaceLeft, spaceRight, disabled,style } = this.props;
+    const { spaceLeft, spaceRight, disabled, style } = this.props;
 
+    const enabled = !disabled;
     return (
       <button
-        disabled={this.props.disabled} 
+        disabled={this.props.disabled}
         style={style}
-        className={classNames([classes.button, { spaceLeft, spaceRight, disabled }])} 
+        className={classNames([classes.button, { spaceLeft, spaceRight, disabled, enabled }])}
         onClick={this.props.onClick}>{this.props.children}</button>
     )
   }

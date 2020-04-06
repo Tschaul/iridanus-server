@@ -6,7 +6,7 @@ import { World } from '../../../../shared/model/v1/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
 import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
 import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';
-import { screenWhite, selectedYellow } from '../../../ui-components/colors/colors';
+import { screenWhite, selectedYellow, screenWhiteRaw } from '../../../ui-components/colors/colors';
 import { HoverTooltip } from '../../../ui-components/tooltip/hover-tooltip.component';
 import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.component';
 import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
@@ -135,7 +135,7 @@ export class GameStageForeground extends React.Component<{
                   cy={world.y}
                   r={WORLD_OUTER_RADIUS}
                   opacity="1"
-                  stroke={screenWhite.fade(0.5) as any}
+                  stroke={screenWhiteRaw.fade(0.5).toString()}
                   fill="none"
                   strokeWidth="3"
                   strokeDasharray="10,10"
