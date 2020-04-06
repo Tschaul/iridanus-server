@@ -11,7 +11,7 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
       captureDelay: 2.5 * millisecondsPerDay,
     },
     population: {
-      minimumPopulationGrowthDelay: 7 * millisecondsPerDay
+      minimumPopulationGrowthDelay: 35 * millisecondsPerDay
     },
     combat: {
       integrityDamagePerShip: 0.094276,

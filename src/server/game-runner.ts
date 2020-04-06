@@ -194,7 +194,7 @@ export class GameRunner {
     })
 
     const currentTimestamp = this.clock.getTimestamp();
-    const gameStartTimestamp = currentTimestamp + this.environment.millisecondsPerDay * 30;
+    const gameStartTimestamp = currentTimestamp + this.environment.millisecondsPerDay * 3;
     const gameEndTimestamp = gameStartTimestamp + this.environment.millisecondsPerDay * 7 * 8
 
     return {
