@@ -19,6 +19,7 @@ export type FleetByTwoWorlds = {
 const dummyState: VisibleState = {
   scorings: {},
   currentTimestamp: 0,
+  gameStartTimestamp: 0,
   gameEndTimestamp: Number.MAX_SAFE_INTEGER,
   universe: {
     fleets: {},
@@ -58,6 +59,10 @@ export class GameData {
 
   @computed private get universe() {
     return this.gameState.current.universe;
+  }
+
+  @computed public get gameStartTimestamp() {
+    return this.gameState.current.gameStartTimestamp;
   }
 
   @computed public get scorings() {

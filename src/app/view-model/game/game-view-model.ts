@@ -26,7 +26,7 @@ export class GameViewModel {
   gameStageViewModel = new GameStageViewModel(this.gameData, this.selection, this.worldHints, this.gameNotifications);
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection);
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints);
-  topBarViewModel = new TopBarViewModel(this, this.gameOrders, this.gameStats);
+  topBarViewModel = new TopBarViewModel(this, this.gameData, this.gameOrders, this.gameStats);
   infoPanelViewModel = new InfoPanelViewModel(this, this.gameData, this.gameNotifications, this.selection);
 
   @computed public get gameId() {

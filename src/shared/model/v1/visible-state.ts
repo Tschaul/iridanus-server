@@ -7,6 +7,7 @@ import { Scorings } from "./scoring";
 export interface VisibleState {
   currentTimestamp: number;
   gameEndTimestamp: number;
+  gameStartTimestamp: number;
   universe: VisibleUniverse;
   scorings: Scorings
 }

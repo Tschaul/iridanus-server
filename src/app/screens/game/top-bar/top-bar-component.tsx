@@ -9,7 +9,12 @@ import { TopBarViewModel } from "../../../view-model/game/top-bar-view-model";
 import { createClasses } from "../../../ui-components/setup-jss";
 import { getClosestAttribute } from "../../helper/get-attribute";
 import { StatType } from "../../../view-model/game/game-stats";
-import { hoverYellow, errorRed } from "../../../ui-components/colors/colors";
+import { hoverYellow, errorRed, selectedYellow } from "../../../ui-components/colors/colors";
+import { getDisplayDuration } from "../../../ui-components/display-duration";
+import { toStream } from "mobx-utils";
+import { switchMap } from "rxjs/operators";
+import { Observable, Subscription, from, ObservableInput } from "rxjs";
+import { reaction } from "mobx";
 
 const classes = createClasses({
   statsItem: {
@@ -26,6 +31,31 @@ export class TopBar extends React.Component<{
   vm: TopBarViewModel,
   panelClassName?: string,
 }> {
+  state: { gameStartDuration: string | null } = { gameStartDuration: null }
+
+  subscription: Subscription;
+
+  componentWillMount() {
+    reaction(
+      () => this.props.vm.gameStartTimestamp,
+      (gameStartTimestamp) => {
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+        }
+        getDisplayDuration(gameStartTimestamp).subscribe(gameStartDuration => {
+          this.setState({ gameStartDuration })
+        })
+      }
+    )
+
+  }
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   render() {
 
     const stats = this.props.vm.totalStats;
@@ -34,6 +64,8 @@ export class TopBar extends React.Component<{
       onMouseEnter: this.handleMouseEnterStatsItem,
       onMouseLeave: this.handleMouseLeaveStatsItem
     }
+
+    console.log({ gameStartDuration: this.state.gameStartDuration })
 
     return <Panel
       panelClassName={classNames(this.props.panelClassName)}
@@ -47,7 +79,7 @@ export class TopBar extends React.Component<{
           onClick={this.handleSaveOrders}
         >Save {this.props.vm.updatedOrdersCount} orders</Button>
       </div>
-      <div>
+      {this.state.gameStartDuration ? <div style={{ color: selectedYellow }}>Game will start in {this.state.gameStartDuration}. Place your initial orders.</div> : <div>
         <span {...mouseHandler} data-stat={'INFLUENCE'} className={classNames(classes.statsItem)}>{stats.influence} ⦀ </span>
         <span {...mouseHandler} data-stat={'POPULATION'} className={classNames(classes.statsItem)}>{stats.population} P </span>
         <span {...mouseHandler} data-stat={'INDUSTRY'} className={classNames(classes.statsItem)}>{stats.industry} I</span>
@@ -55,7 +87,7 @@ export class TopBar extends React.Component<{
         <span {...mouseHandler} data-stat={'METAL'} className={classNames(classes.statsItem)}>{stats.metal} ▮</span>
         <span {...mouseHandler} data-stat={'SHIPS'} className={classNames(classes.statsItem)}>{stats.ships} ►</span>
         <span {...mouseHandler} data-stat={'FLEET_KEYS'} className={classNames(classes.statsItem)}>{stats.fleetKeys} ◈</span>
-      </div>
+      </div>}
       <div>
         {this.props.vm.isConnected ? this.props.vm.gameId : <span style={{ color: errorRed }}>DISCONNECTED</span>}
       </div>

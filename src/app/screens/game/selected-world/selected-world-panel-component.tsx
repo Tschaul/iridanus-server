@@ -13,7 +13,9 @@ import * as classNames from 'classnames'
 import { createClasses, StyleSheet } from "../../../ui-components/setup-jss";
 import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
-import { VisibleWorld } from "../../../../shared/model/v1/visible-state";
+import { getDisplayDuration } from "../../../ui-components/display-duration";
+import { map } from "rxjs/operators";
+import { of, Observable } from "rxjs";
 
 const classes = createClasses({
   row: {
@@ -39,7 +41,9 @@ export class SelectedWorldPanel extends React.Component<{
   vm: SelectedWorldViewModel,
   panelClassName?: string,
 }> {
+
   panel: Panel | null;
+
   render() {
 
     return this.renderPanel(
@@ -84,7 +88,7 @@ export class SelectedWorldPanel extends React.Component<{
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div>{this.padSpaces(world.populationLimit)} <span style={{textDecoration: 'overline'}}>P</span> &nbsp;</div>
+            <div>{this.padSpaces(world.populationLimit)} <span style={{ textDecoration: 'overline' }}>P</span> &nbsp;</div>
             <div>{this.padSpaces(world.industry)} I &nbsp;</div>
             <div>{this.padSpaces(world.mines)} M &nbsp;</div>
           </div>
@@ -121,7 +125,7 @@ export class SelectedWorldPanel extends React.Component<{
         {this.tableAmount(fleet.metal, deltaMetalAmount, '▮')}
         {this.tableAmount(fleet.population, deltaPopulationAmount, 'P')}
         <div className={classes.col}>
-          <HoverTooltip content={fleet.status}>
+          <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             {this.fleetStatusIcon(fleet.status)}
           </HoverTooltip>
         </div>
@@ -157,12 +161,45 @@ export class SelectedWorldPanel extends React.Component<{
         {this.tableAmount(world.metal, deltaMetalAmount, '▮')}
         {this.tableAmount(world.population, deltaPopulationAmount, 'P')}
         <div className={classes.col}>
-          <HoverTooltip content={world.status}>
+          <HoverTooltip content$={this.getStatusTooltip(world)}>
             {this.worldStatusIcon(world.status)}
           </HoverTooltip>
         </div>
       </div>
     )
+  }
+
+  private getStatusTooltip(item: World | Fleet): Observable<string> {
+    const doneTimestamp = this.getDoneTimestamp(item);
+    if (doneTimestamp) {
+      return getDisplayDuration(doneTimestamp).pipe(map(duration => {
+        return `${item.status} ${duration}`
+      }))
+    } else {
+      return of(item.status)
+    }
+  }
+
+  private getDoneTimestamp(item: World | Fleet): number | null {
+    switch (item.status) {
+      case 'SCRAPPING_SHIPS':
+      case 'BUILDING_SHIP':
+      case 'BUILDING_INDUSTRY':
+      case 'LOADING_METAL':
+      case 'LOADING_SHIPS':
+      case 'LOADING_POPULATION':
+      case 'DROPPING_METAL':
+      case 'DROPPING_SHIPS':
+      case 'DROPPING_POPULATION':
+      case 'ARRIVING':
+        return item.readyTimestamp
+      case 'LEAVING':
+        return item.warpingTimestamp;
+      case 'WARPING':
+        return item.arrivingTimestamp;
+      default:
+        return null;
+    }
   }
 
   @autobind

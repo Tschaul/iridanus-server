@@ -56,7 +56,7 @@ export class GameStageForeground extends React.Component<{
           const playerInfo = this.props.vm.playerInfos[ownerId];
           const pos = add(offsetPoint, mul(step, index))
           return (
-            <StaticTooltip svg content={hint}>
+            <StaticTooltip svg content={hint} key={playerInfo.id}>
               <text
                 key={ownerId}
                 x={pos.x}
