@@ -23,6 +23,15 @@ export class SelectedWorldViewModel {
     }
   }
 
+  @computed public get playerInfoOfWorldBeingCaptured() {
+    const world = this.selection.selectedWorld;
+    if (world && world.status !== 'UNKNOWN' && world.status !== 'REMEBERED' && world.captureStatus === 'BEING_CAPTURED') {
+      return this.gameData.playerInfos[world.capturingPlayerId];
+    } else {
+      return null;
+    }
+  }
+
   @computed get fleetsAtStageSelection(): Array<Fleet & { owner: PlayerInfo | null }> {
     switch (this.selection.stageSelection.type) {
       case 'WORLD':

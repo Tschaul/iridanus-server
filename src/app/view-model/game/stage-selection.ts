@@ -1,6 +1,8 @@
 import { computed, observable } from "mobx";
 import { GameData } from "./game-data";
 import { GameOrders } from "./game-orders";
+import { VisibleWorld } from "../../../shared/model/v1/visible-state";
+import { World } from "../../../shared/model/v1/world";
 
 export type GameStageMode = {
   type: 'NORMAL'
@@ -71,7 +73,7 @@ export class GameStageSelection {
 
   }
 
-  @computed public get selectedWorld() {
+  @computed public get selectedWorld(): VisibleWorld | null {
     if (this.stageSelection.type === 'WORLD') {
       const world = this.gameData.worlds[this.stageSelection.id];
       const orderDrafts = this.gameOrders.orderDraftsForWorld(this.stageSelection.id);
@@ -79,7 +81,7 @@ export class GameStageSelection {
         return {
           ...world,
           orders: orderDrafts
-        }
+        } as World;
       } else {
         return world
       }

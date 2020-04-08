@@ -4,7 +4,7 @@ import { Panel } from "../../../ui-components/panel/panel-component";
 import { observer } from "mobx-react";
 import { screenWhite, selectedYellow, hoverYellow } from "../../../ui-components/colors/colors";
 import { Fleet } from "../../../../shared/model/v1/fleet";
-import { World } from "../../../../shared/model/v1/world";
+import { World, WorldBeingCaptured } from "../../../../shared/model/v1/world";
 import { PlayerInfo } from "../../../../shared/model/v1/player-info";
 import autobind from "autobind-decorator";
 import { getClosestAttribute } from "../../helper/get-attribute";
@@ -124,7 +124,7 @@ export class SelectedWorldPanel extends React.Component<{
         {this.tableAmount(fleet.ships, deltaShipsAmount, '►')}
         {this.tableAmount(fleet.metal, deltaMetalAmount, '▮')}
         {this.tableAmount(fleet.population, deltaPopulationAmount, 'P')}
-        <div className={classes.col}>
+        <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             {this.fleetStatusIcon(fleet.status)}
           </HoverTooltip>
@@ -160,13 +160,25 @@ export class SelectedWorldPanel extends React.Component<{
         {this.tableAmount(world.ships, deltaShipsAmount, '►')}
         {this.tableAmount(world.metal, deltaMetalAmount, '▮')}
         {this.tableAmount(world.population, deltaPopulationAmount, 'P')}
-        <div className={classes.col}>
+        <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(world)}>
             {this.worldStatusIcon(world.status)}
           </HoverTooltip>
+          {world.captureStatus === 'BEING_CAPTURED' && (
+            <HoverTooltip content$={this.getCaptureTooltip(world)}>
+              <span style={{color: this.props.vm.playerInfoOfWorldBeingCaptured?.color}}>⚑</span>
+            </HoverTooltip>
+          )}
         </div>
       </div>
     )
+  }
+
+  private getCaptureTooltip(item: WorldBeingCaptured): Observable<string> {
+    const doneTimestamp = item.captureTimestamp
+    return getDisplayDuration(doneTimestamp).pipe(map(duration => {
+      return `${item.captureStatus} ${duration}`
+    }))
   }
 
   private getStatusTooltip(item: World | Fleet): Observable<string> {
