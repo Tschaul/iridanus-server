@@ -21,8 +21,8 @@ const TOP_PANEL_HEIGHT = 300;
 const classes = createClasses({
   grid: {
     display: 'grid',
-    height: '100vh',
-    width: '100vw',
+    height: '100%',
+    width: '100%',
     gridTemplateColumns: `[start] auto [panels-start] ${RIGHT_PANEL_WIDTH}px [end]`,
     gridTemplateRows: `[start] ${TOP_BAR_HEIGHT}px [main-start] auto [top-start] ${TOP_PANEL_HEIGHT}px [middle-start] ${MIDDLE_PANEL_HEIGHT}px [bottom-start] ${BOTTOM_PANEL_HEIGHT}px [end]`,
     position: 'fixed',

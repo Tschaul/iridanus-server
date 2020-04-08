@@ -43,7 +43,7 @@ export class Background extends React.Component {
 
     return [
       <div style={backgroundStyle} key="background">
-        <canvas style={{ height: "100vh", width: "100vw" }} ref={elem => this.canvas = elem}></canvas>
+        <canvas style={{ height: "100%", width: "100%" }} ref={elem => this.canvas = elem}></canvas>
       </div>,
       <div style={foregroundStyle} key="foreground">
         {this.props.children}
