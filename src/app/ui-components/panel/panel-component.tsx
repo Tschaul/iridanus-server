@@ -1,9 +1,7 @@
 import * as React from "react";
 import { screenPseudoTransparent, screenWhite } from "../colors/colors";
 import { animateElement } from "../animate-element";
-import autobind from "autobind-decorator";
 import classNames from "classnames";
-import ScrollArea from 'react-scrollbar';
 
 export class Panel extends React.Component<{
   panelStyle?: React.CSSProperties,
@@ -56,19 +54,4 @@ export class Panel extends React.Component<{
     )
   }
 
-  private renderScrollAreaOrNot(content: any) {
-
-    return <ScrollArea
-      smoothScrolling={true}
-      verticalScrollbarStyle={{
-        backgroundColor: screenWhite,
-        borderRadius: '0.25ex'
-      }}
-    >
-      {content}
-    </ScrollArea>
-  }
 }
-
-// <div className={classNames(this.props.contentClassName)} style={this.props.contentStyle} ref={elem => this.content = elem}>
-//

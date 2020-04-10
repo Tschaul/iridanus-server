@@ -15,6 +15,7 @@ import { WarpOrderEditor } from "./warp-order-component";
 import { hoverYellow } from "../../../ui-components/colors/colors";
 import { AmountOrderEditor } from "./amount-oder-component";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
+import { Scroll } from "../../../ui-components/scroll-area/scroll-component";
 
 const classes = createClasses({
   panel: {
@@ -105,29 +106,31 @@ export class OrderEditor extends React.Component<{
         Fleet orders
           <PanelDivider></PanelDivider>
       </div>,
-      <div style={{ flex: 1 }} key="b">
-        {orders.map((order, index) => {
-          switch (order.type) {
-            case 'LOAD_METAL':
-            case 'LOAD_SHIPS':
-            case 'DROP_SHIPS':
-            case 'DROP_METAL':
-            case 'LOAD_POPULATION':
-            case 'DROP_POPULATION':
-              return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
-            case 'WARP':
-              return <WarpOrderEditor order={order}></WarpOrderEditor>
-            case 'AWAIT_CAPTURE':
-              return <span>Await Capture</span>
-          }
-        }).map((content, index) => (
-          <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>
-            <div style={{ flex: 1 }}>{content}</div>
-            <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>
-          </div>
-        ))}
+      <div style={{ flex: "1 0 auto", height: "1em" }} key="b">
+        <Scroll>
+          {orders.map((order, index) => {
+            switch (order.type) {
+              case 'LOAD_METAL':
+              case 'LOAD_SHIPS':
+              case 'DROP_SHIPS':
+              case 'DROP_METAL':
+              case 'LOAD_POPULATION':
+              case 'DROP_POPULATION':
+                return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
+              case 'WARP':
+                return <WarpOrderEditor order={order}></WarpOrderEditor>
+              case 'AWAIT_CAPTURE':
+                return <span>Await Capture</span>
+            }
+          }).map((content, index) => (
+            <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>
+              <div style={{ flex: 1 }}>{content}</div>
+              <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>
+            </div>
+          ))}
+        </Scroll>
       </div>,
-      <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between' }} key="c">
+      <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
         <HoverTooltip content="Drop population"><Button tight onClick={this.handleNewDropPopulationOrder}>🠣P</Button></HoverTooltip>
         <HoverTooltip content="Load Population"><Button tight onClick={this.handleNewLoadPopulationOrder}>🠡P</Button></HoverTooltip>
         <HoverTooltip content="Drop metal"><Button tight onClick={this.handleNewDropMetalOrder}>🠣▮</Button></HoverTooltip>
