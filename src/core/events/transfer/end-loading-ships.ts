@@ -12,7 +12,7 @@ export class EndLoadingShipsEventQueue implements GameEventQueue {
 
     public upcomingEvent$: Observable<GameEvent | null>;
     constructor(public fleets: FleetProjector) {
-    this.upcomingEvent$ = this.fleets.firstByStatus<LoadingShipsFleet>('LOADING_SHIPS').pipe(
+    this.upcomingEvent$ = this.fleets.firstByStatusAndTimestamp<LoadingShipsFleet>('LOADING_SHIPS','readyTimestamp').pipe(
       map((fleet) => {
         if (!fleet) {
           return null

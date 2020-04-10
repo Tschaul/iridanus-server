@@ -12,7 +12,7 @@ export class EndDroppingMetalEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
   constructor(public fleets: FleetProjector) {
-    this.upcomingEvent$ = this.fleets.firstByStatus<DroppingMetalFleet>('DROPPING_METAL').pipe(
+    this.upcomingEvent$ = this.fleets.firstByStatusAndTimestamp<DroppingMetalFleet>('DROPPING_METAL','readyTimestamp').pipe(
       map((fleet) => {
         if (!fleet) {
           return null

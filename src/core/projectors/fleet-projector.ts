@@ -64,10 +64,14 @@ export class FleetProjector {
     );
   }
 
-  public firstByStatus<TFleetWithStatus extends Fleet>(status: Fleet["status"]): Observable<TFleetWithStatus | null> {
+  public firstByStatusAndTimestamp<TFleetWithStatus extends Fleet>(status: Fleet["status"], orderBy: keyof TFleetWithStatus): Observable<TFleetWithStatus | null> {
     return this.byId$.pipe(
       map(fleets => {
-        const fleet = Object.values(fleets).find(fleet => fleet.status === status);
+        const fleet = Object.values(fleets)
+          .filter(fleet => fleet.status === status)
+          .sort((a: TFleetWithStatus, b: TFleetWithStatus) => {
+            return (a[orderBy] as any) - (b[orderBy] as any)
+          }).find(it => !!it);
         return fleet as TFleetWithStatus || null;
       }),
       distinctUntilChanged(),

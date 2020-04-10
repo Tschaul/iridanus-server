@@ -12,7 +12,7 @@ export class EndScrappingShipsEventQueue implements GameEventQueue {
 
   public upcomingEvent$: Observable<GameEvent | null>;
   constructor(public worlds: WorldProjector) {
-    this.upcomingEvent$ = this.worlds.firstByStatus<ScrappingShipsWorld>('SCRAPPING_SHIPS').pipe(
+    this.upcomingEvent$ = this.worlds.firstByStatusAndTimestamp<ScrappingShipsWorld>('SCRAPPING_SHIPS', 'readyTimestamp').pipe(
       map((world) => {
         if (!world) {
           return null

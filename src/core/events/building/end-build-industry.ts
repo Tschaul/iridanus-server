@@ -12,7 +12,7 @@ export class EndBuildIndustryEventQueue implements GameEventQueue {
 
     public upcomingEvent$: Observable<GameEvent | null>;
     constructor(public worlds: WorldProjector) {
-    this.upcomingEvent$ = this.worlds.firstByStatus<BuildingIndustryWorld>('BUILDING_INDUSTRY').pipe(
+    this.upcomingEvent$ = this.worlds.firstByStatusAndTimestamp<BuildingIndustryWorld>('BUILDING_INDUSTRY', 'readyTimestamp').pipe(
       map((world) => {
         if (!world) {
           return null

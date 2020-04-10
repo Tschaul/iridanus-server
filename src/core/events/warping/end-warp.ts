@@ -21,7 +21,7 @@ export class EndWarpEventQueue implements GameEventQueue {
     public worlds: WorldProjector,
   ) {
     this.upcomingEvent$ = combineLatest(
-      this.fleets.firstByStatus<WarpingFleet>('WARPING'),
+      this.fleets.firstByStatusAndTimestamp<WarpingFleet>('WARPING','arrivingTimestamp'),
       this.worlds.byId$
     ).pipe(
       map(([fleet, worlds]) => {

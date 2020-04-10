@@ -10,7 +10,7 @@ import { fleetReady } from "../../actions/fleet/fleet-ready";
 export class ArriveAtWorldEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
   constructor(public fleets: FleetProjector) {
-    this.upcomingEvent$ = this.fleets.firstByStatus<ArrivingFleet>('ARRIVING').pipe(
+    this.upcomingEvent$ = this.fleets.firstByStatusAndTimestamp<ArrivingFleet>('ARRIVING','readyTimestamp').pipe(
       map((fleet) => {
         if (!fleet) {
           return null

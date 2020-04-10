@@ -8,7 +8,7 @@ import equal from 'deep-equal';
 
 @injectable()
 export class WorldProjector {
-  constructor(private store: ReadonlyStore){}
+  constructor(private store: ReadonlyStore) { }
 
   public byId$ = this.store.state$.pipe(
     map(state => state.universe.worlds),
@@ -17,7 +17,7 @@ export class WorldProjector {
   )
 
   public firstByStatusAndNextOrderType<TWorldWithStatus extends World, TWorldOrder extends WorldOrder>(
-    status: TWorldWithStatus["status"], 
+    status: TWorldWithStatus["status"],
     orderType: WorldOrder["type"]): Observable<[TWorldWithStatus | null, TWorldOrder | null]> {
     return this.byId$.pipe(
       map(Worlds => {
@@ -27,13 +27,17 @@ export class WorldProjector {
         return [world || null, world ? world.orders[0] : null] as any;
       }),
       distinctUntilChanged(equal));
-    
+
   }
 
-  public firstByStatus<TWorldWithStatus extends World>(status: World["status"]): Observable<TWorldWithStatus | null> {
+  public firstByStatusAndTimestamp<TWorldWithStatus extends World>(status: World["status"], orderBy: keyof TWorldWithStatus): Observable<TWorldWithStatus | null> {
     return this.byId$.pipe(
       map(worlds => {
-        const world = Object.values(worlds).find(world => world.status === status);
+        const world = Object.values(worlds)
+          .filter(world => world.status === status)
+          .sort((a: TWorldWithStatus, b: TWorldWithStatus) => {
+            return (a[orderBy] as any) - (b[orderBy] as any)
+          }).find(it => !!it);
         return world as TWorldWithStatus || null;
       }),
       distinctUntilChanged(equal));

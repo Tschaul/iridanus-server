@@ -8,10 +8,10 @@ export type GameNotification =
   | PopulationLimitReachedNotification
   | GameStartedNotification;
 
- export type PersistedGameNotification = {
-   markedAsRead: boolean,
-   id: string
- } & GameNotification;
+export type PersistedGameNotification = {
+  markedAsRead: boolean,
+  id: string
+} & GameNotification;
 
 
 export interface NotificationBase {

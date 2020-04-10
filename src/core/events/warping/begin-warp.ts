@@ -14,10 +14,10 @@ export class BeginWarpEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    public fleets: FleetProjector, 
+    public fleets: FleetProjector,
     private setup: GameSetupProvider
   ) {
-    this.upcomingEvent$ = this.fleets.firstByStatus<LeavingFleet>('LEAVING').pipe(
+    this.upcomingEvent$ = this.fleets.firstByStatusAndTimestamp<LeavingFleet>('LEAVING', 'warpingTimestamp').pipe(
       map((fleet) => {
         if (!fleet) {
           return null
