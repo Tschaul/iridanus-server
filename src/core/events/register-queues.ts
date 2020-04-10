@@ -46,8 +46,12 @@ import { GameEndsEventQueue } from "./scoring/game-ends";
 import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
 import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
 import { GameStartsEventQueue } from "./start/game-starts";
+import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
+import { NotifyWorldIdleEventQueue } from "./idle-notification/notify-world-idle";
 
 export function registerEventQueues(container: Container) {
+
+  // TODO split into sub registries
 
   container.bind(GameStartsEventQueue).toSelf()
 
@@ -109,6 +113,10 @@ export function registerEventQueues(container: Container) {
 
   container.bind(TickEventQueue).toSelf();
 
+  container.bind(NotifyFleetIdleEventQueue).toSelf();
+  container.bind(NotifyWorldIdleEventQueue).toSelf();
+
   container.bind(CompleteEventQueue).toSelf();
+
 
 }

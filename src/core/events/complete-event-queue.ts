@@ -47,6 +47,8 @@ import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 import { GameEndsEventQueue } from "./scoring/game-ends";
 import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
 import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
+import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
+import { NotifyWorldIdleEventQueue } from "./idle-notification/notify-world-idle";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -54,6 +56,8 @@ export class CompleteEventQueue implements GameEventQueue {
   upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
+
+    // TODO split into sub-queues
 
     gameEnds: GameEndsEventQueue,
     playerChangesInfluence: PlayerChangesInfluenceEventQueue,
@@ -109,6 +113,9 @@ export class CompleteEventQueue implements GameEventQueue {
 
     revealWorld: RevealWorldEventQueue,
     remeberWorld: RememberWorldEventQueue,
+
+    notifyFleetIdle: NotifyFleetIdleEventQueue,
+    notifyWorldIdle: NotifyWorldIdleEventQueue,
   ) {
 
     const allEventQueues = [
@@ -156,6 +163,8 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStartGrowing,
       worldStopsGrowing,
       worldGrows,
+      notifyFleetIdle,
+      notifyWorldIdle
     ]
 
     this.upcomingEvent$ = combineLatest(

@@ -57,6 +57,8 @@ export interface ReadyFleetBase extends BaseFleet {
     status: 'READY'
     currentWorldId: string;
     ownerId: string;
+    // TODO make required
+    idleNotificationSent?: boolean;
 }
 
 export type ReadyFleet = ReadyFleetBase & FleetWithCombatStatus;

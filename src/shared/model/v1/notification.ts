@@ -31,7 +31,6 @@ export interface FleetAwaitingOrdersNotification extends NotificationBase {
 
 export interface WorldAwaitingOrdersNotification extends NotificationBase {
   type: 'WORLD_AWAITING_ORDERS',
-  fleetId: string
   worldId: string,
 }
 

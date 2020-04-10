@@ -159,6 +159,7 @@ export type BuildingIndustryWorld = WorldWithOwnerBase & {
 export type ReadyWorld = WorldWithOwnerBase & {
     status: 'READY'
     ownerId: string;
+    idleNotificationSent?: boolean;
 }
 
 export type ScrappingShipsWorld = WorldWithOwnerBase & {
