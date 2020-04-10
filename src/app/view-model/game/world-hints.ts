@@ -34,6 +34,7 @@ export class WorldHints {
 
   clearHints() {
     this.worldHintsById.clear()
+    this.gateHintsById.clear()
   }
 
   getHintForWorld(id: string): string | null {
