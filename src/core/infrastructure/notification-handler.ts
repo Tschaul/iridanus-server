@@ -10,7 +10,7 @@ export class NotificationHandler {
   private notifications$$ = new Subject<GameNotification>();
   public notifications$ = this.notifications$$.asObservable();
 
-  constructor(private logger: Logger) { }
+  constructor(protected logger: Logger) { }
 
   handleNotifications(event: GameEvent) {
     (event.notifications ?? []).forEach(notifiction => {

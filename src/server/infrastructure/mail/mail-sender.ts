@@ -14,25 +14,25 @@ export interface MailPayload {
 
 @injectable()
 export class MailSender {
-  transporter: Mail;
   constructor(private environment: Environment, private userRepository: UserRepository, private logger: Logger) {
-    this.transporter = createTransport({
-      host: environment.mailSettings.host,
-      port: environment.mailSettings.port,
-      secure: environment.mailSettings.secure,
-      auth: {
-        user: environment.mailSettings.username,
-        pass: environment.mailSettings.password
-      }
-    })
   }
 
   async send(mail: MailPayload) {
+    
+    const transporter = createTransport({
+      host: this.environment.mailSettings.host,
+      port: this.environment.mailSettings.port,
+      secure: this.environment.mailSettings.secure,
+      auth: {
+        user: this.environment.mailSettings.username,
+        pass: this.environment.mailSettings.password
+      }
+    })
 
     const userInfos = await this.userRepository.getUserInfos(mail.recipients);
     const to = userInfos.map(it => it.email).join(', ');
 
-    const info = await this.transporter.sendMail({
+    const info = await transporter.sendMail({
       from: this.environment.mailSettings.fromAddress,
       to,
       subject: mail.subject,

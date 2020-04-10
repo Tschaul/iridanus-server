@@ -21,6 +21,7 @@ import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
 import { Scorings } from "../shared/model/v1/scoring";
 import { NotificationHandler } from "../core/infrastructure/notification-handler";
 import { Environment } from "./environment/environment";
+import { NotificationMailer } from "./mails/notification-mail-handler";
 
 @injectable()
 export class GameRunner {
@@ -89,6 +90,7 @@ export class GameRunner {
     const setup = container.get(GameSetupProvider);
     const store = container.get(Store);
     const notificationHandler = container.get(NotificationHandler);
+    const notificationMailer = container.get(NotificationMailer);
 
     setup.rules = makeConfig(this.environment.millisecondsPerDay);
 
@@ -130,7 +132,11 @@ export class GameRunner {
       this.errorHandler.catchPromise(this.gameRepository.appendNotification(gameInfo.id, notification));
     })
 
+    notificationMailer.start();
+
     await game.startGameLoop();
+    
+    notificationMailer.stop();
 
     this.logger.info('game runner: game ' + gameInfo.id + ' has ended');
 

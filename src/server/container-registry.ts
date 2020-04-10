@@ -16,7 +16,7 @@ import { registerRepositories } from './repositories/register-repositories';
 import { registerEnvironment } from './environment/register-environment';
 import { registerGlobalInfrastructure } from './infrastructure/register-infrastructure';
 import { registerCoreInfrastructure } from '../core/infrastructure/register-core-infrastructure';
-import { registerMails } from './mails/register-mails';
+import { registerMails, registerGameMailHandler } from './mails/register-mails';
 import { Environment } from './environment/environment';
 
 @injectable()
@@ -79,6 +79,7 @@ export class ContainerRegistry {
       registerEventQueues(container);
       registerProjectors(container);
       registerGameDataProviders(container);
+      registerGameMailHandler(container);
 
       this.containersByGameId.set(gameId, container);
 
