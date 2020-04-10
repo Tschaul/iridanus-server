@@ -1,5 +1,6 @@
-import { interval, of } from "rxjs";
+import { interval, of, Subscription } from "rxjs";
 import { map, startWith } from "rxjs/operators";
+import * as React from "react";
 
 const millisecondsPerMinute = 60 * 1000;
 const millisecondsPerHour = 60 * millisecondsPerMinute;
@@ -20,8 +21,12 @@ export function getDisplayDuration(endTimestamp: number) {
 
 function displayDuration(duration: number): string | null {
 
+  if (duration === 0) {
+    return null;
+  }
+
   if (duration <= 0) {
-    return null
+    return displayDuration(-duration) + ' ago';
   }
 
   const weeks = Math.floor(duration / millisecondsPerWeek)
@@ -52,4 +57,26 @@ function displayDuration(duration: number): string | null {
   }
 
   return '<1m';
+}
+
+export class Duration extends React.Component<{
+  timestamp: number
+}> {
+  state: { duration: string | null } = { duration: '' }
+  subscription: Subscription;
+
+  componentDidMount() {
+    this.subscription = getDisplayDuration(this.props.timestamp).subscribe(duration => {
+      this.setState({ duration });
+    })
+  }
+
+  componentWillUnmount() {
+    this.subscription.unsubscribe();
+  }
+
+  render() {
+    return this.state.duration;
+  }
+
 }

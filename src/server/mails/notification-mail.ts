@@ -24,7 +24,7 @@ export class NotificationMail {
 
 there are important updates in your Iridanus game ${gameId}:
 
-${notifications.map(it => '- ' + it.type + '\n')}
+${notifications.map(it => '- ' + it.type).join('\n')}
 
 Have a look now: ${this.environment.baseUrl}`
     })

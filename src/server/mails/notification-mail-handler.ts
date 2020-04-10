@@ -1,11 +1,12 @@
 import { injectable } from "inversify";
 import { NotificationHandler } from "../../core/infrastructure/notification-handler";
-import { bufferTime } from "rxjs/operators";
+import { windowWhen, debounceTime, toArray, mergeMap } from "rxjs/operators";
 
 import { GameSetupProvider } from "../../core/game-setup-provider";
 import { GlobalErrorHandler } from "../infrastructure/error-handling/global-error-handler";
 import { NotificationMail } from "./notification-mail";
 import { Subscription } from "rxjs";
+import { Environment } from "../environment/environment";
 
 @injectable()
 export class NotificationMailer {
@@ -14,15 +15,16 @@ export class NotificationMailer {
     private notificationHandler: NotificationHandler,
     private setup: GameSetupProvider,
     private errorHandler: GlobalErrorHandler,
-    private notificationMail: NotificationMail
+    private notificationMail: NotificationMail,
+    private environment: Environment
   ) {
   }
 
   start() {
-    console.log("starting to send notification mails for game "+ this.setup.gameId)
     this.subscription = this.notificationHandler.notifications$.pipe(
-      bufferTime(0),
-    ).subscribe(notifications => {
+      windowWhen(() => this.notificationHandler.notifications$.pipe(debounceTime(this.environment.millisecondsPerDay / 24))),
+      mergeMap(x => x.pipe(toArray()))
+    ).subscribe((notifications) => {
       this.errorHandler.catchPromise((async () => {
         const byPlayerId = groupBy(notifications, 'playerId');
         for (const playerId of Object.getOwnPropertyNames(byPlayerId)) {

@@ -9,8 +9,10 @@ import { hoverYellow } from "../../../ui-components/colors/colors";
 import { InfoPanelViewModel } from "../../../view-model/game/info-panel-view-model";
 import { createClasses } from "../../../ui-components/setup-jss";
 import { reaction, IReactionDisposer } from "mobx";
-import { getDisplayDuration } from "../../../ui-components/display-duration";
+import { getDisplayDuration, Duration } from "../../../ui-components/display-duration";
 import { Subscription } from "rxjs";
+import { Scroll } from "../../../ui-components/scroll-area/scroll-component";
+import { UpdateFleetOrdersExecutor } from "../../../../server/commands/executors/orders/update-fleet-orders-executor";
 
 const classes = createClasses({
   tab: {
@@ -23,6 +25,11 @@ const classes = createClasses({
       textDecoration: 'underline'
     }
   },
+  panelContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%'
+  }
 });
 
 @observer
@@ -69,14 +76,17 @@ export class GameInfoPanel extends React.Component<{
 
     return <Panel
       panelClassName={classNames(this.props.panelClassName)}
+      contentClassName={classNames(classes.panelContent)}
       fadeDirection="right"
       ref={panel => this.panel = panel}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div onClick={this.handleScoringsClick} className={classNames(classes.tab, { active: this.props.vm.displayedTab === 'SCORINGS' })}>Score</div>
-        <div onClick={this.handleNotificationsClick} className={classNames(classes.tab, { active: this.props.vm.displayedTab === 'NOTIFICATIONS' })}>Notifications</div>
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div onClick={this.handleScoringsClick} className={classNames(classes.tab, { active: this.props.vm.displayedTab === 'SCORINGS' })}>Score</div>
+          <div onClick={this.handleNotificationsClick} className={classNames(classes.tab, { active: this.props.vm.displayedTab === 'NOTIFICATIONS' })}>Notifications</div>
+        </div>
+        <PanelDivider />
       </div>
-      <PanelDivider />
       {this.renderContent()}
     </Panel>
 
@@ -86,11 +96,15 @@ export class GameInfoPanel extends React.Component<{
     switch (this.props.vm.displayedTab) {
       case 'NOTIFICATIONS':
         const notifications = this.props.vm.notificationsViewModel.notifications;
-        return notifications.map(notification => {
-          return <div key={notification.id}>
-            {notification.type}
-          </div>
-        })
+        return <div style={{ flex: '1 1 auto', height: '1em' }}>
+          <Scroll>
+            {notifications.map(notification => {
+              return <div key={notification.id}>
+                <Duration timestamp={notification.timestamp} /> {notification.type}
+              </div>
+            })}
+          </Scroll>
+        </div>
 
       case 'SCORINGS':
         return <div>
