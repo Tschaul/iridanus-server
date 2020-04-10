@@ -35,7 +35,7 @@ import { RememberWorldEventQueue } from "./visibility/remember-world";
 import { LooseFleetEventQueue } from "./capture/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
-import { WorldStopGrowingEventQueue } from "./population/world-stop-mining";
+import { WorldStopGrowingEventQueue } from "./population/world-stop-growing";
 import { BeginLoadingPopulationEventQueue } from "./transfer/begin-loading-population";
 import { EndLoadPopulationEventQueue } from "./transfer/end-loading-population";
 import { BeginDroppingPopulationEventQueue } from "./transfer/begin-dropping-population";

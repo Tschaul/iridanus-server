@@ -52,11 +52,19 @@ export class LeaveWorldEventQueue implements GameEventQueue {
           let delay = this.setup.rules.warping.leaveWorldDelay;
 
           const currentWorld = worlds[fleet.currentWorldId];
-          if (worldhasOwner(currentWorld) &&  currentWorld.ownerId === fleet.ownerId) {
+          if (worldhasOwner(currentWorld) && currentWorld.ownerId === fleet.ownerId) {
             delay = 0;
-          } 
+          }
+
+          const targetWorld = worlds[order.targetWorldId];
 
           return {
+            notifications: (worldhasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) ? [{
+              type: 'ENEMY_WARP_IN_DETECTED',
+              worldId: order.targetWorldId,
+              playerId: targetWorld.ownerId,
+              timestamp
+            }] : [],
             timestamp,
             happen: () => {
               return [

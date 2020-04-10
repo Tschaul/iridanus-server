@@ -15,7 +15,7 @@ export function worldStartFiring(
         return {
           ...oldWorld,
           combatStatus: 'FIRING',
-          weaponsReadyTimestamp,
+          weaponsReadyTimestamp
         }
       })
     }

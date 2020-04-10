@@ -1113,6 +1113,9 @@
                 "id": {
                     "type": "string"
                 },
+                "idleNotificationSent": {
+                    "type": "boolean"
+                },
                 "integrity": {
                     "type": "number"
                 },
@@ -1350,6 +1353,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1387,6 +1393,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1424,6 +1433,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1461,6 +1473,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1498,6 +1513,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1535,6 +1553,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1572,6 +1593,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1609,6 +1633,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1646,6 +1673,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1683,6 +1713,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1720,6 +1753,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1757,6 +1793,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1794,6 +1833,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1831,6 +1873,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1868,6 +1913,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1905,6 +1953,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },

@@ -16,7 +16,8 @@ export function fleetStopFiring(
           currentWorldId: oldFleet.currentWorldId,
           status: 'READY',
           combatStatus: 'AT_PEACE',
-          ownerId: oldFleet.ownerId
+          ownerId: oldFleet.ownerId,
+          idleNotificationSent: false
         }
       })
     }

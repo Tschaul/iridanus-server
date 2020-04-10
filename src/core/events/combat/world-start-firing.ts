@@ -8,6 +8,7 @@ import { RandomNumberGenerator } from "../../infrastructure/random-number-genera
 import { worldStartFiring } from "../../actions/world/start-firing";
 import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { worldhasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class WorldStartFiringEventQueue implements GameEventQueue {
@@ -25,10 +26,10 @@ export class WorldStartFiringEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return worlds.find(world =>
-          world.status === 'READY'
+          worldhasOwner(world)
           && combatWorldIds.indexOf(world.id) !== -1
           && world.combatStatus === 'AT_PEACE'
-        )
+        ) as WorldWithOwner | null
       })
     )
 
@@ -41,10 +42,16 @@ export class WorldStartFiringEventQueue implements GameEventQueue {
           return null;
         }
         return {
+          notifications: [{
+            type: 'WORLD_IS_UNDER_ATTACK',
+            worldId: world.id,
+            playerId: world.ownerId,
+            timestamp
+          }],
           timestamp,
           happen: () => {
 
-            const weaponsReadyTimestamp = timestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval
+            const weaponsReadyTimestamp = Math.round(timestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval);
 
             return [
               worldStartFiring(world.id, weaponsReadyTimestamp)
