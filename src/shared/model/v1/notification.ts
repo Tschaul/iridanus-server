@@ -6,7 +6,8 @@ export type GameNotification =
   | EnemyWarpInDetectedNotification
   | NewWorldDiscoveredNotification
   | PopulationLimitReachedNotification
-  | GameStartedNotification;
+  | GameStartedNotification
+  | GameEndedNotification;
 
 export type PersistedGameNotification = {
   markedAsRead: boolean,
@@ -21,6 +22,10 @@ export interface NotificationBase {
 
 export interface GameStartedNotification extends NotificationBase {
   type: 'GAME_STARTED',
+}
+
+export interface GameEndedNotification extends NotificationBase {
+  type: 'GAME_ENDED',
 }
 
 export interface FleetAwaitingOrdersNotification extends NotificationBase {

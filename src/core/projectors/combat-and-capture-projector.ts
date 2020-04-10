@@ -85,12 +85,13 @@ export class CombatAndCaptureProjector {
       shareReplay(1)
     )
 
-    this.nextCapturedFleet$ = combineLatest(this.fleets.byId$, this.playersAtWorldById$).pipe(
-      map(([fleetsById, playersAtWorldById]) => {
+    this.nextCapturedFleet$ = combineLatest(this.fleets.byId$, this.playersAtWorldById$, this.worlds.byId$).pipe(
+      map(([fleetsById, playersAtWorldById, worldsById]) => {
         const lostFleets = Object.values(fleetsById).filter(fleet => fleet.status === 'LOST') as LostFleet[];
         const capturedLostFleet = lostFleets.find(fleet => {
           const players = playersAtWorldById[fleet.currentWorldId] || [];
-          return players.length === 1;
+          const world = worldsById[fleet.currentWorldId];
+          return players.length === 1 && worldhasOwner(world);
         });
         if (capturedLostFleet) {
           return [capturedLostFleet, playersAtWorldById[capturedLostFleet.currentWorldId][0]]
