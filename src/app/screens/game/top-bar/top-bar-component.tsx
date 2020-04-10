@@ -11,7 +11,7 @@ import { StatType } from "../../../view-model/game/game-stats";
 import { hoverYellow, errorRed, selectedYellow } from "../../../ui-components/colors/colors";
 import { getDisplayDuration } from "../../../ui-components/display-duration";
 import { Subscription } from "rxjs";
-import { reaction } from "mobx";
+import { reaction, IReactionDisposer } from "mobx";
 
 const classes = createClasses({
   statsItem: {
@@ -31,15 +31,16 @@ export class TopBar extends React.Component<{
   state: { gameStartDuration: string | null } = { gameStartDuration: null }
 
   subscription: Subscription;
+  reactionDisposer: IReactionDisposer;
 
   componentWillMount() {
-    reaction(
+    this.reactionDisposer = reaction(
       () => this.props.vm.gameStartTimestamp,
       (gameStartTimestamp) => {
         if (this.subscription) {
           this.subscription.unsubscribe();
         }
-        getDisplayDuration(gameStartTimestamp).subscribe(gameStartDuration => {
+        this.subscription = getDisplayDuration(gameStartTimestamp).subscribe(gameStartDuration => {
           this.setState({ gameStartDuration })
         })
       }
@@ -51,6 +52,9 @@ export class TopBar extends React.Component<{
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    if (this.reactionDisposer) {
+      this.reactionDisposer();
+    }
   }
 
   render() {
@@ -61,8 +65,6 @@ export class TopBar extends React.Component<{
       onMouseEnter: this.handleMouseEnterStatsItem,
       onMouseLeave: this.handleMouseLeaveStatsItem
     }
-
-    console.log({ gameStartDuration: this.state.gameStartDuration })
 
     return <Panel
       panelClassName={classNames(this.props.panelClassName)}

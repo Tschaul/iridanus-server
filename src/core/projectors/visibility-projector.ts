@@ -88,12 +88,12 @@ export class VisibilityProjector {
         Object.values(state.universe.fleets).filter(fleet => !fleetHasOwner(fleet) || fleet.ownerId !== playerId).forEach(fleet => {
           if (fleet.status === 'WARPING') {
             if (!visibilityForPlayer[fleet.originWorldId]
-              || visibilityForPlayer[fleet.originWorldId].status === 'REMEBERED'
+              || visibilityForPlayer[fleet.originWorldId].status === 'REMEMBERED'
               || !visibilityForPlayer[fleet.targetWorldId]
-              || visibilityForPlayer[fleet.targetWorldId].status === 'REMEBERED') {
+              || visibilityForPlayer[fleet.targetWorldId].status === 'REMEMBERED') {
               delete fleets[fleet.id]
             }
-          } else if (!visibilityForPlayer[fleet.currentWorldId] || visibilityForPlayer[fleet.currentWorldId].status === 'REMEBERED') {
+          } else if (!visibilityForPlayer[fleet.currentWorldId] || visibilityForPlayer[fleet.currentWorldId].status === 'REMEMBERED') {
             delete fleets[fleet.id]
           } else if (fleetHasOwner(fleet) && fleet.ownerId !== playerId) {
             fleets[fleet.id] = {
@@ -113,7 +113,7 @@ export class VisibilityProjector {
               status: 'UNKNOWN',
               id: world.id
             }
-          } else if (visibilityForPlayer[world.id].status === 'REMEBERED') {
+          } else if (visibilityForPlayer[world.id].status === 'REMEMBERED') {
             const rememberedWorld = visibilityForPlayer[world.id];
             worlds[world.id] = rememberedWorld as RemeberedWorld;
           } else if (worldhasOwner(world) && world.ownerId !== playerId) {
@@ -171,7 +171,6 @@ export class VisibilityProjector {
           if (neighboringWorldIds && neighboringWorldIds.some(id => {
             const neighboringWorld = worldsById[id];
             return this.worldOwnedByPlayer(neighboringWorld, playerId)
-              && this.playerHasFleetKeyAtWorld(allFleets, playerId, neighboringWorld)
           })) {
             return true;
           }

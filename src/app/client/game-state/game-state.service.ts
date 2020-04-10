@@ -4,8 +4,9 @@ import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
 import { VisibleState } from "../../../shared/model/v1/visible-state";
-import { GameStateSubscription, GameInfoSubscription, GameMetaDataSubscription } from "../../../shared/messages/subscriptions/game-subscriptions";
-import { GameStateSubscriptionResult, GameInfoSubscriptionResult, GameMetaDataSubscriptionResult } from "../../../shared/messages/subscriptions/game-subscription-results";
+import { GameStateSubscription, GameInfoSubscription, GameMetaDataSubscription, GameRulesSubscription } from "../../../shared/messages/subscriptions/game-subscriptions";
+import { GameStateSubscriptionResult, GameInfoSubscriptionResult, GameMetaDataSubscriptionResult, GameRulesSubscriptionResult } from "../../../shared/messages/subscriptions/game-subscription-results";
+import { GameRules } from "../../../shared/model/v1/rules";
 
 @injectable()
 export class GameStateService {
@@ -28,6 +29,14 @@ export class GameStateService {
     }, gameId).pipe(
       map(result => result.info)
     ) as Observable<GameInfo>
+  }
+
+  getGameRulesByGameId(gameId: string) {
+    return  this.connection.subscribe<GameRulesSubscription, GameRulesSubscriptionResult>({
+      type: 'GAME/RULES'
+    }, gameId).pipe(
+      map(result => result.rules)
+    ) as Observable<GameRules>
   }
 
   getGameMetaDataById(gameId: string) {

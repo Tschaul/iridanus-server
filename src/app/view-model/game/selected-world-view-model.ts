@@ -25,7 +25,7 @@ export class SelectedWorldViewModel {
 
   @computed public get playerInfoOfWorldBeingCaptured() {
     const world = this.selection.selectedWorld;
-    if (world && world.status !== 'UNKNOWN' && world.status !== 'REMEBERED' && world.captureStatus === 'BEING_CAPTURED') {
+    if (world && world.status !== 'UNKNOWN' && world.status !== 'REMEMBERED' && world.captureStatus === 'BEING_CAPTURED') {
       return this.gameData.playerInfos[world.capturingPlayerId];
     } else {
       return null;

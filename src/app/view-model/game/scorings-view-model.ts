@@ -24,9 +24,19 @@ export class ScoringsViewModel {
 
   @observable public timestamp = new Date().getTime();
 
+  @computed get gameEndTimestamp() {
+    return this.gameData.gameEndTimestamp
+  }
+
+  @computed get gameEndScoreDisplay() {
+    const gameEndingScore = this.gameData.gameRules.scoring.gameEndingScore;
+    const week = 7 * this.infoPanelViewModel.millisecondsPerDay;
+    return Math.round(gameEndingScore / week);
+  }
+
   @computed public get scoringsDisplay() {
 
-    const gameEndingScore = 7000 * this.infoPanelViewModel.millisecondsPerDay;
+    const gameEndingScore = this.gameData.gameRules.scoring.gameEndingScore;
     const week = 7 * this.infoPanelViewModel.millisecondsPerDay;
 
     const result: ScoringDisplay[] = [];

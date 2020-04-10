@@ -3,13 +3,6 @@
 # Iridanus-server
 Server for Iridanus
 
-# Findings fro first long term test
-
-- initially industry only at home world
-- population only 50% random other 50% distributed mainly towards the middle non randomly
-- end game score cut in half-
-- own worlds always see neighbors
-
 # Remaining Todos for MVP scope
 
 - scrapping industry to metal

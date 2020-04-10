@@ -38,5 +38,5 @@ export function visibleWorldhasOwner(world: VisibleWorld): world is WorldWithOwn
 }
 
 export function visibleWorldIsWorld(world: VisibleWorld): world is World {
-  return world.status !== 'UNKNOWN' && world.status !== 'REMEBERED';
+  return world.status !== 'UNKNOWN' && world.status !== 'REMEMBERED';
 }

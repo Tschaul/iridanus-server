@@ -2,7 +2,7 @@
 
 export interface RemeberedWorld {
   id: string
-  status: 'REMEBERED',
+  status: 'REMEMBERED',
   ownerId?: string,
   industry: number,
   mines: number,

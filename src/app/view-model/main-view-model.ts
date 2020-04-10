@@ -17,7 +17,7 @@ export class MainViewModel {
     this.welcomeViewModel.password = '123456';
     this.welcomeViewModel.login();
 
-    this.lobbyViewModel.selectedGameId = 'wggxd8iaffwo';
+    this.lobbyViewModel.selectedGameId = '4y36y62hhstl';
     this.lobbyViewModel.viewGame();
 
     when(

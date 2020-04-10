@@ -87,16 +87,13 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
 
   let fleetKeyNumber = 1;
 
-  // const rank = getRank(id);
+  const rank = getRank(id);
 
-  // const amount = 5 - rank;
+  const random = randomSphericArray(3);
 
-  const random = randomSphericArray(4);
-
-
-  const industry = Math.round(random[0] * 3);
-  const mines = Math.round(random[1] * 6);
-  const populationLimit = Math.max(Math.round(random[2] * 50), mines, industry)
+  const industry = 0;
+  const mines = Math.round(random[0] * 6);
+  const populationLimit = Math.max(Math.round(random[1] * 25) + getStaticPopulationLimit(rank), mines + industry)
   const population = Math.round(Math.random() * populationLimit);
 
   const world: LostWorld = {
@@ -113,7 +110,7 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
     captureStatus: 'NOT_BEING_CAPTURED'
   }
 
-  const fleetAmount = Math.round(random[3])
+  const fleetAmount = Math.round(random[2])
 
   const fleets: LostFleet[] = Array.from(Array(fleetAmount).keys()).map(_ => {
     const fleetId = 'w' + id + 'f' + fleetKeyNumber++;
@@ -130,6 +127,15 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
   })
 
   return [world, fleets];
+}
+
+function getStaticPopulationLimit(rank: 1 | 2 | 3 | 4 | 5) {
+  switch (rank) {
+    case 1: return 40;
+    case 2: return 30;
+    case 3: return 15;
+    default: return 5;
+  }
 }
 
 function randomSphericArray(length: number) {

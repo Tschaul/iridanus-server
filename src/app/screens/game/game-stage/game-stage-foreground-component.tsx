@@ -83,7 +83,7 @@ export class GameStageForeground extends React.Component<{
       const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
-      const opacity = world.status === 'UNKNOWN' || world.status === 'REMEBERED' ? 0.5 : 1
+      const opacity = world.status === 'UNKNOWN' || world.status === 'REMEMBERED' ? 0.5 : 1
       return (
         <g key={world.id}>
           <text

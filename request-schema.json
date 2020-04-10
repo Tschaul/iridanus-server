@@ -111,6 +111,9 @@
                             "$ref": "#/definitions/GameNotificationsSubscription"
                         },
                         {
+                            "$ref": "#/definitions/GameRulesSubscription"
+                        },
+                        {
                             "$ref": "#/definitions/EnvironmentInfoSubscription"
                         }
                     ]
@@ -348,6 +351,20 @@
                 "type": {
                     "enum": [
                         "GAME/NOTIFICATIONS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "GameRulesSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/RULES"
                     ],
                     "type": "string"
                 }

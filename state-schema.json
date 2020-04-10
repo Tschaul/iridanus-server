@@ -1204,7 +1204,7 @@
                 },
                 "status": {
                     "enum": [
-                        "REMEBERED"
+                        "REMEMBERED"
                     ],
                     "type": "string"
                 }

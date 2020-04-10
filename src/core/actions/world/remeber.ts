@@ -15,7 +15,7 @@ export function rememberWorld(
       return produce(state, draft => {
         draft.universe.visibility[playerId][worldId] = {
           id: worldId,
-          status: 'REMEBERED',
+          status: 'REMEMBERED',
           industry: world.industry,
           mines: world.mines,
           population: world.population,

@@ -9,6 +9,8 @@ import { hoverYellow } from "../../../ui-components/colors/colors";
 import { InfoPanelViewModel } from "../../../view-model/game/info-panel-view-model";
 import { createClasses } from "../../../ui-components/setup-jss";
 import { reaction, IReactionDisposer } from "mobx";
+import { getDisplayDuration } from "../../../ui-components/display-duration";
+import { Subscription } from "rxjs";
 
 const classes = createClasses({
   tab: {
@@ -29,11 +31,15 @@ export class GameInfoPanel extends React.Component<{
   panelClassName?: string,
 }> {
 
+  state: { gameEndDuration: string | null } = { gameEndDuration: null }
+
   panel: Panel | null;
-  reactionDisposer: IReactionDisposer;
+  reactionDisposerDisplayedTab: IReactionDisposer;
+  reactionDisposerGameEndTimestamp: IReactionDisposer;
+  gameEndTimestampSubscription: Subscription;
 
   componentDidMount() {
-    this.reactionDisposer = reaction(
+    this.reactionDisposerDisplayedTab = reaction(
       () => this.props.vm.displayedTab,
       () => {
         if (this.panel) {
@@ -41,10 +47,22 @@ export class GameInfoPanel extends React.Component<{
         }
       }
     )
+
+    this.reactionDisposerGameEndTimestamp = reaction(
+      () => this.props.vm.scoringsViewModel.gameEndTimestamp,
+      (gameEndTimestamp) => {
+        if (this.gameEndTimestampSubscription) {
+          this.gameEndTimestampSubscription.unsubscribe();
+        }
+        this.gameEndTimestampSubscription = getDisplayDuration(gameEndTimestamp).subscribe(gameEndDuration => {
+          this.setState({ gameEndDuration })
+        })
+      }
+    )
   }
 
   componentWillUnmount() {
-    this.reactionDisposer()
+    this.reactionDisposerDisplayedTab()
   }
 
   render() {
@@ -75,47 +93,54 @@ export class GameInfoPanel extends React.Component<{
         })
 
       case 'SCORINGS':
-        return this.props.vm.scoringsViewModel.scoringsDisplay.map(scoring => {
-          const rowStyle: React.CSSProperties = {
-            display: 'flex',
-            justifyContent: 'space-between'
-          }
-          const playerColStyle: React.CSSProperties = {
-            display: 'inline-block',
-            color: scoring.color,
-            width: '7ex'
-          }
-          const barWrapperStyle: React.CSSProperties = {
-            display: 'inline-block',
-            position: 'relative',
-            width: '15ex',
-            textAlign: 'center',
-            backgroundColor: 'rgb(145, 145, 145)'
-          }
-          const barStyle: React.CSSProperties = {
-            position: 'absolute',
-            height: '100%',
-            width: Math.round(100 * scoring.currentScore / scoring.finalScore) + '%',
-            backgroundColor: hoverYellow,
-            opacity: 0.4,
-            top: 0,
-            left: 0,
-          }
-          const barContentStyle: React.CSSProperties = {
-            display: 'inline-block',
-            zIndex: 9
-          }
+        return <div>
+          <div>
+            Game ends when one player reaches {this.props.vm.scoringsViewModel.gameEndScoreDisplay} or in {this.state.gameEndDuration}.<br /><br />
+          </div>
+          <div>
+            {this.props.vm.scoringsViewModel.scoringsDisplay.map(scoring => {
+              const rowStyle: React.CSSProperties = {
+                display: 'flex',
+                justifyContent: 'space-between'
+              }
+              const playerColStyle: React.CSSProperties = {
+                display: 'inline-block',
+                color: scoring.color,
+                width: '7ex'
+              }
+              const barWrapperStyle: React.CSSProperties = {
+                display: 'inline-block',
+                position: 'relative',
+                width: '15ex',
+                textAlign: 'center',
+                backgroundColor: 'rgb(145, 145, 145)'
+              }
+              const barStyle: React.CSSProperties = {
+                position: 'absolute',
+                height: '100%',
+                width: Math.round(100 * scoring.currentScore / scoring.finalScore) + '%',
+                backgroundColor: hoverYellow,
+                opacity: 0.4,
+                top: 0,
+                left: 0,
+              }
+              const barContentStyle: React.CSSProperties = {
+                display: 'inline-block',
+                zIndex: 9
+              }
 
-          return (
-            <div style={rowStyle} key={scoring.id}>
-              <span style={playerColStyle}>{scoring.id}</span>
-              <span style={barWrapperStyle}>
-                <span style={barStyle} />
-                <span style={barContentStyle}>{scoring.currentScore}&thinsp;+&thinsp;{scoring.scoreDeltaPerWeek}&thinsp;⦀/w</span>
-              </span>
-            </div>
-          );
-        })
+              return (
+                <div style={rowStyle} key={scoring.id}>
+                  <span style={playerColStyle}>{scoring.id}</span>
+                  <span style={barWrapperStyle}>
+                    <span style={barStyle} />
+                    <span style={barContentStyle}>{scoring.currentScore}&thinsp;+&thinsp;{scoring.scoreDeltaPerWeek}&thinsp;⦀/w</span>
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
     }
   }
 

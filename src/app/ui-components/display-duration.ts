@@ -20,8 +20,6 @@ export function getDisplayDuration(endTimestamp: number) {
 
 function displayDuration(duration: number): string | null {
 
-  console.log({duration})
-
   if (duration <= 0) {
     return null
   }
