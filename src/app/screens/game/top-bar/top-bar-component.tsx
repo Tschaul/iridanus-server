@@ -1,5 +1,4 @@
 import * as React from "react";
-import { OrderEditorViewModel } from "../../../view-model/game/order-editor-view-model";
 import { Panel } from "../../../ui-components/panel/panel-component";
 import classNames from "classnames";
 import { Button } from "../../../ui-components/button/button";
@@ -11,9 +10,7 @@ import { getClosestAttribute } from "../../helper/get-attribute";
 import { StatType } from "../../../view-model/game/game-stats";
 import { hoverYellow, errorRed, selectedYellow } from "../../../ui-components/colors/colors";
 import { getDisplayDuration } from "../../../ui-components/display-duration";
-import { toStream } from "mobx-utils";
-import { switchMap } from "rxjs/operators";
-import { Observable, Subscription, from, ObservableInput } from "rxjs";
+import { Subscription } from "rxjs";
 import { reaction } from "mobx";
 
 const classes = createClasses({

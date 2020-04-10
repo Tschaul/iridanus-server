@@ -38,7 +38,7 @@ export class ScoringsViewModel {
         color: playerInfo.color,
         id: scoring.playerId,
         currentScore: Math.round(currentScore / week),
-        scoreDeltaPerWeek: Math.round((10 * scoring.influence) / week) / 10,
+        scoreDeltaPerWeek: scoring.influence,
         finalScore: Math.round(gameEndingScore / week)
       })
     })
