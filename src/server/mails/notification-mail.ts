@@ -20,7 +20,7 @@ export class NotificationMail {
       recipients: [playerId],
       subject: notifications[0].type + ' Iridanus notification from game ' + gameId,
       text:
-        `Hi
+        `Hi ${playerId},
 
 there are important updates in your Iridanus game ${gameId}:
 

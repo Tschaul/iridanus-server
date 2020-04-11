@@ -41,7 +41,14 @@ export class TopBar extends React.Component<{
           this.subscription.unsubscribe();
         }
         this.subscription = getDisplayDuration(gameStartTimestamp).subscribe(gameStartDuration => {
-          this.setState({ gameStartDuration })
+          const now = new Date().getTime();
+          if (now > gameStartTimestamp) {
+            this.reactionDisposer();
+            this.subscription.unsubscribe();
+            this.setState({ gameStartDuration: null })
+          } else {
+            this.setState({ gameStartDuration })
+          }
         })
       }
     )

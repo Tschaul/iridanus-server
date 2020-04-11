@@ -48,7 +48,8 @@ export function makeGomeisaThreeRandom(): GameMap {
         population: 30,
         populationLimit: 30,
         ships: 2,
-        captureStatus: 'NOT_BEING_CAPTURED'
+        captureStatus: 'NOT_BEING_CAPTURED',
+        idleNotificationSent: true
       };
 
       ([1, 2, 3]).forEach((index) => {
@@ -63,7 +64,8 @@ export function makeGomeisaThreeRandom(): GameMap {
           population: 0,
           orders: [],
           ownerId: seats[worldId],
-          ships: 6
+          ships: 6,
+          idleNotificationSent: true
         }
       })
     } else {
