@@ -65,11 +65,13 @@ export class ConnectionHandler {
               if (authResult) {
                 this.authenticatedUserId = message.userId;
                 this.sendfn({
-                  type: 'AUTHENTICATION_SUCCESSFULL'
+                  type: 'AUTHENTICATION_SUCCESSFULL',
+                  requestId: message.requestId
                 })
               } else {
                 this.sendfn({
                   type: 'AUTHENTICATION_NOT_SUCCESSFULL',
+                  requestId: message.requestId
                 })
               }
             })

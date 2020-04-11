@@ -4,7 +4,8 @@ import { Subscription } from "./subscriptions";
 export type RequestMessage = {
   type: 'AUTHENTICATE',
   userId: string,
-  password: string
+  password: string,
+  requestId: string
 } | {
   type: 'COMMAND',
   command: Command,

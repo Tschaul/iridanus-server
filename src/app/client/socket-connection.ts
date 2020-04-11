@@ -12,8 +12,8 @@ export class SocketConnection {
 
   socket: WebSocket;
 
-  private requests$$ = new ReplaySubject<RequestMessage>();
-  private responses$$ = new ReplaySubject<ResponseMessage>();
+  private requests$$ = new ReplaySubject<RequestMessage>(1);
+  private responses$$ = new ReplaySubject<ResponseMessage>(1);
   private isConnected$$ = new ReplaySubject<boolean>(1);
 
   public responses$ = this.responses$$.asObservable();
@@ -45,17 +45,22 @@ export class SocketConnection {
   }
 
   public authenticate(userId: string, password: string) {
+    const requestId = makeId();
     this.send({
       type: 'AUTHENTICATE',
       userId,
       password,
+      requestId
     })
     return new Promise((resolve, reject) => {
       this.responses$.pipe(
-        filter(response => response.type === 'AUTHENTICATION_SUCCESSFULL' || response.type === 'AUTHENTICATION_NOT_SUCCESSFULL'),
+        filter(response =>
+          (response.type === 'AUTHENTICATION_SUCCESSFULL' || response.type === 'AUTHENTICATION_NOT_SUCCESSFULL')
+          && response.requestId === requestId
+        ),
         take(1)
       ).subscribe(response => {
-        if(response.type === 'AUTHENTICATION_SUCCESSFULL') {
+        if (response.type === 'AUTHENTICATION_SUCCESSFULL') {
           resolve();
         } else {
           reject('Authentication was not successfull');
@@ -78,10 +83,10 @@ export class SocketConnection {
         filter(response => 'commandId' in response && response.commandId === commandId),
         take(1)
       ).subscribe(response => {
-        if(response.type === 'COMMAND_SUCCESS') {
+        if (response.type === 'COMMAND_SUCCESS') {
           resolve();
         } else {
-          const error = response.type === 'ERROR' ?  response.error : 'command id was missused'
+          const error = response.type === 'ERROR' ? response.error : 'command id was missused'
           reject(error);
         }
       }

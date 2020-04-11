@@ -60,6 +60,7 @@ export class WelcomeViewModel {
     try {
       await this.userManagementervice.login(this.username, this.password)
       this.mainViewModel.loggedInUserId = this.username;
+      this.loginError = false;
     } catch {
       this.loginError = true;
     }
