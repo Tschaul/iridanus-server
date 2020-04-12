@@ -40,11 +40,13 @@ export async function signUpAndLogin(testBed: ServerTestBed, username: string, p
   await testBed.sendMessage({
     type: 'AUTHENTICATE',
     userId: username,
-    password: password
+    password: password,
+    requestId: 'auth'
   });
 
   testBed.expectAuthenticationResponse({
-    type: 'AUTHENTICATION_SUCCESSFULL'
+    type: 'AUTHENTICATION_SUCCESSFULL',
+    requestId: 'auth'
   });
 
   testBed.clearResponses();
