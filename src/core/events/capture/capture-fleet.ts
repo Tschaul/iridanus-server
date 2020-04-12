@@ -24,6 +24,13 @@ export class CaptureFleetEventQueue implements GameEventQueue {
           return null
         } else {
           return {
+            notifications: [{
+              type: 'FLEET_CAPTURED',
+              fleetId: fleet.id,
+              worldId: fleet.currentWorldId,
+              playerId: newOwnerId,
+              timestamp
+            }],
             timestamp,
             happen: () => {
               return [

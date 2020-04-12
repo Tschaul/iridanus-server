@@ -1,3 +1,4 @@
+
 export type GameNotification =
   FleetAwaitingOrdersNotification
   | WorldAwaitingOrdersNotification
@@ -7,7 +8,9 @@ export type GameNotification =
   | NewWorldDiscoveredNotification
   | PopulationLimitReachedNotification
   | GameStartedNotification
-  | GameEndedNotification;
+  | GameEndedNotification
+  | FleetCaputedNotification
+  | WorldCaputedNotification;
 
 export type PersistedGameNotification = {
   markedAsRead: boolean,
@@ -41,7 +44,7 @@ export interface WorldAwaitingOrdersNotification extends NotificationBase {
 
 export interface EngangingTheEnemyNotification extends NotificationBase {
   type: 'ENGAGING_THE_ENEMY',
-  fleetId: string
+  fleetId: string,
   worldId: string,
 }
 
@@ -62,6 +65,17 @@ export interface NewWorldDiscoveredNotification extends NotificationBase {
 
 export interface PopulationLimitReachedNotification extends NotificationBase {
   type: 'POPULATION_LIMIT_REACHED',
+  worldId: string,
+}
+
+export interface WorldCaputedNotification extends NotificationBase {
+  type: 'WORLD_CAPTURED',
+  worldId: string,
+}
+
+export interface FleetCaputedNotification extends NotificationBase {
+  type: 'FLEET_CAPTURED',
+  fleetId: string,
   worldId: string,
 }
 

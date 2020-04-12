@@ -37,6 +37,7 @@ function importance(notification: GameNotification): number {
     case 'GAME_STARTED':
       return 10;
     case 'WORLD_IS_UNDER_ATTACK':
+    case 'WORLD_CAPTURED':
     case 'ENGAGING_THE_ENEMY':
     case 'ENEMY_WARP_IN_DETECTED':
       return 5;
