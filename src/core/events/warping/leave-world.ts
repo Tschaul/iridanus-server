@@ -38,7 +38,7 @@ export class LeaveWorldEventQueue implements GameEventQueue {
           return null
         } else {
 
-          if (!gates[fleet.currentWorldId].includes(order.targetWorldId)) {
+          if (fleet.ships === 0 || !gates[fleet.currentWorldId].includes(order.targetWorldId)) {
             return {
               timestamp,
               happen: () => {
