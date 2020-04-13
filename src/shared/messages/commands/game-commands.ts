@@ -1,7 +1,8 @@
 
 export type GameCommand = CreateGameCommand
   | JoinGameCommand
-  | ReadyForGameCommand;
+  | ReadyForGameCommand
+  | ToggleSpectatorForGameCommand;
 
 export interface CreateGameCommand {
   type: 'GAME/CREATE',
@@ -10,6 +11,11 @@ export interface CreateGameCommand {
 
 export interface JoinGameCommand {
   type: 'GAME/JOIN',
+  gameId: string
+}
+
+export interface ToggleSpectatorForGameCommand {
+  type: 'GAME/TOGGLE_SPECTATOR',
   gameId: string
 }
 

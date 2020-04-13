@@ -138,9 +138,25 @@ export class GameRepository {
       return draft => {
         draft.info.players[playerId] = {
           state: 'JOINED',
-          name: playerId,
-          ...getPlayerTemplate(count)
+          id: playerId,
+          isSpectator: false,
+          ...getPlayerTemplate(count),
         } as PlayerInfo;
+      }
+    })
+  }
+
+  public async toggleSpecatorMode(gameId: string, playerId: string) {
+    const handle = await this.handleForGameInfoById(gameId);
+    handle.do(async (draft) => {
+      if (draft.info.state !== 'PROPOSED') {
+        throw new Error("Game has allready started.")
+      }
+      if (!draft.info.players[playerId]) {
+        throw new Error("Player has not joined the game yet.")
+      }
+      return draft => {
+        draft.info.players[playerId].isSpectator = !draft.info.players[playerId].isSpectator
       }
     })
   }

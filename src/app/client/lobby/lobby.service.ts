@@ -10,7 +10,7 @@ import { GameListAllSubscriptionResult } from "../../../shared/messages/subscrip
 @injectable()
 export class LobbyService {
 
-  constructor(private connection: SocketConnection) {}
+  constructor(private connection: SocketConnection) { }
 
   allGames$ = this.connection.subscribe<GamesListAllSubscription, GameListAllSubscriptionResult>({
     type: 'GAME/LIST_ALL'
@@ -44,6 +44,13 @@ export class LobbyService {
   async readyForGame(id: string): Promise<void> {
     await this.connection.sendCommand({
       type: 'GAME/READY',
+      gameId: id
+    })
+  }
+
+  async toggleSpectatorModeForGame(id: string): Promise<void> {
+    await this.connection.sendCommand({
+      type: 'GAME/TOGGLE_SPECTATOR',
       gameId: id
     })
   }

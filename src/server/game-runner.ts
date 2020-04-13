@@ -135,7 +135,7 @@ export class GameRunner {
     notificationMailer.start();
 
     await game.startGameLoop();
-    
+
     notificationMailer.stop();
 
     this.logger.info('game runner: game ' + gameInfo.id + ' has ended');
@@ -145,7 +145,9 @@ export class GameRunner {
   }
 
   instantiateMap(gameInfo: Readonly<GameInfo>, map: Readonly<GameMap>): GameState {
-    const players = Object.getOwnPropertyNames(gameInfo.players);
+    const players = Object.values(gameInfo.players)
+      .filter(player => !player.isSpectator)
+      .map(player => player.id);
 
     const scorings: Scorings = {};
 
@@ -179,7 +181,7 @@ export class GameRunner {
             const neighboringWorld = state.worlds[neighboringWorldId];
             return worldhasOwner(neighboringWorld) && [seat, player].includes(neighboringWorld.ownerId)
           })) {
-              state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
+            state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
           }
         })
         Object.getOwnPropertyNames(state.fleets).forEach(fleetId => {

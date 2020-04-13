@@ -82,11 +82,13 @@ export class LobbyScreen extends React.Component<{
         </div>
         <div style={{ flex: 1 }}>{this.renderPlayerRows()}</div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {game.state === 'PROPOSED' && (
+          {game.state === 'PROPOSED' && [(
             this.playerHasJoinedGame()
-              ? <Button onClick={this.handleReadyClick}>READY</Button>
-              : <Button onClick={this.handleJoinClick}>JOIN</Button>
-          )}
+              ? <Button key="a" onClick={this.handleReadyClick}>READY</Button>
+              : <Button key="a" onClick={this.handleJoinClick}>JOIN</Button>
+          ), (
+            <Button key="b" spaceLeft onClick={this.handleToggleSpectatorClick}>TOGGLE SPEC.</Button>
+          )]}
           <PanelDivider />
           {game.state === 'STARTED' && this.playerHasJoinedGame() && (
             <Button onClick={this.handleViewClick} spaceRight>VIEW</Button>
@@ -111,6 +113,11 @@ export class LobbyScreen extends React.Component<{
   @autobind
   handleJoinClick() {
     this.props.vm.joinGame();
+  }
+
+  @autobind
+  handleToggleSpectatorClick() {
+    this.props.vm.toggleSpecatatorMode();
   }
 
   @autobind
@@ -161,7 +168,7 @@ export class LobbyScreen extends React.Component<{
 
     return Object.values(game.players).map(playerInfo => {
       return (
-        <div>{playerInfo.name} · {playerInfo.state}</div>
+      <div><span style={{color: playerInfo.color}}>{playerInfo.id}</span> · {playerInfo.state} {playerInfo.isSpectator && '· spectator'}</div>
       )
     })
   }

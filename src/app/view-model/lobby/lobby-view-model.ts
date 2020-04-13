@@ -69,6 +69,13 @@ export class LobbyViewModel {
     await this.lobbyService.readyForGame(this.selectedGameId);
   }
 
+  public async toggleSpecatatorMode() {
+    if (!this.selectedGameId) {
+      return
+    }
+    await this.lobbyService.toggleSpectatorModeForGame(this.selectedGameId);
+  }
+
   public async viewGame() {
     if (!this.selectedGameId) {
       return

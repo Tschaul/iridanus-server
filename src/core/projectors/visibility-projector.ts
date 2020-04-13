@@ -78,7 +78,7 @@ export class VisibilityProjector {
     shareReplay(1),
   )
 
-  public visibleUniverseForPlayer(playerId: string) {
+  public visibleUniverseForPlayer(playerId: string): Observable<VisibleState> {
     return this.store.state$.pipe(
       map(state => {
         const visibilityForPlayer = state.universe.visibility[playerId];
