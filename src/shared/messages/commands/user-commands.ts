@@ -5,6 +5,9 @@ export type UserCommand = SignUpUserCommand
 
 export interface SignUpUserCommand {
   type: 'USER/SIGN_UP_USER',
+  /**
+   * @pattern ^(?=.{3,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+   */
   id: string;
   email: string;
   password: string;
