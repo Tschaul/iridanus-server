@@ -5,13 +5,11 @@ Server for Iridanus
 
 # Remaining Todos for MVP scope
 
+- fleet keys can warp without ships
 - scrapping industry to metal
-- notifications for important events
-- send notifications via email
 
 # Further Improvements
 
-- highlight fleets without orders
 - help: context based links into docs
 
 # Roadmap and ideas

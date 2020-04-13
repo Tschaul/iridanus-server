@@ -9,7 +9,7 @@ export function giveOrTakeWorldMetal(worldId: string, amount: number): Action {
       return updateWorld(state, worldId, oldWorld => {
         return {
           ...oldWorld,
-          metal: oldWorld.metal + amount
+          metal: Math.max(oldWorld.metal + amount, 0)
         }
       })
     }

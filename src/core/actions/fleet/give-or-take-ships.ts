@@ -7,7 +7,7 @@ export function giveOrTakeFleetShips(fleetid: string, amount: number): Action {
     describe: () => `GiveOrTakeFleetShips ${JSON.stringify({fleetid, amount})}`,
     apply: (state: GameState) => {
       return updateFleet(state, fleetid, fleet => {
-        const ships = fleet.ships + amount;
+        const ships = Math.max(fleet.ships + amount, 0);
         let metal = fleet.metal;
         let population = fleet.population;
         // overloaded metal and population gets discared (mainly during combat)
@@ -24,7 +24,7 @@ export function giveOrTakeFleetShips(fleetid: string, amount: number): Action {
           ...fleet,
           ships,
           metal,
-          population
+          population: Math.max(population, 0)
         }
       })
     }

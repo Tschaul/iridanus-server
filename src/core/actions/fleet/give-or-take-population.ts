@@ -4,12 +4,12 @@ import { updateFleet } from "./update-fleet";
 
 export function giveOrTakeFleetPopulation(fleetid: string, amount: number): Action {
   return {
-    describe: () => `GiveOrTakeFleetPopulation ${JSON.stringify({fleetid, amount})}`,
+    describe: () => `GiveOrTakeFleetPopulation ${JSON.stringify({ fleetid, amount })}`,
     apply: (state: GameState) => {
       return updateFleet(state, fleetid, oldFleet => {
         return {
           ...oldFleet,
-          population: oldFleet.population + amount
+          population: Math.max(oldFleet.population + amount, 0)
         }
       })
     }

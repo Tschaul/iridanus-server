@@ -9,7 +9,7 @@ export function giveOrTakeWorldPopulation(worldId: string, amount: number): Acti
       return updateWorld(state, worldId, oldWorld => {
         return {
           ...oldWorld,
-          population: oldWorld.population + amount
+          population: Math.max(oldWorld.population + amount, 0)
         }
       })
     }
