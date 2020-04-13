@@ -58,6 +58,20 @@ export class GameStageViewModel {
     }, {} as { [k: string]: string[] })
   }
 
+  @computed get idleFleetOwnersByWorldId() {
+    return Object.getOwnPropertyNames(this.gameData.fleetsByWorldId).reduce((result, key) => {
+      const owners = this.gameData.fleetsByWorldId[key]
+        .filter(fleetIsAtWorldAndHasOwner)
+        .filter(fleet => {
+          return fleet.status === 'READY'
+            && fleet.orders.length === 0
+        })
+        .map(fleet => fleet.ownerId);
+      result[key] = [...new Set(owners)];
+      return result
+    }, {} as { [k: string]: string[] })
+  }
+
   @computed get selectedFleet() {
     return this.selection.selectedFleet;
   }

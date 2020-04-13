@@ -38,7 +38,10 @@ export class OrderEditorViewModel {
     }
   }
 
-  @computed get selectedWorldOrFleetIsOwnedByUser() {
+  @computed get selectedWorldOrFleetIsVisibleToUser() {
+    if (this.gameViewModel.selfIsSpecator) {
+      return true;
+    }
     if (this.selection.selectedFleet) {
       const fleet = this.selection.selectedFleet;
       return fleetHasOwner(fleet) && fleet.ownerId === this.gameViewModel.selfPlayerId;
@@ -48,6 +51,10 @@ export class OrderEditorViewModel {
     } else {
       return true
     }
+  }
+
+  @computed get selfIsSpectator(): boolean {
+    return this.gameViewModel.selfIsSpecator
   }
 
   @computed get orders(): FleetOrder[] | WorldOrder[] {

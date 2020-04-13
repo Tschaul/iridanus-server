@@ -8,3 +8,4 @@ export const WARP_LANE_WIDTH = 15;
 
 export const FLEET_DISTANCE = 28;
 export const FLEET_SPREAD_DURING_WARP = 22;
+export const FLEET_OUTER_RADIUS = 12;

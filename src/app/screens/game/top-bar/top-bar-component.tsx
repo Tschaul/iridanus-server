@@ -79,11 +79,15 @@ export class TopBar extends React.Component<{
       contentStyle={{ display: 'flex', justifyContent: 'space-between' }}
     >
       <div>
-        <Button
-          disabled={this.props.vm.updatedOrdersCount === 0}
-          style={{ transform: 'translateY(-0.25em)' }}
-          onClick={this.handleSaveOrders}
-        >Save {this.props.vm.updatedOrdersCount} orders</Button>
+        {this.props.vm.selfIsSpectator ? (
+          <span>SPECTATOR</span>
+        ) : (
+            <Button
+              disabled={this.props.vm.updatedOrdersCount === 0}
+              style={{ transform: 'translateY(-0.25em)' }}
+              onClick={this.handleSaveOrders}
+            >Save {this.props.vm.updatedOrdersCount} orders</Button>
+          )}
       </div>
       {this.state.gameStartDuration ? <div style={{ color: selectedYellow }}>Game will start in {this.state.gameStartDuration}. Place your initial orders.</div> : <div>
         <span {...mouseHandler} data-stat={'INFLUENCE'} className={classNames(classes.statsItem)}>{stats.influence} ⦀ </span>

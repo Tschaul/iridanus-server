@@ -52,7 +52,7 @@ export class OrderEditor extends React.Component<{
   }
 
   render() {
-    if (!this.props.vm.selectedWorldOrFleetIsOwnedByUser) {
+    if (!this.props.vm.selectedWorldOrFleetIsVisibleToUser) {
       return this.renderPanel([<span>not yours</span>])
     }
     switch (this.props.vm.selectionType) {
@@ -83,15 +83,15 @@ export class OrderEditor extends React.Component<{
         }).map((content, index) => (
           <div key={index} data-order-index={index} style={{ display: 'flex' }}>
             <div style={{ flex: 1 }}>{content}</div>
-            <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>
+            {!this.props.vm.selfIsSpectator && <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>}
           </div>
         ))}
       </div>,
-      <div style={{ display: 'flex' }} key="c">
+      ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex' }} key="c">
         <HoverTooltip content="Build industry"><Button tight onClick={this.handleNewBuildIndustryOrder} spaceRight>+I</Button></HoverTooltip>
         <HoverTooltip content="Build ships"><Button tight onClick={this.handleNewBuildShipsOrder} spaceRight>+►</Button></HoverTooltip>
         <HoverTooltip content="Scrap ships for industry"><Button tight onClick={this.handleNewScrapShipsOrder} spaceRight>⮂I</Button></HoverTooltip>
-      </div>
+      </div>)])
     ])
   }
 
@@ -125,12 +125,12 @@ export class OrderEditor extends React.Component<{
           }).map((content, index) => (
             <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>
               <div style={{ flex: 1 }}>{content}</div>
-              <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>
+              {!this.props.vm.selfIsSpectator && <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>}
             </div>
           ))}
         </Scroll>
       </div>,
-      <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
+      ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
         <HoverTooltip content="Drop population"><Button tight onClick={this.handleNewDropPopulationOrder}>🠣P</Button></HoverTooltip>
         <HoverTooltip content="Load Population"><Button tight onClick={this.handleNewLoadPopulationOrder}>🠡P</Button></HoverTooltip>
         <HoverTooltip content="Drop metal"><Button tight onClick={this.handleNewDropMetalOrder}>🠣▮</Button></HoverTooltip>
@@ -139,7 +139,7 @@ export class OrderEditor extends React.Component<{
         <HoverTooltip content="Load ships"><Button tight onClick={this.handleNewLoadShipsOrder}>🠡►</Button></HoverTooltip>
         <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
         <HoverTooltip content="Await capture"><Button tight onClick={this.handleNewAwaitCaptureOrder}>⚑</Button></HoverTooltip>
-      </div>
+      </div>)])
     ])
   }
 

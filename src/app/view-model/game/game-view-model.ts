@@ -28,6 +28,10 @@ export class GameViewModel {
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints);
   topBarViewModel = new TopBarViewModel(this, this.gameData, this.gameOrders, this.gameStats);
   infoPanelViewModel = new InfoPanelViewModel(this, this.gameData, this.gameNotifications, this.selection);
+  
+  @computed get selfIsSpecator(): boolean {
+    return this.gameData.playerInfos[this.selfPlayerId] && this.gameData.playerInfos[this.selfPlayerId].isSpectator;
+  }
 
   @computed public get gameId() {
     return this.mainViewModel.activeGameId;

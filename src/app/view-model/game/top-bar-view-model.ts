@@ -21,6 +21,9 @@ export class TopBarViewModel {
   @computed get gameId() {
     return this.gameViewModel.gameId;
   }
+  @computed get selfIsSpectator(): boolean {
+    return this.gameViewModel.selfIsSpecator
+  }
 
   @computed public get isConnected() {
     return this.gameViewModel.isConnected;

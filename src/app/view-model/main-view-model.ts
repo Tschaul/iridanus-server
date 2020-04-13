@@ -13,12 +13,12 @@ export class MainViewModel {
   public environment = new ServerEnvironment();
 
   constructor() {
-    // this.welcomeViewModel.username = 'tschaul';
-    // this.welcomeViewModel.password = '123456';
-    // this.welcomeViewModel.login();
+    this.welcomeViewModel.username = 'tschaul';
+    this.welcomeViewModel.password = '123456';
+    this.welcomeViewModel.login();
 
-    // this.lobbyViewModel.selectedGameId = '4y36y62hhstl';
-    // this.lobbyViewModel.viewGame();
+    this.lobbyViewModel.selectedGameId = '2mnjl95eud7u';
+    this.lobbyViewModel.viewGame();
 
     when(
       () => this.connectionStatus.isConnected,

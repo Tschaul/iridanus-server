@@ -5,7 +5,7 @@ import autobind from "autobind-decorator";
 import { World } from '../../../../shared/model/v1/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
 import { mul, add, diff, normal, middle } from '../../../../shared/math/vec2';
-import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS } from './constants';
+import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS, FLEET_OUTER_RADIUS } from './constants';
 import { screenWhite, selectedYellow, screenWhiteRaw } from '../../../ui-components/colors/colors';
 import { HoverTooltip } from '../../../ui-components/tooltip/hover-tooltip.component';
 import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.component';
@@ -98,16 +98,35 @@ export class GameStageForeground extends React.Component<{
           >{/*world.id*/}◉</text>
           {fleetOwners.map(ownerId => {
             const playerInfo = this.props.vm.playerInfos[ownerId];
+            const idleOwnersAtWorld = this.props.vm.idleFleetOwnersByWorldId[world.id];
+            const idle = idleOwnersAtWorld && idleOwnersAtWorld.includes(ownerId);
             return (
-              <text
-                key={ownerId}
-                x={world.x + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.x}
-                y={world.y + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.y}
-                dominantBaseline="middle"
-                textAnchor="middle"
-                fill={playerInfo.color}
-                fontSize={22}
-              >◈</text>);
+              <g>
+                {idle && (
+                  <circle
+                    cx={world.x + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.x}
+                    cy={world.y + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.y}
+                    r={FLEET_OUTER_RADIUS}
+                    opacity="1"
+                    stroke={screenWhiteRaw.fade(0.5).toString()}
+                    fill="none"
+                    strokeWidth="3"
+                    strokeDasharray="5,5"
+                    data-world-id={world.id}
+                  />
+                )}
+                <text
+                  key={ownerId}
+                  x={world.x + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.x}
+                  y={world.y + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.y}
+                  dominantBaseline="middle"
+                  textAnchor="middle"
+                  fill={playerInfo.color}
+                  fontSize={22}
+                  style={{ transform: "translateY(1px)" }}
+                >◈</text>
+              </g>
+            );
           })}
           <HoverTooltip
             svg={true}
