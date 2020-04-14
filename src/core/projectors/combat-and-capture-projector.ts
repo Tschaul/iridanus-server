@@ -180,7 +180,7 @@ export class CombatAndCaptureProjector {
       map(worldsbyId => {
         const worldsBeingCaptured = Object.values(worldsbyId).filter(world => world.captureStatus === 'BEING_CAPTURED') as WorldBeingCaptured[]
 
-        const nextWorld = worldsBeingCaptured.sort((a, b) => b.captureTimestamp - a.captureTimestamp)[0] || null;
+        const nextWorld = worldsBeingCaptured.sort((a, b) => a.captureTimestamp - b.captureTimestamp)[0] || null;
 
         return nextWorld ? [nextWorld as (World & WorldBeingCaptured), nextWorld.capturingPlayerId] : [null, '']
       }),
