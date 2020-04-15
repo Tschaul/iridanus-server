@@ -318,7 +318,7 @@ function getPlayerTemplate(num: number): Partial<PlayerInfo> {
       }
     case 3:
       return {
-        color: 'mediumseagreen',
+        color: '#37cc37',
         fleetDrawingPosition: normalize({ x: 1, y: 1 })
       }
     default:
