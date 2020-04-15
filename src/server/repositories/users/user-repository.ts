@@ -109,7 +109,7 @@ export class UserRepository {
         throw new Error(`email for user id '${id}' is not yet activated`)
       }
       const confirmedUser = data.users[id] as ConfirmedUser;
-      if (confirmedUser.passwordResetToken !== token || now < confirmedUser.passwortResetTokenValidUntil) {
+      if (confirmedUser.passwordResetToken !== token || confirmedUser.passwortResetTokenValidUntil < now ) {
         throw new Error(`password reset token for user '${id}' is not valid`)
       }
       const salt = await this.crypto.secureRandom();
