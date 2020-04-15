@@ -94,7 +94,7 @@ function makeWorld(id: string): [LostWorld, LostFleet[]] {
   const random = randomSphericArray(3);
 
   const industry = 0;
-  const mines = Math.round(random[0] * 6);
+  const mines = Math.round(random[0] * 4);
 
   const populationLimitStatic = getStaticPopulationLimit(rank);
   const populationLimitRandom = Math.round(random[1] * 25);
