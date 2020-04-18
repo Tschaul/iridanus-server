@@ -38,7 +38,7 @@ export class ConfirmEmailPanel extends React.Component<{
         <div style={container}>
           <Panel contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
               <div style={{flex: 1}}>
-                Thank you for signing up. Please check you email account and follow the link that we sent you.
+                Thank you for signing up. Please check your email account and follow the link that we sent you.
               </div>
           </Panel>
         </div>
