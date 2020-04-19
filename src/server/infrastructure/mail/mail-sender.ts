@@ -18,7 +18,7 @@ export class MailSender {
   }
 
   async send(mail: MailPayload) {
-    
+
     const transporter = createTransport({
       host: this.environment.mailSettings.host,
       port: this.environment.mailSettings.port,
@@ -30,20 +30,26 @@ export class MailSender {
     })
 
     const userInfos = await this.userRepository.getUserInfos(mail.recipients);
-    const to = userInfos.map(it => it.email).join(', ');
 
-    const info = await transporter.sendMail({
-      from: this.environment.mailSettings.fromAddress,
-      to,
-      subject: mail.subject,
-      text: mail.text,
-      html: mail.html
-    })
+    for (const userInfo of userInfos) {
+      
+      const to = userInfo.email;
 
-    this.logger.info("Message sent: " + info.messageId);
+      const info = await transporter.sendMail({
+        from: this.environment.mailSettings.fromAddress,
+        to,
+        subject: mail.subject,
+        text: mail.text,
+        html: mail.html
+      })
 
-    if (this.environment.mailSettings.useTestAccount) {
-      this.logger.info("Preview URL: " + getTestMessageUrl(info));
+      this.logger.info("Message sent: " + info.messageId);
+
+      if (this.environment.mailSettings.useTestAccount) {
+        this.logger.info("Preview URL: " + getTestMessageUrl(info));
+      }
     }
+
+
   }
 }
