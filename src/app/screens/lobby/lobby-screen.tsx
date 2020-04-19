@@ -82,13 +82,14 @@ export class LobbyScreen extends React.Component<{
         </div>
         <div style={{ flex: 1 }}>{this.renderPlayerRows()}</div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {game.state === 'PROPOSED' && [(
-            this.playerHasJoinedGame()
-              ? <Button key="a" onClick={this.handleReadyClick}>READY</Button>
-              : <Button key="a" onClick={this.handleJoinClick}>JOIN</Button>
-          ), (
-            <Button key="b" spaceLeft onClick={this.handleToggleSpectatorClick}>TOGGLE SPEC.</Button>
-          )]}
+          {game.state === 'PROPOSED' && (
+            this.playerHasJoinedGame() ? [
+              <Button key="a" onClick={this.handleReadyClick}>READY</Button>,
+              <Button key="b" spaceLeft onClick={this.handleToggleSpectatorClick}>TOGGLE SPEC.</Button>
+            ] : [
+              <Button key="a" onClick={this.handleJoinClick}>JOIN</Button>
+            ]
+          )}
           <PanelDivider />
           {game.state === 'STARTED' && this.playerHasJoinedGame() && (
             <Button onClick={this.handleViewClick} spaceRight>VIEW</Button>
@@ -133,7 +134,7 @@ export class LobbyScreen extends React.Component<{
           <PanelDivider />
         </div>
         <div style={{ flex: 1 }}>
-          {this.props.vm.allGames.current.map(game => this.renderGameRow(game))}
+          {this.props.vm.gamesToDisplay.map(game => this.renderGameRow(game))}
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button onClick={this.handleCreateGameClick}>CREATE GAME</Button>
@@ -168,7 +169,7 @@ export class LobbyScreen extends React.Component<{
 
     return Object.values(game.players).map(playerInfo => {
       return (
-      <div><span style={{color: playerInfo.color}}>{playerInfo.id}</span> · {playerInfo.state} {playerInfo.isSpectator && '· spectator'}</div>
+        <div><span style={{ color: playerInfo.color }}>{playerInfo.id}</span> · {playerInfo.state} {playerInfo.isSpectator && '· spectator'}</div>
       )
     })
   }

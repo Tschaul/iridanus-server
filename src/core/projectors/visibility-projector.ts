@@ -85,16 +85,17 @@ export class VisibilityProjector {
         const fleets = {
           ...state.universe.fleets
         }
+
+        const worldIsNotVisible = (worldId: string) => {
+          return !visibilityForPlayer[worldId]
+            || visibilityForPlayer[worldId].status === 'REMEMBERED'
+        }
+
         Object.values(state.universe.fleets).filter(fleet => !fleetHasOwner(fleet) || fleet.ownerId !== playerId).forEach(fleet => {
-          if (fleet.status === 'WARPING') {
-            if (!visibilityForPlayer[fleet.originWorldId]
-              || visibilityForPlayer[fleet.originWorldId].status === 'REMEMBERED'
-              || !visibilityForPlayer[fleet.targetWorldId]
-              || visibilityForPlayer[fleet.targetWorldId].status === 'REMEMBERED') {
-              delete fleets[fleet.id]
-            }
-          } else if (!visibilityForPlayer[fleet.currentWorldId] || visibilityForPlayer[fleet.currentWorldId].status === 'REMEMBERED') {
-            delete fleets[fleet.id]
+          if (fleet.status === 'WARPING' && (worldIsNotVisible(fleet.originWorldId) || worldIsNotVisible(fleet.targetWorldId))) {
+            delete fleets[fleet.id];
+          } else if (fleet.status !== 'WARPING' && worldIsNotVisible(fleet.currentWorldId)) {
+            delete fleets[fleet.id];
           } else if (fleetHasOwner(fleet) && fleet.ownerId !== playerId) {
             fleets[fleet.id] = {
               ...fleets[fleet.id],

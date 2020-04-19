@@ -10,7 +10,8 @@ export class NotificationsViewModel {
 
   @computed get notifications() {
     if (this.gameStageSelection.selectedWorld) {
-      return this.gameNotifications.notificationsByWorldId[this.gameStageSelection.selectedWorld.id] || [];
+      const notifications = this.gameNotifications.notificationsByWorldId[this.gameStageSelection.selectedWorld.id] || [];
+      return notifications.slice(0).sort((a,b) => b.timestamp - a.timestamp)
     } else {
       return [];
     }

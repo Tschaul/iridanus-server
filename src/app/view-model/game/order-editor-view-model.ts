@@ -6,7 +6,8 @@ import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
 import { visibleWorldIsWorld, visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
-import { fleetHasOwner } from "../../../shared/model/v1/fleet";
+import { fleetHasOwner, Fleet } from "../../../shared/model/v1/fleet";
+import { GameData } from "./game-data";
 
 export class OrderEditorViewModel {
 
@@ -15,6 +16,7 @@ export class OrderEditorViewModel {
     private gameOrders: GameOrders,
     private selection: GameStageSelection,
     private worldHints: WorldHints,
+    private gameData: GameData,
   ) {
   }
 
@@ -96,12 +98,17 @@ export class OrderEditorViewModel {
 
       const fleet = this.selection.selectedFleet!;
 
-      const warpOrder: WarpOrder = {
-        type: 'WARP',
-        targetWorldId: worldId
-      }
+      const lastWorldId = this.projectedLastWorld(fleet);
 
-      this.gameOrders.addFleetOrder(fleet.id, warpOrder);
+      if (this.gameData.gates[lastWorldId].includes(worldId)) {
+
+        const warpOrder: WarpOrder = {
+          type: 'WARP',
+          targetWorldId: worldId
+        }
+  
+        this.gameOrders.addFleetOrder(fleet.id, warpOrder);
+      }
     })
   }
 
@@ -211,7 +218,7 @@ export class OrderEditorViewModel {
     this.worldHints.clearHints();
   }
 
-  deleteOrder(index: number) {
+  public deleteOrder(index: number) {
     if (this.selectionType === 'FLEET') {
       this.gameOrders.deleteFleetOrder(this.selectedWorldOrFleetId as string, index)
     }
@@ -219,6 +226,22 @@ export class OrderEditorViewModel {
       this.gameOrders.deleteWorldOrder(this.selectedWorldOrFleetId as string, index)
     }
     this.clearHints();
+  }
+
+  private projectedLastWorld(fleet: Fleet) {
+
+    const lastWarpOrder = fleet.orders.slice(0).reverse().find(order => order.type === 'WARP') as WarpOrder | null;
+
+    if (lastWarpOrder) {
+      return lastWarpOrder.targetWorldId
+    }
+
+    if (fleet.status === 'WARPING') {
+      return fleet.targetWorldId
+    }
+
+    return fleet.currentWorldId;
+    
   }
 
 }

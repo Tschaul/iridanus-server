@@ -17,7 +17,14 @@ export class LobbyViewModel {
 
   @computed
   public get loggedInUserId() {
-    return this.mainViewModel.loggedInUserId;
+    return this.mainViewModel.loggedInUserId as string;
+  }
+
+  @computed 
+  public get gamesToDisplay() {
+    return this.allGames.current.filter(game => {
+      return game.state === 'PROPOSED' || game.players[this.loggedInUserId]
+    })
   }
 
   @observable

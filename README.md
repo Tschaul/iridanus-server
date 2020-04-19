@@ -3,15 +3,18 @@
 # Iridanus-server
 Server for Iridanus
 
-# Remaining Todos for MVP scope
+# Bugs
 
-- scrapping industry to metal
+- notification mail when game goes from PROPOSED to STARTED
 
 # Further Improvements
 
 - help: context based links into docs
+- chose color in game lobby
 
 # Some Ideas
+
+- scrapping industry to metal
 
 ## Battle tactics
 

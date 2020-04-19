@@ -22,6 +22,7 @@ import { Scorings } from "../shared/model/v1/scoring";
 import { NotificationHandler } from "../core/infrastructure/notification-handler";
 import { Environment } from "./environment/environment";
 import { NotificationMailer } from "./mails/notification-mail-handler";
+import { GameIsReadyMail } from "./mails/game-is-ready-mail";
 
 @injectable()
 export class GameRunner {
@@ -32,6 +33,7 @@ export class GameRunner {
   private readonly logger: Logger;
   private readonly initializer: Initializer;
   private readonly environment: Environment;
+  private readonly gameIsReadyMail: GameIsReadyMail;
 
   constructor(
     private registry: ContainerRegistry,
@@ -42,6 +44,7 @@ export class GameRunner {
     this.logger = registry.globalContainer.get(Logger);
     this.initializer = registry.globalContainer.get(Initializer);
     this.environment = registry.globalContainer.get(Environment);
+    this.gameIsReadyMail = registry.globalContainer.get(GameIsReadyMail);
   }
 
   run() {
@@ -105,6 +108,8 @@ export class GameRunner {
       const state = this.instantiateMap(gameInfo, map);
 
       await this.gameRepository.startGame(gameInfo.id, map.drawingPositions);
+      
+      await this.gameIsReadyMail.send(gameInfo, state.gameStartTimestamp);
 
       setup.initialState = state;
 
@@ -144,7 +149,7 @@ export class GameRunner {
 
   }
 
-  instantiateMap(gameInfo: Readonly<GameInfo>, map: Readonly<GameMap>): GameState {
+  private instantiateMap(gameInfo: Readonly<GameInfo>, map: Readonly<GameMap>): GameState {
     const players = Object.values(gameInfo.players)
       .filter(player => !player.isSpectator)
       .map(player => player.id);

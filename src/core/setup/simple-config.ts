@@ -20,8 +20,8 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
       populationDamageChancePerShip: 0.04713,
     },
     building: {
-      buildIndustryDelay: 50 * millisecondsPerDay,
-      buildShipDelay: 10 * millisecondsPerDay,
+      buildIndustryDelay: 35 * millisecondsPerDay,
+      buildShipDelay: 7 * millisecondsPerDay,
       buildIndustryCost: 5,
     },
     warping: {
@@ -35,12 +35,12 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
       transferPopulationDelay: 1 * millisecondsPerDay,
     },
     mining: {
-      miningDelay: 3 * millisecondsPerDay,
+      miningDelay: 7 * millisecondsPerDay,
       maximumMetal: 10
     },
     scrapping: {
       scrappingDelay: 1 * millisecondsPerDay,
-      shipsPerIndustry: 6
+      shipsPerIndustry: 5
     },
     global: {
       maxAmount: 99

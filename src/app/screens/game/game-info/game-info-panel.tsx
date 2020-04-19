@@ -99,7 +99,7 @@ export class GameInfoPanel extends React.Component<{
         return <div style={{ flex: '1 1 auto', height: '1em' }}>
           <Scroll>
             {notifications.map(notification => {
-              return <div key={notification.id}>
+              return <div key={notification.id} style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
                 <Duration timestamp={notification.timestamp} /> {notification.type}
               </div>
             })}

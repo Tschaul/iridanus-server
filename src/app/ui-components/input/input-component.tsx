@@ -12,6 +12,7 @@ const classes = createClasses({
     border: 0,
     color: "inherit",
     fontSize: "inherit",
+    fontFamily: "inherit",
     textShadow: "inherit",
     "&:focus": {
       color: selectedYellow
@@ -28,7 +29,8 @@ export class Input extends React.Component<{
   max?: number,
   onEnterKey?: () => void,
   onBlur?: () => void,
-  style?: React.CSSProperties
+  style?: React.CSSProperties,
+  autocomplete?: string
 }> {
 
   render() {
@@ -45,6 +47,7 @@ export class Input extends React.Component<{
         min={this.props.min}
         max={this.props.max}
         step={this.props.type === 'number' ? 1 : undefined}
+        autoComplete={this.props.autocomplete}
       />
     )
   }

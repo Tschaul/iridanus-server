@@ -56,15 +56,17 @@ export class LoginPanel extends React.Component<{
       <div style={flexContainerStyle}>
         <Panel contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
           <div style={{ flex: 1 }}>
-            Welcome to {iridanusAscii}
-            <br />
-            please enter login<br />
-            ><Input type="text" value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
-            <br />
-            please enter password<br />
-            ><Input type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
-            <br />
-            <a style={{color: hoverYellow}} href="javascript:void(0)" onClick={this.handlePasswordForgotten}>password forgotten?</a> 
+            <form>
+              Welcome to {iridanusAscii}
+              <br />
+              please enter login<br />
+              ><Input autocomplete="username" type="text" value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
+              <br />
+              please enter password<br />
+              ><Input autocomplete="current-password" type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
+              <br />
+              <a style={{ color: hoverYellow }} href="javascript:void(0)" onClick={this.handlePasswordForgotten}>password forgotten?</a>
+            </form>
           </div>
           <div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
