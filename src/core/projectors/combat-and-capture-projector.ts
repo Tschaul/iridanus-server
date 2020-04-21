@@ -129,12 +129,11 @@ export class CombatAndCaptureProjector {
       map(([worldsById, playersAtWorldById, fleetsByWorldId]) => {
         const worldsNotBeingCaptured = Object.values(worldsById).filter(world => world.captureStatus === 'NOT_BEING_CAPTURED');
 
-        const capturedOwnedWorld = worldsNotBeingCaptured.find(world => {
-          return this.getCapturingPlayer(world, playersAtWorldById, fleetsByWorldId) !== null
-        });
-
-        if (capturedOwnedWorld) {
-          return [capturedOwnedWorld, this.getCapturingPlayer(capturedOwnedWorld, playersAtWorldById, fleetsByWorldId)]
+        for (const world of worldsNotBeingCaptured) {
+          const capturingPlayer = this.getCapturingPlayer(world, playersAtWorldById, fleetsByWorldId);
+          if (capturingPlayer) {
+            return [world, capturingPlayer]
+          }
         }
 
         return [null, '']
@@ -152,11 +151,14 @@ export class CombatAndCaptureProjector {
       map(([worldsbyId, playersAtWorldById, fleetsByWorldId]) => {
         const worldsBeingCaptured = Object.values(worldsbyId).filter(world => world.captureStatus === 'BEING_CAPTURED') as (World & WorldBeingCaptured)[]
 
-        const nextWorld = worldsBeingCaptured.find(world => {
-          return this.getCapturingPlayer(world, playersAtWorldById, fleetsByWorldId) !== world.capturingPlayerId
-        });
-
-        return nextWorld || null;
+        for (const world of worldsBeingCaptured) {
+          const capturingPlayer = this.getCapturingPlayer(world, playersAtWorldById, fleetsByWorldId);
+          if (capturingPlayer !== world.capturingPlayerId) {
+            return world
+          }
+        }
+        
+        return null;
       }),
       distinctUntilChanged(equal),
       shareReplay(1)
