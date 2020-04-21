@@ -4,7 +4,7 @@ import produce from "immer";
 import { runMap } from "../test-helper";
 import { expect } from "chai";
 import { ReadyFleet } from "../../../shared/model/v1/fleet";
-import { ReadyWorld } from "../../../shared/model/v1/world";
+import { ReadyWorld, WorldWithOwner } from "../../../shared/model/v1/world";
 
 describe("capture", () => {
 
@@ -24,6 +24,19 @@ describe("capture", () => {
     
     const playedMap = produce(captureTestMap, draft => {
       draft.universe.worlds["w1"].status = 'LOST';
+    });
+
+    const state = await runMap(playedMap);
+
+    expect(state.universe.worlds["w1"].status).to.equal('READY');
+    expect((state.universe.worlds["w1"] as ReadyWorld).ownerId).to.equal('p1');
+
+  })
+
+  it("does capture opponent world", async () => {
+    
+    const playedMap = produce(captureTestMap, draft => {
+      (draft.universe.worlds["w1"] as WorldWithOwner).ownerId = "p2"
     });
 
     const state = await runMap(playedMap);
