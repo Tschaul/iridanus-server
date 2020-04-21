@@ -82,16 +82,15 @@ export class InfluenceProjector {
     this.byPlayerId$,
     this.calculatedInfluenceForPlayers$
   ]).pipe(
-    map(([scorings, calculatedInfluence]) => {
-      const playerIdToUpdate = Object.getOwnPropertyNames(scorings).find(playerId => {
-        return scorings[playerId].influence !== calculatedInfluence[playerId]
-      })
+    map(([scorings, calculatedInfluences]) => {
 
-      if (playerIdToUpdate == null) {
-        return [null, null]
-      } else {
-        return [playerIdToUpdate, calculatedInfluence[playerIdToUpdate]] as [string, number]
+      for (const playerId of Object.getOwnPropertyNames(scorings)) {
+        const influence = calculatedInfluences[playerId] || 0;
+        if (scorings[playerId].influence !== influence) {
+          return [playerId, influence]
+        }
       }
+      return [null, null]
     })
   )
 }
