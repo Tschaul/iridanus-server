@@ -29,7 +29,7 @@ export class GameEndsEventQueue implements GameEventQueue {
         Object.values(scorings).forEach(scoring => {
           if (scoring.influence > 0) {
             const projectedEnd = scoring.lastScoringTimestamp + Math.round((setup.rules.scoring.gameEndingScore - scoring.score) / scoring.influence)
-            if (projectedEnd < gameEndTimestamp) {
+            if (projectedEnd < endGameTimestamp) {
               endGameTimestamp = projectedEnd;
             }
           }
