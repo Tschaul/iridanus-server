@@ -112,8 +112,6 @@ export class OrderEditor extends React.Component<{
             switch (order.type) {
               case 'LOAD_METAL':
               case 'DROP_METAL':
-              case 'LOAD_POPULATION':
-              case 'DROP_POPULATION':
                 return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
               case 'WARP':
                 return <WarpOrderEditor order={order}></WarpOrderEditor>
@@ -129,8 +127,6 @@ export class OrderEditor extends React.Component<{
         </Scroll>
       </div>,
       ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
-        <HoverTooltip content="Drop population"><Button tight onClick={this.handleNewDropPopulationOrder}>🠣P</Button></HoverTooltip>
-        <HoverTooltip content="Load Population"><Button tight onClick={this.handleNewLoadPopulationOrder}>🠡P</Button></HoverTooltip>
         <HoverTooltip content="Drop metal"><Button tight onClick={this.handleNewDropMetalOrder}>🠣▮</Button></HoverTooltip>
         <HoverTooltip content="Load metal"><Button tight onClick={this.handleNewLoadMetalOrder}>🠡▮</Button></HoverTooltip>
         <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
@@ -183,16 +179,6 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewDropMetalOrder() {
     this.props.vm.newDropMetalOrder(99)
-  }
-
-  @autobind
-  handleNewLoadPopulationOrder() {
-    this.props.vm.newLoadPopulationOrder(99)
-  }
-
-  @autobind
-  handleNewDropPopulationOrder() {
-    this.props.vm.newDropPopulationOrder(99)
   }
 
   @autobind

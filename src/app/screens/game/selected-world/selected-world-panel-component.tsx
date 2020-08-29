@@ -114,7 +114,6 @@ export class SelectedWorldPanel extends React.Component<{
     const icon = '◈'
 
     const deltaMetalAmount = fleet.status === 'LOADING_METAL' ? fleet.transferAmount : 0;
-    const deltaPopulationAmount = fleet.status === 'LOADING_POPULATION' ? fleet.transferAmount : 0;
 
     return (
       <div className={classNames([classes.row, { selected }])} key={fleet.id} data-fleet-id={fleet.id} onClick={this.handleRowClick}>
@@ -122,7 +121,7 @@ export class SelectedWorldPanel extends React.Component<{
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
         {this.tableAmount(fleet.ships, 0, '►')}
         {this.tableAmount(fleet.metal, deltaMetalAmount, '▮')}
-        {this.tableAmount(fleet.population, deltaPopulationAmount, 'P')}
+        {this.tableAmount(fleet.population, 0, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             {this.fleetStatusIcon(fleet.status)}
@@ -144,17 +143,13 @@ export class SelectedWorldPanel extends React.Component<{
       return sum + (fleet.status === 'DROPPING_METAL' ? fleet.transferAmount : 0)
     }, 0)
 
-    const deltaPopulationAmount = fleets.reduce((sum, fleet) => {
-      return sum + (fleet.status === 'DROPPING_POPULATION' ? fleet.transferAmount : 0)
-    }, 0)
-
     return (
       <div className={classNames([classes.row, { selected }])} key={world.id} data-fleet-id={null} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
         {this.tableAmount(world.ships, 0, '►')}
         {this.tableAmount(world.metal, deltaMetalAmount, '▮')}
-        {this.tableAmount(world.population, deltaPopulationAmount, 'P')}
+        {this.tableAmount(world.population, 0, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(world)}>
             {this.worldStatusIcon(world.status)}
@@ -193,9 +188,7 @@ export class SelectedWorldPanel extends React.Component<{
       case 'BUILDING_SHIP':
       case 'BUILDING_INDUSTRY':
       case 'LOADING_METAL':
-      case 'LOADING_POPULATION':
       case 'DROPPING_METAL':
-      case 'DROPPING_POPULATION':
       case 'ARRIVING':
         return item.readyTimestamp
       case 'LEAVING':

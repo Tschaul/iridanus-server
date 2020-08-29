@@ -1,6 +1,6 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
-import { WarpOrder, FleetOrder, LoadMetalOrder, DropMetalOrder, LoadPopulationOrder, DropPopulationOrder, AwaitCaptureOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, LoadMetalOrder, DropMetalOrder, AwaitCaptureOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder, BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
@@ -120,28 +120,10 @@ export class OrderEditorViewModel {
     this.gameOrders.addFleetOrder(fleet.id, order);
   }
 
-  public newLoadPopulationOrder(amount: number) {
-    const fleet = this.selection.selectedFleet!;
-    const order: LoadPopulationOrder = {
-      type: 'LOAD_POPULATION',
-      amount
-    }
-    this.gameOrders.addFleetOrder(fleet.id, order);
-  }
-
   public newLoadMetalOrder(amount: number) {
       const fleet = this.selection.selectedFleet!;
       const order: LoadMetalOrder = {
         type: 'LOAD_METAL',
-        amount
-      }
-      this.gameOrders.addFleetOrder(fleet.id, order);
-  }
-
-  public newDropPopulationOrder(amount: number) {
-      const fleet = this.selection.selectedFleet!;
-      const order: DropPopulationOrder = {
-        type: 'DROP_POPULATION',
         amount
       }
       this.gameOrders.addFleetOrder(fleet.id, order);
