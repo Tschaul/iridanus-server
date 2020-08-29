@@ -22,31 +22,15 @@ Server for Iridanus
 
 - automatic cargo: Fleets can be sent onto gates between to adjecent controlled and lost worlds to act as cargo fleet. Cargo between these worlds get automatically according to 'gradients' in metal and population by these cargo fleets. Also population distributes itsself randomly along trading routes.
 
-- there are no more mines. instead world the have simply a lot of metal on them.
+- there are no more mines. instead worlds have simply a lot of metal on them.
 
-- ship transfers happen instantly witout delay
-
-- fleet keys can be created and destroyed at owned worlds
-
-- even more radical: fleets have always 5 ships i.e. remove destinction between fleet and ships
-
-- ships/fleets are built in classes. The more industry a world has the higher the class of ships/fleet it produces. The class defines the firepower and cargo capacity much like the ships before. However such a ship is destroyed fully or not at all i.e. its class does not lower with damage.
+- ships can no longer be transfered between fleets. Industry produces new fleets in regular intervals. The more industry a world has the more ships do the fleets have it produces. Fleets that loos all there ships are destroyed (intead of lost). You can no longer capture a fleet.
 
 - all worlds start with 0 population. All population must therefore migrate there. Worlds without population cannot be owned. Maybe some worlds have population, but those would have ships defending them.
 
 - the time it takes to caputure a world goes up with the population of that world.
 
-## Battle tactics
-
-multiple different attack modes per fleet/world
-
-- Weighted random (default behavior)
-- Focus smallest
-- Focus biggest
-- Focus fleets
-- Focus world industry
-- Focus world ships
-- Focus world population
+- fleets are displayed individually at the worlds and gates. If there are too many to display, some are left out. Selection works as now over the world/gate view. During warp, fleets are displayed at a position that reflects ther warping state (remaining time).
 
 ## Research
 
@@ -66,7 +50,7 @@ white
 
 blue
 - speed: warping takes only a portion of the time
-- cloak: ships that are not attacking (on cooldown) and idle can not be seen by the enemy
+- cloak: ships that are not attacking (or on cooldown) and idle can not be seen by the enemy
 - vision: all neighboring systems are constantly 'probed' for free
 
 black
