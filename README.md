@@ -14,7 +14,27 @@ Server for Iridanus
 
 # Some Ideas
 
+- no more build orders at worlds. instead ships are built automatically
+
+- at regular intervals all worlds known to any player get revealed to all players
+
 - scrapping industry to metal
+
+- automatic cargo: Fleets can be sent onto gates between to adjecent controlled and lost worlds to act as cargo fleet. Cargo between these worlds get automatically according to 'gradients' in metal and population by these cargo fleets. Also population distributes itsself randomly along trading routes.
+
+- there are no more mines. instead world the have simply a lot of metal on them.
+
+- ship transfers happen instantly witout delay
+
+- fleet keys can be created and destroyed at owned worlds
+
+- even more radical: fleets have always 5 ships i.e. remove destinction between fleet and ships
+
+- ships/fleets are built in classes. The more industry a world has the higher the class of ships/fleet it produces. The class defines the firepower and cargo capacity much like the ships before. However such a ship is destroyed fully or not at all i.e. its class does not lower with damage.
+
+- all worlds start with 0 population. All population must therefore migrate there. Worlds without population cannot be owned. Maybe some worlds have population, but those would have ships defending them.
+
+- the time it takes to caputure a world goes up with the population of that world.
 
 ## Battle tactics
 
