@@ -17,8 +17,6 @@ export const scrappingTestMap: GameState = {
         status: 'READY',
         combatStatus: 'AT_PEACE',
         currentWorldId: "w1",
-        metal: 0,
-        population: 0,
         orders: [],
         ownerId: "p1",
         ships: 5,

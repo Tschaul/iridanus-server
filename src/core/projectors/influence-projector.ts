@@ -53,7 +53,6 @@ export class InfluenceProjector {
 
         Object.values(fleetsById).forEach(fleet => {
           if (fleetHasOwner(fleet)) {
-            incrementStat(population, fleet.ownerId, fleet.population)
             incrementStat(ships, fleet.ownerId, fleet.ships)
           }
         })

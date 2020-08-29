@@ -11,6 +11,7 @@
     "start-server:dev": "env-cmd node build/server/server.js",
     "start": "node build/server/server.js",
     "build:watch": "tsc --watch",
+    "build:tests:watch": "tsc --p tsconfig.tests.json --watch",
     "bundle": "webpack",
     "docker:build": "npm run generate:request-schema && npm run generate:state-schema && tsc && webpack && docker build -t tschaul/iridanus .",
     "docker:push": "docker push tschaul/iridanus",

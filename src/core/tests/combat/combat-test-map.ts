@@ -17,11 +17,9 @@ export const map: GameState = {
         status: 'READY',
         combatStatus: 'AT_PEACE',
         currentWorldId: "w1",
-        metal: 0,
         orders: [],
         ownerId: "p1",
         ships: 10,
-        population: 0,
         integrity: 1,
       },
       "f2": {
@@ -29,11 +27,9 @@ export const map: GameState = {
         status: 'READY',
         combatStatus: 'AT_PEACE',
         currentWorldId: "w1",
-        metal: 0,
         orders: [],
         ownerId: "p2",
         ships: 10,
-        population: 0,
         integrity: 1,
       }
     },

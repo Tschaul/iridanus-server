@@ -84,9 +84,7 @@ function determineCollateralDamage(attacker: ReadyFleet | WorldWithOwner, world:
 
 function determineDamage(attacker: Fleet | World, defender: Fleet | World, targetType: 'WORLD' | 'FLEET', config: GameRules): [number, number] {
 
-  const damageMultiplier = (targetType === 'FLEET' && defender.ships === defender.metal + defender.population) ? 2 : 1
-
-  const damage = attacker.ships * config.combat.integrityDamagePerShip * damageMultiplier;
+  const damage = attacker.ships * config.combat.integrityDamagePerShip;
 
   let newShipsPlusIntegrity = defender.ships + defender.integrity - damage;
 

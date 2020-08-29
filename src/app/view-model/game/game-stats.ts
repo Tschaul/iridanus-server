@@ -84,7 +84,6 @@ export class GameStats {
 
     Object.values(this.gameData.fleets).forEach(fleet => {
       if (fleetHasOwner(fleet) && fleet.ownerId === currentPlayer) {
-        stats.metal += fleet.metal;
         stats.ships += fleet.ships;
         stats.fleetKeys += 1;
       }
@@ -147,9 +146,12 @@ export class GameStats {
 
       const fleetsAtWorld = this.gameData.fleetsByWorldId[world.id] || [];
 
-      fleetsAtWorld.filter(fleet => fleetHasOwner(fleet) && fleet.ownerId === currentPlayer).forEach(fleet => {
-        value += fleet[property];
-      })
+      if (property === 'ships') {
+        fleetsAtWorld.filter(fleet => fleetHasOwner(fleet) && fleet.ownerId === currentPlayer).forEach(fleet => {
+          value += fleet[property];
+        })
+      }
+
 
       if (value > 0) {
 
@@ -167,9 +169,11 @@ export class GameStats {
         const fleets = this.gameData.warpingFleetsByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
         if (fleets.length) {
           let value = 0;
-          fleets.forEach(fleet => {
-            value += fleet[property];
-          })
+          if (property === 'ships') {
+            fleets.forEach(fleet => {
+              value += fleet[property];
+            })
+          }
           hints.push({
             type: 'GATE',
             hint: value + this.symbolForProperty(property),

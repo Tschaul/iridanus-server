@@ -26,18 +26,14 @@ export function baseFleet(fleet: Fleet): BaseFleet {
     return {
         id: fleet.id,
         ships: fleet.ships,
-        metal: fleet.metal,
         orders: fleet.orders,
         integrity: fleet.integrity,
-        population: fleet.population,
     }
 }
 
 export interface BaseFleet {
     id: string;
     ships: number;
-    metal: number;
-    population: number;
     orders: FleetOrder[];
     integrity: number;
 }

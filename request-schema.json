@@ -251,66 +251,6 @@
             ],
             "type": "object"
         },
-        "DropMetalOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "DROP_METAL"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "DropPopulationOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "DROP_POPULATION"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "DropShipsOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "DROP_SHIPS"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
         "EnvironmentInfoSubscription": {
             "properties": {
                 "type": {
@@ -423,66 +363,6 @@
             },
             "required": [
                 "gameId",
-                "type"
-            ],
-            "type": "object"
-        },
-        "LoadMetalOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "LOAD_METAL"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "LoadPopulationOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "LOAD_POPULATION"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "LoadShipsOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "LOAD_SHIPS"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
                 "type"
             ],
             "type": "object"
@@ -648,24 +528,6 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/LoadMetalOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/DropMetalOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/LoadShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/DropShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/LoadPopulationOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/DropPopulationOrder"
                             }
                         ]
                     },
