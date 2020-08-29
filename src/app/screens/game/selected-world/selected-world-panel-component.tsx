@@ -113,15 +113,13 @@ export class SelectedWorldPanel extends React.Component<{
 
     const icon = '◈'
 
-    const deltaMetalAmount = fleet.status === 'LOADING_METAL' ? fleet.transferAmount : 0;
-
     return (
       <div className={classNames([classes.row, { selected }])} key={fleet.id} data-fleet-id={fleet.id} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
-        {this.tableAmount(fleet.ships, 0, '►')}
-        {this.tableAmount(fleet.metal, deltaMetalAmount, '▮')}
-        {this.tableAmount(fleet.population, 0, 'P')}
+        {this.tableAmount(fleet.ships, '►')}
+        {this.tableAmount(fleet.metal, '▮')}
+        {this.tableAmount(fleet.population, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             {this.fleetStatusIcon(fleet.status)}
@@ -139,17 +137,13 @@ export class SelectedWorldPanel extends React.Component<{
 
     const icon = '◉';
 
-    const deltaMetalAmount = fleets.reduce((sum, fleet) => {
-      return sum + (fleet.status === 'DROPPING_METAL' ? fleet.transferAmount : 0)
-    }, 0)
-
     return (
       <div className={classNames([classes.row, { selected }])} key={world.id} data-fleet-id={null} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
-        {this.tableAmount(world.ships, 0, '►')}
-        {this.tableAmount(world.metal, deltaMetalAmount, '▮')}
-        {this.tableAmount(world.population, 0, 'P')}
+        {this.tableAmount(world.ships, '►')}
+        {this.tableAmount(world.metal, '▮')}
+        {this.tableAmount(world.population, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(world)}>
             {this.worldStatusIcon(world.status)}
@@ -187,8 +181,6 @@ export class SelectedWorldPanel extends React.Component<{
       case 'SCRAPPING_SHIPS':
       case 'BUILDING_SHIP':
       case 'BUILDING_INDUSTRY':
-      case 'LOADING_METAL':
-      case 'DROPPING_METAL':
       case 'ARRIVING':
         return item.readyTimestamp
       case 'LEAVING':
@@ -214,10 +206,9 @@ export class SelectedWorldPanel extends React.Component<{
     }
   }
 
-  tableAmount(amount: number, delta: number, symbol: string) {
+  tableAmount(amount: number, symbol: string) {
     return <div className={classes.col} style={{ width: '8ex' }}>
       {amount}
-      {delta !== 0 && ('+' + delta)}
       {' ' + symbol}
     </div>
   }
@@ -225,8 +216,6 @@ export class SelectedWorldPanel extends React.Component<{
   fleetStatusIcon(status: Fleet['status']) {
     switch (status) {
       case 'ARRIVING': return '🠰';
-      case 'DROPPING_METAL':
-      case 'LOADING_METAL': return '⮁▮';
       case 'WARPING': return '🠲';
       case 'LEAVING': return '🠲';
       default: return ' ';

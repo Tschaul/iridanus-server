@@ -1,7 +1,5 @@
 import { Container } from "inversify";
-import { BeginLoadingMetalEventQueue } from "./transfer/begin-loading-metal";
 import { CompleteEventQueue } from "./complete-event-queue";
-import { EndLoadMetalEventQueue } from "./transfer/end-loading-metal";
 import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
@@ -19,8 +17,6 @@ import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { TickEventQueue } from "./tick";
-import { BeginDroppingMetalEventQueue } from "./transfer/begin-dropping-metal";
-import { EndDroppingMetalEventQueue } from "./transfer/end-dropping-metal";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
@@ -49,12 +45,6 @@ export function registerEventQueues(container: Container) {
 
   container.bind(GameEndsEventQueue).toSelf();
   container.bind(PlayerChangesInfluenceEventQueue).toSelf();
-
-  container.bind(BeginLoadingMetalEventQueue).toSelf();
-  container.bind(EndLoadMetalEventQueue).toSelf();
-
-  container.bind(BeginDroppingMetalEventQueue).toSelf();
-  container.bind(EndDroppingMetalEventQueue).toSelf();
 
   container.bind(BeginScrappingShipsEventQueue).toSelf();
   container.bind(EndScrappingShipsEventQueue).toSelf();

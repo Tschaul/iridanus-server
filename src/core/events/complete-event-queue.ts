@@ -1,9 +1,7 @@
 import { injectable } from "inversify";
 import { GameEventQueue, GameEvent } from "./event";
-import { BeginLoadingMetalEventQueue } from "./transfer/begin-loading-metal";
 import { Observable, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import { EndLoadMetalEventQueue } from "./transfer/end-loading-metal";
 import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
@@ -21,8 +19,6 @@ import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { TickEventQueue } from "./tick";
-import { BeginDroppingMetalEventQueue } from "./transfer/begin-dropping-metal";
-import { EndDroppingMetalEventQueue } from "./transfer/end-dropping-metal";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
@@ -53,11 +49,6 @@ export class CompleteEventQueue implements GameEventQueue {
 
     gameEnds: GameEndsEventQueue,
     playerChangesInfluence: PlayerChangesInfluenceEventQueue,
-
-    beginLoadMetal: BeginLoadingMetalEventQueue,
-    endLoadMetal: EndLoadMetalEventQueue,
-    beginDropMetal: BeginDroppingMetalEventQueue,
-    endDropMetal: EndDroppingMetalEventQueue,
 
     arriveAtWorld: ArriveAtWorldEventQueue,
     beginWarp: BeginWarpEventQueue,
@@ -113,10 +104,6 @@ export class CompleteEventQueue implements GameEventQueue {
       awaitCapture,
       gameEnds,
       playerChangesInfluence,
-      beginLoadMetal,
-      endLoadMetal,
-      beginDropMetal,
-      endDropMetal,
       beginScrappingShips,
       endScrappingShips,
       arriveAtWorld,

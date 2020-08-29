@@ -1,15 +1,12 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
-import { LoadMetalOrder, DropMetalOrder} from "../../../../shared/model/v1/fleet-orders";
 import { WrappedObservable } from "../../helper/wrap-observable";
 import { Input } from "../../../ui-components/input/input-component";
 import { BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryOrder } from "../../../../shared/model/v1/world-order";
 
 export type AmountOrderEditorOrder =
-  LoadMetalOrder
-  | DropMetalOrder
-  | ScrapShipsForIndustryOrder
+  ScrapShipsForIndustryOrder
   | BuildIndustryOrder
   | BuildShipsOrder;
 
@@ -68,9 +65,6 @@ export class AmountOrderEditor extends React.Component<AmountOrderEditorProps, {
 
   symbol() {
     switch (this.props.order.type) {
-      case 'DROP_METAL':
-      case 'LOAD_METAL':
-        return '▮';
       case 'BUILD_SHIPS':
         return '►';
       case 'BUILD_INDUSTRY':
@@ -81,10 +75,6 @@ export class AmountOrderEditor extends React.Component<AmountOrderEditorProps, {
 
   displayText() {
     switch (this.props.order.type) {
-      case 'DROP_METAL':
-        return 'Drop Metal';
-      case 'LOAD_METAL':
-        return 'Load Metal';
       case 'SCRAP_SHIPS_FOR_INDUSTRY':
         return 'Scrap Ships';
       case 'BUILD_INDUSTRY':

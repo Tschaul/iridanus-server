@@ -13,9 +13,9 @@ import classNames from "classnames";
 import { getClosestAttribute } from "../../helper/get-attribute";
 import { WarpOrderEditor } from "./warp-order-component";
 import { hoverYellow } from "../../../ui-components/colors/colors";
-import { AmountOrderEditor } from "./amount-oder-component";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
 import { Scroll } from "../../../ui-components/scroll-area/scroll-component";
+import { AmountOrderEditor } from "./amount-oder-component";
 
 const classes = createClasses({
   panel: {
@@ -110,9 +110,6 @@ export class OrderEditor extends React.Component<{
         <Scroll>
           {orders.map((order, index) => {
             switch (order.type) {
-              case 'LOAD_METAL':
-              case 'DROP_METAL':
-                return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
               case 'WARP':
                 return <WarpOrderEditor order={order}></WarpOrderEditor>
               case 'AWAIT_CAPTURE':
@@ -127,8 +124,6 @@ export class OrderEditor extends React.Component<{
         </Scroll>
       </div>,
       ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
-        <HoverTooltip content="Drop metal"><Button tight onClick={this.handleNewDropMetalOrder}>🠣▮</Button></HoverTooltip>
-        <HoverTooltip content="Load metal"><Button tight onClick={this.handleNewLoadMetalOrder}>🠡▮</Button></HoverTooltip>
         <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
         <HoverTooltip content="Await capture"><Button tight onClick={this.handleNewAwaitCaptureOrder}>⚑</Button></HoverTooltip>
       </div>)])
@@ -169,16 +164,6 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewAwaitCaptureOrder() {
     this.props.vm.newAwaitCaptureOrder()
-  }
-
-  @autobind
-  handleNewLoadMetalOrder() {
-    this.props.vm.newLoadMetalOrder(99)
-  }
-
-  @autobind
-  handleNewDropMetalOrder() {
-    this.props.vm.newDropMetalOrder(99)
   }
 
   @autobind
