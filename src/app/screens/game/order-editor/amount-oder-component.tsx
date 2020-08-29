@@ -1,16 +1,14 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
-import { LoadMetalOrder, LoadShipsOrder, DropMetalOrder, DropShipsOrder, LoadPopulationOrder, DropPopulationOrder } from "../../../../shared/model/v1/fleet-orders";
+import { LoadMetalOrder, DropMetalOrder, LoadPopulationOrder, DropPopulationOrder } from "../../../../shared/model/v1/fleet-orders";
 import { WrappedObservable } from "../../helper/wrap-observable";
 import { Input } from "../../../ui-components/input/input-component";
 import { BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryOrder } from "../../../../shared/model/v1/world-order";
 
 export type AmountOrderEditorOrder =
   LoadMetalOrder
-  | LoadShipsOrder
   | DropMetalOrder
-  | DropShipsOrder
   | ScrapShipsForIndustryOrder
   | BuildIndustryOrder
   | BuildShipsOrder
@@ -78,8 +76,6 @@ export class AmountOrderEditor extends React.Component<AmountOrderEditorProps, {
       case 'DROP_METAL':
       case 'LOAD_METAL':
         return '▮';
-      case 'DROP_SHIPS':
-      case 'LOAD_SHIPS':
       case 'BUILD_SHIPS':
         return '►';
       case 'BUILD_INDUSTRY':
@@ -98,10 +94,6 @@ export class AmountOrderEditor extends React.Component<AmountOrderEditorProps, {
         return 'Drop Population';
       case 'LOAD_POPULATION':
         return 'Load Population';
-      case 'DROP_SHIPS':
-        return 'Drop Ships';
-      case 'LOAD_SHIPS':
-        return 'Load Ships';
       case 'SCRAP_SHIPS_FOR_INDUSTRY':
         return 'Scrap Ships';
       case 'BUILD_INDUSTRY':

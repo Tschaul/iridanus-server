@@ -1,9 +1,7 @@
 import { Container } from "inversify";
 import { BeginLoadingMetalEventQueue } from "./transfer/begin-loading-metal";
 import { CompleteEventQueue } from "./complete-event-queue";
-import { BeginLoadingShipsEventQueue } from "./transfer/begin-loading-ships";
 import { EndLoadMetalEventQueue } from "./transfer/end-loading-metal";
-import { EndLoadingShipsEventQueue } from "./transfer/end-loading-ships";
 import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
@@ -22,9 +20,7 @@ import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { TickEventQueue } from "./tick";
 import { BeginDroppingMetalEventQueue } from "./transfer/begin-dropping-metal";
-import { BeginDroppingShipsEventQueue } from "./transfer/begin-dropping-ships";
 import { EndDroppingMetalEventQueue } from "./transfer/end-dropping-metal";
-import { EndDroppingShipsEventQueue } from "./transfer/end-dropping-ships";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
@@ -59,17 +55,13 @@ export function registerEventQueues(container: Container) {
   container.bind(PlayerChangesInfluenceEventQueue).toSelf();
 
   container.bind(BeginLoadingMetalEventQueue).toSelf();
-  container.bind(BeginLoadingShipsEventQueue).toSelf();
   container.bind(BeginLoadingPopulationEventQueue).toSelf();
   container.bind(EndLoadMetalEventQueue).toSelf();
-  container.bind(EndLoadingShipsEventQueue).toSelf();
   container.bind(EndLoadPopulationEventQueue).toSelf();
 
   container.bind(BeginDroppingMetalEventQueue).toSelf();
-  container.bind(BeginDroppingShipsEventQueue).toSelf();
   container.bind(BeginDroppingPopulationEventQueue).toSelf();
   container.bind(EndDroppingMetalEventQueue).toSelf();
-  container.bind(EndDroppingShipsEventQueue).toSelf();
   container.bind(EndDroppingPopulationEventQueue).toSelf();
 
   container.bind(BeginScrappingShipsEventQueue).toSelf();

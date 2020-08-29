@@ -3,9 +3,7 @@ import { GameEventQueue, GameEvent } from "./event";
 import { BeginLoadingMetalEventQueue } from "./transfer/begin-loading-metal";
 import { Observable, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import { BeginLoadingShipsEventQueue } from "./transfer/begin-loading-ships";
 import { EndLoadMetalEventQueue } from "./transfer/end-loading-metal";
-import { EndLoadingShipsEventQueue } from "./transfer/end-loading-ships";
 import { ArriveAtWorldEventQueue } from "./warping/arrive-world";
 import { BeginWarpEventQueue } from "./warping/begin-warp";
 import { EndWarpEventQueue } from "./warping/end-warp";
@@ -24,9 +22,7 @@ import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { TickEventQueue } from "./tick";
 import { BeginDroppingMetalEventQueue } from "./transfer/begin-dropping-metal";
-import { BeginDroppingShipsEventQueue } from "./transfer/begin-dropping-ships";
 import { EndDroppingMetalEventQueue } from "./transfer/end-dropping-metal";
-import { EndDroppingShipsEventQueue } from "./transfer/end-dropping-ships";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
@@ -63,16 +59,12 @@ export class CompleteEventQueue implements GameEventQueue {
     playerChangesInfluence: PlayerChangesInfluenceEventQueue,
 
     beginLoadMetal: BeginLoadingMetalEventQueue,
-    beginLoadShips: BeginLoadingShipsEventQueue,
     beginLoadPopulation: BeginLoadingPopulationEventQueue,
     endLoadMetal: EndLoadMetalEventQueue,
-    endLoadShips: EndLoadingShipsEventQueue,
     endLoadPopulation: EndLoadPopulationEventQueue,
     beginDropMetal: BeginDroppingMetalEventQueue,
-    beginDropShips: BeginDroppingShipsEventQueue,
     beginDropPopulation: BeginDroppingPopulationEventQueue,
     endDropMetal: EndDroppingMetalEventQueue,
-    endDropShips: EndDroppingShipsEventQueue,
     endDropPopulation: EndDroppingPopulationEventQueue,
 
     arriveAtWorld: ArriveAtWorldEventQueue,
@@ -130,12 +122,8 @@ export class CompleteEventQueue implements GameEventQueue {
       gameEnds,
       playerChangesInfluence,
       beginLoadMetal,
-      beginLoadShips,
       endLoadMetal,
-      endLoadShips,
       beginDropMetal,
-      beginDropShips,
-      endDropShips,
       endDropMetal,
       beginLoadPopulation,
       beginDropPopulation,

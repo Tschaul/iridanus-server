@@ -10,9 +10,7 @@ export type FleetWithOwnerAtWorld =
     | LeavingFleet
     | ArrivingFleet
     | LoadingMetalFleet
-    | LoadingShipsFleet
     | DroppingMetalFleet
-    | DroppingShipsFleet
     | LoadingPopulationFleet
     | DroppingPopulationFleet;
 
@@ -125,22 +123,6 @@ export interface LoadingPopulationFleet extends BaseFleet {
 
 export interface DroppingPopulationFleet extends BaseFleet {
     status: 'DROPPING_POPULATION'
-    currentWorldId: string;
-    transferAmount: number;
-    readyTimestamp: number;
-    ownerId: string;
-}
-
-export interface LoadingShipsFleet extends BaseFleet {
-    status: 'LOADING_SHIPS'
-    currentWorldId: string;
-    transferAmount: number;
-    readyTimestamp: number;
-    ownerId: string;
-}
-
-export interface DroppingShipsFleet extends BaseFleet {
-    status: 'DROPPING_SHIPS'
     currentWorldId: string;
     transferAmount: number;
     readyTimestamp: number;

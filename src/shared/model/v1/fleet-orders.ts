@@ -3,8 +3,6 @@ export type FleetOrder =
   | WarpOrder
   | LoadMetalOrder
   | DropMetalOrder
-  | LoadShipsOrder
-  | DropShipsOrder
   | LoadPopulationOrder
   | DropPopulationOrder
 
@@ -49,26 +47,6 @@ export interface LoadPopulationOrder {
 
 export interface DropPopulationOrder {
   type: 'DROP_POPULATION',
-  /**
-   * @minimum 1
-   * @maximum 99
-   * @type integer
-   */
-  amount: number;
-}
-
-export interface LoadShipsOrder {
-  type: 'LOAD_SHIPS',
-  /**
-   * @minimum 1
-   * @maximum 99
-   * @type integer
-   */
-  amount: number;
-}
-
-export interface DropShipsOrder {
-  type: 'DROP_SHIPS',
   /**
    * @minimum 1
    * @maximum 99

@@ -111,8 +111,6 @@ export class OrderEditor extends React.Component<{
           {orders.map((order, index) => {
             switch (order.type) {
               case 'LOAD_METAL':
-              case 'LOAD_SHIPS':
-              case 'DROP_SHIPS':
               case 'DROP_METAL':
               case 'LOAD_POPULATION':
               case 'DROP_POPULATION':
@@ -135,8 +133,6 @@ export class OrderEditor extends React.Component<{
         <HoverTooltip content="Load Population"><Button tight onClick={this.handleNewLoadPopulationOrder}>🠡P</Button></HoverTooltip>
         <HoverTooltip content="Drop metal"><Button tight onClick={this.handleNewDropMetalOrder}>🠣▮</Button></HoverTooltip>
         <HoverTooltip content="Load metal"><Button tight onClick={this.handleNewLoadMetalOrder}>🠡▮</Button></HoverTooltip>
-        <HoverTooltip content="Drop ships"><Button tight onClick={this.handleNewDropShipsOrder}>🠣►</Button></HoverTooltip>
-        <HoverTooltip content="Load ships"><Button tight onClick={this.handleNewLoadShipsOrder}>🠡►</Button></HoverTooltip>
         <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
         <HoverTooltip content="Await capture"><Button tight onClick={this.handleNewAwaitCaptureOrder}>⚑</Button></HoverTooltip>
       </div>)])
@@ -197,16 +193,6 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewDropPopulationOrder() {
     this.props.vm.newDropPopulationOrder(99)
-  }
-
-  @autobind
-  handleNewLoadShipsOrder() {
-    this.props.vm.newLoadShipsOrder(99)
-  }
-
-  @autobind
-  handleNewDropShipsOrder() {
-    this.props.vm.newDropShipsOrder(99)
   }
 
   @autobind

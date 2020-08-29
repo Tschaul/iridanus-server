@@ -114,14 +114,13 @@ export class SelectedWorldPanel extends React.Component<{
     const icon = '◈'
 
     const deltaMetalAmount = fleet.status === 'LOADING_METAL' ? fleet.transferAmount : 0;
-    const deltaShipsAmount = fleet.status === 'LOADING_SHIPS' ? fleet.transferAmount : 0;
     const deltaPopulationAmount = fleet.status === 'LOADING_POPULATION' ? fleet.transferAmount : 0;
 
     return (
       <div className={classNames([classes.row, { selected }])} key={fleet.id} data-fleet-id={fleet.id} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
-        {this.tableAmount(fleet.ships, deltaShipsAmount, '►')}
+        {this.tableAmount(fleet.ships, 0, '►')}
         {this.tableAmount(fleet.metal, deltaMetalAmount, '▮')}
         {this.tableAmount(fleet.population, deltaPopulationAmount, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
@@ -145,10 +144,6 @@ export class SelectedWorldPanel extends React.Component<{
       return sum + (fleet.status === 'DROPPING_METAL' ? fleet.transferAmount : 0)
     }, 0)
 
-    const deltaShipsAmount = fleets.reduce((sum, fleet) => {
-      return sum + (fleet.status === 'DROPPING_SHIPS' ? fleet.transferAmount : 0)
-    }, 0)
-
     const deltaPopulationAmount = fleets.reduce((sum, fleet) => {
       return sum + (fleet.status === 'DROPPING_POPULATION' ? fleet.transferAmount : 0)
     }, 0)
@@ -157,7 +152,7 @@ export class SelectedWorldPanel extends React.Component<{
       <div className={classNames([classes.row, { selected }])} key={world.id} data-fleet-id={null} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
-        {this.tableAmount(world.ships, deltaShipsAmount, '►')}
+        {this.tableAmount(world.ships, 0, '►')}
         {this.tableAmount(world.metal, deltaMetalAmount, '▮')}
         {this.tableAmount(world.population, deltaPopulationAmount, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
@@ -198,10 +193,8 @@ export class SelectedWorldPanel extends React.Component<{
       case 'BUILDING_SHIP':
       case 'BUILDING_INDUSTRY':
       case 'LOADING_METAL':
-      case 'LOADING_SHIPS':
       case 'LOADING_POPULATION':
       case 'DROPPING_METAL':
-      case 'DROPPING_SHIPS':
       case 'DROPPING_POPULATION':
       case 'ARRIVING':
         return item.readyTimestamp
@@ -241,8 +234,6 @@ export class SelectedWorldPanel extends React.Component<{
       case 'ARRIVING': return '🠰';
       case 'DROPPING_METAL':
       case 'LOADING_METAL': return '⮁▮';
-      case 'DROPPING_SHIPS':
-      case 'LOADING_SHIPS': return '⮁►';
       case 'WARPING': return '🠲';
       case 'LEAVING': return '🠲';
       default: return ' ';

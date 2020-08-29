@@ -64,57 +64,6 @@ describe("transfer", () => {
     expect((state.universe.worlds["w1"] as World).metal).to.equal(10)
   })
 
-  it("load ships", async () => {
-    const map = produce(warpTestMap, draft => {
-
-      draft.universe.fleets["f1"].orders.push({
-        type: 'LOAD_SHIPS',
-        amount: 5
-      })
-  
-    });
-
-    const state = await runMap(map);
-
-    expect((state.universe.fleets["f1"] as ReadyFleet).ships).to.equal(15)
-    expect((state.universe.worlds["w1"] as World).ships).to.equal(0)
-  })
-
-  it("drop ships", async () => {
-    const map = produce(warpTestMap, draft => {
-
-      draft.universe.fleets["f1"].orders.push({
-        type: 'DROP_SHIPS',
-        amount: 5
-      })
-  
-    });
-
-    const state = await runMap(map);
-
-    expect((state.universe.fleets["f1"] as ReadyFleet).ships).to.equal(5)
-    expect((state.universe.worlds["w1"] as World).ships).to.equal(10)
-  })
-
-  it("drop ships and load ships", async () => {
-    const map = produce(warpTestMap, draft => {
-
-      draft.universe.fleets["f1"].orders.push({
-        type: 'DROP_SHIPS',
-        amount: 99
-      })
-      draft.universe.fleets["f1"].orders.push({
-        type: 'LOAD_SHIPS',
-        amount: 99
-      })
-  
-    });
-
-    const state = await runMap(map);
-
-    expect((state.universe.fleets["f1"] as ReadyFleet).ships).to.equal(15)
-    expect((state.universe.worlds["w1"] as World).ships).to.equal(0)
-  })
 })
 
 
