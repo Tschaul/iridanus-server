@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
-import { Fleet, ReadyFleetBase, FiringFleet, LostFleet, fleetHasOwner, FleetWithOwnerAtWorld, fleetIsAtWorldAndHasOwner } from "../../shared/model/v1/fleet";
+import { Fleet, ReadyFleetBase, FiringFleet, LostFleet, fleetHasOwner, FleetWithOwnerAtWorld, fleetIsAtWorldAndHasOwner, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { World, FiringWorld, WorldWithOwner, worldhasOwner, WorldBeingCaptured } from "../../shared/model/v1/world";
 import equal from 'deep-equal';
 
@@ -203,7 +203,7 @@ export class CombatAndCaptureProjector {
     const fleetOwnersByWorldId: { [k: string]: string[] } = {};
 
     for (const fleet of fleets) {
-      if (fleet.status !== 'LOST' && fleet.status !== 'WARPING') {
+      if (fleet.status !== 'LOST' && fleetIsAtWorld(fleet)) {
         const value = fleetOwnersByWorldId[fleet.currentWorldId];
         if (!value) {
           fleetOwnersByWorldId[fleet.currentWorldId] = [fleet.ownerId];

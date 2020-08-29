@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { Fleet } from "../../shared/model/v1/fleet";
+import { Fleet, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { FleetOrder } from "../../shared/model/v1/fleet-orders";
 import equal from 'deep-equal';
 
@@ -22,7 +22,7 @@ export class FleetProjector {
       const result = {} as { [k: string]: Fleet[] };
 
       for (const fleet of Object.values(fleetsById)) {
-        if (fleet.status !== 'WARPING') {
+        if (fleetIsAtWorld(fleet)) {
           if (!result[fleet.currentWorldId]) {
             result[fleet.currentWorldId] = [];
           }

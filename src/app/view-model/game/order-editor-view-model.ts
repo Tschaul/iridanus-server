@@ -186,6 +186,14 @@ export class OrderEditorViewModel {
       return fleet.targetWorldId
     }
 
+    if (fleet.status === 'TRANSFERING_CARGO') {
+      return fleet.toWorldId
+    }
+
+    if (fleet.status === 'WAITING_FOR_CARGO') {
+      return fleet.atWorldId
+    }
+
     return fleet.currentWorldId;
     
   }

@@ -94,7 +94,7 @@ export class VisibilityProjector {
         Object.values(state.universe.fleets).filter(fleet => !fleetHasOwner(fleet) || fleet.ownerId !== playerId).forEach(fleet => {
           if (fleet.status === 'WARPING' && (worldIsNotVisible(fleet.originWorldId) || worldIsNotVisible(fleet.targetWorldId))) {
             delete fleets[fleet.id];
-          } else if (fleet.status !== 'WARPING' && worldIsNotVisible(fleet.currentWorldId)) {
+          } else if (fleetIsAtWorld(fleet) && worldIsNotVisible(fleet.currentWorldId)) {
             delete fleets[fleet.id];
           } else if (fleetHasOwner(fleet) && fleet.ownerId !== playerId) {
             fleets[fleet.id] = {

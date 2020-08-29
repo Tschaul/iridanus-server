@@ -7,6 +7,7 @@ import { middle, diff, shorten, add } from '../../../../shared/math/vec2';
 import { WORLD_OUTER_RADIUS } from './constants';
 import { screenWhite } from '../../../ui-components/colors/colors';
 import { WarpOrder } from '../../../../shared/model/v1/fleet-orders';
+import { assertNever } from '../../../../shared/util/assert-never';
 
 @observer
 @autobind
@@ -32,8 +33,28 @@ export class GameStageSelectedFleet extends React.Component<{
 
   }
 
+  private getCurrentWorld(fleet: Fleet): string {
+    if (fleetIsAtWorld(fleet)) {
+      return fleet.currentWorldId;
+    }
+
+    if (fleet.status === 'WARPING') {
+      return fleet.targetWorldId
+    }
+
+    if (fleet.status === 'TRANSFERING_CARGO') {
+      return fleet.toWorldId
+    }
+
+    if (fleet.status === 'WAITING_FOR_CARGO') {
+      return fleet.atWorldId
+    }
+
+    assertNever(fleet);
+  }
+
   renderWarpOrderPath(fleet: Fleet) {
-    let currentWorldId = fleetIsAtWorld(fleet) ? fleet.currentWorldId : fleet.targetWorldId;
+    let currentWorldId = this.getCurrentWorld(fleet);
 
     const warpOrders = fleet.orders.filter(order => order.type === 'WARP') as WarpOrder[];
 

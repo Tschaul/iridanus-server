@@ -3,7 +3,9 @@ import { FleetOrder } from "./fleet-orders";
 export type Fleet =
     LostFleet
     | FleetWithOwnerAtWorld
-    | WarpingFleet;
+    | WarpingFleet
+    | TransferingCargoFleet
+    | WaitingForCargoFleet;
 
 export type FleetWithOwnerAtWorld =
     ReadyFleet
@@ -11,10 +13,10 @@ export type FleetWithOwnerAtWorld =
     | ArrivingFleet;
 
 export function fleetIsAtWorld(fleet: Fleet): fleet is FleetWithOwnerAtWorld | LostFleet {
-    return fleet.status !== 'WARPING';
+    return !['TRANSFERIG_CARGO', 'WAITING_FOR_CARGO', 'WARPING'].includes(fleet.status);
 }
 
-export function fleetHasOwner(fleet: Fleet): fleet is FleetWithOwnerAtWorld | WarpingFleet {
+export function fleetHasOwner(fleet: Fleet): fleet is FleetWithOwnerAtWorld | WarpingFleet | TransferingCargoFleet | WaitingForCargoFleet {
     return fleet.status !== 'LOST';
 }
 
@@ -47,7 +49,6 @@ export interface ReadyFleetBase extends BaseFleet {
     status: 'READY'
     currentWorldId: string;
     ownerId: string;
-    // TODO make required
     idleNotificationSent?: boolean;
 }
 
@@ -87,4 +88,20 @@ export interface ArrivingFleet extends BaseFleet {
     currentWorldId: string;
     readyTimestamp: number;
     ownerId: string;
+}
+
+export interface TransferingCargoFleet extends BaseFleet {
+    status: 'TRANSFERING_CARGO';
+    cargoType: 'METAL' | 'POPULATION';
+    ownerId: string;
+    cargoAmount: number;
+    fromWorldId: string,
+    toWorldId: string,
+}
+
+export interface WaitingForCargoFleet extends BaseFleet {
+    status: 'WAITING_FOR_CARGO';
+    ownerId: string;
+    atWorldId: string,
+    otherWorldId: string,
 }
