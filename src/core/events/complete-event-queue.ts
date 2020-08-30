@@ -37,6 +37,10 @@ import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influ
 import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
 import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
 import { NotifyWorldIdleEventQueue } from "./idle-notification/notify-world-idle";
+import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
+import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
+import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo";
+import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -86,6 +90,11 @@ export class CompleteEventQueue implements GameEventQueue {
     looseFleet: LooseFleetEventQueue,
     awaitCapture: AwaitedCaptureEventQueue,
 
+    startCargoMission: StartCargoMissionEventQueue,
+    stopCargoMission: StopCargoMissionEventQueue,
+    beginTransferingCargo: BeginTransferingCargoEventQueue,
+    endTransferingCargo: EndTransferingCargoEventQueue,
+
     revealWorld: RevealWorldEventQueue,
     remeberWorld: RememberWorldEventQueue,
 
@@ -126,6 +135,10 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStartGrowing,
       worldStopsGrowing,
       worldGrows,
+      startCargoMission,
+      stopCargoMission,
+      beginTransferingCargo,
+      endTransferingCargo,
       notifyFleetIdle,
       notifyWorldIdle
     ]

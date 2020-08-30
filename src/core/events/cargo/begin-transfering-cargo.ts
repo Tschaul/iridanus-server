@@ -40,16 +40,14 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
         const fleet = waitingFleets.find(fleet => {
           const cargo = cargoAmounts(
             worlds[fleet.fromWorldId],
-            fleet.toWorldId,
+            worlds[fleet.toWorldId],
             metalPotential[fleet.ownerId],
-            populationPotential[fleet.ownerId],
             fleet.ships
           )
           const reverseCargo = cargoAmounts(
             worlds[fleet.toWorldId],
-            fleet.fromWorldId,
+            worlds[fleet.fromWorldId],
             metalPotential[fleet.ownerId],
-            populationPotential[fleet.ownerId],
             fleet.ships
           )
 
@@ -66,9 +64,8 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
 
               const cargo = cargoAmounts(
                 worlds[fleet.fromWorldId],
-                fleet.toWorldId,
+                worlds[fleet.toWorldId],
                 metalPotential[fleet.ownerId],
-                populationPotential[fleet.ownerId],
                 fleet.ships
               )
             

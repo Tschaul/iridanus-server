@@ -58,7 +58,7 @@ export class StartCargoMissionEventQueue implements GameEventQueue {
               }
               return [
                 popFleetOrder(fleet.id),
-                waitForCargo(fleet.id, order.otherWorldId)
+                waitForCargo(fleet.id, order.otherWorldId, fleet.currentWorldId)
               ]
             }
           }

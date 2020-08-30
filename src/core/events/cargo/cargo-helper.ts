@@ -2,30 +2,24 @@ import { World } from "../../../shared/model/v1/world";
 
 export function cargoAmounts(
   worldFrom: World,
-  worldToId: string,
+  worldTo: World,
   metalPotential: { [worldId: string]: number },
-  populationPotential: { [worldId: string]: number },
   ships: number
 ) {
 
   return {
-    population: cargoAmount(
-      populationPotential[worldFrom.id],
-      populationPotential[worldToId],
-      worldFrom.population,
-      ships
-    ),
-    metal: cargoAmount(
+    metal: metalCargoAmount(
       metalPotential[worldFrom.id],
-      metalPotential[worldToId],
+      metalPotential[worldTo.id],
       worldFrom.metal,
       ships
-    )
+    ),
+    population: 0
   }
 
 }
 
-function cargoAmount(
+function metalCargoAmount(
   fromPotential: number,
   toPotential: number,
   worldAmount: number,
@@ -36,3 +30,4 @@ function cargoAmount(
     return Math.min(worldAmount, ships)
   } else return 0;
 }
+

@@ -497,6 +497,24 @@
             ],
             "type": "object"
         },
+        "StartCargoMissionOrder": {
+            "properties": {
+                "otherWorldId": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "START_CARGO_MISSION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "otherWorldId",
+                "type"
+            ],
+            "type": "object"
+        },
         "ToggleSpectatorForGameCommand": {
             "properties": {
                 "gameId": {
@@ -528,6 +546,9 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
                             }
                         ]
                     },

@@ -191,7 +191,7 @@ export class OrderEditorViewModel {
     }
 
     if (fleet.status === 'WAITING_FOR_CARGO') {
-      return fleet.atWorldId
+      return fleet.fromWorldId
     }
 
     return fleet.currentWorldId;

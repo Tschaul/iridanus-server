@@ -20,6 +20,9 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
                             }
                         ]
                     },
@@ -257,6 +260,9 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
                             }
                         ]
                     },
@@ -313,6 +319,9 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
                             }
                         ]
                     },
@@ -437,6 +446,9 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
                             }
                         ]
                     },
@@ -550,6 +562,91 @@
             ],
             "type": "object"
         },
+        "StartCargoMissionOrder": {
+            "properties": {
+                "otherWorldId": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "START_CARGO_MISSION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "otherWorldId",
+                "type"
+            ],
+            "type": "object"
+        },
+        "TransferingCargoFleet": {
+            "properties": {
+                "arrivingTimestamp": {
+                    "type": "number"
+                },
+                "cargoMetal": {
+                    "type": "number"
+                },
+                "cargoPopulation": {
+                    "type": "number"
+                },
+                "fromWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/AwaitCaptureOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "TRANSFERING_CARGO"
+                    ],
+                    "type": "string"
+                },
+                "toWorldId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "arrivingTimestamp",
+                "cargoMetal",
+                "cargoPopulation",
+                "fromWorldId",
+                "id",
+                "integrity",
+                "orders",
+                "ownerId",
+                "ships",
+                "status",
+                "toWorldId"
+            ],
+            "type": "object"
+        },
         "Universe": {
             "properties": {
                 "fleets": {
@@ -586,6 +683,12 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpingFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/TransferingCargoFleet"
+                            },
+                            {
+                                "$ref": "#/definitions/WaitingForCargoFleet"
                             }
                         ]
                     },
@@ -3269,6 +3372,61 @@
             ],
             "type": "object"
         },
+        "WaitingForCargoFleet": {
+            "properties": {
+                "fromWorldId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrity": {
+                    "type": "number"
+                },
+                "orders": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/AwaitCaptureOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "ships": {
+                    "type": "number"
+                },
+                "status": {
+                    "enum": [
+                        "WAITING_FOR_CARGO"
+                    ],
+                    "type": "string"
+                },
+                "toWorldId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fromWorldId",
+                "id",
+                "integrity",
+                "orders",
+                "ownerId",
+                "ships",
+                "status",
+                "toWorldId"
+            ],
+            "type": "object"
+        },
         "WarpOrder": {
             "properties": {
                 "targetWorldId": {
@@ -3306,6 +3464,9 @@
                             },
                             {
                                 "$ref": "#/definitions/WarpOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StartCargoMissionOrder"
                             }
                         ]
                     },

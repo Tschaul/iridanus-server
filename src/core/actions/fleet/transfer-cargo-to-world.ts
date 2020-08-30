@@ -11,7 +11,7 @@ export function transferCargoToWorld(
   toWorldId: string
 ): Action {
   return {
-    describe: () => `TransferingCargoToWorld ${JSON.stringify({ fleetId, arrivingTimestamp })}`,
+    describe: () => `TransferingCargoToWorld ${JSON.stringify({ fleetId, toWorldId, arrivingTimestamp, cargoMetal, cargoPopulation })}`,
     apply: (state: GameState) => {
 
       return updateFleet<ReadyFleet | TransferingCargoFleet, TransferingCargoFleet>(state, fleetId, (oldFleet) => {

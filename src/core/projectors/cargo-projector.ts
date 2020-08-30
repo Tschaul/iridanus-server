@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
-import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
+import { map, distinctUntilChanged, shareReplay, tap } from "rxjs/operators";
 import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { PlayerProjector } from "./player-projector";
@@ -8,7 +8,6 @@ import { Distances } from "../../shared/model/v1/distances";
 import { fleetHasOwner, TransferingCargoFleet, WaitingForCargoFleet } from "../../shared/model/v1/fleet";
 import { floydWarshall } from "../../shared/math/path-finding/floydWarshall";
 import { Gates } from "../../shared/model/v1/universe";
-import { gates } from "../../util/hex-map/gomeisa-three-random";
 import { WorldProjector } from "./world-projector";
 import { worldhasOwner } from "../../shared/model/v1/world";
 import { generatePotential } from "../../shared/math/path-finding/potential";
@@ -48,7 +47,7 @@ export class CargoProjector {
 
         }
 
-        result[playerId] = floydWarshall(gates)
+        result[playerId] = floydWarshall(routes)
 
       }
 
@@ -76,7 +75,10 @@ export class CargoProjector {
 
       result[playerId] = generatePotential(attractivity, cargoDistances[playerId])
     }
-  }), distinctUntilChanged(deepEqual))
+
+    return result;
+  }), 
+  distinctUntilChanged(deepEqual)
 
   public populationPotentialByPlayer$: Observable<{ [playerId: string]: {[worldId: string]: number} }> = combineLatest([
     this.cargoDistancesByPlayer$,
@@ -97,6 +99,8 @@ export class CargoProjector {
 
       result[playerId] = generatePotential(attractivity, cargoDistances[playerId])
     }
+
+    return result;
   }), distinctUntilChanged(deepEqual))
 
 }

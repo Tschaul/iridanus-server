@@ -47,7 +47,7 @@ export class GameStageSelectedFleet extends React.Component<{
     }
 
     if (fleet.status === 'WAITING_FOR_CARGO') {
-      return fleet.atWorldId
+      return fleet.fromWorldId
     }
 
     assertNever(fleet);

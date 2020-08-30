@@ -36,6 +36,10 @@ import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
 import { GameStartsEventQueue } from "./start/game-starts";
 import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
 import { NotifyWorldIdleEventQueue } from "./idle-notification/notify-world-idle";
+import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
+import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo";
+import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
+import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 
 export function registerEventQueues(container: Container) {
 
@@ -89,6 +93,12 @@ export function registerEventQueues(container: Container) {
 
   container.bind(NotifyFleetIdleEventQueue).toSelf();
   container.bind(NotifyWorldIdleEventQueue).toSelf();
+
+  container.bind(StartCargoMissionEventQueue).toSelf();
+  container.bind(StopCargoMissionEventQueue).toSelf();
+  container.bind(BeginTransferingCargoEventQueue).toSelf();
+  container.bind(EndTransferingCargoEventQueue).toSelf();
+
 
   container.bind(CompleteEventQueue).toSelf();
 
