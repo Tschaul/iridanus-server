@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { FleetProjector } from "./fleet-projector";
-import { combineLatest } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { PlayerProjector } from "./player-projector";
 import { Distances } from "../../shared/model/v1/distances";
 import { fleetHasOwner, TransferingCargoFleet, WaitingForCargoFleet } from "../../shared/model/v1/fleet";
@@ -57,7 +57,7 @@ export class CargoProjector {
     distinctUntilChanged(deepEqual)
   )
 
-  public metalPotentialByPlayer$ = combineLatest([
+  public metalPotentialByPlayer$: Observable<{ [playerId: string]: {[worldId: string]: number} }> = combineLatest([
     this.cargoDistancesByPlayer$,
     this.worlds.byId$
   ]).pipe(map(([cargoDistances, worldsById]) => {
@@ -78,7 +78,7 @@ export class CargoProjector {
     }
   }), distinctUntilChanged(deepEqual))
 
-  public populationPotentialByPlayer$ = combineLatest([
+  public populationPotentialByPlayer$: Observable<{ [playerId: string]: {[worldId: string]: number} }> = combineLatest([
     this.cargoDistancesByPlayer$,
     this.worlds.byId$
   ]).pipe(map(([cargoDistances, worldsById]) => {
