@@ -32,23 +32,24 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
       readyFleetWithStarCargoMissionOrder$,
       this.time.currentTimestamp$,
       this.cargo.metalPotentialByPlayer$,
-      this.cargo.populationPotentialByPlayer$,
       this.worlds.byId$
     ).pipe(
-      map(([waitingFleets, timestamp, metalPotential, populationPotential, worlds]) => {
+      map(([waitingFleets, timestamp, metalPotential, worlds]) => {
 
         const fleet = waitingFleets.find(fleet => {
           const cargo = cargoAmounts(
             worlds[fleet.fromWorldId],
             worlds[fleet.toWorldId],
             metalPotential[fleet.ownerId],
-            fleet.ships
+            fleet.ships,
+            true
           )
           const reverseCargo = cargoAmounts(
             worlds[fleet.toWorldId],
             worlds[fleet.fromWorldId],
             metalPotential[fleet.ownerId],
-            fleet.ships
+            fleet.ships,
+            true
           )
 
           return cargo.population !== 0 || cargo.metal !== 0 || reverseCargo.population !== 0 || reverseCargo.metal !== 0
@@ -66,7 +67,8 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
                 worlds[fleet.fromWorldId],
                 worlds[fleet.toWorldId],
                 metalPotential[fleet.ownerId],
-                fleet.ships
+                fleet.ships,
+                false
               )
             
               const arrivingTimestamp = timestamp + this.setup.rules.warping.warpToWorldDelay

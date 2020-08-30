@@ -78,29 +78,6 @@ export class CargoProjector {
 
     return result;
   }), 
-  distinctUntilChanged(deepEqual)
-
-  public populationPotentialByPlayer$: Observable<{ [playerId: string]: {[worldId: string]: number} }> = combineLatest([
-    this.cargoDistancesByPlayer$,
-    this.worlds.byId$
-  ]).pipe(map(([cargoDistances, worldsById]) => {
-
-    const result: { [playerId: string]: {[worldId: string]: number} } = {}
-
-    for (const playerId of Object.getOwnPropertyNames(cargoDistances)) {
-
-      const attractivity: { [worldId: string]: number } = {}
-
-      for (const world of Object.values(worldsById)) {
-        if (worldhasOwner(world) && world.ownerId === playerId) {
-          attractivity[world.id] = world.populationLimit - world.population
-        }
-      }
-
-      result[playerId] = generatePotential(attractivity, cargoDistances[playerId])
-    }
-
-    return result;
-  }), distinctUntilChanged(deepEqual))
+  distinctUntilChanged(deepEqual))
 
 }
