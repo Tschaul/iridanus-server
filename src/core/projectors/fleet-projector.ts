@@ -36,6 +36,18 @@ export class FleetProjector {
     distinctUntilChanged(equal)
   ) as Observable<{ [k: string]: Fleet[] }>;
 
+  public allByStatus<TFleetWithStatus extends Fleet,>(
+    status: TFleetWithStatus["status"]): Observable<TFleetWithStatus[]> {
+      return this.byId$.pipe(
+        map(fleetsById => {
+          return Object.values(fleetsById).filter(fleet =>
+            fleet.status === status) as TFleetWithStatus[];
+        }),
+        distinctUntilChanged(equal),
+        shareReplay(1)
+      );
+  }
+
   public firstByStatusAndNextOrderType<TFleetWithStatus extends Fleet, TFleetOrder extends FleetOrder>(
     status: TFleetWithStatus["status"],
     orderType: TFleetOrder["type"]): Observable<[TFleetWithStatus | null, TFleetOrder | null]> {

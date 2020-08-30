@@ -9,13 +9,17 @@ import { fleetHasOwner, TransferingCargoFleet, WaitingForCargoFleet } from "../.
 import { floydWarshall } from "../../shared/math/path-finding/floydWarshall";
 import { Gates } from "../../shared/model/v1/universe";
 import { gates } from "../../util/hex-map/gomeisa-three-random";
+import { WorldProjector } from "./world-projector";
+import { worldhasOwner } from "../../shared/model/v1/world";
+import { generatePotential } from "../../shared/math/path-finding/potential";
+import deepEqual from "deep-equal";
 
 @injectable()
-export class GatesProjector {
+export class CargoProjector {
   constructor(
-    private store: ReadonlyStore,
     private fleets: FleetProjector,
-    private players: PlayerProjector
+    private players: PlayerProjector,
+    private worlds: WorldProjector
   ) { }
 
   private cargoDistancesByPlayer$ = combineLatest([
@@ -37,22 +41,62 @@ export class GatesProjector {
 
         for (const cargoFleet of cargoFleets) {
 
-          let [world1, world2] = cargoFleet.status === 'TRANSFERING_CARGO' 
-            ? [cargoFleet.fromWorldId, cargoFleet.toWorldId]
-            : [cargoFleet.atWorldId, cargoFleet.otherWorldId]
+          routes[cargoFleet.fromWorldId] = routes[cargoFleet.fromWorldId] ?? []
+          routes[cargoFleet.fromWorldId].push(cargoFleet.toWorldId)
+          routes[cargoFleet.toWorldId] = routes[cargoFleet.toWorldId] ?? []
+          routes[cargoFleet.toWorldId].push(cargoFleet.fromWorldId)
 
-
-            routes[world1] = routes[world1] ?? []
-            routes[world1].push(world2)
-            routes[world2] = routes[world2] ?? []
-            routes[world2].push(world1)
-          
         }
 
         result[playerId] = floydWarshall(gates)
 
       }
-    })
+
+      return result;
+    }),
+    distinctUntilChanged(deepEqual)
   )
+
+  public metalPotentialByPlayer$ = combineLatest([
+    this.cargoDistancesByPlayer$,
+    this.worlds.byId$
+  ]).pipe(map(([cargoDistances, worldsById]) => {
+
+    const result: { [playerId: string]: {[worldId: string]: number} } = {}
+
+    for (const playerId of Object.getOwnPropertyNames(cargoDistances)) {
+
+      const attractivity: { [worldId: string]: number } = {}
+
+      for (const world of Object.values(worldsById)) {
+        if (worldhasOwner(world) && world.ownerId === playerId) {
+          attractivity[world.id] = Math.max(world.industry - world.metal / 2, 0)
+        }
+      }
+
+      result[playerId] = generatePotential(attractivity, cargoDistances[playerId])
+    }
+  }), distinctUntilChanged(deepEqual))
+
+  public populationPotentialByPlayer$ = combineLatest([
+    this.cargoDistancesByPlayer$,
+    this.worlds.byId$
+  ]).pipe(map(([cargoDistances, worldsById]) => {
+
+    const result: { [playerId: string]: {[worldId: string]: number} } = {}
+
+    for (const playerId of Object.getOwnPropertyNames(cargoDistances)) {
+
+      const attractivity: { [worldId: string]: number } = {}
+
+      for (const world of Object.values(worldsById)) {
+        if (worldhasOwner(world) && world.ownerId === playerId) {
+          attractivity[world.id] = world.populationLimit - world.population
+        }
+      }
+
+      result[playerId] = generatePotential(attractivity, cargoDistances[playerId])
+    }
+  }), distinctUntilChanged(deepEqual))
 
 }

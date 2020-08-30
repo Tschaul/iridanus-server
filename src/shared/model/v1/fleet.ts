@@ -92,16 +92,17 @@ export interface ArrivingFleet extends BaseFleet {
 
 export interface TransferingCargoFleet extends BaseFleet {
     status: 'TRANSFERING_CARGO';
-    cargoType: 'METAL' | 'POPULATION';
+    cargoMetal: number;
+    cargoPopulation: number;
     ownerId: string;
-    cargoAmount: number;
     fromWorldId: string,
     toWorldId: string,
+    arrivingTimestamp: number
 }
 
 export interface WaitingForCargoFleet extends BaseFleet {
     status: 'WAITING_FOR_CARGO';
     ownerId: string;
-    atWorldId: string,
-    otherWorldId: string,
+    fromWorldId: string,
+    toWorldId: string,
 }
