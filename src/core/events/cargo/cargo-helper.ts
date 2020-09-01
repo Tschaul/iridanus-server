@@ -63,6 +63,6 @@ function theoreticalPopulationCargoAmount(
 
   const maxPassangers = (equilibriumCapacity - worldFromCapacity)
 
-  return Math.min(maxPassangers, ships)
+  return Math.min(maxPassangers, ships, worldFrom.population - 1)
 }
 

@@ -7,13 +7,13 @@ import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
 import { GameStateService } from "../../client/game-state/game-state.service";
-import { FleetWithOwnerAtWorld, LostFleet, fleetIsAtWorld, WarpingFleet } from "../../../shared/model/v1/fleet";
+import { FleetWithOwnerAtWorld, LostFleet, fleetIsAtWorld, FleetInTransit, gateOfFleetInTransit } from "../../../shared/model/v1/fleet";
 import { VisibleState } from "../../../shared/model/v1/visible-state";
 import { GameRules } from "../../../shared/model/v1/rules";
 
 export type FleetByTwoWorlds = {
   [worldId1: string]: {
-    [worldId2: string]: WarpingFleet[];
+    [worldId2: string]: FleetInTransit[];
   };
 };
 
@@ -150,12 +150,13 @@ export class GameData {
   @computed get warpingFleetsByBothWorlds() {
     const fleets = Object.values(this.universe.fleets).filter(
       fleet => !fleetIsAtWorld(fleet)
-    ) as WarpingFleet[];
+    ) as Array<FleetInTransit>;
 
     const result: FleetByTwoWorlds = {};
 
     for (const fleet of fleets) {
-      const [id1, id2] = [fleet.originWorldId, fleet.targetWorldId].sort();
+
+      const [id1, id2] = gateOfFleetInTransit(fleet);
       result[id1] = result[id1] || {};
       result[id1][id2] = result[id1][id2] || [];
       result[id1][id2].push(fleet);

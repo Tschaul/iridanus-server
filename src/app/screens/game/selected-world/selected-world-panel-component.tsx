@@ -213,6 +213,8 @@ export class SelectedWorldPanel extends React.Component<{
 
   fleetStatusIcon(status: Fleet['status']) {
     switch (status) {
+      case 'WAITING_FOR_CARGO': return '⏾'
+      case 'TRANSFERING_CARGO': return '⇄'
       case 'ARRIVING': return '🠰';
       case 'WARPING': return '🠲';
       case 'LEAVING': return '🠲';
