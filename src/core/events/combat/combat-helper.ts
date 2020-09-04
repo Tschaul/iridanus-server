@@ -13,7 +13,7 @@ import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-popu
 
 export function handleFiring(attacker: ReadyFleet | WorldWithOwner, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
   const targetResult = determineTarget(attacker, world, fleetsByCurrentworldId[world.id], random);
-  
+
   if (!targetResult) {
     return []
   }
@@ -31,9 +31,7 @@ export function handleFiring(attacker: ReadyFleet | WorldWithOwner, world: World
 
 
 function determineTarget(attacker: ReadyFleet | WorldWithOwner, world: World, otherFleetsAtWorld: Fleet[], random: RandomNumberGenerator): ['WORLD', World] | ['FLEET', Fleet] | undefined {
-  const enemyFleets = otherFleetsAtWorld.filter(otherFleet =>
-    otherFleet.status !== 'LOST'
-    && otherFleet.ownerId !== attacker.ownerId);
+  const enemyFleets = otherFleetsAtWorld.filter(otherFleet => otherFleet.ownerId !== attacker.ownerId);
 
   let worldTargetShips = world.ships;
 

@@ -1,18 +1,18 @@
 import { FleetOrder } from "./fleet-orders";
 
 export type Fleet =
-    LostFleet
-    | FleetWithOwnerAtWorld
-    | WarpingFleet
-    | TransferingCargoFleet
-    | WaitingForCargoFleet;
+    FleetWithOwnerAtWorld
+    | FleetInTransit;
 
 export type FleetWithOwnerAtWorld =
     ReadyFleet
     | LeavingFleet
     | ArrivingFleet;
 
-export type FleetInTransit = WarpingFleet | WaitingForCargoFleet | TransferingCargoFleet;
+export type FleetInTransit = 
+    WarpingFleet 
+    | WaitingForCargoFleet 
+    | TransferingCargoFleet;
 
 export function pathOfFleetInTransit(fleet: FleetInTransit): [string, string] {
     if (fleet.status === 'WARPING') {
@@ -22,16 +22,8 @@ export function pathOfFleetInTransit(fleet: FleetInTransit): [string, string] {
     }
 }
 
-export function fleetIsAtWorld(fleet: Fleet): fleet is FleetWithOwnerAtWorld | LostFleet {
+export function fleetIsAtWorld(fleet: Fleet): fleet is FleetWithOwnerAtWorld {
     return !['TRANSFERING_CARGO', 'WAITING_FOR_CARGO', 'WARPING'].includes(fleet.status);
-}
-
-export function fleetHasOwner(fleet: Fleet): fleet is FleetWithOwnerAtWorld | WarpingFleet | TransferingCargoFleet | WaitingForCargoFleet {
-    return fleet.status !== 'LOST';
-}
-
-export function fleetIsAtWorldAndHasOwner(fleet: Fleet): fleet is FleetWithOwnerAtWorld {
-    return fleetHasOwner(fleet) && fleetIsAtWorld(fleet);
 }
 
 export function baseFleet(fleet: Fleet): BaseFleet {
@@ -48,11 +40,6 @@ export interface BaseFleet {
     ships: number;
     orders: FleetOrder[];
     integrity: number;
-}
-
-export interface LostFleet extends BaseFleet {
-    status: 'LOST'
-    currentWorldId: string;
 }
 
 export interface ReadyFleetBase extends BaseFleet {

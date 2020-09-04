@@ -1,6 +1,6 @@
 import { observable, computed } from "mobx";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
-import { fleetIsAtWorldAndHasOwner, FleetInTransit } from "../../../shared/model/v1/fleet";
+import { FleetInTransit, fleetIsAtWorld } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
@@ -59,7 +59,7 @@ export class GameStageViewModel {
   @computed get fleetOwnersByWorldId() {
     return Object.getOwnPropertyNames(this.gameData.fleetsByWorldId).reduce((result, key) => {
       const owners = this.gameData.fleetsByWorldId[key]
-        .filter(fleetIsAtWorldAndHasOwner)
+        .filter(fleetIsAtWorld)
         .map(fleet => fleet.ownerId);
       result[key] = [...new Set(owners)];
       return result
@@ -69,7 +69,7 @@ export class GameStageViewModel {
   @computed get idleFleetOwnersByWorldId() {
     return Object.getOwnPropertyNames(this.gameData.fleetsByWorldId).reduce((result, key) => {
       const owners = this.gameData.fleetsByWorldId[key]
-        .filter(fleetIsAtWorldAndHasOwner)
+        .filter(fleetIsAtWorld)
         .filter(fleet => {
           return fleet.status === 'READY'
             && fleet.orders.length === 0

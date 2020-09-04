@@ -5,7 +5,6 @@ import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { worldhasOwner } from "../../shared/model/v1/world";
-import { fleetHasOwner } from "../../shared/model/v1/fleet";
 import equal from 'deep-equal';
 import { Scorings } from "../../shared/model/v1/scoring";
 
@@ -52,9 +51,7 @@ export class InfluenceProjector {
         })
 
         Object.values(fleetsById).forEach(fleet => {
-          if (fleetHasOwner(fleet)) {
-            incrementStat(ships, fleet.ownerId, fleet.ships)
-          }
+          incrementStat(ships, fleet.ownerId, fleet.ships)
         })
 
         const allPlayerIds = new Set([

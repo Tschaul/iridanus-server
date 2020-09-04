@@ -5,7 +5,7 @@ import { combineLatest, zip, Observable } from "rxjs";
 import { WorldProjector } from "./world-projector";
 import { map, switchMap, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { worldhasOwner, World } from "../../shared/model/v1/world";
-import { Fleet, fleetHasOwner, fleetIsAtWorld } from "../../shared/model/v1/fleet";
+import { Fleet, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
 import { VisibleWorld, VisibleState } from "../../shared/model/v1/visible-state";
 import { RemeberedWorld, WorldVisibilityStatus } from "../../shared/model/v1/visibility-status";
@@ -91,12 +91,12 @@ export class VisibilityProjector {
             || visibilityForPlayer[worldId].status === 'REMEMBERED'
         }
 
-        Object.values(state.universe.fleets).filter(fleet => !fleetHasOwner(fleet) || fleet.ownerId !== playerId).forEach(fleet => {
+        Object.values(state.universe.fleets).filter(fleet => fleet.ownerId !== playerId).forEach(fleet => {
           if (fleet.status === 'WARPING' && (worldIsNotVisible(fleet.originWorldId) || worldIsNotVisible(fleet.targetWorldId))) {
             delete fleets[fleet.id];
           } else if (fleetIsAtWorld(fleet) && worldIsNotVisible(fleet.currentWorldId)) {
             delete fleets[fleet.id];
-          } else if (fleetHasOwner(fleet) && fleet.ownerId !== playerId) {
+          } else if (fleet.ownerId !== playerId) {
             fleets[fleet.id] = {
               ...fleets[fleet.id],
               orders: []
@@ -192,6 +192,6 @@ export class VisibilityProjector {
   }
 
   private fleetOwnedByPlayer(fleet: Fleet, playerId: string) {
-    return fleetHasOwner(fleet) && fleet.ownerId === playerId;
+    return fleet.ownerId === playerId;
   }
 }

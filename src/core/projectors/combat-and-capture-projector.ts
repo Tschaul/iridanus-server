@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
-import { Fleet, ReadyFleetBase, FiringFleet, LostFleet, fleetHasOwner, FleetWithOwnerAtWorld, fleetIsAtWorldAndHasOwner, fleetIsAtWorld } from "../../shared/model/v1/fleet";
+import { Fleet, ReadyFleetBase, FiringFleet, FleetWithOwnerAtWorld, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { World, FiringWorld, WorldWithOwner, worldhasOwner, WorldBeingCaptured } from "../../shared/model/v1/world";
 import equal from 'deep-equal';
 
@@ -19,7 +19,6 @@ export class CombatAndCaptureProjector {
   public nextCapturedWorld$: Observable<[(World & WorldBeingCaptured) | null, string]>;
   public nextStartCapturingWorld$: Observable<[World | null, string]>;
   public nextStopCapturingWorld$: Observable<World | null>;
-  public nextCapturedFleet$: Observable<[LostFleet | null, string]>;
   public nextLostFleet$: Observable<Fleet | null>;
 
   constructor(
@@ -85,31 +84,12 @@ export class CombatAndCaptureProjector {
       shareReplay(1)
     )
 
-    this.nextCapturedFleet$ = combineLatest(this.fleets.byId$, this.playersAtWorldById$, this.worlds.byId$).pipe(
-      map(([fleetsById, playersAtWorldById, worldsById]) => {
-        const lostFleets = Object.values(fleetsById).filter(fleet => fleet.status === 'LOST') as LostFleet[];
-        const capturedLostFleet = lostFleets.find(fleet => {
-          const players = playersAtWorldById[fleet.currentWorldId] || [];
-          const world = worldsById[fleet.currentWorldId];
-          return players.length === 1 && worldhasOwner(world);
-        });
-        if (capturedLostFleet) {
-          return [capturedLostFleet, playersAtWorldById[capturedLostFleet.currentWorldId][0]]
-        }
-
-        return [null, '']
-
-      }),
-      distinctUntilChanged(equal),
-      shareReplay(1)
-    )
-
     this.nextLostFleet$ = combineLatest(this.fleets.byId$, this.fleets.byCurrentWorldId$, this.worlds.byId$).pipe(
       map(([fleetsById, fleetsByWorldId, worldsById]) => {
 
-        const ownedFleetsWithoutShips = Object.values(fleetsById).filter(fleet => fleet.ships === 0 && fleetIsAtWorldAndHasOwner(fleet)) as FleetWithOwnerAtWorld[];
+        const ownedFleetsWithoutShips = Object.values(fleetsById).filter(fleet => fleet.ships === 0 && fleetIsAtWorld(fleet)) as FleetWithOwnerAtWorld[];
         const lostOwnedFleet = ownedFleetsWithoutShips.find(fleet => {
-          const noOtherFleetsAtWorld = !(fleetsByWorldId[fleet.currentWorldId] || []).some(otherFleet => otherFleet.ships !== 0 && fleetHasOwner(otherFleet) && otherFleet.ownerId === fleet.ownerId)
+          const noOtherFleetsAtWorld = !(fleetsByWorldId[fleet.currentWorldId] || []).some(otherFleet => otherFleet.ships !== 0 && fleetIsAtWorld(otherFleet) && otherFleet.ownerId === fleet.ownerId)
           const world = worldsById[fleet.currentWorldId];
           const worldIsNotOwned = !worldhasOwner(world) || world.ownerId !== fleet.ownerId;
           return noOtherFleetsAtWorld && worldIsNotOwned;
@@ -188,7 +168,7 @@ export class CombatAndCaptureProjector {
     }
 
     const noOtherOwner = players.filter(id => id !== world.ownerId).length === 1;
-    const noFleetsAtWorld = !(fleetsByWorldId[world.id] || []).some(fleet => fleet.ships !== 0 && fleetHasOwner(fleet) && fleet.ownerId === world.ownerId)
+    const noFleetsAtWorld = !(fleetsByWorldId[world.id] || []).some(fleet => fleet.ships !== 0 && fleet.ownerId === world.ownerId)
     const worldShouldBeCaptured = world.ships === 0 && noOtherOwner && noFleetsAtWorld;
 
     if (worldShouldBeCaptured) {
@@ -203,7 +183,7 @@ export class CombatAndCaptureProjector {
     const fleetOwnersByWorldId: { [k: string]: string[] } = {};
 
     for (const fleet of fleets) {
-      if (fleet.status !== 'LOST' && fleetIsAtWorld(fleet)) {
+      if (fleetIsAtWorld(fleet)) {
         const value = fleetOwnersByWorldId[fleet.currentWorldId];
         if (!value) {
           fleetOwnersByWorldId[fleet.currentWorldId] = [fleet.ownerId];

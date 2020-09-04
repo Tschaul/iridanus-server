@@ -2,7 +2,6 @@ import { GameData } from "./game-data";
 import { observable, reaction, computed } from "mobx";
 import { GameViewModel } from "./game-view-model";
 import { visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
-import { fleetHasOwner, fleetIsAtWorldAndHasOwner, fleetIsAtWorld } from "../../../shared/model/v1/fleet";
 import { WorldHints, WorldHint } from "./world-hints";
 import { BaseWorld } from "../../../shared/model/v1/world";
 
@@ -83,7 +82,7 @@ export class GameStats {
     })
 
     Object.values(this.gameData.fleets).forEach(fleet => {
-      if (fleetHasOwner(fleet) && fleet.ownerId === currentPlayer) {
+      if (fleet.ownerId === currentPlayer) {
         stats.ships += fleet.ships;
         stats.fleetKeys += 1;
       }
@@ -147,7 +146,7 @@ export class GameStats {
       const fleetsAtWorld = this.gameData.fleetsByWorldId[world.id] || [];
 
       if (property === 'ships') {
-        fleetsAtWorld.filter(fleet => fleetHasOwner(fleet) && fleet.ownerId === currentPlayer).forEach(fleet => {
+        fleetsAtWorld.filter(fleet => fleet.ownerId === currentPlayer).forEach(fleet => {
           value += fleet[property];
         })
       }
@@ -197,7 +196,7 @@ export class GameStats {
 
       const fleetsAtWorld = this.gameData.fleetsByWorldId[world.id] || [];
 
-      let value = fleetsAtWorld.filter(fleet => fleetHasOwner(fleet) && fleet.ownerId === currentPlayer).length;
+      let value = fleetsAtWorld.filter(fleet => fleet.ownerId === currentPlayer).length;
 
       if (value > 0) {
         hints.push({
@@ -242,7 +241,7 @@ export class GameStats {
 
       const fleetsAtWorld = this.gameData.fleetsByWorldId[world.id] || [];
 
-      fleetsAtWorld.filter(fleet => fleetHasOwner(fleet) && fleet.ownerId === currentPlayer).forEach(fleet => {
+      fleetsAtWorld.filter(fleet => fleet.ownerId === currentPlayer).forEach(fleet => {
         value -= fleet.ships;
       })
 

@@ -59,17 +59,7 @@ export function makeGomeisaThree(): GameMap {
           ships: 6
         }
       })
-    } else {
-      const fleetId = 'f' + fleetKeyNumber++;
-      universe.fleets[fleetId] = {
-        status: 'LOST',
-        currentWorldId: worldId,
-        id: fleetId,
-        integrity: 0,
-        orders: [],
-        ships: 6
-      }
-    }
+    } 
 
     universe.worlds[worldId] = world
 

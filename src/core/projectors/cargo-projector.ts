@@ -5,7 +5,7 @@ import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { PlayerProjector } from "./player-projector";
 import { Distances } from "../../shared/model/v1/distances";
-import { fleetHasOwner, TransferingCargoFleet, WaitingForCargoFleet } from "../../shared/model/v1/fleet";
+import { TransferingCargoFleet, WaitingForCargoFleet } from "../../shared/model/v1/fleet";
 import { floydWarshall } from "../../shared/math/path-finding/floydWarshall";
 import { Gates } from "../../shared/model/v1/universe";
 import { WorldProjector } from "./world-projector";
@@ -31,8 +31,7 @@ export class CargoProjector {
       for (const playerId of allPlayerIds) {
 
         const cargoFleets = Object.values(fleetsById).filter(fleet => {
-          return fleetHasOwner(fleet)
-            && fleet.ownerId === playerId
+          return fleet.ownerId === playerId
             && (fleet.status === 'TRANSFERING_CARGO' || fleet.status === 'WAITING_FOR_CARGO')
         }) as Array<TransferingCargoFleet | WaitingForCargoFleet>;
 

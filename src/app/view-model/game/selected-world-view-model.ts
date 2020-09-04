@@ -1,7 +1,7 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
 import { worldhasOwner, World } from "../../../shared/model/v1/world";
-import { fleetHasOwner, Fleet } from "../../../shared/model/v1/fleet";
+import { Fleet } from "../../../shared/model/v1/fleet";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
@@ -38,7 +38,7 @@ export class SelectedWorldViewModel {
         const id = this.selection.stageSelection.id;
         if (this.gameData.fleetsByWorldId[id]) {
           return this.gameData.fleetsByWorldId[id].map(fleet => {
-            const owner = fleetHasOwner(fleet) ? this.gameData.playerInfos[fleet.ownerId] : null;
+            const owner = this.gameData.playerInfos[fleet.ownerId];
             return {
               ...fleet,
               owner

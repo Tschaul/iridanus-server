@@ -14,7 +14,6 @@ import { FleetStopFiringEventQueue } from "./combat/fleet-stop-firing";
 import { WorldStartFiringEventQueue } from "./combat/world-start-firing";
 import { WorldFireEventQueue } from "./combat/world-fire";
 import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
-import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { TickEventQueue } from "./tick";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
@@ -79,7 +78,6 @@ export function registerEventQueues(container: Container) {
   container.bind(WorldPopulationGrowsEventQueue).toSelf();
   container.bind(WorldStopGrowingEventQueue).toSelf();
 
-  container.bind(CaptureFleetEventQueue).toSelf();
   container.bind(StartCapturingWorldEventQueue).toSelf();
   container.bind(CaptureWorldEventQueue).toSelf();
   container.bind(StopCapturingWorldEventQueue).toSelf();

@@ -300,53 +300,6 @@
             ],
             "type": "object"
         },
-        "LostFleet": {
-            "properties": {
-                "currentWorldId": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "integrity": {
-                    "type": "number"
-                },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/AwaitCaptureOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/WarpOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/StartCargoMissionOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "ships": {
-                    "type": "number"
-                },
-                "status": {
-                    "enum": [
-                        "LOST"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "currentWorldId",
-                "id",
-                "integrity",
-                "orders",
-                "ships",
-                "status"
-            ],
-            "type": "object"
-        },
         "MiningWorld": {
             "properties": {
                 "miningStatus": {
@@ -653,9 +606,6 @@
                     "additionalProperties": {
                         "anyOf": [
                             {
-                                "$ref": "#/definitions/LostFleet"
-                            },
-                            {
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/ReadyFleetBase"
@@ -685,10 +635,10 @@
                                 "$ref": "#/definitions/WarpingFleet"
                             },
                             {
-                                "$ref": "#/definitions/TransferingCargoFleet"
+                                "$ref": "#/definitions/WaitingForCargoFleet"
                             },
                             {
-                                "$ref": "#/definitions/WaitingForCargoFleet"
+                                "$ref": "#/definitions/TransferingCargoFleet"
                             }
                         ]
                     },

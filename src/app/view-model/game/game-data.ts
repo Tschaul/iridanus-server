@@ -2,12 +2,11 @@ import { observable, computed, when } from "mobx";
 import { IStreamListener, fromStream } from "mobx-utils";
 import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
 import { empty } from "rxjs";
-import { GameState } from "../../../shared/model/v1/state";
 import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
 import { GameStateService } from "../../client/game-state/game-state.service";
-import { FleetWithOwnerAtWorld, LostFleet, fleetIsAtWorld, FleetInTransit, pathOfFleetInTransit } from "../../../shared/model/v1/fleet";
+import { FleetWithOwnerAtWorld, fleetIsAtWorld, FleetInTransit, pathOfFleetInTransit } from "../../../shared/model/v1/fleet";
 import { VisibleState } from "../../../shared/model/v1/visible-state";
 import { GameRules } from "../../../shared/model/v1/rules";
 
@@ -136,7 +135,7 @@ export class GameData {
   }
 
   @computed get fleetsByWorldId() {
-    const result: { [k: string]: Array<FleetWithOwnerAtWorld | LostFleet> } = {};
+    const result: { [k: string]: Array<FleetWithOwnerAtWorld> } = {};
     for (const fleetKey of Object.getOwnPropertyNames(this.universe.fleets)) {
       const fleet = this.universe.fleets[fleetKey];
       if (fleetIsAtWorld(fleet)) {

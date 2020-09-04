@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { injectable } from "inversify";
 import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { looseFleet } from "../../actions/fleet/loose";
+import { looseFleet } from "../../actions/fleet/loose-fleet";
 
 @injectable()
 export class LooseFleetEventQueue implements GameEventQueue {

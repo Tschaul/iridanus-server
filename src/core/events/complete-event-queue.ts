@@ -17,7 +17,6 @@ import { WorldStartFiringEventQueue } from "./combat/world-start-firing";
 import { WorldFireEventQueue } from "./combat/world-fire";
 import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
-import { CaptureFleetEventQueue } from "./capture/capture-fleet";
 import { TickEventQueue } from "./tick";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
@@ -83,7 +82,6 @@ export class CompleteEventQueue implements GameEventQueue {
     worldGrows: WorldPopulationGrowsEventQueue,
     worldStopsGrowing: WorldStopGrowingEventQueue,
 
-    captureFleet: CaptureFleetEventQueue,
     startCapturingWorld: StartCapturingWorldEventQueue,
     captureWorld: CaptureWorldEventQueue,
     stopCapturingWorld: StopCapturingWorldEventQueue,
@@ -105,7 +103,6 @@ export class CompleteEventQueue implements GameEventQueue {
     const allEventQueues = [
       revealWorld,
       remeberWorld,
-      captureFleet,
       startCapturingWorld,
       captureWorld,
       stopCapturingWorld,

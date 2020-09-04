@@ -6,7 +6,7 @@ import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
 import { visibleWorldIsWorld, visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
-import { fleetHasOwner, Fleet } from "../../../shared/model/v1/fleet";
+import { Fleet } from "../../../shared/model/v1/fleet";
 import { GameData } from "./game-data";
 
 export class OrderEditorViewModel {
@@ -46,7 +46,7 @@ export class OrderEditorViewModel {
     }
     if (this.selection.selectedFleet) {
       const fleet = this.selection.selectedFleet;
-      return fleetHasOwner(fleet) && fleet.ownerId === this.gameViewModel.selfPlayerId;
+      return fleet.ownerId === this.gameViewModel.selfPlayerId;
     } else if (this.selection.selectedWorld) {
       const world = this.selection.selectedWorld;
       return visibleWorldhasOwner(world) && world.ownerId === this.gameViewModel.selfPlayerId;

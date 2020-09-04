@@ -4,7 +4,6 @@ import { Vec2 } from "../../shared/math/vec2";
 import { LostWorld, ReadyWorld } from "../../shared/model/v1/world";
 import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
 import { GameMap } from "../../shared/model/v1/game-map";
-import { LostFleet } from "../../shared/model/v1/fleet";
 
 const homeWorlds = ['c3', 'c7', 'c11'];
 
@@ -66,12 +65,6 @@ export function makeGomeisaThreeRandom(): GameMap {
           idleNotificationSent: true
         }
       })
-    } else {
-      let [world, fleets] = makeWorld(worldId);
-      universe.worlds[worldId] = world;
-      fleets.forEach(fleet => {
-        universe.fleets[fleet.id] = fleet;
-      })
     }
 
   })
@@ -83,54 +76,54 @@ export function makeGomeisaThreeRandom(): GameMap {
   }
 }
 
-function makeWorld(id: string): [LostWorld, LostFleet[]] {
+// function makeWorld(id: string): [LostWorld, LostFleet[]] {
 
-  let fleetKeyNumber = 1;
+//   let fleetKeyNumber = 1;
 
-  const rank = getRank(id);
+//   const rank = getRank(id);
 
-  const random = randomSphericArray(3);
+//   const random = randomSphericArray(3);
 
-  const industry = 0;
-  const metal = Math.round(random[0] * 20);
+//   const industry = 0;
+//   const metal = Math.round(random[0] * 20);
 
-  const populationLimitStatic = getStaticPopulationLimit(rank);
-  const populationLimitRandom = Math.round(random[1] * 25);
+//   const populationLimitStatic = getStaticPopulationLimit(rank);
+//   const populationLimitRandom = Math.round(random[1] * 25);
   
-  const populationLimit = Math.max(populationLimitRandom + populationLimitStatic, metal + industry)
+//   const populationLimit = Math.max(populationLimitRandom + populationLimitStatic, metal + industry)
 
-  const world: LostWorld = {
-    id,
-    industry,
-    integrity: 0,
-    metal: metal,
-    mines: 0,
-    orders: [],
-    population: 0,
-    populationLimit,
-    ships: 0,
-    status: 'LOST',
-    captureStatus: 'NOT_BEING_CAPTURED'
-  }
+//   const world: LostWorld = {
+//     id,
+//     industry,
+//     integrity: 0,
+//     metal: metal,
+//     mines: 0,
+//     orders: [],
+//     population: 0,
+//     populationLimit,
+//     ships: 0,
+//     status: 'LOST',
+//     captureStatus: 'NOT_BEING_CAPTURED'
+//   }
 
-  const fleetAmount = Math.round(random[2])
+//   const fleetAmount = Math.round(random[2])
 
-  const fleets: LostFleet[] = Array.from(Array(fleetAmount).keys()).map(_ => {
-    const fleetId = 'w' + id + 'f' + fleetKeyNumber++;
-    return {
-      status: 'LOST',
-      currentWorldId: id,
-      id: fleetId,
-      integrity: 0,
-      population: 0,
-      metal: 0,
-      orders: [],
-      ships: 0
-    }
-  })
+//   const fleets: LostFleet[] = Array.from(Array(fleetAmount).keys()).map(_ => {
+//     const fleetId = 'w' + id + 'f' + fleetKeyNumber++;
+//     return {
+//       status: 'LOST',
+//       currentWorldId: id,
+//       id: fleetId,
+//       integrity: 0,
+//       population: 0,
+//       metal: 0,
+//       orders: [],
+//       ships: 0
+//     }
+//   })
 
-  return [world, fleets];
-}
+//   return [world, fleets];
+// }
 
 function getStaticPopulationLimit(rank: 1 | 2 | 3 | 4 | 5) {
   switch (rank) {

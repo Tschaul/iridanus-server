@@ -10,8 +10,7 @@ import { GameInfo } from "../shared/model/v1/game-info";
 import { GameMap } from "../shared/model/v1/game-map";
 import { GameState } from "../shared/model/v1/state";
 import produce from "immer";
-import { worldhasOwner, LostWorld, baseWorld } from "../shared/model/v1/world";
-import { fleetHasOwner, baseFleet, ReadyFleet } from "../shared/model/v1/fleet";
+import { worldhasOwner } from "../shared/model/v1/world";
 import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
@@ -175,11 +174,6 @@ export class GameRunner {
             if (player) {
               world.ownerId = player;
               state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
-            } else {
-              state.worlds[worldId] = {
-                status: 'LOST',
-                ...baseWorld(world)
-              }
             }
           }
           if (player && state.gates[worldId].some(neighboringWorldId => {
@@ -191,15 +185,9 @@ export class GameRunner {
         })
         Object.getOwnPropertyNames(state.fleets).forEach(fleetId => {
           const fleet = state.fleets[fleetId];
-          if (fleetHasOwner(fleet) && fleet.ownerId === seat) {
+          if (fleet.ownerId === seat) {
             if (player) {
               fleet.ownerId = player;
-            } else {
-              state.fleets[fleetId] = {
-                status: 'LOST',
-                ...baseFleet(fleet),
-                currentWorldId: (fleet as ReadyFleet).currentWorldId
-              }
             }
           }
         })

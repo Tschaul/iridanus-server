@@ -18,7 +18,7 @@ export class UpdateFleetOrdersExecutor implements CommandExecutor<UpdateFleetOrd
 
     const fleet = state.universe.fleets[command.fleetId];
 
-    if (!fleet || fleet.status === 'LOST' || fleet.ownerId !== userId) {
+    if (!fleet || fleet.ownerId !== userId) {
       throw new Error('Invalid fleet order command');
     }
 
