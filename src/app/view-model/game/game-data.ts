@@ -6,7 +6,7 @@ import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
 import { GameStateService } from "../../client/game-state/game-state.service";
-import { FleetWithOwnerAtWorld, fleetIsAtWorld, FleetInTransit, pathOfFleetInTransit } from "../../../shared/model/v1/fleet";
+import { FleetAtWorld, fleetIsAtWorld, FleetInTransit, pathOfFleetInTransit } from "../../../shared/model/v1/fleet";
 import { VisibleState } from "../../../shared/model/v1/visible-state";
 import { GameRules } from "../../../shared/model/v1/rules";
 
@@ -135,7 +135,7 @@ export class GameData {
   }
 
   @computed get fleetsByWorldId() {
-    const result: { [k: string]: Array<FleetWithOwnerAtWorld> } = {};
+    const result: { [k: string]: Array<FleetAtWorld> } = {};
     for (const fleetKey of Object.getOwnPropertyNames(this.universe.fleets)) {
       const fleet = this.universe.fleets[fleetKey];
       if (fleetIsAtWorld(fleet)) {

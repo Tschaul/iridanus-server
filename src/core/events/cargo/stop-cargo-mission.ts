@@ -34,6 +34,7 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
           const toWorld = worlds[fleet.toWorldId];
           return (worldhasOwner(fromWorld) && fromWorld.ownerId !== fleet.ownerId)
             || (worldhasOwner(toWorld) && toWorld.ownerId !== fleet.ownerId)
+            || !!fleet.orders.length
         }) ?? null
 
         if (!fleet) {

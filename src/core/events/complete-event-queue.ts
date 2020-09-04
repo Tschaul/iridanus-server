@@ -133,9 +133,9 @@ export class CompleteEventQueue implements GameEventQueue {
       worldStopsGrowing,
       worldGrows,
       startCargoMission,
-      stopCargoMission,
       beginTransferingCargo,
       endTransferingCargo,
+      stopCargoMission,
       notifyFleetIdle,
       notifyWorldIdle
     ]

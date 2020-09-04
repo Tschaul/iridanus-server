@@ -4,7 +4,7 @@ import { GameStageViewModel } from '../../../view-model/game/game-stage-view-mod
 import autobind from "autobind-decorator";
 import { World } from '../../../../shared/model/v1/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
-import { mul, add, diff, normal, middle, normalize, abs } from '../../../../shared/math/vec2';
+import { mul, add, diff, normal, middle, normalize, abs, distributeOnCircle } from '../../../../shared/math/vec2';
 import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS, FLEET_OUTER_RADIUS } from './constants';
 import { screenWhite, selectedYellow, screenWhiteRaw } from '../../../ui-components/colors/colors';
 import { HoverTooltip } from '../../../ui-components/tooltip/hover-tooltip.component';
@@ -114,10 +114,13 @@ export class GameStageForeground extends React.Component<{
   private renderWorlds(): React.ReactNode {
     return this.props.vm.worldsToDisplay.map(world => {
       const color = this.getColorForWorld(world);
-      const fleetOwners = this.props.vm.fleetOwnersByWorldId[world.id] || [];
+      const fleets = this.props.vm.fleetsByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
       const opacity = world.status === 'UNKNOWN' || world.status === 'REMEMBERED' ? 0.5 : 1
+
+      const positions = distributeOnCircle(fleets.length);
+
       return (
         <g key={world.id}>
           <text
@@ -129,17 +132,17 @@ export class GameStageForeground extends React.Component<{
             fontSize={33}
             style={{ transform: "translateY(1px)" }}
             opacity={opacity}
-          >{/*world.id*/}◉</text>
-          {fleetOwners.map(ownerId => {
-            const playerInfo = this.props.vm.playerInfos[ownerId];
-            const idleOwnersAtWorld = this.props.vm.idleFleetOwnersByWorldId[world.id];
-            const idle = idleOwnersAtWorld && idleOwnersAtWorld.includes(ownerId);
+          >◉</text>
+          {fleets.map((fleet, index) => {
+            const playerInfo = this.props.vm.playerInfos[fleet.ownerId];
+            const idle = fleet.status === 'READY' && !fleet.orders.length
+            const pos = positions[index]
             return (
               <g>
                 {idle && (
                   <circle
-                    cx={world.x + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.x}
-                    cy={world.y + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.y}
+                    cx={world.x + FLEET_DISTANCE * pos.x}
+                    cy={world.y + FLEET_DISTANCE * pos.y}
                     r={FLEET_OUTER_RADIUS}
                     opacity="1"
                     stroke={screenWhiteRaw.fade(0.5).toString()}
@@ -150,9 +153,9 @@ export class GameStageForeground extends React.Component<{
                   />
                 )}
                 <text
-                  key={ownerId}
-                  x={world.x + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.x}
-                  y={world.y + FLEET_DISTANCE * playerInfo.fleetDrawingPosition.y}
+                  key={fleet.id}
+                  x={world.x + FLEET_DISTANCE * pos.x}
+                  y={world.y + FLEET_DISTANCE * pos.y}
                   dominantBaseline="middle"
                   textAnchor="middle"
                   fill={playerInfo.color}

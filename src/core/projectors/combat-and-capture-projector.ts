@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
-import { Fleet, ReadyFleetBase, FiringFleet, FleetWithOwnerAtWorld, fleetIsAtWorld } from "../../shared/model/v1/fleet";
+import { Fleet, ReadyFleetBase, FiringFleet, FleetAtWorld, fleetIsAtWorld } from "../../shared/model/v1/fleet";
 import { World, FiringWorld, WorldWithOwner, worldhasOwner, WorldBeingCaptured } from "../../shared/model/v1/world";
 import equal from 'deep-equal';
 
@@ -87,7 +87,7 @@ export class CombatAndCaptureProjector {
     this.nextLostFleet$ = combineLatest(this.fleets.byId$, this.fleets.byCurrentWorldId$, this.worlds.byId$).pipe(
       map(([fleetsById, fleetsByWorldId, worldsById]) => {
 
-        const ownedFleetsWithoutShips = Object.values(fleetsById).filter(fleet => fleet.ships === 0 && fleetIsAtWorld(fleet)) as FleetWithOwnerAtWorld[];
+        const ownedFleetsWithoutShips = Object.values(fleetsById).filter(fleet => fleet.ships === 0 && fleetIsAtWorld(fleet)) as FleetAtWorld[];
         const lostOwnedFleet = ownedFleetsWithoutShips.find(fleet => {
           const noOtherFleetsAtWorld = !(fleetsByWorldId[fleet.currentWorldId] || []).some(otherFleet => otherFleet.ships !== 0 && fleetIsAtWorld(otherFleet) && otherFleet.ownerId === fleet.ownerId)
           const world = worldsById[fleet.currentWorldId];

@@ -1,3 +1,5 @@
+import { single } from "rxjs/operators";
+
 export type Vec2 = { x: number, y: number };
 
 export function mul(v1: Vec2, m: number): Vec2 {
@@ -32,7 +34,7 @@ export function abs(v: Vec2): number {
 }
 
 export function normalize(v: Vec2): Vec2 {
-  return mul(v, 1/abs(v));
+  return mul(v, 1 / abs(v));
 }
 
 export function middle(v1: Vec2, v2: Vec2) {
@@ -46,4 +48,20 @@ export function shorten(v: Vec2, d: number) {
 export function extend(v: Vec2, d: number) {
   const a = abs(v);
   return mul(normalize(v), a + d);
+}
+
+export function distributeOnCircle(n: number): Vec2[] {
+
+  const result: Vec2[] = [];
+
+  const step = 2 * Math.PI / n;
+
+  for (let alpha = 0; alpha <= 2 * Math.PI; alpha += step) {
+    result.push({
+      x: Math.sin(alpha),
+      y: Math.cos(alpha)
+    })
+  }
+
+  return result;
 }

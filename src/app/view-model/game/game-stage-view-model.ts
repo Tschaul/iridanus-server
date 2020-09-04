@@ -1,6 +1,6 @@
 import { observable, computed } from "mobx";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
-import { FleetInTransit, fleetIsAtWorld } from "../../../shared/model/v1/fleet";
+import { FleetInTransit, fleetIsAtWorld, FleetAtWorld } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
@@ -56,30 +56,10 @@ export class GameStageViewModel {
   @observable public stageWidth = 0;
   @observable public stageHeight = 0;
 
-  @computed get fleetOwnersByWorldId() {
-    return Object.getOwnPropertyNames(this.gameData.fleetsByWorldId).reduce((result, key) => {
-      const owners = this.gameData.fleetsByWorldId[key]
-        .filter(fleetIsAtWorld)
-        .map(fleet => fleet.ownerId);
-      result[key] = [...new Set(owners)];
-      return result
-    }, {} as { [k: string]: string[] })
+  @computed get fleetsByWorldId() {
+    return this.gameData.fleetsByWorldId
   }
-
-  @computed get idleFleetOwnersByWorldId() {
-    return Object.getOwnPropertyNames(this.gameData.fleetsByWorldId).reduce((result, key) => {
-      const owners = this.gameData.fleetsByWorldId[key]
-        .filter(fleetIsAtWorld)
-        .filter(fleet => {
-          return fleet.status === 'READY'
-            && fleet.orders.length === 0
-        })
-        .map(fleet => fleet.ownerId);
-      result[key] = [...new Set(owners)];
-      return result
-    }, {} as { [k: string]: string[] })
-  }
-
+  
   @computed get selectedFleet() {
     return this.selection.selectedFleet;
   }

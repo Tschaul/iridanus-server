@@ -37,6 +37,11 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
       map(([waitingFleets, timestamp, metalPotential, worlds]) => {
 
         const fleet = waitingFleets.find(fleet => {
+
+          if (fleet.orders.length) {
+            return false;
+          }
+
           const cargo = cargoAmounts(
             worlds[fleet.fromWorldId],
             worlds[fleet.toWorldId],

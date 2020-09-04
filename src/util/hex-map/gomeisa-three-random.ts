@@ -65,6 +65,8 @@ export function makeGomeisaThreeRandom(): GameMap {
           idleNotificationSent: true
         }
       })
+    } else {
+      universe.worlds[worldId] = makeWorld(worldId);
     }
 
   })
@@ -76,54 +78,38 @@ export function makeGomeisaThreeRandom(): GameMap {
   }
 }
 
-// function makeWorld(id: string): [LostWorld, LostFleet[]] {
+function makeWorld(id: string): LostWorld {
 
-//   let fleetKeyNumber = 1;
+  let fleetKeyNumber = 1;
 
-//   const rank = getRank(id);
+  const rank = getRank(id);
 
-//   const random = randomSphericArray(3);
+  const random = randomSphericArray(3);
 
-//   const industry = 0;
-//   const metal = Math.round(random[0] * 20);
+  const industry = 0;
+  const metal = Math.round(random[0] * 20);
 
-//   const populationLimitStatic = getStaticPopulationLimit(rank);
-//   const populationLimitRandom = Math.round(random[1] * 25);
+  const populationLimitStatic = getStaticPopulationLimit(rank);
+  const populationLimitRandom = Math.round(random[1] * 25);
   
-//   const populationLimit = Math.max(populationLimitRandom + populationLimitStatic, metal + industry)
+  const populationLimit = Math.max(populationLimitRandom + populationLimitStatic, metal + industry)
 
-//   const world: LostWorld = {
-//     id,
-//     industry,
-//     integrity: 0,
-//     metal: metal,
-//     mines: 0,
-//     orders: [],
-//     population: 0,
-//     populationLimit,
-//     ships: 0,
-//     status: 'LOST',
-//     captureStatus: 'NOT_BEING_CAPTURED'
-//   }
+  const world: LostWorld = {
+    id,
+    industry,
+    integrity: 0,
+    metal: metal,
+    mines: 0,
+    orders: [],
+    population: 0,
+    populationLimit,
+    ships: 0,
+    status: 'LOST',
+    captureStatus: 'NOT_BEING_CAPTURED'
+  }
 
-//   const fleetAmount = Math.round(random[2])
-
-//   const fleets: LostFleet[] = Array.from(Array(fleetAmount).keys()).map(_ => {
-//     const fleetId = 'w' + id + 'f' + fleetKeyNumber++;
-//     return {
-//       status: 'LOST',
-//       currentWorldId: id,
-//       id: fleetId,
-//       integrity: 0,
-//       population: 0,
-//       metal: 0,
-//       orders: [],
-//       ships: 0
-//     }
-//   })
-
-//   return [world, fleets];
-// }
+  return world;
+}
 
 function getStaticPopulationLimit(rank: 1 | 2 | 3 | 4 | 5) {
   switch (rank) {

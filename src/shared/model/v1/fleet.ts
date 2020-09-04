@@ -1,10 +1,10 @@
 import { FleetOrder } from "./fleet-orders";
 
 export type Fleet =
-    FleetWithOwnerAtWorld
+    FleetAtWorld
     | FleetInTransit;
 
-export type FleetWithOwnerAtWorld =
+export type FleetAtWorld =
     ReadyFleet
     | LeavingFleet
     | ArrivingFleet;
@@ -22,7 +22,7 @@ export function pathOfFleetInTransit(fleet: FleetInTransit): [string, string] {
     }
 }
 
-export function fleetIsAtWorld(fleet: Fleet): fleet is FleetWithOwnerAtWorld {
+export function fleetIsAtWorld(fleet: Fleet): fleet is FleetAtWorld {
     return !['TRANSFERING_CARGO', 'WAITING_FOR_CARGO', 'WARPING'].includes(fleet.status);
 }
 

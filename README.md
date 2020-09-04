@@ -3,6 +3,16 @@
 # Iridanus-server
 Server for Iridanus
 
+# TODOS
+
+- right click to warp and cargo
+- build fleets automatically
+- make scrap ships for industry a fleet order
+- remove world orders
+- auto capture worlds by transfering population to lost fleet
+- turn around when ending cargo mission on foreign world
+- remove mines
+
 # Bugs
 
 - notification mail when game goes from PROPOSED to STARTED
@@ -18,19 +28,11 @@ Server for Iridanus
 
 - at regular intervals all worlds known to any player get revealed to all players
 
-- scrapping industry to metal
-
-- automatic cargo: Fleets can be sent onto gates between to adjecent controlled and lost worlds to act as cargo fleet. Cargo between these worlds get automatically according to 'gradients' in metal and population by these cargo fleets. Also population distributes itsself randomly along trading routes.
-
 - there are no more mines. instead worlds have simply a lot of metal on them.
 
 - ships can no longer be transfered between fleets. Industry produces new fleets in regular intervals. The more industry a world has the more ships do the fleets have it produces. Fleets that loos all there ships are destroyed (intead of lost). You can no longer capture a fleet.
 
-- all worlds start with 0 population. All population must therefore migrate there. Worlds without population cannot be owned. Maybe some worlds have population, but those would have ships defending them.
-
 - the time it takes to caputure a world goes up with the population of that world.
-
-- fleets are displayed individually at the worlds and gates. If there are too many to display, some are left out. Selection works as now over the world/gate view. During warp, fleets are displayed at a position that reflects ther warping state (remaining time).
 
 ## Research
 

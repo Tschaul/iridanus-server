@@ -112,6 +112,8 @@ export class OrderEditor extends React.Component<{
             switch (order.type) {
               case 'WARP':
                 return <WarpOrderEditor order={order}></WarpOrderEditor>
+              case 'START_CARGO_MISSION':
+                return <span>Start Cargo Mission</span>
               case 'AWAIT_CAPTURE':
                 return <span>Await Capture</span>
             }
