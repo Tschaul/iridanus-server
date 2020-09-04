@@ -1,6 +1,6 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
-import { WarpOrder, FleetOrder, AwaitCaptureOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, AwaitCaptureOrder, StartCargoMissionOrder } from "../../../shared/model/v1/fleet-orders";
 import { WorldOrder, BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
@@ -105,6 +105,28 @@ export class OrderEditorViewModel {
         const warpOrder: WarpOrder = {
           type: 'WARP',
           targetWorldId: worldId
+        }
+  
+        this.gameOrders.addFleetOrder(fleet.id, warpOrder);
+      }
+    })
+  }
+
+  public newStartCargoMissionOrder() {
+    this.selection.requestGateTargetSelection('Select gate target!', (world1Id, world2Id) => {
+
+
+      const fleet = this.selection.selectedFleet!;
+
+      const lastWorldId = this.projectedLastWorld(fleet);
+
+      const otherWorldId = lastWorldId === world1Id ? world2Id : world1Id;
+
+      if (this.gameData.gates[lastWorldId].includes(otherWorldId)) {
+
+        const warpOrder: StartCargoMissionOrder = {
+          type: 'START_CARGO_MISSION',
+          otherWorldId: otherWorldId
         }
   
         this.gameOrders.addFleetOrder(fleet.id, warpOrder);

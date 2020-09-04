@@ -19,10 +19,12 @@ export type WorldToDisplay = VisibleWorld & {
 }
 
 export type GateWithStartAndEndPosition = {
-  xStart: number,
-  yStart: number,
-  xEnd: number,
-  yEnd: number
+  xFrom: number,
+  yFrom: number,
+  worldFromId: string,
+  xTo: number,
+  yTo: number,
+  worldToId: string,
 }
 
 export class GameStageViewModel {
@@ -128,17 +130,19 @@ export class GameStageViewModel {
       const positionFrom = this.drawingPositons[keyFrom];
       const positionTo = this.drawingPositons[keyTo];
       return {
-        xStart: positionFrom.x,
-        yStart: positionFrom.y,
-        xEnd: positionTo.x,
-        yEnd: positionTo.y
+        xFrom: positionFrom.x,
+        yFrom: positionFrom.y,
+        xTo: positionTo.x,
+        yTo: positionTo.y,
+        worldToId: keyTo,
+        worldFromId: keyFrom
       }
     })
   }
 
   @computed get warpingFleetOwnersByBothWorlds(): Array<[string, Vec2, string, Vec2, string[]]> {
 
-    const warpingFleetsMap = this.gameData.warpingFleetsByBothWorlds;
+    const warpingFleetsMap = this.gameData.fleetsInTransitByBothWorlds;
 
     const result = [] as Array<[string, Vec2, string, Vec2, string[]]>;
 
@@ -160,7 +164,8 @@ export class GameStageViewModel {
   }
 
   public selectGate(id1: string, id2: string) {
-    this.selection.selectGate(id1, id2);
+    const [s1, s2] = [id1, id2].sort()
+    this.selection.selectGate(s1, s2);
   }
 
   public hintForWorld(id: string): string | null {

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
+import { GameStageViewModel, GateWithStartAndEndPosition } from '../../../view-model/game/game-stage-view-model';
 import { Vec2, diff, normal, add, mul } from '../../../../shared/math/vec2';
-import { WORLD_OUTER_RADIUS, WORLD_STROKE, WORLD_BACKGROUND_COLOR, WARP_LANE_WIDTH } from './constants';
+import { WORLD_OUTER_RADIUS, WORLD_STROKE, WORLD_BACKGROUND_COLOR, WARP_LANE_WIDTH, BACKDROP_BORDER } from './constants';
+import { pathForGate } from './helper';
 
 
 @observer
@@ -24,33 +25,14 @@ export class GameStageBackdrop extends React.Component<{
             )
           })}
           {this.props.vm.gatesWithDisplayPosition.map((gate, index) => {
-            const start = {
-              x: gate.xStart,
-              y: gate.yStart
-            }
-            const end = {
-              x: gate.xEnd,
-              y: gate.yEnd
-            }
-            const delta = diff(end, start);
-            const n = normal(delta);
-            const width = WARP_LANE_WIDTH / 2;
-            const path = 'M' +
-              d(add(start, mul(n, width))) +
-              'L' +
-              d(add(end, mul(n, width))) +
-              'L' +
-              d(add(end, mul(n, -1 * width))) +
-              'L' +
-              d(add(start, mul(n, -1 * width))) +
-              'Z';
+            const path = pathForGate(gate);
             return (
               <path key={index} d={path}></path>
             )
           })}
         </clipPath>
         <filter id="backdropBorder">
-          <feMorphology operator="dilate" radius="2"></feMorphology>
+          <feMorphology operator="dilate" radius={BACKDROP_BORDER}></feMorphology>
         </filter>
         <g filter="url(#backdropBorder)">
           <rect width="100%" height="100%" fill={WORLD_STROKE} 
@@ -62,9 +44,5 @@ export class GameStageBackdrop extends React.Component<{
       </g>
     )
   }
-}
-
-function d(v: Vec2) {
-  return `${v.x} ${v.y}`
 }
 

@@ -10,6 +10,10 @@ export type GameStageMode = {
   type: 'SELECT_WORLD_TARGET',
   description: string,
   callback: (worldId: string) => void
+} | {
+  type: 'SELECT_GATE_TARGET',
+  description: string,
+  callback: (world1Id: string, world2Id: string) => void
 }
 
 export type StageSelection = {
@@ -26,6 +30,11 @@ export type StageSelection = {
 export class GameStageSelection {
 
   selectGate(id1: string, id2: string) {
+    if (this.mode.type === 'SELECT_GATE_TARGET') {
+      this.mode.callback(id1, id2)
+      this.mode = { type: 'NORMAL' }
+      return;
+    }
     this.stageSelection = {
       type: 'GATE',
       id1,
@@ -57,10 +66,17 @@ export class GameStageSelection {
 
   @observable public mode: GameStageMode = { type: 'NORMAL' };
 
-
   public requestWorldTargetSelection(description: string, callback: (worldId: string) => void) {
     this.mode = {
       type: 'SELECT_WORLD_TARGET',
+      description,
+      callback
+    }
+  }
+
+  public requestGateTargetSelection(description: string, callback: (world1Id: string, world2Id: string) => void) {
+    this.mode = {
+      type: 'SELECT_GATE_TARGET',
       description,
       callback
     }

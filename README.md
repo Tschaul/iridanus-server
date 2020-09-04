@@ -34,12 +34,19 @@ Server for Iridanus
 
 ## Research
 
-- Research gets gathered proportional to population over time
+- Research gets gathered by proportional to population over time
 - Research can be spent on 5 trees with five colors similar to MTG colors
 - Researched upgrades effect all fleets/worlds instantly
 - Only a total of 5 upgrades can be purchased per game
 
-Possible Upgrades:
+# Other idea:
+
+- Research gets gathered by proportional to population over time
+- There is a pool of uprades shared by all plyers.
+- When i buy a research/developement no one else can buy it
+- no colors
+
+# Possible Upgrades:
 
 cooldown for most abilities: ~1 week
 

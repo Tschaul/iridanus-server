@@ -16,14 +16,14 @@ export type FleetInTransit = WarpingFleet | WaitingForCargoFleet | TransferingCa
 
 export function gateOfFleetInTransit(fleet: FleetInTransit): [string, string] {
     if (fleet.status === 'WARPING') {
-        return [fleet.originWorldId, fleet.targetWorldId].sort() as [string, string]
+        return [fleet.originWorldId, fleet.targetWorldId] as [string, string]
     } else {
-        return [fleet.fromWorldId, fleet.toWorldId].sort() as [string, string]
+        return [fleet.fromWorldId, fleet.toWorldId] as [string, string]
     }
 }
 
 export function fleetIsAtWorld(fleet: Fleet): fleet is FleetWithOwnerAtWorld | LostFleet {
-    return !['TRANSFERIG_CARGO', 'WAITING_FOR_CARGO', 'WARPING'].includes(fleet.status);
+    return !['TRANSFERING_CARGO', 'WAITING_FOR_CARGO', 'WARPING'].includes(fleet.status);
 }
 
 export function fleetHasOwner(fleet: Fleet): fleet is FleetWithOwnerAtWorld | WarpingFleet | TransferingCargoFleet | WaitingForCargoFleet {

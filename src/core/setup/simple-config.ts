@@ -5,7 +5,7 @@ import { GameRules } from "../../shared/model/v1/rules";
 export function makeConfig(millisecondsPerDay: number): GameRules {
   return {
     scoring: {
-      gameEndingScore: 3500 * millisecondsPerDay
+      gameEndingScore: 35000 * millisecondsPerDay
     },
     capture: {
       captureDelay: 2.5 * millisecondsPerDay,

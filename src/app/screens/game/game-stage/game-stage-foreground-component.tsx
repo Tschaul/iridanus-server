@@ -10,6 +10,7 @@ import { screenWhite, selectedYellow, screenWhiteRaw } from '../../../ui-compone
 import { HoverTooltip } from '../../../ui-components/tooltip/hover-tooltip.component';
 import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.component';
 import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
+import { pathForGate } from './helper';
 
 
 @observer
@@ -23,6 +24,7 @@ export class GameStageForeground extends React.Component<{
         {this.renderModeHint()}
         {this.renderWorlds()}
         {this.renderWarppingFleets()}
+        {this.renderGateHitBoxes()}
       </g>
     )
   }
@@ -31,9 +33,29 @@ export class GameStageForeground extends React.Component<{
     switch (this.props.vm.mode.type) {
       case 'NORMAL':
         return <g />
-      case 'SELECT_WORLD_TARGET':
+      default:
         return <text fill={screenWhite} x="32" y="32">{this.props.vm.mode.description}</text>
     }
+  }
+
+  private renderGateHitBoxes() {
+
+    return <g>
+      {this.props.vm.gatesWithDisplayPosition.map((gate, index) => {
+        const path = pathForGate(gate);
+        return (
+          <path 
+          key={index} 
+          d={path} 
+          data-world-id1={gate.worldFromId}
+          data-world-id2={gate.worldToId}
+          onClick={this.handleGateClick}
+          opacity="0"
+          style={{ cursor: 'pointer' }}
+          ></path>
+        )
+      })}
+    </g>
   }
 
   private renderWarppingFleets() {

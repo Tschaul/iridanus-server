@@ -164,9 +164,9 @@ export class GameStats {
 
     })
 
-    Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds).forEach(worldId1 => {
-      Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds[worldId1]).forEach(worldId2 => {
-        const fleets = this.gameData.warpingFleetsByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
+    Object.getOwnPropertyNames(this.gameData.fleetsInTransitByBothWorlds).forEach(worldId1 => {
+      Object.getOwnPropertyNames(this.gameData.fleetsInTransitByBothWorlds[worldId1]).forEach(worldId2 => {
+        const fleets = this.gameData.fleetsInTransitByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
         if (fleets.length) {
           let value = 0;
           if (property === 'ships') {
@@ -209,9 +209,9 @@ export class GameStats {
 
     })
 
-    Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds).forEach(worldId1 => {
-      Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds[worldId1]).forEach(worldId2 => {
-        const fleets = this.gameData.warpingFleetsByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
+    Object.getOwnPropertyNames(this.gameData.fleetsInTransitByBothWorlds).forEach(worldId1 => {
+      Object.getOwnPropertyNames(this.gameData.fleetsInTransitByBothWorlds[worldId1]).forEach(worldId2 => {
+        const fleets = this.gameData.fleetsInTransitByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
         if (fleets.length) {
           let value = fleets.length;
           hints.push({
@@ -257,9 +257,9 @@ export class GameStats {
 
     })
 
-    Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds).forEach(worldId1 => {
-      Object.getOwnPropertyNames(this.gameData.warpingFleetsByBothWorlds[worldId1]).forEach(worldId2 => {
-        const fleets = this.gameData.warpingFleetsByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
+    Object.getOwnPropertyNames(this.gameData.fleetsInTransitByBothWorlds).forEach(worldId1 => {
+      Object.getOwnPropertyNames(this.gameData.fleetsInTransitByBothWorlds[worldId1]).forEach(worldId2 => {
+        const fleets = this.gameData.fleetsInTransitByBothWorlds[worldId1][worldId2].filter(fleet => fleet.ownerId === currentPlayer);
         if (fleets.length) {
           let value = 0;
           fleets.forEach(fleet => {

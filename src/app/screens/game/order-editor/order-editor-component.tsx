@@ -125,6 +125,7 @@ export class OrderEditor extends React.Component<{
       </div>,
       ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
         <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
+        <HoverTooltip content="Start cargo mission"><Button tight onClick={this.handleNewStartCargoMissionOrder}>⇄</Button></HoverTooltip>
         <HoverTooltip content="Await capture"><Button tight onClick={this.handleNewAwaitCaptureOrder}>⚑</Button></HoverTooltip>
       </div>)])
     ])
@@ -159,6 +160,11 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewWarpOrder() {
     this.props.vm.newWarpOrder()
+  }
+
+  @autobind
+  handleNewStartCargoMissionOrder() {
+    this.props.vm.newStartCargoMissionOrder()
   }
 
   @autobind

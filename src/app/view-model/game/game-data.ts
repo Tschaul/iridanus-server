@@ -147,7 +147,7 @@ export class GameData {
     return result;
   }
 
-  @computed get warpingFleetsByBothWorlds() {
+  @computed get fleetsInTransitByBothWorlds() {
     const fleets = Object.values(this.universe.fleets).filter(
       fleet => !fleetIsAtWorld(fleet)
     ) as Array<FleetInTransit>;

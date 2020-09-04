@@ -13,12 +13,6 @@ export class MainViewModel {
   public environment = new ServerEnvironment();
 
   constructor() {
-    // this.welcomeViewModel.username = 'tschaul';
-    // this.welcomeViewModel.password = '123456';
-    // this.welcomeViewModel.login();
-
-    // this.lobbyViewModel.selectedGameId = '2mnjl95eud7u';
-    // this.lobbyViewModel.viewGame();
 
     when(
       () => this.connectionStatus.isConnected,
@@ -26,6 +20,12 @@ export class MainViewModel {
         this.environment.initialize();
         await this.parseLocation();
 
+        this.welcomeViewModel.username = 'tschaul';
+        this.welcomeViewModel.password = '123456';
+        this.welcomeViewModel.login();
+    
+        this.lobbyViewModel.selectedGameId = 'f7qh0tj216qf';
+        this.lobbyViewModel.viewGame();
       }
     )
   }
