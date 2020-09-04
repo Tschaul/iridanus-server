@@ -15,18 +15,18 @@ export function pathForGate(gate: GateWithStartAndEndPosition) {
   const parallel = normalize(delta);
   const orthogonal = normal(delta);
 
-  const start = add(worldStart, mul(parallel, (WORLD_OUTER_RADIUS - BACKDROP_BORDER - 1)))
-  const end = add(worldEnd, mul(parallel, -1 * (WORLD_OUTER_RADIUS - BACKDROP_BORDER - 1)))
+  const startOfLane = add(worldStart, mul(parallel, (WORLD_OUTER_RADIUS - BACKDROP_BORDER - 1)))
+  const endOfLane = add(worldEnd, mul(parallel, -1 * (WORLD_OUTER_RADIUS - BACKDROP_BORDER - 1)))
 
   const width = WARP_LANE_WIDTH / 2;
   const path = 'M' +
-    d(add(start, mul(orthogonal, width))) +
+    d(add(startOfLane, mul(orthogonal, width))) +
     'L' +
-    d(add(end, mul(orthogonal, width))) +
+    d(add(endOfLane, mul(orthogonal, width))) +
     'L' +
-    d(add(end, mul(orthogonal, -1 * width))) +
+    d(add(endOfLane, mul(orthogonal, -1 * width))) +
     'L' +
-    d(add(start, mul(orthogonal, -1 * width))) +
+    d(add(startOfLane, mul(orthogonal, -1 * width))) +
     'Z';
   return path;
 }

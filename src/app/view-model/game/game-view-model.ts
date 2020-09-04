@@ -12,10 +12,12 @@ import { TopBarViewModel } from "./top-bar-view-model";
 import { ScoringsViewModel } from "./scorings-view-model";
 import { GameNotifications } from "./game-notifications";
 import { InfoPanelViewModel } from "./info-panel-view-model";
+import { GameClock } from "./clock";
 
 
 export class GameViewModel {
 
+  clock = new GameClock();
   gameData = new GameData(this);
   gameNotifications = new GameNotifications(this);
   gameOrders = new GameOrders(this, this.gameData);
@@ -23,7 +25,7 @@ export class GameViewModel {
   worldHints = new WorldHints();
   gameStats = new GameStats(this, this.gameData, this.worldHints);
 
-  gameStageViewModel = new GameStageViewModel(this.gameData, this.selection, this.worldHints, this.gameNotifications);
+  gameStageViewModel = new GameStageViewModel(this.gameData, this.selection, this.worldHints, this.gameNotifications, this.clock);
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection);
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints, this.gameData);
   topBarViewModel = new TopBarViewModel(this, this.gameData, this.gameOrders, this.gameStats);
@@ -49,11 +51,13 @@ export class GameViewModel {
   }
 
   public focus() {
+    this.clock.focus();
     this.gameData.focus();
     this.gameNotifications.focus();
   }
 
   public unfocus() {
+    this.clock.unfocus();
     this.gameData.unfocus();
     this.gameNotifications.unfocus();
   }

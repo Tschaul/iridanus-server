@@ -14,7 +14,7 @@ export type FleetWithOwnerAtWorld =
 
 export type FleetInTransit = WarpingFleet | WaitingForCargoFleet | TransferingCargoFleet;
 
-export function gateOfFleetInTransit(fleet: FleetInTransit): [string, string] {
+export function pathOfFleetInTransit(fleet: FleetInTransit): [string, string] {
     if (fleet.status === 'WARPING') {
         return [fleet.originWorldId, fleet.targetWorldId] as [string, string]
     } else {

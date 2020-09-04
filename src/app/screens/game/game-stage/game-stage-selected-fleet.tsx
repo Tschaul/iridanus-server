@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import autobind from "autobind-decorator";
-import { Fleet, fleetIsAtWorld, WarpingFleet, FleetInTransit, gateOfFleetInTransit } from '../../../../shared/model/v1/fleet';
+import { Fleet, fleetIsAtWorld, WarpingFleet, FleetInTransit, pathOfFleetInTransit } from '../../../../shared/model/v1/fleet';
 import { middle, diff, shorten, add } from '../../../../shared/math/vec2';
 import { WORLD_OUTER_RADIUS } from './constants';
 import { screenWhite } from '../../../ui-components/colors/colors';
@@ -105,7 +105,7 @@ export class GameStageSelectedFleet extends React.Component<{
   renderCurrentWarpingPath(fleet: Fleet) {
     if (!fleetIsAtWorld(fleet)) {
 
-      const [w1,w2] = gateOfFleetInTransit(fleet);
+      const [w1,w2] = pathOfFleetInTransit(fleet);
 
       const originWorldPos = this.props.vm.drawingPositons[w1];
       const targetWorldPos = this.props.vm.drawingPositons[w2];

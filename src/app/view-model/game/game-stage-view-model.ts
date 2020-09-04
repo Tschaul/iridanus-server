@@ -1,12 +1,13 @@
 import { observable, computed } from "mobx";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
-import { fleetIsAtWorldAndHasOwner } from "../../../shared/model/v1/fleet";
+import { fleetIsAtWorldAndHasOwner, FleetInTransit } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
 import { VisibleWorld } from "../../../shared/model/v1/visible-state";
 import { GameNotifications } from "./game-notifications";
+import { GameClock } from "./clock";
 
 
 const STAGE_OFFSET = 75;
@@ -27,6 +28,10 @@ export type GateWithStartAndEndPosition = {
   worldToId: string,
 }
 
+export type FleetInTransitWithProgress = FleetInTransit & {
+  transitPosition: number
+}
+
 export class GameStageViewModel {
   @computed get mode() {
     return this.selection.mode;
@@ -36,7 +41,8 @@ export class GameStageViewModel {
     private gameData: GameData,
     private selection: GameStageSelection,
     private worldHints: WorldHints,
-    private gameNotifcations: GameNotifications
+    private gameNotifcations: GameNotifications,
+    private clock: GameClock
   ) { }
 
   @computed get playerInfos() {
@@ -140,19 +146,25 @@ export class GameStageViewModel {
     })
   }
 
-  @computed get warpingFleetOwnersByBothWorlds(): Array<[string, Vec2, string, Vec2, string[]]> {
+  @computed get warpingFleetsByBothWorlds(): Array<[string, Vec2, string, Vec2, FleetInTransitWithProgress[]]> {
 
     const warpingFleetsMap = this.gameData.fleetsInTransitByBothWorlds;
 
-    const result = [] as Array<[string, Vec2, string, Vec2, string[]]>;
+    const result = [] as Array<[string, Vec2, string, Vec2, FleetInTransitWithProgress[]]>;
 
     for (const key1 of Object.getOwnPropertyNames(warpingFleetsMap)) {
       for (const key2 of Object.getOwnPropertyNames(warpingFleetsMap[key1])) {
         const world1Vec = this.drawingPositons[key1];
         const world2Vec = this.drawingPositons[key2];
         const fleets = warpingFleetsMap[key1][key2];
-        const fleetOwners = [...new Set(fleets.map(fleet => fleet.ownerId))];
-        result.push([key1, world1Vec, key2, world2Vec, fleetOwners]);
+        // const fleetOwners = [...new Set(fleets.map(fleet => fleet.ownerId))];
+        result.push([key1, world1Vec, key2, world2Vec, fleets.map(fleet => {
+          const transitPosition = this.calculateTransitPosition(fleet);
+          return {
+            ...fleet,
+            transitPosition
+          }
+        })]);
       }
     }
     return result;
@@ -174,5 +186,18 @@ export class GameStageViewModel {
 
   public hintForGate(id1: string, id2: string) {
     return this.worldHints.getHintForGate(id1, id2)
+  }
+
+  private calculateTransitPosition(fleet: FleetInTransit): number {
+    const now = this.clock.now;
+    const warpDelay = this.gameData.gameRules.warping.warpToWorldDelay;
+    switch (fleet.status) {
+      case 'TRANSFERING_CARGO':
+        return 1 - (fleet.arrivingTimestamp - now) / warpDelay;
+      case 'WARPING':
+        return 1 - (fleet.arrivingTimestamp - now) / warpDelay;
+      case 'WAITING_FOR_CARGO':
+        return 0;
+    }
   }
 }
