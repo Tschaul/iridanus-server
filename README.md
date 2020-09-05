@@ -24,6 +24,8 @@ Server for Iridanus
 
 # Some Ideas
 
+- destroyed ships create metal on the world where they are destroyed.
+
 - no more build orders at worlds. instead ships are built automatically
 
 - at regular intervals all worlds known to any player get revealed to all players

@@ -210,6 +210,20 @@
             ],
             "type": "object"
         },
+        "DeployToWorldOrder": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "DEPLOY_TO_WORLD"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "EnvironmentInfoSubscription": {
             "properties": {
                 "type": {
@@ -436,6 +450,20 @@
             ],
             "type": "object"
         },
+        "SplitFleetOrder": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "SPLIT_FLEET"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "StartCargoMissionOrder": {
             "properties": {
                 "otherWorldId": {
@@ -488,6 +516,12 @@
                             },
                             {
                                 "$ref": "#/definitions/StartCargoMissionOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/SplitFleetOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/DeployToWorldOrder"
                             }
                         ]
                     },

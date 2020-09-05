@@ -19,10 +19,9 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
       this.time.currentTimestamp$
     ).pipe(
       map(([worlds, timestamp]) => {
-
         const world = worlds.find(world => {
-          const builtShips = Math.min(world.population, world.industry, world.metal)
-          return builtShips > 0
+          const activeIndustry = Math.min(world.population, world.industry)
+          return activeIndustry > 0 && world.metal >= activeIndustry
         })
 
         if (!world) {
@@ -31,12 +30,10 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
           return {
             timestamp,
             happen: () => {
-              
-
-              const builtShips = Math.min(world.population, world.industry, world.metal)
+              const activeIndustry = Math.min(world.population, world.industry)
               return [
-                buildShip(world.id, timestamp + this.setup.rules.building.buildShipDelay, builtShips),
-                giveOrTakeWorldMetal(world.id, -1 * builtShips),
+                buildShip(world.id, timestamp + this.setup.rules.building.buildShipDelay, activeIndustry),
+                giveOrTakeWorldMetal(world.id, -1 * activeIndustry),
               ];
 
             }

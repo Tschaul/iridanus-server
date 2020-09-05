@@ -7,26 +7,9 @@ import { ReadyWorld, WorldWithOwner } from "../../../shared/model/v1/world";
 
 describe("capture", () => {
 
-  it("does capture world", async () => {
-    
-    const playedMap = produce(captureTestMap, draft => {
-      draft.universe.worlds["w1"].status = 'LOST';
-    });
-
-    const state = await runMap(playedMap);
-
-    expect(state.universe.worlds["w1"].status).to.equal('READY');
-    expect((state.universe.worlds["w1"] as ReadyWorld).ownerId).to.equal('p1');
-
-  })
-
   it("does capture opponent world", async () => {
     
-    const playedMap = produce(captureTestMap, draft => {
-      (draft.universe.worlds["w1"] as WorldWithOwner).ownerId = "p2"
-    });
-
-    const state = await runMap(playedMap);
+    const state = await runMap(captureTestMap);
 
     expect(state.universe.worlds["w1"].status).to.equal('READY');
     expect((state.universe.worlds["w1"] as ReadyWorld).ownerId).to.equal('p1');
@@ -50,7 +33,8 @@ describe("capture", () => {
 
     const state = await runMap(playedMap);
 
-    expect(state.universe.worlds["w2"].status).to.equal('LOST');
+    expect(state.universe.worlds["w2"].status).to.equal('READY');
+    expect((state.universe.worlds["w2"] as ReadyWorld).ownerId).to.equal('p2');
 
     expect(state.universe.worlds["w3"].status).to.equal('READY');
     expect((state.universe.worlds["w3"] as ReadyWorld).ownerId).to.equal('p1');

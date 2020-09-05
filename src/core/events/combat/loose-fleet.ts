@@ -5,6 +5,7 @@ import { injectable } from "inversify";
 import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { looseFleet } from "../../actions/fleet/loose-fleet";
+import { FleetProjector } from "../../projectors/fleet-projector";
 
 @injectable()
 export class LooseFleetEventQueue implements GameEventQueue {
@@ -12,14 +13,19 @@ export class LooseFleetEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
-    public capture: CombatAndCaptureProjector,
+    public fleet: FleetProjector,
     public time: TimeProjector,
   ) {
     this.upcomingEvent$ = combineLatest(
-      this.capture.nextLostFleet$,
+      this.fleet.byId$,
       this.time.currentTimestamp$
     ).pipe(
-      map(([fleet, timestamp]) => {
+      map(([fleetsById, timestamp]) => {
+
+        const fleet = Object.values(fleetsById).find(fleet => {
+          fleet.ships <= 0;
+        })
+
         if (!fleet) {
           return null
         } else {

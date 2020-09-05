@@ -19,7 +19,6 @@ export class CombatAndCaptureProjector {
   public nextCapturedWorld$: Observable<[(World & WorldBeingCaptured) | null, string]>;
   public nextStartCapturingWorld$: Observable<[World | null, string]>;
   public nextStopCapturingWorld$: Observable<World | null>;
-  public nextLostFleet$: Observable<Fleet | null>;
 
   constructor(
     private worlds: WorldProjector,
@@ -84,27 +83,6 @@ export class CombatAndCaptureProjector {
       shareReplay(1)
     )
 
-    this.nextLostFleet$ = combineLatest(this.fleets.byId$, this.fleets.byCurrentWorldId$, this.worlds.byId$).pipe(
-      map(([fleetsById, fleetsByWorldId, worldsById]) => {
-
-        const ownedFleetsWithoutShips = Object.values(fleetsById).filter(fleet => fleet.ships === 0 && fleetIsAtWorld(fleet)) as FleetAtWorld[];
-        const lostOwnedFleet = ownedFleetsWithoutShips.find(fleet => {
-          const noOtherFleetsAtWorld = !(fleetsByWorldId[fleet.currentWorldId] || []).some(otherFleet => otherFleet.ships !== 0 && fleetIsAtWorld(otherFleet) && otherFleet.ownerId === fleet.ownerId)
-          const world = worldsById[fleet.currentWorldId];
-          const worldIsNotOwned = !worldhasOwner(world) || world.ownerId !== fleet.ownerId;
-          return noOtherFleetsAtWorld && worldIsNotOwned;
-        });
-        if (lostOwnedFleet) {
-          return lostOwnedFleet;
-        }
-
-        return null
-
-      }),
-      distinctUntilChanged(equal),
-      shareReplay(1)
-    )
-
     this.nextStartCapturingWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
       map(([worldsById, playersAtWorldById, fleetsByWorldId]) => {
         const worldsNotBeingCaptured = Object.values(worldsById).filter(world => world.captureStatus === 'NOT_BEING_CAPTURED');
@@ -161,9 +139,6 @@ export class CombatAndCaptureProjector {
     const players = playersAtWorldById[world.id] || [];
 
     if (!worldhasOwner(world)) {
-      if (players.length === 1) {
-        return players[0]
-      }
       return null
     }
 

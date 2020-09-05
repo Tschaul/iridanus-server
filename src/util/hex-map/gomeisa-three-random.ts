@@ -41,7 +41,7 @@ export function makeGomeisaThreeRandom(): GameMap {
         populationGrowthStatus: 'NOT_GROWING',
         integrity: 0,
         metal: 10,
-        mines: 2,
+        mines: 0,
         industry: 10,
         population: 30,
         populationLimit: 30,

@@ -27,17 +27,17 @@ export const captureTestMap: GameState = {
       "w1": {
         ...dummyReadyWorld,
         id: "w1",
-        ownerId: "p1",
+        ownerId: "p2",
       },
       "w2": {
         ...dummyReadyWorld,
         id: "w2",
-        status: 'LOST'
+        ownerId: "p2",
       },
       "w3": {
         ...dummyReadyWorld,
         id: "w3",
-        status: 'LOST'
+        ownerId: "p2",
       }
     },
     gates: {

@@ -18,7 +18,7 @@ import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
 import { RevealWorldEventQueue } from "./visibility/reveal-world";
 import { RememberWorldEventQueue } from "./visibility/remember-world";
-import { LooseFleetEventQueue } from "./capture/loose-fleet";
+import { LooseFleetEventQueue } from "./combat/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
 import { WorldStopGrowingEventQueue } from "./population/world-stop-growing";
