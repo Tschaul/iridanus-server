@@ -5,9 +5,9 @@ Server for Iridanus
 
 # TODOS
 
-- right click to warp and cargo
+- make deploy ships for industry a fleet order
+- split fleets
 - build fleets automatically
-- make scrap ships for industry a fleet order
 - remove world orders
 - auto capture worlds by transfering population to lost fleet
 - turn around when ending cargo mission on foreign world

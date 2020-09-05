@@ -14,6 +14,7 @@ import { Gates } from "../../../shared/model/v1/universe";
 import { distinctUntilChanged } from "rxjs/operators";
 import deepEqual from "deep-equal";
 import { floydWarshall } from "../../../shared/math/path-finding/floydWarshall";
+import { reactionToObservable } from "../../../shared/util/reactionToObservable";
 
 export type FleetByTwoWorlds = {
   [worldId1: string]: {
@@ -99,6 +100,7 @@ export class GameData {
   @observable public distances: Distances = {}
 
   @observable public doneLoading = false;
+  subscription: Subscription = Subscription.EMPTY;
 
   @computed public get rawDrawingPositions() {
     const gameInfo = this.metaData.current as GameMetaData;
@@ -190,15 +192,20 @@ export class GameData {
       () => !!Object.values(this.gameState.current.universe.worlds).length,
       () => {
         this.doneLoading = true;
-        this.distances = floydWarshall(this.gameState.current.universe.gates)
       }
     )
 
+    this.subscription = reactionToObservable(() => this.gameState.current.universe.gates, { deepEqual: true })
+      .subscribe(gates => {
+        this.distances = floydWarshall(gates)
+      })
   }
 
   unfocus() {
     this.gameState.dispose();
     this.metaData.dispose();
     this.gameInfo.dispose();
+    this.subscription.unsubscribe();
+    this.subscription = Subscription.EMPTY;
   }
 }
