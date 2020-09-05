@@ -53,7 +53,7 @@ export class OrderEditor extends React.Component<{
 
   render() {
     if (!this.props.vm.selectedWorldOrFleetIsVisibleToUser) {
-      return this.renderPanel([<span>not yours</span>])
+      return this.renderPanel([<span  key="a">not yours</span>])
     }
     switch (this.props.vm.selectionType) {
       case 'WORLD':
@@ -78,7 +78,7 @@ export class OrderEditor extends React.Component<{
             case 'BUILD_INDUSTRY':
             case 'BUILD_SHIPS':
             case 'SCRAP_SHIPS_FOR_INDUSTRY':
-              return <AmountOrderEditor order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
+              return <AmountOrderEditor key={index} order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
           }
         }).map((content, index) => (
           <div key={index} data-order-index={index} style={{ display: 'flex' }}>
@@ -111,11 +111,11 @@ export class OrderEditor extends React.Component<{
           {orders.map((order, index) => {
             switch (order.type) {
               case 'WARP':
-                return <WarpOrderEditor order={order}></WarpOrderEditor>
+                return <WarpOrderEditor key={index} order={order}></WarpOrderEditor>
               case 'START_CARGO_MISSION':
-                return <span>Start Cargo Mission</span>
+                return <span key={index}>Start Cargo Mission</span>
               case 'AWAIT_CAPTURE':
-                return <span>Await Capture</span>
+                return <span key={index}>Await Capture</span>
             }
           }).map((content, index) => (
             <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>

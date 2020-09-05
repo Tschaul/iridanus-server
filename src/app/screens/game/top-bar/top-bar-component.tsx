@@ -30,7 +30,7 @@ export class TopBar extends React.Component<{
 }> {
   state: { gameStartDuration: string | null } = { gameStartDuration: null }
 
-  subscription: Subscription;
+  subscription: Subscription = Subscription.EMPTY;
   reactionDisposer: IReactionDisposer;
 
   componentWillMount() {

@@ -160,6 +160,10 @@ export class GameStageViewModel {
     this.selection.selectGate(s1, s2);
   }
 
+  public selectFleet(id1: string) {
+    this.selection.selectFleet(id1)
+  }
+
   public hintForWorld(id: string): string | null {
     return this.worldHints.getHintForWorld(id);
   }

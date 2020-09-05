@@ -23,8 +23,8 @@ export class GameStageForeground extends React.Component<{
     return (
       <g opacity="1">
         {this.renderModeHint()}
-        {this.renderWorlds()}
         {this.renderWarppingFleets()}
+        {this.renderWorlds()}
         {this.renderGateHitBoxes()}
       </g>
     )
@@ -55,6 +55,7 @@ export class GameStageForeground extends React.Component<{
               data-world-id1={gate.worldFromId}
               data-world-id2={gate.worldToId}
               onClick={this.handleGateClick}
+              onContextMenu={this.handleGateRightClick}
               opacity="0"
               style={{ cursor: 'pointer' }}
             ></path>
@@ -101,7 +102,9 @@ export class GameStageForeground extends React.Component<{
                 fontSize={22}
                 data-world-id1={id1}
                 data-world-id2={id2}
+                data-fleet-id={fleet.id}
                 onClick={this.handleGateClick}
+                onContextMenu={this.handleGateRightClick}
                 cursor='pointer'
               >◈</text>
             </g>
@@ -133,38 +136,6 @@ export class GameStageForeground extends React.Component<{
             style={{ transform: "translateY(1px)" }}
             opacity={opacity}
           >◉</text>
-          {fleets.map((fleet, index) => {
-            const playerInfo = this.props.vm.playerInfos[fleet.ownerId];
-            const idle = fleet.status === 'READY' && !fleet.orders.length
-            const pos = positions[index]
-            return (
-              <g>
-                {idle && (
-                  <circle
-                    cx={world.x + FLEET_DISTANCE * pos.x}
-                    cy={world.y + FLEET_DISTANCE * pos.y}
-                    r={FLEET_OUTER_RADIUS}
-                    opacity="1"
-                    stroke={screenWhiteRaw.fade(0.5).toString()}
-                    fill="none"
-                    strokeWidth="3"
-                    strokeDasharray="5,5"
-                    data-world-id={world.id}
-                  />
-                )}
-                <text
-                  key={fleet.id}
-                  x={world.x + FLEET_DISTANCE * pos.x}
-                  y={world.y + FLEET_DISTANCE * pos.y}
-                  dominantBaseline="middle"
-                  textAnchor="middle"
-                  fill={playerInfo.color}
-                  fontSize={22}
-                  style={{ transform: "translateY(1px)" }}
-                >◈</text>
-              </g>
-            );
-          })}
           <HoverTooltip
             svg={true}
             content={this.getTooltipForWorld(world)}
@@ -182,6 +153,7 @@ export class GameStageForeground extends React.Component<{
                   strokeDasharray="10,10"
                   data-world-id={world.id}
                   onClick={this.handleWorldClick}
+                  onContextMenu={this.handleWorldRightClick}
                   style={{ cursor: 'pointer' }}
                 />
               )}
@@ -197,6 +169,7 @@ export class GameStageForeground extends React.Component<{
                   strokeDasharray="10,10"
                   data-world-id={world.id}
                   onClick={this.handleWorldClick}
+                  onContextMenu={this.handleWorldRightClick}
                   style={{ cursor: 'pointer' }}
                 />
               )}
@@ -207,10 +180,52 @@ export class GameStageForeground extends React.Component<{
                 opacity="0"
                 data-world-id={world.id}
                 onClick={this.handleWorldClick}
+                onContextMenu={this.handleWorldRightClick}
                 style={{ cursor: 'pointer' }}
               />
             </StaticTooltip>
           </HoverTooltip>
+          {fleets.map((fleet, index) => {
+            const playerInfo = this.props.vm.playerInfos[fleet.ownerId];
+            const idle = fleet.status === 'READY' && !fleet.orders.length
+            const pos = positions[index]
+            return (
+              <g key={fleet.id}>
+                {idle && (
+                  <circle
+                    cx={world.x + FLEET_DISTANCE * pos.x}
+                    cy={world.y + FLEET_DISTANCE * pos.y}
+                    r={FLEET_OUTER_RADIUS}
+                    opacity="1"
+                    stroke={screenWhiteRaw.fade(0.5).toString()}
+                    fill="none"
+                    strokeWidth="3"
+                    strokeDasharray="5,5"
+                    data-world-id={world.id}
+                    data-fleet-id={fleet.id}
+                    onClick={this.handleWorldClick}
+                    onContextMenu={this.handleWorldRightClick}
+                    style={{ cursor: 'pointer' }}
+                  />
+                )}
+                <text
+                  key={fleet.id}
+                  x={world.x + FLEET_DISTANCE * pos.x}
+                  y={world.y + FLEET_DISTANCE * pos.y}
+                  dominantBaseline="middle"
+                  textAnchor="middle"
+                  fill={playerInfo.color}
+                  fontSize={22}
+                  style={{ transform: "translateY(1px)" }}
+                  data-world-id={world.id}
+                  data-fleet-id={fleet.id}
+                  onClick={this.handleWorldClick}
+                  onContextMenu={this.handleWorldRightClick}
+                  style={{ cursor: 'pointer' }}
+                >◈</text>
+              </g>
+            );
+          })}
         </g>);
     });
   }
@@ -219,6 +234,15 @@ export class GameStageForeground extends React.Component<{
   handleWorldClick(event: React.MouseEvent) {
     const worldId = getClosestAttribute(event, 'data-world-id');
     this.props.vm.selectWorld(worldId);
+    const fleetId = getClosestAttribute(event, 'data-fleet-id');
+    if (fleetId) {
+      this.props.vm.selectFleet(fleetId)
+    }
+  }
+
+  @autobind
+  handleWorldRightClick(event: React.MouseEvent) {
+    console.log('Right click');
   }
 
   @autobind
@@ -228,6 +252,15 @@ export class GameStageForeground extends React.Component<{
     if (world1Id && world2Id) {
       this.props.vm.selectGate(world1Id, world2Id);
     }
+    const fleetId = getClosestAttribute(event, 'data-fleet-id');
+    if (fleetId) {
+      this.props.vm.selectFleet(fleetId)
+    }
+  }
+
+  @autobind
+  handleGateRightClick(event: React.MouseEvent) {
+    console.log('Right click');
   }
 
   getColorForWorld(world: VisibleWorld) {

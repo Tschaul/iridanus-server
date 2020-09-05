@@ -43,10 +43,17 @@ Server for Iridanus
 
 # Other idea:
 
-- Research gets gathered by proportional to population over time
+- Research/developement gets gathered by proportional to population over time
 - There is a pool of uprades shared by all plyers.
 - When i buy a research/developement no one else can buy it
-- no colors
+
+# Victory condition
+
+- Points for 3 upgrades of same color
+- Points for highest amount of ships or population respectively
+- Points can be bought with developement
+- Points for owning special artefact worlds
+- Points for each owned capital world
 
 # Possible Upgrades:
 
@@ -82,7 +89,7 @@ more ideas for upgrades:
 - building industry is cheaper
 - fleets can transport more metal
 - instant strike: when enagaging the enemy ships fire once instantly
-- sacrifice population to get extra metal from mines
+- sacrifice population for metal
 
 
 

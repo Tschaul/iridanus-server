@@ -76,7 +76,7 @@ export class SelectedWorldViewModel {
   }
 
   public selectFleetId(id: string | null) {
-    this.selection.selectedFleetdId = id;
+    this.selection.selectFleet(id)
   }
 
   public isWorldOrFleetSelected(isWorld: boolean, item: World | Fleet) {

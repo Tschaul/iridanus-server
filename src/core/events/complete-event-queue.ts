@@ -108,7 +108,7 @@ export class CompleteEventQueue implements GameEventQueue {
       stopCapturingWorld,
       looseFleet,
       awaitCapture,
-      gameEnds,
+      // gameEnds,
       playerChangesInfluence,
       beginScrappingShips,
       endScrappingShips,

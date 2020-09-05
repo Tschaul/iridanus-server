@@ -29,6 +29,10 @@ export type StageSelection = {
 
 export class GameStageSelection {
 
+  selectFleet(id: string | null) {
+    this.selectedFleetdId = id;
+  }
+
   selectGate(id1: string, id2: string) {
     if (this.mode.type === 'SELECT_GATE_TARGET') {
       this.mode.callback(id1, id2)

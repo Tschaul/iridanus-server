@@ -65,7 +65,7 @@ export class LoginPanel extends React.Component<{
               please enter password<br />
               ><Input autocomplete="current-password" type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
               <br />
-              <a style={{ color: hoverYellow }} href="javascript:void(0)" onClick={this.handlePasswordForgotten}>password forgotten?</a>
+              <a style={{ color: hoverYellow }} onClick={this.handlePasswordForgotten}>password forgotten?</a>
             </form>
           </div>
           <div>

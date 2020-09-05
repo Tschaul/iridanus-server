@@ -1,7 +1,7 @@
-import { observable, computed, when } from "mobx";
-import { IStreamListener, fromStream } from "mobx-utils";
+import { observable, computed, when, toJS } from "mobx";
+import { IStreamListener, fromStream, toStream } from "mobx-utils";
 import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
-import { empty } from "rxjs";
+import { empty, from, ObservableInput, Subscription } from "rxjs";
 import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
@@ -9,6 +9,11 @@ import { GameStateService } from "../../client/game-state/game-state.service";
 import { FleetAtWorld, fleetIsAtWorld, FleetInTransit, pathOfFleetInTransit } from "../../../shared/model/v1/fleet";
 import { VisibleState } from "../../../shared/model/v1/visible-state";
 import { GameRules } from "../../../shared/model/v1/rules";
+import { Distances } from "../../../shared/model/v1/distances";
+import { Gates } from "../../../shared/model/v1/universe";
+import { distinctUntilChanged } from "rxjs/operators";
+import deepEqual from "deep-equal";
+import { floydWarshall } from "../../../shared/math/path-finding/floydWarshall";
 
 export type FleetByTwoWorlds = {
   [worldId1: string]: {
@@ -90,6 +95,8 @@ export class GameData {
   @observable private gameRulesStream: IStreamListener<GameRules> = fromStream(empty(), dummyRules);
   @observable private gameState: IStreamListener<VisibleState> = fromStream(empty(), dummyState);
   @observable private metaData: IStreamListener<GameMetaData> = fromStream(empty(), dummyMetaData);
+
+  @observable public distances: Distances = {}
 
   @observable public doneLoading = false;
 
@@ -180,11 +187,13 @@ export class GameData {
       }
     )
     when(
-      () => !!Object.values(this.gameState.current.universe.worlds),
+      () => !!Object.values(this.gameState.current.universe.worlds).length,
       () => {
         this.doneLoading = true;
+        this.distances = floydWarshall(this.gameState.current.universe.gates)
       }
     )
+
   }
 
   unfocus() {
