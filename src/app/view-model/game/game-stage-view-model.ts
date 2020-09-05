@@ -8,6 +8,8 @@ import { WorldHints } from "./world-hints";
 import { VisibleWorld } from "../../../shared/model/v1/visible-state";
 import { GameNotifications } from "./game-notifications";
 import { GameClock } from "./clock";
+import { GameOrders } from "./game-orders";
+import { OrderEditorViewModel } from "./order-editor-view-model";
 
 
 const STAGE_OFFSET = 75;
@@ -42,6 +44,7 @@ export class GameStageViewModel {
     private selection: GameStageSelection,
     private worldHints: WorldHints,
     private gameNotifcations: GameNotifications,
+    private orderEditor: OrderEditorViewModel,
     private clock: GameClock
   ) { }
 
@@ -183,5 +186,13 @@ export class GameStageViewModel {
       case 'WAITING_FOR_CARGO':
         return 0;
     }
+  }
+
+  public sendFleetToWorld(worldId: string) {
+    this.orderEditor.newWarpOrderToWorld(worldId)
+  }
+
+  public sendFleetToGate(world1Id: string, world2Id: string) {
+    this.orderEditor.startCargoMissionAtGate(world1Id, world2Id)
   }
 }

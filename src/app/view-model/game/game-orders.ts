@@ -32,7 +32,6 @@ export class GameOrders {
     )
   }
 
-
   public async saveOrderDrafts() {
     for (const [worldId, orderDrafts] of this.worldOrderDrafts) {
       await this.orderService.updateWorldOrders(this.gameViewModel.gameId!, worldId, orderDrafts);

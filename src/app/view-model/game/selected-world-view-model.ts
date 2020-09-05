@@ -51,9 +51,7 @@ export class SelectedWorldViewModel {
         const fleetMap = this.gameData.fleetsInTransitByBothWorlds;
         const id1 = this.selection.stageSelection.id1;
         const id2 = this.selection.stageSelection.id2;
-        console.log({fleetMap, id1, id2})
         if (fleetMap[id1] && fleetMap[id1][id2]) {
-          console.log(fleetMap[id1][id2])
           return fleetMap[id1][id2].map(fleet => {
             const owner = this.gameData.playerInfos[fleet.ownerId];
             return {

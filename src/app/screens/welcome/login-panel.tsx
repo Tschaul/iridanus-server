@@ -60,10 +60,10 @@ export class LoginPanel extends React.Component<{
               Welcome to {iridanusAscii}
               <br />
               please enter login<br />
-              ><Input autocomplete="username" type="text" value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
+              &gt;<Input autocomplete="username" type="text" value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
               <br />
               please enter password<br />
-              ><Input autocomplete="current-password" type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
+              &gt;<Input autocomplete="current-password" type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
               <br />
               <a style={{ color: hoverYellow }} onClick={this.handlePasswordForgotten}>password forgotten?</a>
             </form>

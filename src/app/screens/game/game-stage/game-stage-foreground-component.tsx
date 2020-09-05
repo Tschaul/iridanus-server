@@ -2,10 +2,9 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel } from '../../../view-model/game/game-stage-view-model';
 import autobind from "autobind-decorator";
-import { World } from '../../../../shared/model/v1/world';
 import { getClosestAttribute } from '../../helper/get-attribute';
-import { mul, add, diff, normal, middle, normalize, abs, distributeOnCircle } from '../../../../shared/math/vec2';
-import { FLEET_SPREAD_DURING_WARP, FLEET_DISTANCE, WORLD_OUTER_RADIUS, FLEET_OUTER_RADIUS } from './constants';
+import { mul, diff, normalize, abs, distributeOnCircle } from '../../../../shared/math/vec2';
+import { FLEET_DISTANCE, WORLD_OUTER_RADIUS, FLEET_OUTER_RADIUS } from './constants';
 import { screenWhite, selectedYellow, screenWhiteRaw } from '../../../ui-components/colors/colors';
 import { HoverTooltip } from '../../../ui-components/tooltip/hover-tooltip.component';
 import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.component';
@@ -72,22 +71,15 @@ export class GameStageForeground extends React.Component<{
       const dist = abs(delta);
       const parallel = normalize(delta);
 
-      // const offset = ((fleetOwners.length - 1) / 2) * FLEET_SPREAD_DURING_WARP;
-      // const offsetPoint = diff(meanPosition, mul(n, offset));
-      // const step = mul(n, FLEET_SPREAD_DURING_WARP);
-
-
-
       return <g key={`${id1}:${id2}`}>
-        {fleets.map((fleet, index) => {
+        {fleets.map((fleet) => {
 
-          const [fromId, toId] = pathOfFleetInTransit(fleet);
+          const [fromId] = pathOfFleetInTransit(fleet);
 
           const relPos = fromId === id1 ? fleet.transitPosition : (1 - fleet.transitPosition);
 
           const playerInfo = this.props.vm.playerInfos[fleet.ownerId];
           const rel = mul(parallel, WORLD_OUTER_RADIUS + relPos * (dist - 2 * WORLD_OUTER_RADIUS))
-          console.log(rel)
           return (
             <g
               transform={`translate(${rel.x},${rel.y})`}
@@ -216,12 +208,11 @@ export class GameStageForeground extends React.Component<{
                   textAnchor="middle"
                   fill={playerInfo.color}
                   fontSize={22}
-                  style={{ transform: "translateY(1px)" }}
+                  style={{ transform: "translateY(1px)", cursor: 'pointer' }}
                   data-world-id={world.id}
                   data-fleet-id={fleet.id}
                   onClick={this.handleWorldClick}
                   onContextMenu={this.handleWorldRightClick}
-                  style={{ cursor: 'pointer' }}
                 >◈</text>
               </g>
             );
@@ -242,7 +233,10 @@ export class GameStageForeground extends React.Component<{
 
   @autobind
   handleWorldRightClick(event: React.MouseEvent) {
-    console.log('Right click');
+    const worldId = getClosestAttribute(event, 'data-world-id');
+    if (worldId) {
+      this.props.vm.sendFleetToWorld(worldId)
+    }
   }
 
   @autobind
@@ -250,6 +244,7 @@ export class GameStageForeground extends React.Component<{
     const world1Id = getClosestAttribute(event, 'data-world-id1');
     const world2Id = getClosestAttribute(event, 'data-world-id2');
     if (world1Id && world2Id) {
+      console.log({world1Id, world2Id})
       this.props.vm.selectGate(world1Id, world2Id);
     }
     const fleetId = getClosestAttribute(event, 'data-fleet-id');
@@ -260,7 +255,11 @@ export class GameStageForeground extends React.Component<{
 
   @autobind
   handleGateRightClick(event: React.MouseEvent) {
-    console.log('Right click');
+    const world1Id = getClosestAttribute(event, 'data-world-id1');
+    const world2Id = getClosestAttribute(event, 'data-world-id2');
+    if (world1Id && world2Id) {
+      this.props.vm.sendFleetToGate(world1Id, world2Id)
+    }
   }
 
   getColorForWorld(world: VisibleWorld) {

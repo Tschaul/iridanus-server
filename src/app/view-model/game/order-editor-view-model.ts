@@ -8,6 +8,7 @@ import { WorldHints } from "./world-hints";
 import { visibleWorldIsWorld, visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
 import { Fleet } from "../../../shared/model/v1/fleet";
 import { GameData } from "./game-data";
+import { findPathFromWorldToGate, findPathFromWorldToWorld } from "../../../shared/math/path-finding/findPath";
 
 export class OrderEditorViewModel {
 
@@ -96,42 +97,63 @@ export class OrderEditorViewModel {
   public newWarpOrder() {
     this.selection.requestWorldTargetSelection('Select warp target!', (worldId) => {
 
-      const fleet = this.selection.selectedFleet!;
-
-      const lastWorldId = this.projectedLastWorld(fleet);
-
-      if (this.gameData.gates[lastWorldId].includes(worldId)) {
-
-        const warpOrder: WarpOrder = {
-          type: 'WARP',
-          targetWorldId: worldId
-        }
-  
-        this.gameOrders.addFleetOrder(fleet.id, warpOrder);
-      }
+      this.newWarpOrderToWorld(worldId);
     })
+  }
+
+  public newWarpOrderToWorld(worldId: string) {
+    const fleet = this.selection.selectedFleet;
+    if (fleet) {
+
+      const startWorld = this.projectedLastWorld(fleet);
+
+      const path = findPathFromWorldToWorld(startWorld, worldId, this.gameData.gates, this.gameData.distances)
+
+      this.addOrderForPath(path, fleet.id)
+
+    }
   }
 
   public newStartCargoMissionOrder() {
     this.selection.requestGateTargetSelection('Select gate target!', (world1Id, world2Id) => {
+      this.startCargoMissionAtGate(world1Id, world2Id);
+    })
+  }
 
+  public startCargoMissionAtGate(world1Id: string, world2Id: string) {
+    const fleet = this.selection.selectedFleet;
+    if (fleet) {
 
-      const fleet = this.selection.selectedFleet!;
+      const startWorld = this.projectedLastWorld(fleet);
 
-      const lastWorldId = this.projectedLastWorld(fleet);
+      const path = findPathFromWorldToGate(startWorld, [world1Id, world2Id], this.gameData.gates, this.gameData.distances)
+
+      this.addOrderForPath(path, fleet.id)
+
+      const lastWorldId = path.length ? path[path.length - 1][1] : startWorld
 
       const otherWorldId = lastWorldId === world1Id ? world2Id : world1Id;
 
-      if (this.gameData.gates[lastWorldId].includes(otherWorldId)) {
+      const warpOrder: StartCargoMissionOrder = {
+        type: 'START_CARGO_MISSION',
+        otherWorldId: otherWorldId
+      };
 
-        const warpOrder: StartCargoMissionOrder = {
-          type: 'START_CARGO_MISSION',
-          otherWorldId: otherWorldId
-        }
-  
-        this.gameOrders.addFleetOrder(fleet.id, warpOrder);
-      }
-    })
+      this.gameOrders.addFleetOrder(fleet.id, warpOrder);
+    }
+  }
+
+  private addOrderForPath(path: Array<[string, string]>, fleetId: string) {
+
+    for (const item of path) {
+      const warpOrder: WarpOrder = {
+        type: 'WARP',
+        targetWorldId: item[1]
+      };
+
+      this.gameOrders.addFleetOrder(fleetId, warpOrder);
+    }
+
   }
 
   public newAwaitCaptureOrder() {
@@ -142,7 +164,7 @@ export class OrderEditorViewModel {
     this.gameOrders.addFleetOrder(fleet.id, order);
   }
 
-  public newScrapShipsOrder(amount: number) {      
+  public newScrapShipsOrder(amount: number) {
     const world = this.selection.selectedWorld!;
     const order: ScrapShipsForIndustryOrder = {
       type: 'SCRAP_SHIPS_FOR_INDUSTRY',
@@ -159,7 +181,7 @@ export class OrderEditorViewModel {
     }
     this.gameOrders.addWorldOrder(world.id, order);
   }
-  
+
   public newBuildShipsOrder(amount: number) {
     const world = this.selection.selectedWorld!;
     const order: BuildShipsOrder = {
@@ -217,7 +239,7 @@ export class OrderEditorViewModel {
     }
 
     return fleet.currentWorldId;
-    
+
   }
 
 }
