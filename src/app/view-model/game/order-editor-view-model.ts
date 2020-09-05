@@ -1,11 +1,10 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
 import { WarpOrder, FleetOrder, AwaitCaptureOrder, StartCargoMissionOrder } from "../../../shared/model/v1/fleet-orders";
-import { WorldOrder, BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryOrder } from "../../../shared/model/v1/world-order";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
-import { visibleWorldIsWorld, visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
+import { visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
 import { Fleet } from "../../../shared/model/v1/fleet";
 import { GameData } from "./game-data";
 import { findPathFromWorldToGate, findPathFromWorldToWorld } from "../../../shared/math/path-finding/findPath";
@@ -60,7 +59,7 @@ export class OrderEditorViewModel {
     return this.gameViewModel.selfIsSpecator
   }
 
-  @computed get orders(): FleetOrder[] | WorldOrder[] {
+  @computed get orders(): FleetOrder[] {
 
     switch (this.selectionType) {
       case 'FLEET':
@@ -69,29 +68,18 @@ export class OrderEditorViewModel {
         }
         return this.selection.selectedFleet.orders
       case 'WORLD':
-        if (!this.selection.selectedWorld) {
-          return [];
-        }
-        if (visibleWorldIsWorld(this.selection.selectedWorld!)) {
-          return this.selection.selectedWorld!.orders;
-        }
         return [];
       default:
         return [];
     }
   }
 
-  public updateOrder(order: FleetOrder | WorldOrder, index: number) {
+  public updateOrder(order: FleetOrder, index: number) {
     if (this.selectionType === 'FLEET') {
       const newOrders = this.orders.slice(0) as FleetOrder[];
       newOrders[index] = order as FleetOrder;
       this.gameOrders.updateFleetOrders(this.selectedWorldOrFleetId as string, newOrders);
-    } else {
-      const newOrders = this.orders.slice(0) as WorldOrder[];
-      newOrders[index] = order as WorldOrder;
-      this.gameOrders.updateWorldOrders(this.selectedWorldOrFleetId as string, newOrders);
-
-    }
+    } 
   }
 
   public newWarpOrder() {
@@ -164,36 +152,9 @@ export class OrderEditorViewModel {
     this.gameOrders.addFleetOrder(fleet.id, order);
   }
 
-  public newScrapShipsOrder(amount: number) {
-    const world = this.selection.selectedWorld!;
-    const order: ScrapShipsForIndustryOrder = {
-      type: 'SCRAP_SHIPS_FOR_INDUSTRY',
-      amount
-    }
-    this.gameOrders.addWorldOrder(world.id, order);
-  }
-
-  public newBuildIndustryOrder(amount: number) {
-    const world = this.selection.selectedWorld!;
-    const order: BuildIndustryOrder = {
-      type: 'BUILD_INDUSTRY',
-      amount
-    }
-    this.gameOrders.addWorldOrder(world.id, order);
-  }
-
-  public newBuildShipsOrder(amount: number) {
-    const world = this.selection.selectedWorld!;
-    const order: BuildShipsOrder = {
-      type: 'BUILD_SHIPS',
-      amount
-    }
-    this.gameOrders.addWorldOrder(world.id, order);
-  }
-
   worldsWithHints: string[];
 
-  public showHintsForOrder(order: FleetOrder | WorldOrder) {
+  public showHintsForOrder(order: FleetOrder) {
     switch (order.type) {
       case 'WARP':
         this.worldHints.showHints([{ type: 'WORLD', worldId: order.targetWorldId, hint: 'Target world' }]);
@@ -211,9 +172,6 @@ export class OrderEditorViewModel {
   public deleteOrder(index: number) {
     if (this.selectionType === 'FLEET') {
       this.gameOrders.deleteFleetOrder(this.selectedWorldOrFleetId as string, index)
-    }
-    if (this.selectionType === 'WORLD') {
-      this.gameOrders.deleteWorldOrder(this.selectedWorldOrFleetId as string, index)
     }
     this.clearHints();
   }

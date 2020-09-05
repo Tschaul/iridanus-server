@@ -1,26 +1,23 @@
 import { ReadyFleet, Fleet } from "../../../shared/model/v1/fleet";
-import { World, WorldWithOwner, worldhasOwner } from "../../../shared/model/v1/world";
+import { World, worldhasOwner } from "../../../shared/model/v1/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { GameRules } from "../../../shared/model/v1/rules";
 import { Action } from "../../actions/action";
 import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
 import { setFleetIntegrity } from "../../actions/fleet/set-integrity";
 import { looseFleet } from "../../actions/fleet/loose-fleet";
-import { setWorldIntegrity } from "../../actions/world/set-integrity";
-import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 import { giveOrTakeWorldIndustry } from "../../actions/world/give-or-take-industry";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 
-export function handleFiring(attacker: ReadyFleet | WorldWithOwner, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
-  const targetResult = determineTarget(attacker, world, fleetsByCurrentworldId[world.id], random);
+export function handleFiring(attacker: ReadyFleet, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
+  const target = determineTarget(attacker, world, fleetsByCurrentworldId[world.id], random);
 
-  if (!targetResult) {
+  if (!target) {
     return []
   }
 
-  const [targetType, target] = targetResult;
-  const [newShips, newIntegrity] = determineDamage(attacker, target, targetType, config);
-  const damageActions = makeActions(targetType, newShips, target, newIntegrity);
+  const [newShips, newIntegrity] = determineDamage(attacker, target, config);
+  const damageActions = makeActions(newShips, target, newIntegrity);
 
   const [industryDamage, populationDamage] = determineCollateralDamage(attacker, world, config, random);
   const collateralActions = makeCollateralActions(industryDamage, populationDamage, world);
@@ -30,37 +27,25 @@ export function handleFiring(attacker: ReadyFleet | WorldWithOwner, world: World
 
 
 
-function determineTarget(attacker: ReadyFleet | WorldWithOwner, world: World, otherFleetsAtWorld: Fleet[], random: RandomNumberGenerator): ['WORLD', World] | ['FLEET', Fleet] | undefined {
+function determineTarget(attacker: ReadyFleet, world: World, otherFleetsAtWorld: Fleet[], random: RandomNumberGenerator): Fleet | undefined {
   const enemyFleets = otherFleetsAtWorld.filter(otherFleet => otherFleet.ownerId !== attacker.ownerId);
 
-  let worldTargetShips = world.ships;
-
-  if (world.status === 'LOST' || world.ownerId === attacker.ownerId) {
-    // don't fire at lost or your own world;
-    worldTargetShips = 0;
-  }
-
-  const totalShips = worldTargetShips + enemyFleets.reduce((acc, fleet) => acc + fleet.ships, 0);
+  const totalShips = enemyFleets.reduce((acc, fleet) => acc + fleet.ships, 0);
 
   let randomNumber = random.equal() * totalShips;
 
-  if (randomNumber < worldTargetShips) {
-    return ['WORLD', world]
-  } else {
-    randomNumber -= worldTargetShips
-
-    for (const enemyFleet of enemyFleets) {
-      if (randomNumber < enemyFleet.ships) {
-        return ['FLEET', enemyFleet]
-      } else {
-        randomNumber -= enemyFleet.ships
-      }
+  for (const enemyFleet of enemyFleets) {
+    if (randomNumber < enemyFleet.ships) {
+      return enemyFleet
+    } else {
+      randomNumber -= enemyFleet.ships
     }
   }
 
+
 }
 
-function determineCollateralDamage(attacker: ReadyFleet | WorldWithOwner, world: World, config: GameRules, random: RandomNumberGenerator): [number, number] {
+function determineCollateralDamage(attacker: ReadyFleet, world: World, config: GameRules, random: RandomNumberGenerator): [number, number] {
   if (worldhasOwner(world) && attacker.ownerId === world.ownerId) {
     return [0, 0]
   }
@@ -80,7 +65,7 @@ function determineCollateralDamage(attacker: ReadyFleet | WorldWithOwner, world:
   return [industryDamage, populationDamage]
 }
 
-function determineDamage(attacker: Fleet | World, defender: Fleet | World, targetType: 'WORLD' | 'FLEET', config: GameRules): [number, number] {
+function determineDamage(attacker: Fleet, defender: Fleet, config: GameRules): [number, number] {
 
   const damage = attacker.ships * config.combat.integrityDamagePerShip;
 
@@ -101,37 +86,18 @@ function makeCollateralActions(industryDamage: number, populationDamage: number,
   ]
 }
 
-function makeActions(targetType: string, newShips: number, target: Fleet | World, newIntegrity: number): Action[] {
-  switch (targetType) {
-    case 'FLEET':
-      if (newShips <= 0) {
-        return [
-          giveOrTakeFleetShips(target.id, -1 * target.ships),
-          setFleetIntegrity(target.id, 1),
-          looseFleet(target.id),
-        ];
-      }
-      else {
-        return [
-          giveOrTakeFleetShips(target.id, newShips - target.ships),
-          setFleetIntegrity(target.id, newIntegrity),
-        ];
-      }
-    case 'WORLD':
-      if (newShips <= 0) {
-        return [
-          giveOrTakeWorldShips(target.id, -1 * target.ships),
-          setWorldIntegrity(target.id, 1),
-        ];
-      }
-      else {
-        return [
-          giveOrTakeWorldShips(target.id, newShips - target.ships),
-          setWorldIntegrity(target.id, newIntegrity),
-        ];
-      }
-    default:
-      throw new Error('Could not make damage actions')
-
+function makeActions(newShips: number, target: Fleet, newIntegrity: number): Action[] {
+  if (newShips <= 0) {
+    return [
+      giveOrTakeFleetShips(target.id, -1 * target.ships),
+      setFleetIntegrity(target.id, 1),
+      looseFleet(target.id),
+    ];
+  }
+  else {
+    return [
+      giveOrTakeFleetShips(target.id, newShips - target.ships),
+      setFleetIntegrity(target.id, newIntegrity),
+    ];
   }
 }

@@ -28,7 +28,6 @@ export const captureTestMap: GameState = {
         ...dummyReadyWorld,
         id: "w1",
         ownerId: "p1",
-        ships: 5,
       },
       "w2": {
         ...dummyReadyWorld,

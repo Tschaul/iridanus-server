@@ -169,7 +169,7 @@ export class CombatAndCaptureProjector {
 
     const noOtherOwner = players.filter(id => id !== world.ownerId).length === 1;
     const noFleetsAtWorld = !(fleetsByWorldId[world.id] || []).some(fleet => fleet.ships !== 0 && fleet.ownerId === world.ownerId)
-    const worldShouldBeCaptured = world.ships === 0 && noOtherOwner && noFleetsAtWorld;
+    const worldShouldBeCaptured = noOtherOwner && noFleetsAtWorld;
 
     if (worldShouldBeCaptured) {
       return playersAtWorldById[world.id].find(id => id !== world.ownerId)

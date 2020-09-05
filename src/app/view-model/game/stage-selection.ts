@@ -95,16 +95,7 @@ export class GameStageSelection {
 
   @computed public get selectedWorld(): VisibleWorld | null {
     if (this.stageSelection.type === 'WORLD') {
-      const world = this.gameData.worlds[this.stageSelection.id];
-      const orderDrafts = this.gameOrders.orderDraftsForWorld(this.stageSelection.id);
-      if (orderDrafts) {
-        return {
-          ...world,
-          orders: orderDrafts
-        } as World;
-      } else {
-        return world
-      }
+      return this.gameData.worlds[this.stageSelection.id];
     } else {
       return null;
     }

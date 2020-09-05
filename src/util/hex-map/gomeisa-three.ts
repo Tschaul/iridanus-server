@@ -43,7 +43,6 @@ export function makeGomeisaThree(): GameMap {
         populationGrowthStatus: 'NOT_GROWING',
         industry: 30,
         population: 100,
-        ships: 2
       };
 
       ([1, 2, 3, 4, 5]).forEach(() => {
@@ -84,10 +83,8 @@ function makeWorld(id: string): LostWorld {
     integrity: 0,
     metal: amount,
     mines: amount,
-    orders: [],
     population: amount * 10,
     populationLimit: amount * 20,
-    ships: 0,
     status: 'LOST',
     captureStatus: 'NOT_BEING_CAPTURED'
   }

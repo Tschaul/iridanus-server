@@ -5,7 +5,8 @@ import { updateWorld } from "./update-world";
 
 export function buildShip(
   worldId: string,
-  readyTimestamp: number
+  readyTimestamp: number,
+  amount: number
 ): Action {
   return {
     describe: () => `BuildShip ${JSON.stringify({ worldId, readyTimestamp })}`,
@@ -18,6 +19,7 @@ export function buildShip(
           status: 'BUILDING_SHIP',
           readyTimestamp: readyTimestamp,
           ownerId: oldWorld.ownerId,
+          buildingShipsAmount: amount
         }
       })
     }

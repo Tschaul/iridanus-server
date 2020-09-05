@@ -3,7 +3,6 @@ import autobind from "autobind-decorator";
 import { observer } from "mobx-react";
 import { OrderEditorViewModel } from "../../../view-model/game/order-editor-view-model";
 import { Panel } from "../../../ui-components/panel/panel-component";
-import { WorldOrder } from "../../../../shared/model/v1/world-order";
 import { FleetOrder } from "../../../../shared/model/v1/fleet-orders";
 import { Button } from "../../../ui-components/button/button";
 import { reaction } from "mobx";
@@ -57,7 +56,7 @@ export class OrderEditor extends React.Component<{
     }
     switch (this.props.vm.selectionType) {
       case 'WORLD':
-        return this.renderWorldOrderEditor(this.props.vm.orders as WorldOrder[])
+        return this.renderWorldOrderEditor()
       case 'FLEET':
         return this.renderFleetOrderEditor(this.props.vm.orders as FleetOrder[])
       default:
@@ -65,33 +64,16 @@ export class OrderEditor extends React.Component<{
     }
   }
 
-  renderWorldOrderEditor(orders: WorldOrder[]) {
+  renderWorldOrderEditor() {
 
     return this.renderPanel([
       <div key="a">
-        World orders
+        World
           <PanelDivider></PanelDivider>
       </div>,
       <div key="b" style={{ flex: 1 }}>
-        {orders.map((order, index) => {
-          switch (order.type) {
-            case 'BUILD_INDUSTRY':
-            case 'BUILD_SHIPS':
-            case 'SCRAP_SHIPS_FOR_INDUSTRY':
-              return <AmountOrderEditor key={index} order={order} index={index} update={this.handleOrderUpdate}></AmountOrderEditor>
-          }
-        }).map((content, index) => (
-          <div key={index} data-order-index={index} style={{ display: 'flex' }}>
-            <div style={{ flex: 1 }}>{content}</div>
-            {!this.props.vm.selfIsSpectator && <div onClick={this.handleDelete} className={classNames(classes.deleteHandle)}>X</div>}
-          </div>
-        ))}
-      </div>,
-      ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex' }} key="c">
-        <HoverTooltip content="Build industry"><Button tight onClick={this.handleNewBuildIndustryOrder} spaceRight>+I</Button></HoverTooltip>
-        <HoverTooltip content="Build ships"><Button tight onClick={this.handleNewBuildShipsOrder} spaceRight>+►</Button></HoverTooltip>
-        <HoverTooltip content="Scrap ships for industry"><Button tight onClick={this.handleNewScrapShipsOrder} spaceRight>⮂I</Button></HoverTooltip>
-      </div>)])
+        
+      </div>
     ])
   }
 
@@ -175,22 +157,7 @@ export class OrderEditor extends React.Component<{
   }
 
   @autobind
-  handleNewBuildShipsOrder() {
-    this.props.vm.newBuildShipsOrder(1)
-  }
-
-  @autobind
-  handleNewBuildIndustryOrder() {
-    this.props.vm.newBuildIndustryOrder(1)
-  }
-
-  @autobind
-  handleNewScrapShipsOrder() {
-    this.props.vm.newScrapShipsOrder(1)
-  }
-
-  @autobind
-  handleOrderUpdate(order: FleetOrder | WorldOrder, index: number) {
+  handleOrderUpdate(order: FleetOrder, index: number) {
     this.props.vm.updateOrder(order, index);
   }
 

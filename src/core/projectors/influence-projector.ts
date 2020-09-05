@@ -46,7 +46,6 @@ export class InfluenceProjector {
             incrementStat(population, world.ownerId, world.population)
             incrementStat(industry, world.ownerId, world.industry)
             incrementStat(mines, world.ownerId, world.mines)
-            incrementStat(ships, world.ownerId, world.ships)
           }
         })
 

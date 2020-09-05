@@ -139,7 +139,6 @@ export class SelectedWorldPanel extends React.Component<{
       <div className={classNames([classes.row, { selected }])} key={world.id} data-fleet-id={null} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
-        {this.tableAmount(world.ships, '►')}
         {this.tableAmount(world.metal, '▮')}
         {this.tableAmount(world.population, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>

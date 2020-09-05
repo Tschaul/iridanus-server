@@ -19,8 +19,8 @@ describe("cargo", () => {
     
     const state = await runMap(map);
 
-    expect((state.universe.worlds["w1"] as ReadyWorld).metal)
-      .to.be.greaterThan(cargoTestMap.universe.worlds["w1"].metal)
+    expect((state.universe.worlds["w2"] as ReadyWorld).metal)
+      .to.be.lessThan(cargoTestMap.universe.worlds["w2"].metal)
   })
 })
 

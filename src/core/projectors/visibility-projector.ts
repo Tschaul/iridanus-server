@@ -117,11 +117,6 @@ export class VisibilityProjector {
           } else if (visibilityForPlayer[world.id].status === 'REMEMBERED') {
             const rememberedWorld = visibilityForPlayer[world.id];
             worlds[world.id] = rememberedWorld as RemeberedWorld;
-          } else if (worldhasOwner(world) && world.ownerId !== playerId) {
-            worlds[world.id] = {
-              ...worlds[world.id],
-              orders: []
-            } as World
           }
         })
 

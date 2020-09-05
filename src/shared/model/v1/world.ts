@@ -1,5 +1,3 @@
-import { WorldOrder } from "./world-order";
-
 export type World =
     WorldWithOwner
     | LostWorld;
@@ -13,12 +11,10 @@ export type WorldWithOwner =
 export interface BaseWorldBase {
     id: string;
     metal: number;
-    ships: number;
     industry: number;
     population: number;
     populationLimit: number;
     mines: number;
-    orders: WorldOrder[];
     integrity: number;
 }
 
@@ -32,10 +28,8 @@ export function baseWorld(world: World): BaseWorld {
         industry: world.industry,
         metal: world.metal,
         mines: world.mines,
-        orders: world.orders,
         population: world.population,
         populationLimit: world.populationLimit,
-        ships: world.ships,
         integrity: world.integrity,
     }
 
@@ -54,9 +48,7 @@ export function baseWorldWithOwner(world: WorldWithOwnerBase): WorldWithOwnerBas
         industry: world.industry,
         metal: world.metal,
         mines: world.mines,
-        orders: world.orders,
         population: world.population,
-        ships: world.ships,
         integrity: world.integrity,
         ...combatAndMiningStatus(world)
     }
@@ -148,6 +140,7 @@ export type BuildingShipWorld = WorldWithOwnerBase & {
     status: 'BUILDING_SHIP'
     ownerId: string;
     readyTimestamp: number;
+    buildingShipsAmount: number;
 }
 
 export type BuildingIndustryWorld = WorldWithOwnerBase & {

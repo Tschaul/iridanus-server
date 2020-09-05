@@ -8,21 +8,14 @@ import { EndWarpEventQueue } from "./warping/end-warp";
 import { LeaveWorldEventQueue } from "./warping/leave-world";
 import { BeginBuildingShipEventQueue } from "./building/begin-building-ship";
 import { EndBuildShipsEventQueue } from "./building/end-build-ship";
-import { BeginBuildingIndustryEventQueue } from "./building/begin-building-industry";
-import { EndBuildIndustryEventQueue } from "./building/end-build-industry";
 import { FleetFireEventQueue } from "./combat/fleet-fire";
 import { FleetStartFiringEventQueue } from "./combat/fleet-start-firing";
 import { FleetStopFiringEventQueue } from "./combat/fleet-stop-firing";
-import { WorldStartFiringEventQueue } from "./combat/world-start-firing";
-import { WorldFireEventQueue } from "./combat/world-fire";
-import { WorldStopFiringEventQueue } from "./combat/world-stop-firing";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { TickEventQueue } from "./tick";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
-import { BeginScrappingShipsEventQueue } from "./scrapping/begin-scrapping-ships";
-import { EndScrappingShipsEventQueue } from "./scrapping/end-scrapping-ships";
 import { RevealWorldEventQueue } from "./visibility/reveal-world";
 import { RememberWorldEventQueue } from "./visibility/remember-world";
 import { LooseFleetEventQueue } from "./capture/loose-fleet";
@@ -35,7 +28,6 @@ import { GameEndsEventQueue } from "./scoring/game-ends";
 import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
 import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
 import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
-import { NotifyWorldIdleEventQueue } from "./idle-notification/notify-world-idle";
 import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
 import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
 import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo";
@@ -60,19 +52,10 @@ export class CompleteEventQueue implements GameEventQueue {
 
     beginBuildShips: BeginBuildingShipEventQueue,
     endBuildShips: EndBuildShipsEventQueue,
-    beginBuildIndustry: BeginBuildingIndustryEventQueue,
-    endBuildIndustry: EndBuildIndustryEventQueue,
-
-    beginScrappingShips: BeginScrappingShipsEventQueue,
-    endScrappingShips: EndScrappingShipsEventQueue,
 
     fleetStartFiring: FleetStartFiringEventQueue,
     fleetFire: FleetFireEventQueue,
     fleetStopFiring: FleetStopFiringEventQueue,
-
-    worldStartFiring: WorldStartFiringEventQueue,
-    worldFire: WorldFireEventQueue,
-    worldStopFiring: WorldStopFiringEventQueue,
 
     worldStartMining: WorldStartMiningEventQueue,
     worldMinesMetal: WorldMinesMetalEventQueue,
@@ -97,7 +80,6 @@ export class CompleteEventQueue implements GameEventQueue {
     remeberWorld: RememberWorldEventQueue,
 
     notifyFleetIdle: NotifyFleetIdleEventQueue,
-    notifyWorldIdle: NotifyWorldIdleEventQueue,
   ) {
 
     const allEventQueues = [
@@ -108,24 +90,17 @@ export class CompleteEventQueue implements GameEventQueue {
       stopCapturingWorld,
       looseFleet,
       awaitCapture,
-      // gameEnds,
+      gameEnds,
       playerChangesInfluence,
-      beginScrappingShips,
-      endScrappingShips,
       arriveAtWorld,
       beginWarp,
       endWarp,
       leaveWorld,
       beginBuildShips,
       endBuildShips,
-      beginBuildIndustry,
-      endBuildIndustry,
       fleetStopFiring,
       fleetStartFiring,
       fleetFire,
-      worldStartFiring,
-      worldFire,
-      worldStopFiring,
       worldStartMining,
       worldMinesMetal,
       worldStopMining,
@@ -137,7 +112,6 @@ export class CompleteEventQueue implements GameEventQueue {
       endTransferingCargo,
       stopCargoMission,
       notifyFleetIdle,
-      notifyWorldIdle
     ]
 
     this.upcomingEvent$ = combineLatest(

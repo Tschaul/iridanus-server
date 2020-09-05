@@ -56,9 +56,6 @@
                             "$ref": "#/definitions/ToggleSpectatorForGameCommand"
                         },
                         {
-                            "$ref": "#/definitions/UpdateWorldOrdersCommand"
-                        },
-                        {
                             "$ref": "#/definitions/UpdateFleetOrdersCommand"
                         },
                         {
@@ -169,44 +166,6 @@
                 }
             },
             "required": [
-                "type"
-            ],
-            "type": "object"
-        },
-        "BuildIndustryOrder": {
-            "properties": {
-                "amount": {
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "BUILD_INDUSTRY"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "BuildShipsOrder": {
-            "properties": {
-                "amount": {
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "BUILD_SHIPS"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
                 "type"
             ],
             "type": "object"
@@ -432,26 +391,6 @@
             ],
             "type": "object"
         },
-        "ScrapShipsForIndustryOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "SCRAP_SHIPS_FOR_INDUSTRY"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
         "SendPasswordResetTokenCommand": {
             "properties": {
                 "id": {
@@ -565,41 +504,6 @@
                 "fleetId",
                 "orders",
                 "type"
-            ],
-            "type": "object"
-        },
-        "UpdateWorldOrdersCommand": {
-            "properties": {
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/BuildShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/BuildIndustryOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
-                "type": {
-                    "enum": [
-                        "ORDERS/UPDATE_WORLD"
-                    ],
-                    "type": "string"
-                },
-                "worldId": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "orders",
-                "type",
-                "worldId"
             ],
             "type": "object"
         },

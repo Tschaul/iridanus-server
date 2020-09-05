@@ -8,6 +8,7 @@ describe("scoring", () => {
   it("game end with correct timestamp", async () => {
     
     const playedMap = produce(scoringTestMap, draft => {
+      draft.gameEndTimestamp = 100000
     });
 
     const state = await runMap(playedMap);

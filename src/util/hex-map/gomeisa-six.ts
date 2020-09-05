@@ -38,10 +38,8 @@ function makeWorld(id: string): LostWorld {
     integrity: 0,
     metal: 0,
     mines: 0,
-    orders: [],
     population: 0,
     populationLimit: 0,
-    ships: 1,
     status: 'LOST',
     captureStatus: 'NOT_BEING_CAPTURED'
   }

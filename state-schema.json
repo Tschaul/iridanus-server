@@ -87,29 +87,10 @@
                 "mines": {
                     "type": "number"
                 },
-                "orders": {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/BuildShipsOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/BuildIndustryOrder"
-                            },
-                            {
-                                "$ref": "#/definitions/ScrapShipsForIndustryOrder"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
                 "population": {
                     "type": "number"
                 },
                 "populationLimit": {
-                    "type": "number"
-                },
-                "ships": {
                     "type": "number"
                 }
             },
@@ -119,48 +100,8 @@
                 "integrity",
                 "metal",
                 "mines",
-                "orders",
                 "population",
-                "populationLimit",
-                "ships"
-            ],
-            "type": "object"
-        },
-        "BuildIndustryOrder": {
-            "properties": {
-                "amount": {
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "BUILD_INDUSTRY"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
-            ],
-            "type": "object"
-        },
-        "BuildShipsOrder": {
-            "properties": {
-                "amount": {
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "BUILD_SHIPS"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
+                "populationLimit"
             ],
             "type": "object"
         },
@@ -492,26 +433,6 @@
                 "lastScoringTimestamp",
                 "playerId",
                 "score"
-            ],
-            "type": "object"
-        },
-        "ScrapShipsForIndustryOrder": {
-            "properties": {
-                "amount": {
-                    "maximum": 99,
-                    "minimum": 1,
-                    "type": "integer"
-                },
-                "type": {
-                    "enum": [
-                        "SCRAP_SHIPS_FOR_INDUSTRY"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "type"
             ],
             "type": "object"
         },
@@ -1312,6 +1233,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1326,6 +1250,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1353,6 +1278,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1367,6 +1295,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1394,6 +1323,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1408,6 +1340,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1435,6 +1368,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1449,6 +1385,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1476,6 +1413,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1490,6 +1430,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1517,6 +1458,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1531,6 +1475,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1558,6 +1503,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1572,6 +1520,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1599,6 +1548,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1613,6 +1565,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1640,6 +1593,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1654,6 +1610,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1681,6 +1638,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1695,6 +1655,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1722,6 +1683,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1736,6 +1700,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1763,6 +1728,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1777,6 +1745,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1804,6 +1773,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1818,6 +1790,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1845,6 +1818,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1859,6 +1835,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1886,6 +1863,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1900,6 +1880,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"
@@ -1927,6 +1908,9 @@
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
                                             "ownerId": {
                                                 "type": "string"
                                             },
@@ -1941,6 +1925,7 @@
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsAmount",
                                             "ownerId",
                                             "readyTimestamp",
                                             "status"

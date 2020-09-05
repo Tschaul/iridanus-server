@@ -3,9 +3,9 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { injectable } from "inversify";
-import { giveOrTakeWorldShips } from "../../actions/world/give-or-take-ships";
 import { BuildingShipWorld } from "../../../shared/model/v1/world";
 import { worldReady } from "../../actions/world/world-ready";
+import { buildFleet } from "../../actions/fleet/build-fleet";
 
 @injectable()
 export class EndBuildShipsEventQueue implements GameEventQueue {
@@ -21,7 +21,7 @@ export class EndBuildShipsEventQueue implements GameEventQueue {
             timestamp: world.readyTimestamp,
             happen: () => {
               return [
-                giveOrTakeWorldShips(world.id, 1),
+                buildFleet(world.id, world.ownerId, world.buildingShipsAmount),
                 worldReady(world.id),
               ];
             }

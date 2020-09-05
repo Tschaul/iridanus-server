@@ -3,12 +3,11 @@ import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
 import { WrappedObservable } from "../../helper/wrap-observable";
 import { Input } from "../../../ui-components/input/input-component";
-import { BuildIndustryOrder, BuildShipsOrder, ScrapShipsForIndustryOrder } from "../../../../shared/model/v1/world-order";
 
-export type AmountOrderEditorOrder =
-  ScrapShipsForIndustryOrder
-  | BuildIndustryOrder
-  | BuildShipsOrder;
+export type AmountOrderEditorOrder = {
+  type: string,
+  amount: number
+};
 
 export interface AmountOrderEditorProps {
   order: AmountOrderEditorOrder,

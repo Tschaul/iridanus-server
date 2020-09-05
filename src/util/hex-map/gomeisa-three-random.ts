@@ -42,11 +42,9 @@ export function makeGomeisaThreeRandom(): GameMap {
         integrity: 0,
         metal: 10,
         mines: 2,
-        orders: [],
         industry: 10,
         population: 30,
         populationLimit: 30,
-        ships: 2,
         captureStatus: 'NOT_BEING_CAPTURED',
         idleNotificationSent: true
       };
@@ -100,10 +98,8 @@ function makeWorld(id: string): LostWorld {
     integrity: 0,
     metal: metal,
     mines: 0,
-    orders: [],
     population: 0,
     populationLimit,
-    ships: 0,
     status: 'LOST',
     captureStatus: 'NOT_BEING_CAPTURED'
   }

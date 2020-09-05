@@ -38,7 +38,6 @@ export const map: GameState = {
         ...dummyReadyWorld,
         id: "w1",
         ownerId: "p1",
-        ships: 5,
         integrity: 1,
         combatStatus: 'AT_PEACE',
       }
