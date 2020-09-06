@@ -118,6 +118,8 @@ export class SelectedWorldPanel extends React.Component<{
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
         {this.tableAmount(fleet.ships, '►')}
+        {fleet.status === 'TRANSFERING_CARGO' && this.tableAmount(fleet.cargoMetal, '▮')}
+        {fleet.status === 'TRANSFERING_CARGO' && this.tableAmount(fleet.cargoPopulation, 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             {this.fleetStatusIcon(fleet.status)}

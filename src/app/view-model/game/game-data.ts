@@ -164,7 +164,7 @@ export class GameData {
 
     for (const fleet of fleets) {
 
-      const [id1, id2] = pathOfFleetInTransit(fleet);
+      const [id1, id2] = pathOfFleetInTransit(fleet).sort();
       result[id1] = result[id1] || {};
       result[id1][id2] = result[id1][id2] || [];
       result[id1][id2].push(fleet);

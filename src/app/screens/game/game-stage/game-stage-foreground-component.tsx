@@ -127,7 +127,7 @@ export class GameStageForeground extends React.Component<{
             fontSize={33}
             style={{ transform: "translateY(1px)" }}
             opacity={opacity}
-          >◉</text>
+      >{world.id /*◉*/ }</text>
           <HoverTooltip
             svg={true}
             content={this.getTooltipForWorld(world)}
@@ -244,11 +244,12 @@ export class GameStageForeground extends React.Component<{
     const world1Id = getClosestAttribute(event, 'data-world-id1');
     const world2Id = getClosestAttribute(event, 'data-world-id2');
     if (world1Id && world2Id) {
-      console.log({world1Id, world2Id})
+      console.log("gate clicked",{world1Id, world2Id})
       this.props.vm.selectGate(world1Id, world2Id);
     }
     const fleetId = getClosestAttribute(event, 'data-fleet-id');
     if (fleetId) {
+      console.log("fleet clicked",{fleetId})
       this.props.vm.selectFleet(fleetId)
     }
   }

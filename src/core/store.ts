@@ -65,13 +65,13 @@ export class Store {
 
   public commit(timestamp: number) {
 
-    if (this.lastState && this.lastState.currentTimestamp > timestamp) {
-      console.error("CANNOT REVERSE TIMESTAMP TO "+timestamp+". TRANSACTION WAS:")
-      this.currentTransaction.forEach(action => {
-        console.error(action.describe())
-      })
-      throw new Error()
-    }
+    // if (this.lastState && this.lastState.currentTimestamp > timestamp) {
+    //   console.error("CANNOT REVERSE TIMESTAMP TO "+timestamp+". TRANSACTION WAS:")
+    //   this.currentTransaction.forEach(action => {
+    //     console.error(action.describe())
+    //   })
+    //   throw new Error()
+    // }
 
     const setTimestampAction = setTimestamp(timestamp);
     this.actions$$.next(setTimestampAction);

@@ -26,15 +26,13 @@ Server for Iridanus
 
 - destroyed ships create metal on the world where they are destroyed.
 
-- no more build orders at worlds. instead ships are built automatically
-
 - at regular intervals all worlds known to any player get revealed to all players
 
 - there are no more mines. instead worlds have simply a lot of metal on them.
 
 - ships can no longer be transfered between fleets. Industry produces new fleets in regular intervals. The more industry a world has the more ships do the fleets have it produces. Fleets that loos all there ships are destroyed (intead of lost). You can no longer capture a fleet.
 
-- the time it takes to caputure a world goes up with the population of that world.
+- the time it takes to caputure a world is random and goes up with the population of that world. While capturing ships kill opulation over time until the world is captured
 
 ## Research
 
@@ -93,5 +91,11 @@ more ideas for upgrades:
 - instant strike: when enagaging the enemy ships fire once instantly
 - sacrifice population for metal
 
+## Fast realtime challanges
 
+The current architecture allows for only ~1 fast realtime game per engine. Therefore the engine would have to run in the browser of the client. For that the following challanges must be overcome:
 
+- game must be deterministic. i.e. random values but also timestamps in general
+- all players must have a webrtc connection. setting new order would happen via a two phase commit with a majority vote (PAXOS??)
+
+To allow for smooth animations/ transitions (e.g. for ships in transit), significant parts of the UI must be redone. Ships must go onto a seperate layer and have their own animation logic.

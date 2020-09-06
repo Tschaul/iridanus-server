@@ -37,7 +37,7 @@ export class GameStats {
             this.showStatForAllOwnedWorlds('mines');
             break;
           case 'POPULATION':
-            this.showStatForAllOwnedWorlds('population');
+            this.showShipsOrMetalForAllOwnedWorlds('population');
             break;
           case 'SHIPS':
             this.showShipsOrMetalForAllOwnedWorlds('ships');
@@ -117,18 +117,20 @@ export class GameStats {
           ? world[property] + '/' + world.populationLimit
           : world[property];
 
-        hints.push({
-          type: 'WORLD',
-          hint: hintText + this.symbolForProperty(property),
-          worldId: world.id
-        })
+        if (hintText) {
+          hints.push({
+            type: 'WORLD',
+            hint: hintText + this.symbolForProperty(property),
+            worldId: world.id
+          })
+        }
       }
     })
 
     this.worldHints.showHints(hints);
   }
 
-  private showShipsOrMetalForAllOwnedWorlds(property: 'ships' | 'metal') {
+  private showShipsOrMetalForAllOwnedWorlds(property: 'ships' | 'metal' | 'population') {
 
     const currentPlayer = this.gameViewModel.selfPlayerId;
 
@@ -138,7 +140,7 @@ export class GameStats {
 
       let value = 0;
 
-      if (property === 'metal' && visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
+      if (property !== 'ships' && visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
         value += world[property]
       }
 
@@ -169,15 +171,28 @@ export class GameStats {
           let value = 0;
           if (property === 'ships') {
             fleets.forEach(fleet => {
-              value += fleet[property];
+              value += fleet.ships;
             })
           }
-          hints.push({
-            type: 'GATE',
-            hint: value + this.symbolForProperty(property),
-            worldId1,
-            worldId2
-          })
+          if (property === 'metal') {
+            fleets.forEach(fleet => {
+              if (fleet.status === 'TRANSFERING_CARGO') value += fleet.cargoMetal;
+            })
+          }
+          if (property === 'population') {
+            fleets.forEach(fleet => {
+              if (fleet.status === 'TRANSFERING_CARGO') value += fleet.cargoPopulation;
+            })
+          }
+
+          if (value > 0) {
+            hints.push({
+              type: 'GATE',
+              hint: value + this.symbolForProperty(property),
+              worldId1,
+              worldId2
+            })
+          }
         }
       })
     })
