@@ -24,10 +24,9 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
 
     this.upcomingEvent$ = combineLatest(
       readyFleetWithStarCargoMissionOrder$,
-      this.time.currentTimestamp$,
       this.worlds.byId$
     ).pipe(
-      map(([waitingFleets, timestamp, worlds]) => {
+      map(([waitingFleets, worlds]) => {
 
         const fleet = waitingFleets.find(fleet => {
           const fromWorld = worlds[fleet.fromWorldId];
@@ -41,7 +40,6 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
           return null
         } else {
           return {
-            timestamp,
             happen: () => {
 
               return [

@@ -36,26 +36,20 @@ export class FleetStartFiringEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = combineLatest(
-      startFiringFleet$,
-      this.time.currentTimestamp$,
-      this.worlds.byId$
-    ).pipe(
-      map(([fleet, timestamp, worldsById]) => {
+    this.upcomingEvent$ = startFiringFleet$.pipe(
+      map((fleet) => {
         if (!fleet) {
           return null;
         }
-        const world = worldsById[fleet.currentWorldId];
         return {
-          notifications: [{
+          notifications: (timestamp) =>  [{
             type: 'ENGAGING_THE_ENEMY',
             fleetId: fleet.id,
             worldId: fleet.currentWorldId,
             playerId: fleet.ownerId,
             timestamp
           }],
-          timestamp,
-          happen: () => {
+          happen: (timestamp: number) => {
 
             const weaponsReadyTimestamp = Math.round(timestamp + random.exponential() * this.setup.rules.combat.meanFiringInterval)
 

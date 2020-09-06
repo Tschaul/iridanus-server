@@ -17,17 +17,13 @@ export class StartCapturingWorldEventQueue implements GameEventQueue {
     public time: TimeProjector,
     setup: GameSetupProvider
   ) {
-    this.upcomingEvent$ = combineLatest(
-      this.capture.nextStartCapturingWorld$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([[world, newOwnerId], timestamp]) => {
+    this.upcomingEvent$ = this.capture.nextStartCapturingWorld$.pipe(
+      map(([world, newOwnerId]) => {
         if (!world) {
           return null
         } else {
           return {
-            timestamp,
-            happen: () => {
+            happen: (timestamp: number) => {
 
               return [
                 startCapturingWorld(world.id, newOwnerId, timestamp + setup.rules.capture.captureDelay),

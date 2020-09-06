@@ -38,7 +38,6 @@ export function makeGomeisaThree(): GameMap {
         ...world,
         status: 'READY',
         ownerId: seats[worldId],
-        combatStatus: 'AT_PEACE',
         miningStatus: 'NOT_MINING',
         populationGrowthStatus: 'NOT_GROWING',
         industry: 30,

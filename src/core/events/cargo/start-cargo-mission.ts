@@ -32,16 +32,14 @@ export class StartCargoMissionEventQueue implements GameEventQueue {
 
     this.upcomingEvent$ = combineLatest(
       readyFleetWithStarCargoMissionOrder$,
-      this.time.currentTimestamp$,
       this.gates.all$,
       this.worlds.byId$
     ).pipe(
-      map(([[fleet, order], timestamp, gates, worlds]) => {
+      map(([[fleet, order], gates, worlds]) => {
         if (!fleet || !order) {
           return null
         } else {
           return {
-            timestamp,
             happen: () => {
               if (!gates[fleet.currentWorldId].includes(order.otherWorldId)) {
                 return [

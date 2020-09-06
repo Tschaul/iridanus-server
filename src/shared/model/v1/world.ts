@@ -20,7 +20,7 @@ export interface BaseWorldBase {
 
 export type BaseWorld = BaseWorldBase & WorldWithCaptureStatus;
 
-export type WorldWithOwnerBase = BaseWorld & WorldWithCombatStatus & WorldWithMiningStatus & WorldWithPopulationGrowth
+export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & WorldWithPopulationGrowth
 
 export function baseWorld(world: World): BaseWorld {
     const result: any = {
@@ -56,11 +56,6 @@ export function baseWorldWithOwner(world: WorldWithOwnerBase): WorldWithOwnerBas
 
 export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithOwnerBase {
     const result = {} as any;
-
-    result.combatStatus = world.combatStatus;
-    if (world.combatStatus === 'FIRING') {
-        result.weaponsReadyTimestamp = world.weaponsReadyTimestamp;
-    }
 
     result.miningStatus = world.miningStatus;
     if (world.miningStatus === 'MINING') {

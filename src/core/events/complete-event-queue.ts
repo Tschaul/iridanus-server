@@ -115,7 +115,12 @@ export class CompleteEventQueue implements GameEventQueue {
     ]
 
     this.upcomingEvent$ = combineLatest(
-      ...allEventQueues.map(queue => queue.upcomingEvent$)
+      ...allEventQueues.map(queue => {
+
+        if (!queue.upcomingEvent$) console.log(queue.constructor.name,)
+
+        return queue.upcomingEvent$
+      })
     ).pipe(
       map((events) => {
         return events.reduce((acc, event) => {
@@ -123,7 +128,9 @@ export class CompleteEventQueue implements GameEventQueue {
             return acc;
           } else if (acc === null) {
             return event;
-          } else if (event.timestamp < acc.timestamp) {
+          } else if (acc.timestamp && !event.timestamp) {
+            return event;
+          } else if (acc.timestamp && event.timestamp && event.timestamp < acc.timestamp) {
             return event;
           } else {
             return acc;

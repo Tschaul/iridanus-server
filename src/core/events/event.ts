@@ -5,9 +5,9 @@ import { GameNotification } from "../../shared/model/v1/notification";
 
 export interface GameEvent {
     endsGame?: boolean,
-    notifications?: GameNotification[],
-    timestamp: number,
-    happen(): Action[]
+    notifications?: (timestamp: number) => GameNotification[],
+    timestamp?: number,
+    happen(timestamp: number): Action[]
 }
 
 export interface GameEventQueue {

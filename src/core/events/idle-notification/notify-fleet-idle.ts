@@ -21,20 +21,19 @@ export class NotifyFleetIdleEventQueue implements GameEventQueue {
       })
     })) as Observable<ReadyFleet>
 
-    this.upcomingEvent$ = combineLatest([idleFleet$, this.time.currentTimestamp$]).pipe(map(([fleet, timestamp]) => {
+    this.upcomingEvent$ = idleFleet$.pipe(map((fleet) => {
       if (!fleet) {
         return null
       }
 
       return {
-        notifications: [{
+        notifications: (timestamp) => [{
           type: 'FLEET_AWAITING_ORDERS',
           fleetId: fleet.id,
           worldId: fleet.currentWorldId,
           playerId: fleet.ownerId,
           timestamp
         }],
-        timestamp,
         happen: () => [
           notifyFleetIdle(fleet.id)
         ]

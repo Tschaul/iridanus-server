@@ -29,22 +29,18 @@ export class WorldStopGrowingEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = combineLatest(
-      stopGrowingWorld$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([world, timestamp]) => {
+    this.upcomingEvent$ = stopGrowingWorld$.pipe(
+      map((world) => {
         if (!world) {
           return null;
         }
         return {
-          notifications: worldhasOwner(world) ? [{
+          notifications:  (timestamp: number) => worldhasOwner(world) ? [{
             type: 'POPULATION_LIMIT_REACHED',
             worldId: world.id,
             playerId: world.ownerId,
             timestamp
           }] : [],
-          timestamp,
           happen: () => {
             return [
               worldStopGrowing(world.id)

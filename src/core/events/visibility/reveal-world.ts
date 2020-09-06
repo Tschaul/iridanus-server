@@ -18,22 +18,18 @@ export class RevealWorldEventQueue implements GameEventQueue {
     public visibility: VisibilityProjector,
     public time: TimeProjector,
   ) {
-    this.upcomingEvent$ = combineLatest(
-      this.visibility.nextRevealedWorld$,
-      this.time.currentTimestamp$,
-    ).pipe(
-      map(([worldToReaveal, timestamp]) => {
+    this.upcomingEvent$ = this.visibility.nextRevealedWorld$.pipe(
+      map((worldToReaveal) => {
         if (!worldToReaveal) {
           return null
         } else {
           return {
-            notifications: worldToReaveal.currentVisibility ? [] : [{
+            notifications: (timestamp: number) =>  worldToReaveal.currentVisibility ? [] : [{
               type: 'NEW_WORLD_DISCOVERED',
               playerId: worldToReaveal.playerId,
               worldId: worldToReaveal.worldId,
               timestamp
             }],
-            timestamp,
             happen: () => {
               return [
                 revealWorld(worldToReaveal.worldId, worldToReaveal.playerId),

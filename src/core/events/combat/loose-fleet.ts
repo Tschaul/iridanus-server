@@ -16,11 +16,8 @@ export class LooseFleetEventQueue implements GameEventQueue {
     public fleet: FleetProjector,
     public time: TimeProjector,
   ) {
-    this.upcomingEvent$ = combineLatest(
-      this.fleet.byId$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([fleetsById, timestamp]) => {
+    this.upcomingEvent$ = this.fleet.byId$.pipe(
+      map((fleetsById) => {
 
         const fleet = Object.values(fleetsById).find(fleet => {
           fleet.ships <= 0;
@@ -30,7 +27,6 @@ export class LooseFleetEventQueue implements GameEventQueue {
           return null
         } else {
           return {
-            timestamp,
             happen: () => {
               return [
                 looseFleet(fleet.id),

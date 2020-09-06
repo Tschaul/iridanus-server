@@ -33,16 +33,12 @@ export class AwaitedCaptureEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = combineLatest([
-      awaitedCaputureFleet$,
-      this.time.currentTimestamp$
-    ]).pipe(
-      map(([fleet, timestamp]) => {
+    this.upcomingEvent$ = awaitedCaputureFleet$.pipe(
+      map((fleet,) => {
         if (!fleet) {
           return null;
         }
         return {
-          timestamp,
           happen: () => {
             return [
               popFleetOrder(fleet.id)

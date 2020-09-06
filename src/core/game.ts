@@ -31,12 +31,12 @@ export class Game {
   public async startGameLoop() {
     const gameStartEvent = await this.gameStarts.upcomingEvent$.toPromise();
     const now = this.clock.getTimestamp()
-    if (gameStartEvent != null && now < gameStartEvent.timestamp) {
+    if (gameStartEvent != null && now < gameStartEvent.timestamp!) {
       await new Promise((resolve) => {
         setTimeout(() => {
-          this.handleEvent(gameStartEvent, resolve);
+          this.handleEvent(gameStartEvent, gameStartEvent.timestamp!, resolve);
           resolve();
-        }, gameStartEvent.timestamp - now)
+        }, gameStartEvent.timestamp! - now)
       })
     }
     return await this.startMainGameLoop();
@@ -62,15 +62,20 @@ export class Game {
         clearTimeout(this.timeout as NodeJS.Timeout);
         this.timeout = undefined;
 
-        const now = this.clock.getTimestamp()
 
-        if (now < event.timestamp && this.setup.awaitClock) {
-          this.timeout = setTimeout(() => {
-            this.handleEvent(event, resolve);
-          }, event.timestamp - now)
+        if (this.setup.awaitClock) {
+          const now = this.clock.getTimestamp()
+          if (event.timestamp && now < event.timestamp) {
+            this.timeout = setTimeout(() => {
+              this.handleEvent(event, event.timestamp!, resolve);
+            }, event.timestamp - now)
+          } else {
+            this.handleEvent(event, event.timestamp ?? now, resolve);
+          }
         } else {
-          this.handleEvent(event, resolve);
+          this.handleEvent(event, event.timestamp ?? this.store.currentTimestamp, resolve);
         }
+
 
         if (event.endsGame) {
           return
@@ -86,13 +91,13 @@ export class Game {
     resolve(this.store.finalize() as GameState)
   }
 
-  private handleEvent(event: GameEvent, resolve: (state: GameState) => void) {
-    const actions = event.happen();
+  private handleEvent(event: GameEvent, timestamp: number, resolve: (state: GameState) => void) {
+    const actions = event.happen(timestamp);
     for (const action of actions) {
       this.store.dispatch(action);
     }
-    this.store.commit(event.timestamp);
-    this.notificationHandler.handleNotifications(event);
+    this.store.commit(timestamp);
+    this.notificationHandler.handleNotifications(event, timestamp);
     if (event.endsGame) {
       this.finalizeAndResolve(resolve);
     }

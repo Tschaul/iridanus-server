@@ -11,7 +11,7 @@ export class TickEventQueue implements GameEventQueue {
     constructor(
         private time: TimeProjector,
     ){
-        this.upcomingEvent$ = this.time.currentTimestamp$.pipe(
+        this.upcomingEvent$ = this.time.currentTimestampNew$.pipe(
             map(currentTimestamp => {
                 const nextTick = Math.floor(currentTimestamp / 1000) * 1000 + 1000;
                 return {

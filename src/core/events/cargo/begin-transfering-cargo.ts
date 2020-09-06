@@ -30,11 +30,10 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
 
     this.upcomingEvent$ = combineLatest(
       readyFleetWithStarCargoMissionOrder$,
-      this.time.currentTimestamp$,
       this.cargo.metalPotentialByPlayer$,
       this.worlds.byId$
     ).pipe(
-      map(([waitingFleets, timestamp, metalPotential, worlds]) => {
+      map(([waitingFleets, metalPotential, worlds]) => {
 
         const fleet = waitingFleets.find(fleet => {
 
@@ -65,8 +64,7 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
           return null
         } else {
           return {
-            timestamp,
-            happen: () => {
+            happen: (timestamp: number) => {
 
               const cargo = cargoAmounts(
                 worlds[fleet.fromWorldId],

@@ -13,18 +13,13 @@ export class RememberWorldEventQueue implements GameEventQueue {
 
   constructor(
     public visibility: VisibilityProjector,
-    public time: TimeProjector,
   ) {
-    this.upcomingEvent$ = combineLatest(
-      this.visibility.nextWorldToHide$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([worldToReaveal, timestamp]) => {
+    this.upcomingEvent$ = this.visibility.nextWorldToHide$.pipe(
+      map((worldToReaveal) => {
         if (!worldToReaveal) {
           return null
         } else {
           return {
-            timestamp,
             happen: () => {
               return [
                 rememberWorld(worldToReaveal.worldId, worldToReaveal.playerId),

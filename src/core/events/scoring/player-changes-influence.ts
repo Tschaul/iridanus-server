@@ -19,17 +19,13 @@ export class PlayerChangesInfluenceEventQueue implements GameEventQueue {
     private influence: InfluenceProjector,
     private time: TimeProjector) {
 
-    this.upcomingEvent$ = combineLatest([
-      this.influence.playerNeedsInfluenceUpdate$,
-      this.time.currentTimestamp$,
-    ]).pipe(
-      map(([[playerId, newInfluence], timestamp]) => {
+      this.upcomingEvent$ = this.influence.playerNeedsInfluenceUpdate$.pipe(
+      map(([playerId, newInfluence]) => {
         if (!playerId) {
           return null;
         }
         return {
-          timestamp,
-          happen: () => {
+          happen: (timestamp: number) => {
             return [
               updateScoring(playerId as string, newInfluence as number, timestamp)
             ]

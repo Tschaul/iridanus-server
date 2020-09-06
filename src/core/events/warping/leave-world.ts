@@ -29,18 +29,16 @@ export class LeaveWorldEventQueue implements GameEventQueue {
   ) {
     this.upcomingEvent$ = combineLatest(
       this.fleets.firstByStatusAndNextOrderType<ReadyFleet, WarpOrder>('READY', 'WARP'),
-      this.time.currentTimestamp$,
       this.gates.all$,
       this.worlds.byId$
     ).pipe(
-      map(([[fleet, order], timestamp, gates, worlds]) => {
+      map(([[fleet, order], gates, worlds]) => {
         if (!fleet || !order) {
           return null
         } else {
 
           if (fleet.ships === 0 || !gates[fleet.currentWorldId].includes(order.targetWorldId)) {
             return {
-              timestamp,
               happen: () => {
                 return [
                   popFleetOrder(fleet.id)
@@ -59,14 +57,13 @@ export class LeaveWorldEventQueue implements GameEventQueue {
           const targetWorld = worlds[order.targetWorldId];
 
           return {
-            notifications: (worldhasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) ? [{
+            notifications: (timestamp) => (worldhasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) ? [{
               type: 'ENEMY_WARP_IN_DETECTED',
               worldId: order.targetWorldId,
               playerId: targetWorld.ownerId,
               timestamp
             }] : [],
-            timestamp,
-            happen: () => {
+            happen: (timestamp) => {
               return [
                 leaveWorld(fleet.id, order.targetWorldId, timestamp + delay),
                 popFleetOrder(fleet.id)

@@ -39,7 +39,6 @@ export const map: GameState = {
         id: "w1",
         ownerId: "p1",
         integrity: 1,
-        combatStatus: 'AT_PEACE',
       }
     },
     gates: {

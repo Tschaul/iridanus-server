@@ -15,16 +15,12 @@ export class StopCapturingWorldEventQueue implements GameEventQueue {
     public capture: CombatAndCaptureProjector,
     public time: TimeProjector,
   ) {
-    this.upcomingEvent$ = combineLatest(
-      this.capture.nextStopCapturingWorld$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([world, timestamp]) => {
+    this.upcomingEvent$ = this.capture.nextStopCapturingWorld$.pipe(
+      map((world) => {
         if (!world) {
           return null
         } else {
           return {
-            timestamp,
             happen: () => {
 
               return [

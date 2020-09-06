@@ -32,17 +32,13 @@ export class WorldStartMiningEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = combineLatest(
-      startMiningWorld$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([world, timestamp]) => {
+    this.upcomingEvent$ = startMiningWorld$.pipe(
+      map((world) => {
         if (!world) {
           return null;
         }
         return {
-          timestamp,
-          happen: () => {
+          happen: (timestamp: number) => {
 
             const nextMetalMinedTimestamp = timestamp + this.setup.rules.mining.miningDelay / world.mines
 

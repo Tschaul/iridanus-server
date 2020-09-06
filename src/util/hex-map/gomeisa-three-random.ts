@@ -36,7 +36,6 @@ export function makeGomeisaThreeRandom(): GameMap {
         id: worldId,
         status: 'READY',
         ownerId: seats[worldId],
-        combatStatus: 'AT_PEACE',
         miningStatus: 'NOT_MINING',
         populationGrowthStatus: 'NOT_GROWING',
         integrity: 0,

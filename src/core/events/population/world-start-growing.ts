@@ -34,17 +34,13 @@ export class WorldStartGrowingEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = combineLatest(
-      startGrowingWorld$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([world, timestamp]) => {
+    this.upcomingEvent$ = startGrowingWorld$.pipe(
+      map((world) => {
         if (!world) {
           return null;
         }
         return {
-          timestamp,
-          happen: () => {
+          happen: (timestamp: number) => {
 
             const nextMetalMinedTimestamp = timestamp + calculatePopulationGrowthDelay(world, this.setup.rules.population.minimumPopulationGrowthDelay);
 

@@ -15,16 +15,13 @@ export class CaptureWorldEventQueue implements GameEventQueue {
     public capture: CombatAndCaptureProjector,
     public time: TimeProjector,
   ) {
-    this.upcomingEvent$ = combineLatest(
-      this.capture.nextCapturedWorld$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([[world, newOwnerId], timestamp]) => {
+    this.upcomingEvent$ = this.capture.nextCapturedWorld$.pipe(
+      map(([world, newOwnerId]) => {
         if (!world) {
           return null
         } else {
           return {
-            notifications: [{
+            notifications: (timestamp) =>  [{
               type: 'WORLD_CAPTURED',
               worldId: world.id,
               playerId: newOwnerId,

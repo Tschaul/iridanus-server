@@ -7,7 +7,7 @@ import { Clock } from "../infrastructure/clock";
 export class TimeProjector {
   constructor(private store: ReadonlyStore, private clock: Clock){}
 
-  public currentTimestamp$ = this.store.state$.pipe(
+  public currentTimestampNew$ = this.store.state$.pipe(
     map(state => state.currentTimestamp),
     distinctUntilChanged(),
     shareReplay(1),

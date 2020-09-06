@@ -39,27 +39,12 @@ export class CombatAndCaptureProjector {
       shareReplay(1)
     )
 
-    this.nextFiringWorld$ = worlds.byId$.pipe(
-      map(worldsById => {
-        return (Object.values(worldsById)
-          .filter(world =>
-            'combatStatus' in world
-            && world.combatStatus === 'FIRING'
-          ) as Array<(WorldWithOwner & FiringWorld)>)
-          .sort((a, b) =>
-            a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
-          )[0] || null
-      }),
-      shareReplay(1)
-    )
-
     this.playersAtWorldById$ = combineLatest(this.worlds.byId$, this.fleets.byId$).pipe(
       map(([worldsById, fleetsById]) => {
 
-        const worlds = Object.values(worldsById);
         const fleets = Object.values(fleetsById);
 
-        return this.getPlayersAtWorldById(fleets, worlds);
+        return this.getPlayersAtWorldById(fleets);
       }),
       shareReplay(1)
     );
@@ -147,7 +132,7 @@ export class CombatAndCaptureProjector {
     return null
   }
 
-  private getPlayersAtWorldById(fleets: Fleet[], worlds: World[]): { [k: string]: string[] } {
+  private getPlayersAtWorldById(fleets: Fleet[]): { [k: string]: string[] } {
 
     const fleetOwnersByWorldId: { [k: string]: string[] } = {};
 
@@ -159,18 +144,6 @@ export class CombatAndCaptureProjector {
         }
         else if (value.indexOf(fleet.ownerId) === -1) {
           value.push(fleet.ownerId);
-        }
-      }
-    }
-
-    for (const world of worlds) {
-      if (world.status !== 'LOST') {
-        const value = fleetOwnersByWorldId[world.id];
-        if (!value) {
-          fleetOwnersByWorldId[world.id] = [world.ownerId];
-        }
-        else if (value.indexOf(world.ownerId) === -1) {
-          value.push(world.ownerId);
         }
       }
     }

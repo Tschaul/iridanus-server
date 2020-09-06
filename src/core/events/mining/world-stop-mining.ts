@@ -30,16 +30,12 @@ export class WorldStopMiningEventQueue implements GameEventQueue {
       })
     )
 
-    this.upcomingEvent$ = combineLatest(
-      stopMiningWorld$,
-      this.time.currentTimestamp$
-    ).pipe(
-      map(([world, timestamp]) => {
+    this.upcomingEvent$ = stopMiningWorld$.pipe(
+      map((world) => {
         if (!world) {
           return null;
         }
         return {
-          timestamp,
           happen: () => {
             return [
               worldStopMining(world.id)

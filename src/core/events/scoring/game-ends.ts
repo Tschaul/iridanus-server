@@ -45,7 +45,7 @@ export class GameEndsEventQueue implements GameEventQueue {
     ]).pipe(
       map(([timestamp, scorings]) => {
         return {
-          notifications: Object.values(scorings).map(it => {
+          notifications: (timestamp) =>  Object.values(scorings).map(it => {
             return {
               type: 'GAME_ENDED',
               playerId: it.playerId,

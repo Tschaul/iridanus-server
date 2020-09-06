@@ -12,8 +12,9 @@ export class NotificationHandler {
 
   constructor(protected logger: Logger) { }
 
-  handleNotifications(event: GameEvent) {
-    (event.notifications ?? []).forEach(notifiction => {
+  handleNotifications(event: GameEvent, timestamp: number) {
+    const notifications = event.notifications ? event.notifications(timestamp) : [];
+    notifications.forEach(notifiction => {
       this.notifications$$.next(notifiction);
       this.logger.info('GameNotification: ' + JSON.stringify(notifiction))
     })
