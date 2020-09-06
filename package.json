@@ -8,7 +8,7 @@
     "test:no-report": "tsc --p tsconfig.tests.json && mocha",
     "run:playground": "tsc && node build/playground.js",
     "start-app:dev": "webpack-dev-server",
-    "start-server:dev": "env-cmd node build/server/server.js",
+    "start-server:dev": "env-cmd node --inspect build/server/server.js",
     "start": "node build/server/server.js",
     "build:watch": "tsc --watch",
     "build:tests:watch": "tsc --p tsconfig.tests.json --watch",

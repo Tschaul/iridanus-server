@@ -17,6 +17,8 @@ import { GameRules } from '../../shared/model/v1/rules';
 import { ReadyWorld, LostWorld } from '../../shared/model/v1/world';
 import { NotificationHandler } from '../infrastructure/notification-handler';
 
+let totalTime = 0;
+
 export async function runMap(testMap: GameState, options?: {
   watcher?: null | ((state: GameState) => string | number | boolean),
   rules?: GameRules
@@ -66,8 +68,17 @@ export async function runMap(testMap: GameState, options?: {
 
   const game = container.get(Game);
 
-  return await game.startGameLoop();
+  const start = new Date().getTime();
 
+  const result = await game.startGameLoop();
+
+  const duration = new Date().getTime() - start;
+
+  totalTime += duration;
+
+  console.log(`TIMING: this test: ${(duration/1000).toFixed(2)}  total: ${(totalTime/1000).toFixed(2)}`)
+
+  return result;
 }
 
 export const dummyReadyWorld: ReadyWorld = {

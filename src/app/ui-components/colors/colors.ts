@@ -1,4 +1,4 @@
-import * as Color from 'color'
+import Color from 'color'
 
 export const screenPseudoTransparentRaw = Color('rgba(128, 151, 158, 0.29)') as Color;
 export const screenPseudoTransparent = screenPseudoTransparentRaw.toString();

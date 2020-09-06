@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
 import { WarpOrder } from "../../../../shared/model/v1/fleet-orders";

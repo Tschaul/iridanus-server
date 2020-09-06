@@ -25,7 +25,6 @@ export class InfluenceProjector {
 
   public byPlayerId$ = this.store.state$.pipe(
     map(state => state.scorings),
-    distinctUntilChanged(equal),
     shareReplay(1),
   ) as Observable<Scorings>
 
@@ -69,7 +68,6 @@ export class InfluenceProjector {
         return influence;
       }
     ),
-    distinctUntilChanged(equal),
     shareReplay(1)
   )
 

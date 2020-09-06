@@ -31,7 +31,7 @@ export class PlayerChangesInfluenceEventQueue implements GameEventQueue {
           timestamp,
           happen: () => {
             return [
-              updateScoring(playerId, newInfluence as number, timestamp)
+              updateScoring(playerId as string, newInfluence as number, timestamp)
             ]
           }
         }

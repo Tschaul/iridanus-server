@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Panel } from "../../ui-components/panel/panel-component";
 import { GameStage } from "./game-stage/game-stage-component";
 import { GameViewModel } from "../../view-model/game/game-view-model";

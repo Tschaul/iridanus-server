@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { LobbyViewModel } from '../../view-model/lobby/lobby-view-model';
 import { Panel } from '../../ui-components/panel/panel-component';
 import { GameInfo } from '../../../shared/model/v1/game-info';

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { screenPseudoTransparent, screenWhite } from "../colors/colors";
 import { animateElement } from "../animate-element";
 import classNames from "classnames";

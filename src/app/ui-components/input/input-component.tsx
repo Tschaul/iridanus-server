@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { WrappedObservable } from "../../screens/helper/wrap-observable";
 import { observer } from "mobx-react";
 import autobind from "autobind-decorator";

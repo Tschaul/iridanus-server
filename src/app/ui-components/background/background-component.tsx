@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { screenWhite } from "../colors/colors";
 import { generateStar } from "./star-generator";
 

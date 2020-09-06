@@ -43,7 +43,6 @@ export class FleetProjector {
           return Object.values(fleetsById).filter(fleet =>
             fleet.status === status) as TFleetWithStatus[];
         }),
-        distinctUntilChanged(equal),
         shareReplay(1)
       );
   }
@@ -56,7 +55,6 @@ export class FleetProjector {
         const fleet = fleets.length ? fleets[0] : null;
         return [fleet || null, fleet ? (fleet.orders[0] || null) : null] as any;
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     )
   }
@@ -71,7 +69,6 @@ export class FleetProjector {
           && fleet.orders.length
           && fleet.orders[0].type === orderType) as TFleetWithStatus[];
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     );
   }

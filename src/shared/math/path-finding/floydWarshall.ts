@@ -3,6 +3,8 @@ import { Distances } from "../../model/v1/distances";
 
 export function floydWarshall(gates: Gates): Distances {
 
+  console.log("FLOYD WARSHALL")
+
   const dist: Distances = {}
 
   const allWorlds = Object.getOwnPropertyNames(gates);

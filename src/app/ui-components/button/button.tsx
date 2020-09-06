@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { screenWhite, selectedYellow, hoverYellow } from "../colors/colors";
 import { createClasses } from "../setup-jss";
 import classNames from "classnames";

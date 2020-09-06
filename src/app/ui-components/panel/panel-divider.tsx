@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { screenWhite } from '../colors/colors';
 
 export class PanelDivider extends React.Component<{

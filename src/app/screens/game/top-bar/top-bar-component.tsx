@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Panel } from "../../../ui-components/panel/panel-component";
 import classNames from "classnames";
 import { Button } from "../../../ui-components/button/button";

@@ -50,7 +50,6 @@ export class CombatAndCaptureProjector {
             a.weaponsReadyTimestamp - b.weaponsReadyTimestamp
           )[0] || null
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     )
 
@@ -62,7 +61,6 @@ export class CombatAndCaptureProjector {
 
         return this.getPlayersAtWorldById(fleets, worlds);
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     );
 
@@ -79,7 +77,6 @@ export class CombatAndCaptureProjector {
 
         return [combatWorldIds, nonCombatWorldIds] as [string[], string[]];
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     )
 
@@ -90,14 +87,13 @@ export class CombatAndCaptureProjector {
         for (const world of worldsNotBeingCaptured) {
           const capturingPlayer = this.getCapturingPlayer(world, playersAtWorldById, fleetsByWorldId);
           if (capturingPlayer) {
-            return [world, capturingPlayer]
+            return [world, capturingPlayer] as [(World & WorldBeingCaptured) | null, string]
           }
         }
 
-        return [null, '']
+        return [null, ''] as [(World & WorldBeingCaptured) | null, string]
 
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     )
 
@@ -118,7 +114,6 @@ export class CombatAndCaptureProjector {
         
         return null;
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     )
 
@@ -128,9 +123,8 @@ export class CombatAndCaptureProjector {
 
         const nextWorld = worldsBeingCaptured.sort((a, b) => a.captureTimestamp - b.captureTimestamp)[0] || null;
 
-        return nextWorld ? [nextWorld as (World & WorldBeingCaptured), nextWorld.capturingPlayerId] : [null, '']
+        return (nextWorld ? [nextWorld as (World & WorldBeingCaptured), nextWorld.capturingPlayerId] : [null, '']) as [(World & WorldBeingCaptured) | null, string]
       }),
-      distinctUntilChanged(equal),
       shareReplay(1)
     )
   }

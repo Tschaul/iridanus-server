@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { SelectedWorldViewModel } from "../../../view-model/game/selected-world-view-model";
 import { Panel } from "../../../ui-components/panel/panel-component";
 import { observer } from "mobx-react";
@@ -9,7 +9,7 @@ import { PlayerInfo } from "../../../../shared/model/v1/player-info";
 import autobind from "autobind-decorator";
 import { getClosestAttribute } from "../../helper/get-attribute";
 import { reaction } from "mobx";
-import * as classNames from 'classnames'
+import classNames from 'classnames'
 import { createClasses, StyleSheet } from "../../../ui-components/setup-jss";
 import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";

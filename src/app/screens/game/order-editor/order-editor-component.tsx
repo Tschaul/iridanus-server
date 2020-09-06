@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import autobind from "autobind-decorator";
 import { observer } from "mobx-react";
 import { OrderEditorViewModel } from "../../../view-model/game/order-editor-view-model";

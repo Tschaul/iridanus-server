@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import autobind from "autobind-decorator";
 import { screenWhite, screenPseudoTransparent, overlayBackground } from "../colors/colors";
 import { ReplaySubject, combineLatest, BehaviorSubject } from "rxjs";

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { TooltipContext } from "./tooltip-overlay.component";
 import autobind from "autobind-decorator";
 import { Observable, Subscription } from "rxjs";

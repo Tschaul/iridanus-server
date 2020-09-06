@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { WelcomeViewModel, WelcomScreenMode } from "../../view-model/welcome/welcome-view-model";
 import { observer } from "mobx-react";
 import { HasExitAnimation } from "../../ui-components/animatable-components";

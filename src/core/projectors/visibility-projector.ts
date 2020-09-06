@@ -51,7 +51,6 @@ export class VisibilityProjector {
         })
       )
     }),
-    distinctUntilChanged(equal),
     shareReplay(1),
   ) as Observable<WorldToRevealOrHide | null>
 
@@ -74,7 +73,6 @@ export class VisibilityProjector {
         })
       )
     }),
-    distinctUntilChanged(equal),
     shareReplay(1),
   )
 
@@ -134,7 +132,6 @@ export class VisibilityProjector {
 
         return result;
       }),
-      distinctUntilChanged(equal),
       shareReplay(1),
     )
   }
@@ -173,7 +170,6 @@ export class VisibilityProjector {
           return false;
         })
       }),
-      distinctUntilChanged(equal),
       shareReplay(1),
     )
   }

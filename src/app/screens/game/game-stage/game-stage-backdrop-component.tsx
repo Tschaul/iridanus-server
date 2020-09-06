@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import { GameStageViewModel, GateWithStartAndEndPosition } from '../../../view-model/game/game-stage-view-model';
 import { Vec2, diff, normal, add, mul } from '../../../../shared/math/vec2';

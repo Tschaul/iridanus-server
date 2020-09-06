@@ -1,6 +1,6 @@
 import { interval, of, Subscription } from "rxjs";
 import { map, startWith } from "rxjs/operators";
-import * as React from "react";
+import React from "react";
 
 const millisecondsPerMinute = 60 * 1000;
 const millisecondsPerHour = 60 * millisecondsPerMinute;

@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
-import { map, distinctUntilChanged, shareReplay, tap } from "rxjs/operators";
+import { map, distinctUntilChanged, shareReplay, tap, pairwise, startWith, scan } from "rxjs/operators";
 import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { PlayerProjector } from "./player-projector";
@@ -11,7 +11,10 @@ import { Gates } from "../../shared/model/v1/universe";
 import { WorldProjector } from "./world-projector";
 import { worldhasOwner } from "../../shared/model/v1/world";
 import { generatePotential } from "../../shared/math/path-finding/potential";
-import deepEqual from "deep-equal";
+import equal from "deep-equal";
+
+export type GatesByPlayer = { [playerId: string]: Gates };
+export type DistancesByPlayer = { [playerId: string]: Distances };
 
 @injectable()
 export class CargoProjector {
@@ -26,7 +29,7 @@ export class CargoProjector {
     this.players.allPlayerIds$
   ]).pipe(
     map(([fleetsById, allPlayerIds]) => {
-      const result: { [playerId: string]: Distances } = {}
+      const result: GatesByPlayer = {}
 
       for (const playerId of allPlayerIds) {
 
@@ -46,21 +49,34 @@ export class CargoProjector {
 
         }
 
-        result[playerId] = floydWarshall(routes)
+        result[playerId] = routes
 
       }
 
       return result;
     }),
-    distinctUntilChanged(deepEqual)
+    distinctUntilChanged(equal),
+    startWith({}),
+    pairwise(),
+    scan<[GatesByPlayer, GatesByPlayer], DistancesByPlayer>((acc, [oldRoutes, newRoutes]) => {
+      const result: { [playerId: string]: Distances } = {}
+      for (const playerId of Object.getOwnPropertyNames(newRoutes)) {
+        if (equal(newRoutes[playerId], oldRoutes[playerId]) && acc[playerId]) {
+          result[playerId] = acc[playerId]
+        } else {
+          result[playerId] = floydWarshall(newRoutes[playerId])
+        }
+      }
+      return result;
+    }, {})
   )
 
-  public metalPotentialByPlayer$: Observable<{ [playerId: string]: {[worldId: string]: number} }> = combineLatest([
+  public metalPotentialByPlayer$: Observable<{ [playerId: string]: { [worldId: string]: number } }> = combineLatest([
     this.cargoDistancesByPlayer$,
     this.worlds.byId$
   ]).pipe(map(([cargoDistances, worldsById]) => {
 
-    const result: { [playerId: string]: {[worldId: string]: number} } = {}
+    const result: { [playerId: string]: { [worldId: string]: number } } = {}
 
     for (const playerId of Object.getOwnPropertyNames(cargoDistances)) {
 
@@ -76,7 +92,7 @@ export class CargoProjector {
     }
 
     return result;
-  }), 
-  distinctUntilChanged(deepEqual))
+  }),
+    distinctUntilChanged(equal))
 
 }

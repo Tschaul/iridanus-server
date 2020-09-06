@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import * as React from "react";
+import React from "react";
 import { WelcomeViewModel } from "../../view-model/welcome/welcome-view-model";
 import { HasExitAnimation } from "../../ui-components/animatable-components";
 import { Panel } from "../../ui-components/panel/panel-component";
