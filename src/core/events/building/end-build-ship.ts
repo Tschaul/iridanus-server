@@ -5,7 +5,7 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { injectable } from "inversify";
 import { BuildingShipWorld } from "../../../shared/model/v1/world";
 import { worldReady } from "../../actions/world/world-ready";
-import { buildFleet } from "../../actions/fleet/build-fleet";
+import { createFleet } from "../../actions/fleet/create-fleet";
 
 @injectable()
 export class EndBuildShipsEventQueue implements GameEventQueue {
@@ -21,7 +21,7 @@ export class EndBuildShipsEventQueue implements GameEventQueue {
             timestamp: world.readyTimestamp,
             happen: () => {
               return [
-                buildFleet(world.id, world.ownerId, world.buildingShipsAmount),
+                createFleet(world.id, world.ownerId, world.buildingShipsAmount),
                 worldReady(world.id),
               ];
             }

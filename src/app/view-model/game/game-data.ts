@@ -46,18 +46,14 @@ const dummyInfo: GameInfo = {
 
 const dummyRules: GameRules = {
   building: {
-    buildIndustryCost: 1,
-    buildIndustryDelay: 1,
     buildShipDelay: 1,
   },
   capture: {
     captureDelay: 1,
   },
   combat: {
-    industryDamageChancePerShip: 1,
     integrityDamagePerShip: 1,
     meanFiringInterval: 1,
-    populationDamageChancePerShip: 1,
   },
   global: {
     maxAmount: 1,
@@ -71,15 +67,6 @@ const dummyRules: GameRules = {
   },
   scoring: {
     gameEndingScore: 1,
-  },
-  scrapping: {
-    scrappingDelay: 1,
-    shipsPerIndustry: 1,
-  },
-  transfering: {
-    transferMetalDelay: 1,
-    transferPopulationDelay: 1,
-    transferShipsDelay: 1,
   },
   warping: {
     arriveWorldDelay: 1,

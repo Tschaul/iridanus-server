@@ -111,6 +111,8 @@ export class OrderEditor extends React.Component<{
         <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
         <HoverTooltip content="Start cargo mission"><Button tight onClick={this.handleNewStartCargoMissionOrder}>⇄</Button></HoverTooltip>
         <HoverTooltip content="Await capture"><Button tight onClick={this.handleNewAwaitCaptureOrder}>⚑</Button></HoverTooltip>
+        <HoverTooltip content="Split fleet"><Button tight onClick={this.handleNewSplitFleetOrder}>✂</Button></HoverTooltip>
+        <HoverTooltip content="Deploy as industry"><Button tight onClick={this.handlenewDeployToWorldOrder}>I🡓</Button></HoverTooltip>
       </div>)])
     ])
   }
@@ -154,6 +156,16 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewAwaitCaptureOrder() {
     this.props.vm.newAwaitCaptureOrder()
+  }
+
+  @autobind
+  handleNewSplitFleetOrder() {
+    this.props.vm.newSplitFleetOrder()
+  }
+
+  @autobind
+  handlenewDeployToWorldOrder() {
+    this.props.vm.newDeployToWorldOrder()
   }
 
   @autobind

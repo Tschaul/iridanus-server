@@ -20,7 +20,7 @@ export interface BaseWorldBase {
 
 export type BaseWorld = BaseWorldBase & WorldWithCaptureStatus;
 
-export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & WorldWithPopulationGrowth
+export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & WorldWithPopulationGrowth & WorldWithCaptureStatus
 
 export function baseWorld(world: World): BaseWorld {
     const result: any = {
@@ -42,19 +42,7 @@ export function baseWorld(world: World): BaseWorld {
     return result;
 }
 
-export function baseWorldWithOwner(world: WorldWithOwnerBase): WorldWithOwnerBase {
-    return {
-        id: world.id,
-        industry: world.industry,
-        metal: world.metal,
-        mines: world.mines,
-        population: world.population,
-        integrity: world.integrity,
-        ...combatAndMiningStatus(world)
-    }
-}
-
-export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithOwnerBase {
+export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithMiningStatus & WorldWithPopulationGrowth {
     const result = {} as any;
 
     result.miningStatus = world.miningStatus;

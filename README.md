@@ -5,16 +5,14 @@ Server for Iridanus
 
 # TODOS
 
-- make deploy ships for industry a fleet order
-- split fleets
-- build fleets automatically
-- remove world orders
-- auto capture worlds by transfering population to lost fleet
-- turn around when ending cargo mission on foreign world
-- remove mines
+- make deploy ships for industry a fleet order (tests missing)
+- split fleets order (tests missing)
+- fire at population when no enemy fleets are there
+- loose world when population drops to zero
 
 # Bugs
 
+- sometimes: population = 1, but world is not captured
 - notification mail when game goes from PROPOSED to STARTED
 
 # Further Improvements
@@ -24,15 +22,13 @@ Server for Iridanus
 
 # Some Ideas
 
-- destroyed ships create metal on the world where they are destroyed.
-
 - at regular intervals all worlds known to any player get revealed to all players
 
-- there are no more mines. instead worlds have simply a lot of metal on them.
+- Capturing a world with population is not possible. Population must be killed first and own population must be transfered to world in order to take it over. Ships automatically start killing enemy population once no more enemy ships are at the world.
 
-- ships can no longer be transfered between fleets. Industry produces new fleets in regular intervals. The more industry a world has the more ships do the fleets have it produces. Fleets that loos all there ships are destroyed (intead of lost). You can no longer capture a fleet.
+- ships warp twice as fast and cargo capacity ist reduced to half. This should make it more attractive to send ships to the enemy side to scout and harrass.
 
-- the time it takes to caputure a world is random and goes up with the population of that world. While capturing ships kill opulation over time until the world is captured
+- arrival and leaving delay happen everytime you warp into or out of a battle/world capturing (except on your own world). This aplies also for cargo fleet. When warping into battle cargo fleet instantly stop their cargo mission.
 
 ## Research
 
@@ -50,7 +46,7 @@ Server for Iridanus
 # Victory condition
 
 - Points for 3 upgrades of same color
-- Points for highest amount of ships or population respectively
+- Points for highest amount of population or enemy ships destroyed
 - Points can be bought with developement
 - Points for owning special artefact worlds
 - Points for each owned capital world
@@ -86,6 +82,12 @@ green
 
 more ideas for upgrades:
 
+- population grows faster
+- chance to capture enemy world with population
+- drop ships as population
+- recall your ships from any world to one of your owned world
+- recycling: ships that are destroyed on one of your worlds have a 50% chance to spawn metal
+- sacrefice population for metal
 - building industry is cheaper
 - fleets can transport more metal
 - instant strike: when enagaging the enemy ships fire once instantly

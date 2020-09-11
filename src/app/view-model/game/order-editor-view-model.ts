@@ -1,6 +1,6 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
-import { WarpOrder, FleetOrder, AwaitCaptureOrder, StartCargoMissionOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, AwaitCaptureOrder, StartCargoMissionOrder, SplitFleetOrder, DeployToWorldOrder } from "../../../shared/model/v1/fleet-orders";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
@@ -148,6 +148,22 @@ export class OrderEditorViewModel {
     const fleet = this.selection.selectedFleet!;
     const order: AwaitCaptureOrder = {
       type: 'AWAIT_CAPTURE',
+    }
+    this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
+  public newSplitFleetOrder() {
+    const fleet = this.selection.selectedFleet!;
+    const order: SplitFleetOrder = {
+      type: 'SPLIT_FLEET',
+    }
+    this.gameOrders.addFleetOrder(fleet.id, order);
+  }
+
+  public newDeployToWorldOrder() {
+    const fleet = this.selection.selectedFleet!;
+    const order: DeployToWorldOrder = {
+      type: 'DEPLOY_TO_WORLD',
     }
     this.gameOrders.addFleetOrder(fleet.id, order);
   }

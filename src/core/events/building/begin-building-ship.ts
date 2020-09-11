@@ -14,11 +14,12 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(worlds: WorldProjector, private time: TimeProjector, private setup: GameSetupProvider) {
+    const shipsAmount = 5;
     this.upcomingEvent$ = worlds.allByStatus<ReadyWorld>('READY').pipe(
       map((worlds) => {
         const world = worlds.find(world => {
           const activeIndustry = Math.min(world.population, world.industry)
-          return activeIndustry > 0 && world.metal >= activeIndustry
+          return activeIndustry > 0 && world.metal >= shipsAmount
         })
 
         if (!world) {
@@ -27,9 +28,10 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
           return {
             happen: (timestamp: number) => {
               const activeIndustry = Math.min(world.population, world.industry)
+              const delay = this.setup.rules.building.buildShipDelay * shipsAmount / activeIndustry;
               return [
-                buildShip(world.id, timestamp + this.setup.rules.building.buildShipDelay, activeIndustry),
-                giveOrTakeWorldMetal(world.id, -1 * activeIndustry),
+                buildShip(world.id, timestamp + delay, shipsAmount),
+                giveOrTakeWorldMetal(world.id, -1 * shipsAmount),
               ];
 
             }

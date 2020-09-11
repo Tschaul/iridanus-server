@@ -81,7 +81,7 @@ function makeWorld(id: string): LostWorld {
 
   const rank = getRank(id);
 
-  const random = randomSphericArray(3);
+  const random = randomSphericArray(2);
 
   const industry = 0;
   const metal = Math.round(random[0] * 20);

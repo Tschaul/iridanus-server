@@ -1,11 +1,10 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
-import { updateFleet } from "./update-fleet";
 import { FleetAtWorld } from "../../../shared/model/v1/fleet";
 import produce from "immer";
 import { makeId } from "../../../app/client/make-id";
 
-export function buildFleet(
+export function createFleet(
   worldId: string,
   ownerId: string,
   ships: number
