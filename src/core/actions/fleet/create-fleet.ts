@@ -10,7 +10,7 @@ export function createFleet(
   ships: number
 ): Action {
   return {
-    describe: () => `BuildFleet ${JSON.stringify({ worldId, ships })}`,
+    describe: () => `CreateFleet ${JSON.stringify({ worldId, ships })}`,
     apply: (state: GameState) => {
 
       const fleetId = makeId()

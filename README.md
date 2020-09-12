@@ -5,8 +5,6 @@ Server for Iridanus
 
 # TODOS
 
-- make deploy ships for industry a fleet order (tests missing)
-- split fleets order (tests missing)
 - fire at population when no enemy fleets are there
 - loose world when population drops to zero
 

@@ -32,6 +32,8 @@ import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
 import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
 import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo";
 import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
+import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
+import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -80,6 +82,9 @@ export class CompleteEventQueue implements GameEventQueue {
     remeberWorld: RememberWorldEventQueue,
 
     notifyFleetIdle: NotifyFleetIdleEventQueue,
+
+    fleetSplits: FleetSplitsEventQueue,
+    fleetDeploysToWorld: FleetDeploysToWorldEventQueue
   ) {
 
     const allEventQueues = [
@@ -112,6 +117,8 @@ export class CompleteEventQueue implements GameEventQueue {
       endTransferingCargo,
       stopCargoMission,
       notifyFleetIdle,
+      fleetSplits,
+      fleetDeploysToWorld
     ]
 
     this.upcomingEvent$ = combineLatest(

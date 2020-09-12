@@ -31,6 +31,8 @@ import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
 import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo";
 import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
 import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
+import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
+import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
 
 export function registerEventQueues(container: Container) {
 
@@ -79,6 +81,8 @@ export function registerEventQueues(container: Container) {
   container.bind(BeginTransferingCargoEventQueue).toSelf();
   container.bind(EndTransferingCargoEventQueue).toSelf();
 
+  container.bind(FleetSplitsEventQueue).toSelf();
+  container.bind(FleetDeploysToWorldEventQueue).toSelf();
 
   container.bind(CompleteEventQueue).toSelf();
 
