@@ -29,13 +29,14 @@ export const map: GameState = {
         currentWorldId: "w1",
         orders: [],
         ownerId: "p2",
-        ships: 10,
+        ships: 20,
         integrity: 1,
       }
     },
     worlds: {
       "w1": {
         ...dummyReadyWorld,
+        population: 15,
         id: "w1",
         ownerId: "p1",
         integrity: 1,

@@ -41,8 +41,8 @@ export class Store {
 
     this.actions$$.pipe(
       scan((state: GameState, action: Action) => {
-        this.logger.logAction(action);
         const nextState = action.apply(state);
+        this.logger.logAction(action);
         return nextState;
       }, this.setup.initialState),
       sample(this.commits$$),
@@ -64,15 +64,6 @@ export class Store {
   }
 
   public commit(timestamp: number) {
-
-    // if (this.lastState && this.lastState.currentTimestamp > timestamp) {
-    //   console.error("CANNOT REVERSE TIMESTAMP TO "+timestamp+". TRANSACTION WAS:")
-    //   this.currentTransaction.forEach(action => {
-    //     console.error(action.describe())
-    //   })
-    //   throw new Error()
-    // }
-
     const setTimestampAction = setTimestamp(timestamp);
     this.actions$$.next(setTimestampAction);
     this.currentTransaction.forEach(action => this.actions$$.next(action));

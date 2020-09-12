@@ -13,6 +13,7 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
     },
     combat: {
       integrityDamagePerShip: 0.094276,
+      populationDamagePerShip: 0.188552,
       meanFiringInterval: 1 * millisecondsPerDay,
     },
     building: {

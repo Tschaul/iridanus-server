@@ -1,16 +1,14 @@
-import { warpTestMap } from "./split-test-map";
+import { splitTestMap } from "./split-test-map";
 
 import { expect } from 'chai';
-import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import produce from "immer";
 import { runMap } from "../test-helper";
-import { ReadyWorld } from "../../../shared/model/v1/world";
 
 describe("split fleet", () => {
 
   it("fleet splits", async () => {
     
-    const map = produce(warpTestMap, draft => {
+    const map = produce(splitTestMap, draft => {
 
       draft.universe.fleets["f1"].orders.push({
         type: 'SPLIT_FLEET',

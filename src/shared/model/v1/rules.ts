@@ -14,6 +14,7 @@ export interface GameRules {
   combat: {
     meanFiringInterval: number;
     integrityDamagePerShip: number;
+    populationDamagePerShip: number;
   },
   building: {
     buildShipDelay: number;

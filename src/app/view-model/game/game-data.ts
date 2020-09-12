@@ -53,6 +53,7 @@ const dummyRules: GameRules = {
   },
   combat: {
     integrityDamagePerShip: 1,
+    populationDamagePerShip: 1,
     meanFiringInterval: 1,
   },
   global: {

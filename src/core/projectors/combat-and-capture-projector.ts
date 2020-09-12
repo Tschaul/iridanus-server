@@ -43,8 +43,9 @@ export class CombatAndCaptureProjector {
       map(([worldsById, fleetsById]) => {
 
         const fleets = Object.values(fleetsById);
+        const worlds = Object.values(worldsById);
 
-        return this.getPlayersAtWorldById(fleets);
+        return this.getPlayersAtWorldById(fleets, worlds);
       }),
       shareReplay(1)
     );
@@ -132,15 +133,15 @@ export class CombatAndCaptureProjector {
     return null
   }
 
-  private getPlayersAtWorldById(fleets: Fleet[]): { [k: string]: string[] } {
+  private getPlayersAtWorldById(fleets: Fleet[], worlds: World[]): { [k: string]: string[] } {
 
-    const fleetOwnersByWorldId: { [k: string]: string[] } = {};
+    const playersByWorldId: { [k: string]: string[] } = {};
 
     for (const fleet of fleets) {
       if (fleetIsAtWorld(fleet)) {
-        const value = fleetOwnersByWorldId[fleet.currentWorldId];
+        const value = playersByWorldId[fleet.currentWorldId];
         if (!value) {
-          fleetOwnersByWorldId[fleet.currentWorldId] = [fleet.ownerId];
+          playersByWorldId[fleet.currentWorldId] = [fleet.ownerId];
         }
         else if (value.indexOf(fleet.ownerId) === -1) {
           value.push(fleet.ownerId);
@@ -148,6 +149,18 @@ export class CombatAndCaptureProjector {
       }
     }
 
-    return fleetOwnersByWorldId;
+    for (const world of worlds) {
+      if (worldhasOwner(world)) {
+        const value = playersByWorldId[world.id];
+        if (!value) {
+          playersByWorldId[world.id] = [world.ownerId];
+        }
+        else if (value.indexOf(world.ownerId) === -1) {
+          value.push(world.ownerId);
+        }
+      }
+    }
+
+    return playersByWorldId;
   }
 }

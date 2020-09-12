@@ -5,9 +5,6 @@ Server for Iridanus
 
 # TODOS
 
-- fire at population when no enemy fleets are there
-- loose world when population drops to zero
-
 # Bugs
 
 - sometimes: population = 1, but world is not captured

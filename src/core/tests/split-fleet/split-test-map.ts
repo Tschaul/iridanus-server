@@ -1,7 +1,7 @@
 import { GameState } from "../../../shared/model/v1/state";
 import { dummyReadyWorld } from '../test-helper';
 
-export const warpTestMap: GameState = {
+export const splitTestMap: GameState = {
   scorings: {},
   currentTimestamp: 0,
   gameStartTimestamp: 0,
