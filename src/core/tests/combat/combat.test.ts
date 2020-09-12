@@ -3,7 +3,7 @@ import { map } from "./combat-test-map";
 import { runMap } from "../test-helper";
 import { expect } from "chai";
 
-describe.only("combat", () => {
+describe("combat", () => {
 
   it("does combat", async () => {
     

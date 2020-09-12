@@ -21,8 +21,8 @@ export const testRules: GameRules = {
     buildShipDelay: 10 * tick,
   },
   warping: {
-    arriveWorldDelay: 1 * tick,
-    leaveWorldDelay: 1 * tick,
+    arriveAtEnemyWorldDelay: 1 * tick,
+    leaveEnemyWorldDelay: 1 * tick,
     warpToWorldDelay: 1 * tick,
   },
   mining: {

@@ -70,8 +70,8 @@ const dummyRules: GameRules = {
     gameEndingScore: 1,
   },
   warping: {
-    arriveWorldDelay: 1,
-    leaveWorldDelay: 1,
+    arriveAtEnemyWorldDelay: 1,
+    leaveEnemyWorldDelay: 1,
     warpToWorldDelay: 1,
   }
 }

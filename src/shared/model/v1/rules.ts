@@ -20,9 +20,9 @@ export interface GameRules {
     buildShipDelay: number;
   },
   warping: {
-    leaveWorldDelay: number;
+    leaveEnemyWorldDelay: number;
     warpToWorldDelay: number;
-    arriveWorldDelay: number;
+    arriveAtEnemyWorldDelay: number;
   },
   mining: {
     miningDelay: number;

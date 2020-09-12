@@ -29,11 +29,12 @@ export class EndWarpEventQueue implements GameEventQueue {
           return null
         } else {
 
-          let delay = this.setup.rules.warping.leaveWorldDelay;
+          let delay = 0;
 
           const targetWorld = worlds[fleet.targetWorldId];
-          if (worldhasOwner(targetWorld) && targetWorld.ownerId === fleet.ownerId) {
-            delay = 0;
+
+          if (worldhasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) {
+            delay = this.setup.rules.warping.leaveEnemyWorldDelay;
           }
 
           return {
