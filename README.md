@@ -5,6 +5,10 @@ Server for Iridanus
 
 # TODOS
 
+- change 'await capture' in 'await combat'
+- SHIFT to queue commands, default is replacing commands
+- CTRL to select multiple fleets
+
 # Bugs
 
 - sometimes: population = 1, but world is not captured
@@ -19,11 +23,7 @@ Server for Iridanus
 
 - at regular intervals all worlds known to any player get revealed to all players
 
-- Capturing a world with population is not possible. Population must be killed first and own population must be transfered to world in order to take it over. Ships automatically start killing enemy population once no more enemy ships are at the world.
-
 - ships warp twice as fast and cargo capacity ist reduced to half. This should make it more attractive to send ships to the enemy side to scout and harrass.
-
-- arrival and leaving delay happen everytime you warp into or out of a battle/world capturing (except on your own world). This aplies also for cargo fleet. When warping into battle cargo fleet instantly stop their cargo mission.
 
 ## Research
 
