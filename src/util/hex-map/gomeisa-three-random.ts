@@ -39,16 +39,16 @@ export function makeGomeisaThreeRandom(): GameMap {
         miningStatus: 'NOT_MINING',
         populationGrowthStatus: 'NOT_GROWING',
         integrity: 0,
-        metal: 10,
+        metal: 0,
         mines: 0,
-        industry: 10,
+        industry: 500,
         population: 30,
         populationLimit: 30,
         captureStatus: 'NOT_BEING_CAPTURED',
         idleNotificationSent: true
       };
 
-      ([1, 2, 3]).forEach((index) => {
+      ([1, 2, 3, 4, 5, 6, 7]).forEach((index) => {
         const fleetId = 'w' + worldId + 'f' + index;
         universe.fleets[fleetId] = {
           status: 'READY',
@@ -88,7 +88,7 @@ function makeWorld(id: string): LostWorld {
 
   const populationLimitStatic = getStaticPopulationLimit(rank);
   const populationLimitRandom = Math.round(random[1] * 25);
-  
+
   const populationLimit = Math.max(populationLimitRandom + populationLimitStatic, metal + industry)
 
   const world: LostWorld = {

@@ -5,10 +5,10 @@ export const dummyReadyWorld: ReadyWorld = {
   status: 'READY',
   id: "",
   industry: 0,
-  metal: 10,
+  metal: 0,
   mines: 0,
   ownerId: "",
-  population: 25,
+  population: 0,
   populationLimit: 25,
   integrity: 1,
   miningStatus: 'NOT_MINING',
@@ -36,6 +36,26 @@ export const aiTestMap: GameState = {
         ownerId: "p1",
         ships: 10,
         integrity: 1
+      },
+      "f2": {
+        id: "f2",
+        status: 'READY',
+        combatStatus: 'AT_PEACE',
+        currentWorldId: "w1",
+        orders: [],
+        ownerId: "p1",
+        ships: 10,
+        integrity: 1
+      },
+      "f3": {
+        id: "f3",
+        status: 'READY',
+        combatStatus: 'AT_PEACE',
+        currentWorldId: "w1",
+        orders: [],
+        ownerId: "p1",
+        ships: 10,
+        integrity: 1
       }
     },
     worlds: {
@@ -43,6 +63,8 @@ export const aiTestMap: GameState = {
         ...dummyReadyWorld,
         id: "w1",
         ownerId: "p1",
+        industry: 50,
+        population: 25
       },
       "w2": {
         ...dummyReadyWorld,
@@ -53,6 +75,7 @@ export const aiTestMap: GameState = {
         ...dummyReadyWorld,
         id: "w3",
         ownerId: "p1",
+        metal: 50
       }
     },
     gates: {
