@@ -75,7 +75,7 @@ export const aiTestMap: GameState = {
         ...dummyReadyWorld,
         id: "w3",
         ownerId: "p1",
-        metal: 50
+        metal: 15
       }
     },
     gates: {

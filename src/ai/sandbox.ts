@@ -88,70 +88,68 @@ const fleets = Object.values(gameMap.universe.fleets);
 const distances = floydWarshall(gameMap.universe.gates);
 const now = 0
 
-const attractivity: { [worldId: string]: number } = {}
+const timeFrame = config.warping.warpToWorldDelay * 12;
 
-for (const world of worlds) {
-  attractivity[world.id] = Math.max(world.industry, 0)
-}
-
-const potential = generatePotential(attractivity, distances)
-
-const timeFrame = config.warping.warpToWorldDelay * 400;
+let totalIndustry = 0;
+let totalShips = 0;
 
 for (const world of worlds) {
 
-  const usableIndustry = (worldhasOwner(world) && world.ownerId === playerId) ? world.industry : 0;
+  if (!worldhasOwner(world) || world.ownerId === playerId) {
 
-  // active industry constraint
-  model.constraints['active_industry_' + world.id] = { max: usableIndustry * timeFrame }
+    totalIndustry += world.industry;
 
-  // delta metal constraint
-  model.constraints['delta_metal_' + world.id] = { min: -1 * world.metal }
+    // active industry constraint
+    model.constraints['active_industry_' + world.id] = { max: world.industry * timeFrame }
 
-  // free and occupied living space
-  model.constraints['free_living_space_' + world.id] = { max: (world.populationLimit - world.population) * timeFrame }
-  model.constraints['occupied_living_space_' + world.id] = { max: world.population * timeFrame }
+    // delta metal constraint
+    model.constraints['delta_metal_' + world.id] = { min: -1 * world.metal }
 
-  // run industry option
-  model.variables['run_industry_' + world.id] = {
-    ['active_industry_' + world.id]: config.building.buildShipDelay,
-    ['delta_metal_' + world.id]: -1,
-    production: 1,
-  }
+    // free and occupied living space
+    model.constraints['free_living_space_' + world.id] = { max: (world.populationLimit - world.population) * timeFrame }
+    model.constraints['occupied_living_space_' + world.id] = { max: world.population * timeFrame }
 
-  // make babies option
-  model.variables['reproduce_population_' + world.id] = {
-    ['free_living_space_' + world.id]: config.population.minimumPopulationGrowthDelay,
-    ['occupied_living_space_' + world.id]: config.population.minimumPopulationGrowthDelay,
-    production: 1,
-  }
+    // run industry option
+    model.variables['run_industry_' + world.id] = {
+      ['active_industry_' + world.id]: config.building.buildShipDelay,
+      ['delta_metal_' + world.id]: -1,
+      production: 1,
+    }
 
-  for (const neighboringWorldId of gameMap.universe.gates[world.id]) {
+    // make babies option
+    model.variables['reproduce_population_' + world.id] = {
+      ['free_living_space_' + world.id]: config.population.minimumPopulationGrowthDelay,
+      ['occupied_living_space_' + world.id]: config.population.minimumPopulationGrowthDelay,
+      production: 1,
+    }
 
-    model.constraints['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId] = { max: 0 }
+    for (const neighboringWorldId of gameMap.universe.gates[world.id]) {
 
-    model.variables['migrate_population_from_world_' + world.id + '_to_world_' + neighboringWorldId] = {
-      ['free_living_space_' + world.id]: 1,
-      ['occupied_living_space_' + world.id]: -1,
-      ['free_living_space_' + neighboringWorldId]: -1,
-      ['occupied_living_space_' + neighboringWorldId]: 1,
-      ['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId]: 2 * config.warping.warpToWorldDelay
-    };
+      model.constraints['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId] = { max: 0 }
 
-    model.constraints['transport_metal_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId] = { max: 0 }
-    
-    model.variables['migrate_population_from_world_' + world.id + '_to_world_' + neighboringWorldId] = {
-      ['free_living_space_' + world.id]: 1,
-      ['occupied_living_space_' + world.id]: -1,
-      ['free_living_space_' + neighboringWorldId]: -1,
-      ['occupied_living_space_' + neighboringWorldId]: 1,
-      ['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId]: 2 * config.warping.warpToWorldDelay
-    };
+      model.variables['migrate_population_from_world_' + world.id + '_to_world_' + neighboringWorldId] = {
+        ['free_living_space_' + world.id]: 1 * timeFrame,
+        ['occupied_living_space_' + world.id]: -1 * timeFrame,
+        ['free_living_space_' + neighboringWorldId]: -1 * timeFrame,
+        ['occupied_living_space_' + neighboringWorldId]: 1 * timeFrame,
+        ['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId]: 4 * config.warping.warpToWorldDelay
+      };
+
+      model.constraints['transport_metal_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId] = { max: 0 }
+
+      model.variables['transport_metal_from_world_' + world.id + '_to_world_' + neighboringWorldId] = {
+        ['delta_metal_' + neighboringWorldId]: 1,
+        ['delta_metal_' + world.id]: -1,
+        ['transport_metal_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId]: 2 * config.warping.warpToWorldDelay
+      };
+    }
   }
 }
 
 for (const fleet of fleets) {
   if (fleet.ownerId === playerId) {
+
+    totalShips += fleet.ships;
 
     // use every fleet only once constraint
     model.constraints['used_fleet_' + fleet.id] = { max: 1 }
@@ -165,11 +163,12 @@ for (const fleet of fleets) {
       const warpTime = delay + distanceToWorld * config.warping.warpToWorldDelay;
 
       if (warpTime < timeFrame) {
-        model.variables['deploy_' + fleet.id + '_to_world_' + world.id] = {
+        model.variables['order_deploy_' + fleet.id + '_to_world_' + world.id] = {
           ['used_fleet_' + fleet.id]: 1,
-          ['active_industry_' + world.id]: -1 * fleet.ships * (timeFrame - warpTime)
+          ['active_industry_' + world.id]: -1 * fleet.ships * (timeFrame - warpTime),
+          deployed_fleet: 1
         }
-        // model.ints!['deploy_' + fleet.id + '_to_world_' + world.id] = true
+        model.ints!['deploy_' + fleet.id + '_to_world_' + world.id] = true
 
       }
       for (const neighboringWorldId of gameMap.universe.gates[world.id]) {
@@ -183,26 +182,14 @@ for (const fleet of fleets) {
         if (warpTime < timeFrame) {
 
           const cargoTime = timeFrame - warpTime;
-          const cargoHops = (cargoTime / config.warping.warpToWorldDelay) * 0.5;
 
-          let variable = {
+          model.variables['order_cargo_with_' + fleet.id + '_from_world_' + world.id + '_to_world_' + neighboringWorldId] = {
             ['used_fleet_' + fleet.id]: 1,
-          }
-
-          if (potential[neighboringWorldId] > potential[world.id]) {
-            variable['delta_metal_' + neighboringWorldId] = cargoHops * fleet.ships;
-            variable['delta_metal_' + world.id] = -1 * cargoHops * fleet.ships;
-            variable['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId] = cargoTime * 0.5;
-            variable['migration_opportunity_from_world_' + neighboringWorldId + '_to_world_' + world.id] = cargoTime * 0.5;
-          }
-          if (potential[neighboringWorldId] < potential[world.id]) {
-            variable['delta_metal_' + neighboringWorldId] = -1 * cargoHops * fleet.ships;
-            variable['delta_metal_' + world.id] = cargoHops * fleet.ships;
-            variable['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId] = cargoTime * 0.5;
-            variable['migration_opportunity_from_world_' + neighboringWorldId + '_to_world_' + world.id] = cargoTime * 0.5;
-          }
-
-          model.variables['cargo_with_' + fleet.id + '_from_world_' + world.id + '_to_world_' + neighboringWorldId] = variable;
+            ['migration_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId]: -1 * cargoTime,
+            ['migration_opportunity_from_world_' + neighboringWorldId + '_to_world_' + world.id]: -1 * cargoTime,
+            ['transport_metal_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId]: -1 * cargoTime,
+            ['transport_metal_opportunity_from_world_' + neighboringWorldId + '_to_world_' + world.id]: -1 * cargoTime,
+          };
           // model.ints!['cargo_with_' + fleet.id + '_from_world_' + world.id + '_to_world_' + neighboringWorldId] = true
 
         }
@@ -212,6 +199,11 @@ for (const fleet of fleets) {
     }
   }
 }
+
+const fleetsToDeploy = Math.max(0, totalShips - (totalShips + totalIndustry) / 2);
+
+model.constraints.deployed_fleet = { max: fleetsToDeploy}
+
 console.log(model);
 
 const result = solver.Solve(model);
