@@ -6,7 +6,7 @@ const model: IModel = {
   optimize: "production",
   opType: "max",
   constraints: {
-    active_industry_w1: { max: 10 },
+    active_industry_w1: { max: 50 },
     active_industry_w2: { max: 0 },
     active_industry_w3: { max: 0 },
     metal_w1: { min: 0 },
@@ -17,30 +17,30 @@ const model: IModel = {
   variables: {
     run_industry_w1: {
       active_industry_w1: 1,
-      metal_w1: -1,
-      production: 1
+      metal_w1: -0.2,
+      production: 0.2
     },
     run_industry_w2: {
       active_industry_w2: 1,
-      metal_w2: -1,
-      production: 1
+      metal_w2: -0.2,
+      production: 0.2
     },
     run_industry_w3: {
       active_industry_w3: 1,
-      metal_w3: -1,
-      production: 1
+      metal_w3: -0.2,
+      production: 0.2
     },
     deploy_w1: {
       active_industry_w1: -1,
-      ships: 5
+      ships: 1
     },
     deploy_w2: {
       active_industry_w2: -1,
-      ships: 5
+      ships: 1
     },
     deploy_w3: {
       active_industry_w3: -1,
-      ships: 5
+      ships: 1
     },
     cargo_w1_w2: {
       metal_w1: 1,
