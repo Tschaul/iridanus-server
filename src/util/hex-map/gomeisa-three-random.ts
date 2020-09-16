@@ -41,14 +41,14 @@ export function makeGomeisaThreeRandom(): GameMap {
         integrity: 0,
         metal: 0,
         mines: 0,
-        industry: 500,
-        population: 30,
-        populationLimit: 30,
+        industry: 20,
+        population: 50,
+        populationLimit: 50,
         captureStatus: 'NOT_BEING_CAPTURED',
         idleNotificationSent: true
       };
 
-      ([1, 2, 3, 4, 5, 6, 7]).forEach((index) => {
+      ([1, 2, 3, 4]).forEach((index) => {
         const fleetId = 'w' + worldId + 'f' + index;
         universe.fleets[fleetId] = {
           status: 'READY',

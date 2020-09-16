@@ -5,7 +5,6 @@ Server for Iridanus
 
 # TODOS
 
-- change 'await capture' in 'await combat'
 - SHIFT to queue commands, default is replacing commands
 - CTRL to select multiple fleets
 
@@ -16,14 +15,31 @@ Server for Iridanus
 
 # Further Improvements
 
+- replay with timeline. During game only with own vision. After game with full vision.
+- skipping time in dev mode
 - help: context based links into docs
 - chose color in game lobby
 
+# AI
+
+Four modules:
+
+- mind: rates the position in the game and allocates fleets to the other modules. Decides when to be greedy, safe or aggressive to what amount. Also decides which enemy to attack.
+- greed: allocates given ships to cargo routes and deploys them as industry to maximize the production of new ships.
+- fear: allocates given ships to defending.
+- fury: coordinates attacks with given ships.
+
 # Some Ideas
+
+- ships have a delay when starting or ending a cargo mission (need to modify the ships to change between civil and military mode). During this swith all damage taken is doubled.
+
+- no more arriving and leaving delay. Explicit 'retreat' order needed to leave a fight which takes some time during which the fleets gets double damage.
 
 - at regular intervals all worlds known to any player get revealed to all players
 
 - ships warp twice as fast and cargo capacity ist reduced to half. This should make it more attractive to send ships to the enemy side to scout and harrass.
+
+- you can only have as many ships as you have population
 
 ## Research
 
@@ -41,7 +57,7 @@ Server for Iridanus
 # Victory condition
 
 - Points for 3 upgrades of same color
-- Points for highest amount of population or enemy ships destroyed
+- Points for highest amount of population or enemy ships destroyed or industry
 - Points can be bought with developement
 - Points for owning special artefact worlds
 - Points for each owned capital world
@@ -87,6 +103,7 @@ more ideas for upgrades:
 - fleets can transport more metal
 - instant strike: when enagaging the enemy ships fire once instantly
 - sacrifice population for metal
+- mind control one other fleet
 
 ## Fast realtime challanges
 

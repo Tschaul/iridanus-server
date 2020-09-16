@@ -11,8 +11,6 @@ import { EndBuildShipsEventQueue } from "./building/end-build-ship";
 import { FleetFireEventQueue } from "./combat/fleet-fire";
 import { FleetStartFiringEventQueue } from "./combat/fleet-start-firing";
 import { FleetStopFiringEventQueue } from "./combat/fleet-stop-firing";
-import { CaptureWorldEventQueue } from "./capture/capture-world";
-import { TickEventQueue } from "./tick";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
@@ -22,11 +20,8 @@ import { LooseFleetEventQueue } from "./combat/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
 import { WorldStopGrowingEventQueue } from "./population/world-stop-growing";
-import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
-import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 import { GameEndsEventQueue } from "./scoring/game-ends";
 import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
-import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
 import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
 import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
 import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
@@ -71,7 +66,6 @@ export class CompleteEventQueue implements GameEventQueue {
     // captureWorld: CaptureWorldEventQueue,
     // stopCapturingWorld: StopCapturingWorldEventQueue,
     looseFleet: LooseFleetEventQueue,
-    // awaitCapture: AwaitedCaptureEventQueue,
 
     startCargoMission: StartCargoMissionEventQueue,
     stopCargoMission: StopCargoMissionEventQueue,

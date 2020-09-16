@@ -195,4 +195,8 @@ export class GameStageViewModel {
   public sendFleetToGate(world1Id: string, world2Id: string) {
     this.orderEditor.startCargoMissionAtGate(world1Id, world2Id)
   }
+
+  public setAltKeyState(state: boolean) {
+    this.orderEditor.appendOrders = state;
+  }
 }

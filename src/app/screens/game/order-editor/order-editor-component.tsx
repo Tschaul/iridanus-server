@@ -96,8 +96,6 @@ export class OrderEditor extends React.Component<{
                 return <WarpOrderEditor key={index} order={order}></WarpOrderEditor>
               case 'START_CARGO_MISSION':
                 return <span key={index}>Start Cargo Mission</span>
-              case 'AWAIT_CAPTURE':
-                return <span key={index}>Await Capture</span>
             }
           }).map((content, index) => (
             <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>
@@ -110,7 +108,6 @@ export class OrderEditor extends React.Component<{
       ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
         <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
         <HoverTooltip content="Start cargo mission"><Button tight onClick={this.handleNewStartCargoMissionOrder}>⇄</Button></HoverTooltip>
-        <HoverTooltip content="Await capture"><Button tight onClick={this.handleNewAwaitCaptureOrder}>⚑</Button></HoverTooltip>
         <HoverTooltip content="Split fleet"><Button tight onClick={this.handleNewSplitFleetOrder}>✂</Button></HoverTooltip>
         <HoverTooltip content="Deploy as industry"><Button tight onClick={this.handlenewDeployToWorldOrder}>I🡓</Button></HoverTooltip>
       </div>)])
@@ -151,11 +148,6 @@ export class OrderEditor extends React.Component<{
   @autobind
   handleNewStartCargoMissionOrder() {
     this.props.vm.newStartCargoMissionOrder()
-  }
-
-  @autobind
-  handleNewAwaitCaptureOrder() {
-    this.props.vm.newAwaitCaptureOrder()
   }
 
   @autobind

@@ -60,4 +60,8 @@ export class GameOrders {
   public updateFleetOrders(fleetId: string, orders: FleetOrder[]) {
     this.fleetOrderDrafts.set(fleetId, orders);
   }
+
+  public clearFleetOrders(fleetId: string) {
+    this.updateFleetOrders(fleetId, []);
+  }
 }

@@ -1,6 +1,6 @@
 import { GameViewModel } from "./game-view-model";
-import { computed } from "mobx";
-import { WarpOrder, FleetOrder, AwaitCaptureOrder, StartCargoMissionOrder, SplitFleetOrder, DeployToWorldOrder } from "../../../shared/model/v1/fleet-orders";
+import { computed, observable } from "mobx";
+import { WarpOrder, FleetOrder, StartCargoMissionOrder, SplitFleetOrder, DeployToWorldOrder } from "../../../shared/model/v1/fleet-orders";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
@@ -19,6 +19,8 @@ export class OrderEditorViewModel {
     private gameData: GameData,
   ) {
   }
+
+  @observable appendOrders = false;
 
   @computed get selectionType() {
     if (this.selection.selectedFleet) {
@@ -92,6 +94,9 @@ export class OrderEditorViewModel {
   public newWarpOrderToWorld(worldId: string) {
     const fleet = this.selection.selectedFleet;
     if (fleet) {
+      if (!this.appendOrders) {
+        this.gameOrders.clearFleetOrders(fleet.id);
+      }
 
       const startWorld = this.projectedLastWorld(fleet);
 
@@ -111,6 +116,9 @@ export class OrderEditorViewModel {
   public startCargoMissionAtGate(world1Id: string, world2Id: string) {
     const fleet = this.selection.selectedFleet;
     if (fleet) {
+      if (!this.appendOrders) {
+        this.gameOrders.clearFleetOrders(fleet.id);
+      }
 
       const startWorld = this.projectedLastWorld(fleet);
 
@@ -144,12 +152,11 @@ export class OrderEditorViewModel {
 
   }
 
-  public newAwaitCaptureOrder() {
-    const fleet = this.selection.selectedFleet!;
-    const order: AwaitCaptureOrder = {
-      type: 'AWAIT_CAPTURE',
+  private setOrAppendFleetOrder(fleetId: string, order: FleetOrder) {
+    if (!this.appendOrders) {
+      this.gameOrders.clearFleetOrders(fleetId);
     }
-    this.gameOrders.addFleetOrder(fleet.id, order);
+    this.gameOrders.addFleetOrder(fleetId, order)
   }
 
   public newSplitFleetOrder() {
@@ -157,7 +164,7 @@ export class OrderEditorViewModel {
     const order: SplitFleetOrder = {
       type: 'SPLIT_FLEET',
     }
-    this.gameOrders.addFleetOrder(fleet.id, order);
+    this.setOrAppendFleetOrder(fleet.id, order);
   }
 
   public newDeployToWorldOrder() {
@@ -165,7 +172,7 @@ export class OrderEditorViewModel {
     const order: DeployToWorldOrder = {
       type: 'DEPLOY_TO_WORLD',
     }
-    this.gameOrders.addFleetOrder(fleet.id, order);
+    this.setOrAppendFleetOrder(fleet.id, order);
   }
 
   worldsWithHints: string[];
@@ -196,7 +203,7 @@ export class OrderEditorViewModel {
 
     const lastWarpOrder = fleet.orders.slice(0).reverse().find(order => order.type === 'WARP') as WarpOrder | null;
 
-    if (lastWarpOrder) {
+    if (lastWarpOrder && this.appendOrders) {
       return lastWarpOrder.targetWorldId
     }
 

@@ -3,7 +3,7 @@ import { GameRules } from "../../shared/model/v1/rules";
 export function makeConfig(millisecondsPerDay: number): GameRules {
   return {
     scoring: {
-      gameEndingScore: 3500 * millisecondsPerDay
+      gameEndingScore: 10000 * millisecondsPerDay
     },
     capture: {
       captureDelay: 2.5 * millisecondsPerDay,
@@ -13,7 +13,7 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
     },
     combat: {
       integrityDamagePerShip: 0.094276,
-      populationDamagePerShip: 0.188552,
+      populationDamagePerShip: 0.377104,
       meanFiringInterval: 1 * millisecondsPerDay,
     },
     building: {

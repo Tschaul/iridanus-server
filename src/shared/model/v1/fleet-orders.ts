@@ -1,13 +1,8 @@
 export type FleetOrder =
-  AwaitCaptureOrder
-  | WarpOrder
+  WarpOrder
   | StartCargoMissionOrder
   | SplitFleetOrder
   | DeployToWorldOrder
-
-export interface AwaitCaptureOrder {
-  type: 'AWAIT_CAPTURE',
-}
 
 export interface WarpOrder {
   type: 'WARP',

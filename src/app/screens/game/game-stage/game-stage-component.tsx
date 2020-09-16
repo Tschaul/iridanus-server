@@ -5,6 +5,7 @@ import { GameStageBackdrop } from './game-stage-backdrop-component';
 import { GameStageForeground } from './game-stage-foreground-component';
 import { GameStageSelectedFleet } from './game-stage-selected-fleet';
 import classNames from 'classnames';
+import autobind from 'autobind-decorator';
 
 @observer
 export class GameStage extends React.Component<{ 
@@ -27,21 +28,38 @@ export class GameStage extends React.Component<{
     );
   }
 
-  componentDidMount(): void {
 
-    const updateStateFromElement = (element: HTMLDivElement | null) => {
+  @autobind
+  updateStateFromElement() {
 
-      if (!element) {
-        return;
-      }
+    const element = this.stageWrapper
 
-      this.props.vm.stageWidth = element.offsetWidth;
-      this.props.vm.stageHeight = element.offsetHeight;
-
+    if (!element) {
+      return;
     }
 
-    window.addEventListener('resize', () => { updateStateFromElement(this.stageWrapper) });
+    this.props.vm.stageWidth = element.offsetWidth;
+    this.props.vm.stageHeight = element.offsetHeight;
 
-    updateStateFromElement(this.stageWrapper)
+  }
+
+  @autobind
+  updateModifierKeyStates(e: KeyboardEvent) {
+    this.props.vm.setAltKeyState(e.altKey);
+  }
+
+  componentDidMount(): void {
+
+    window.addEventListener('resize', this.updateStateFromElement);
+    window.addEventListener('keydown', this.updateModifierKeyStates)
+    window.addEventListener('keyup', this.updateModifierKeyStates)
+
+    this.updateStateFromElement()
+  }
+
+  componentWillUnmount(): void {
+    window.removeEventListener('resize', this.updateStateFromElement)
+    window.removeEventListener('keydown', this.updateModifierKeyStates)
+    window.removeEventListener('keyup', this.updateModifierKeyStates)
   }
 }

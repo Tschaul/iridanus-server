@@ -9,66 +9,66 @@ import { generatePotential } from "../shared/math/path-finding/potential";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
 import { worldhasOwner } from "../shared/model/v1/world";
 
-const modela: IModel = {
-  optimize: "production",
-  opType: "max",
-  constraints: {
-    used_free_space_w1: { max: 0 },
-    used_occupied_space_w1: { max: 25 },
-    active_industry_w1: { max: 50 },
-    active_industry_w2: { max: 0 },
-    active_industry_w3: { max: 0 },
-    metal_w1: { min: 0 },
-    metal_w2: { min: 0 },
-    metal_w3: { min: -20 },
-    ships: { max: 30 }
-  },
-  variables: {
-    run_industry_w1: {
-      active_industry_w1: 1,
-      metal_w1: -0.2,
-      production: 0.2
-    },
-    run_industry_w2: {
-      active_industry_w2: 1,
-      metal_w2: -0.2,
-      production: 0.2
-    },
-    run_industry_w3: {
-      active_industry_w3: 1,
-      metal_w3: -0.2,
-      production: 0.2
-    },
-    deploy_w1: {
-      active_industry_w1: -1,
-      ships: 1
-    },
-    deploy_w2: {
-      active_industry_w2: -1,
-      ships: 1
-    },
-    deploy_w3: {
-      active_industry_w3: -1,
-      ships: 1
-    },
-    cargo_w1_w2: {
-      metal_w1: 1,
-      metal_w2: -1,
-      ships: 1
-    },
-    cargo_w2_w3: {
-      metal_w2: 1,
-      metal_w3: -1,
-      ships: 1
-    },
-  },
-  ints: {
-    run_industry_w1: 1,
-    deploy_w1: 1,
-    cargo_w1_w2: 1,
-    cargo_w2_w3: 1,
-  }
-}
+// const modela: IModel = {
+//   optimize: "production",
+//   opType: "max",
+//   constraints: {
+//     used_free_space_w1: { max: 0 },
+//     used_occupied_space_w1: { max: 25 },
+//     active_industry_w1: { max: 50 },
+//     active_industry_w2: { max: 0 },
+//     active_industry_w3: { max: 0 },
+//     metal_w1: { min: 0 },
+//     metal_w2: { min: 0 },
+//     metal_w3: { min: -20 },
+//     ships: { max: 30 }
+//   },
+//   variables: {
+//     run_industry_w1: {
+//       active_industry_w1: 1,
+//       metal_w1: -0.2,
+//       production: 0.2
+//     },
+//     run_industry_w2: {
+//       active_industry_w2: 1,
+//       metal_w2: -0.2,
+//       production: 0.2
+//     },
+//     run_industry_w3: {
+//       active_industry_w3: 1,
+//       metal_w3: -0.2,
+//       production: 0.2
+//     },
+//     deploy_w1: {
+//       active_industry_w1: -1,
+//       ships: 1
+//     },
+//     deploy_w2: {
+//       active_industry_w2: -1,
+//       ships: 1
+//     },
+//     deploy_w3: {
+//       active_industry_w3: -1,
+//       ships: 1
+//     },
+//     cargo_w1_w2: {
+//       metal_w1: 1,
+//       metal_w2: -1,
+//       ships: 1
+//     },
+//     cargo_w2_w3: {
+//       metal_w2: 1,
+//       metal_w3: -1,
+//       ships: 1
+//     },
+//   },
+//   ints: {
+//     run_industry_w1: 1,
+//     deploy_w1: 1,
+//     cargo_w1_w2: 1,
+//     cargo_w2_w3: 1,
+//   }
+// }
 
 const model: IModel = {
   optimize: 'production',
@@ -78,8 +78,8 @@ const model: IModel = {
   ints: {}
 }
 
-// const gameMap = makeGomeisaThreeRandom();
-const gameMap = aiTestMap;
+const gameMap = makeGomeisaThreeRandom();
+// const gameMap = aiTestMap;
 const playerId = 'p1'
 
 const config = makeConfig(1000)
@@ -190,7 +190,7 @@ for (const fleet of fleets) {
             ['transport_metal_opportunity_from_world_' + world.id + '_to_world_' + neighboringWorldId]: -1 * cargoTime,
             ['transport_metal_opportunity_from_world_' + neighboringWorldId + '_to_world_' + world.id]: -1 * cargoTime,
           };
-          // model.ints!['cargo_with_' + fleet.id + '_from_world_' + world.id + '_to_world_' + neighboringWorldId] = true
+          model.ints!['order_cargo_with_' + fleet.id + '_from_world_' + world.id + '_to_world_' + neighboringWorldId] = true
 
         }
       }
@@ -204,7 +204,7 @@ const fleetsToDeploy = Math.max(0, totalShips - (totalShips + totalIndustry) / 2
 
 model.constraints.deployed_fleet = { max: fleetsToDeploy}
 
-console.log(model);
+// console.log(model);
 
 const result = solver.Solve(model);
 console.log(result);

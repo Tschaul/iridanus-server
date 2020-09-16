@@ -24,7 +24,6 @@ import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
 import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 import { GameEndsEventQueue } from "./scoring/game-ends";
 import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
-import { AwaitedCaptureEventQueue } from "./capture/awaited-capture";
 import { GameStartsEventQueue } from "./start/game-starts";
 import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
 import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
@@ -67,7 +66,6 @@ export function registerEventQueues(container: Container) {
   container.bind(CaptureWorldEventQueue).toSelf();
   container.bind(StopCapturingWorldEventQueue).toSelf();
   container.bind(LooseFleetEventQueue).toSelf();
-  container.bind(AwaitedCaptureEventQueue).toSelf();
 
   container.bind(RevealWorldEventQueue).toSelf();
   container.bind(RememberWorldEventQueue).toSelf();

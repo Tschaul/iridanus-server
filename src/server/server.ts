@@ -7,11 +7,8 @@ import { ConnectionHandler } from './connection-handler';
 import { RequestMessage } from '../shared/messages/request-message';
 import { GameRunner } from './game-runner';
 import { createProxyServer } from 'http-proxy'
-import { DataHandleRegistry } from './repositories/data-handle-registry';
-import { debounceTime } from 'rxjs/operators';
 import { shutdown } from './shutdown';
-import { MailSender } from './infrastructure/mail/mail-sender';
-import { UserRepository } from './repositories/users/user-repository';
+import { createTestGame } from './create-test-game';
 
 const app = express();
 
@@ -35,6 +32,12 @@ const containerRegistry = new ContainerRegistry();
 const gameRunner = new GameRunner(containerRegistry);
 
 gameRunner.run();
+
+if (process.env.IRIDANUS_CREATE_TEST_GAME === 'true') {
+  setTimeout(() => {
+    createTestGame(containerRegistry)
+  }, 3000)
+}
 
 webSocketServer.on('connection', (socket: WebSocket) => {
 
