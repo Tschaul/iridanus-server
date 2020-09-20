@@ -4,7 +4,7 @@ const tick = 1000;
 
 export const testRules: GameRules = {
   scoring: {
-    gameEndingScore: 3500 * tick,
+    gameEndingScore: 1000 * tick,
   },
   capture: {
     captureDelay: 2.5 * tick,

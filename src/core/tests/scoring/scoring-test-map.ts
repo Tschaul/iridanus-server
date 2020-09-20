@@ -4,7 +4,7 @@ import { dummyReadyWorld } from "../test-helper";
 export const scoringTestMap: GameState = {
   currentTimestamp: 0,
   gameStartTimestamp: 0,
-  gameEndTimestamp: 999999999,
+  gameEndTimestamp: 100000,
   scorings: {
     "p1": {
       influence: 0,

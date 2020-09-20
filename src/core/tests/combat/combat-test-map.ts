@@ -5,7 +5,7 @@ export const map: GameState = {
   scorings: {},
   currentTimestamp: 0,
   gameStartTimestamp: 0,
-  gameEndTimestamp: Number.MAX_SAFE_INTEGER,
+  gameEndTimestamp: 100000,
   universe: {
     visibility: {
       p1: {},
