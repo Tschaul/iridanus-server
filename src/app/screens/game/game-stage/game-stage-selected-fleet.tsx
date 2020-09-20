@@ -65,10 +65,18 @@ export class GameStageSelectedFleet extends React.Component<{
       })
     }
 
+    const path =  warpOrders.map(it => it.targetWorldId);
+
+    const lastOrder =  fleet.orders[fleet.orders.length -1];
+
+    if (lastOrder && lastOrder.type === 'START_CARGO_MISSION') {
+      const lastWorld = path.length ? path[path.length - 1] : currentWorldId;
+      path.push(lastOrder.otherWorldId, lastWorld)
+    }
+
     const result = [];
 
-    for (const warpOrder of warpOrders) {
-      const destinationWorldId = warpOrder.targetWorldId;
+    for (const destinationWorldId of path) {
 
       const originWorldPos = this.props.vm.drawingPositons[currentWorldId];
       const targetWorldPos = this.props.vm.drawingPositons[destinationWorldId];

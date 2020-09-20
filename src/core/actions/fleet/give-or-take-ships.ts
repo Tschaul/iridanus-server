@@ -17,7 +17,7 @@ export function giveOrTakeFleetShips(fleetId: string, amount: number, integrity:
       let newShips = Math.floor(newShipsPlusIntegrity);
       let newIntegrity = newShipsPlusIntegrity % 1;
 
-      if (newIntegrity === 0) {
+      if (newIntegrity === 0 && fleet.integrity !== 0) {
         newIntegrity = 1;
         newShips--;
       }

@@ -5,11 +5,10 @@ import { combineLatest, zip, Observable } from "rxjs";
 import { WorldProjector } from "./world-projector";
 import { map, switchMap, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { worldhasOwner, World } from "../../shared/model/v1/world";
-import { Fleet, fleetIsAtWorld } from "../../shared/model/v1/fleet";
+import { Fleet, FleetInTransit, fleetIsAtWorld, pathOfFleetInTransit } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
 import { VisibleWorld, VisibleState } from "../../shared/model/v1/visible-state";
 import { RemeberedWorld, WorldVisibilityStatus } from "../../shared/model/v1/visibility-status";
-import equal from 'deep-equal';
 
 export interface WorldToRevealOrHide {
   worldId: string,
@@ -28,14 +27,45 @@ export class VisibilityProjector {
 
   private visiblity$ = this.store.state$.pipe(map(state => state.universe.visibility));
 
+  public worldsToRememberFromGlobalRevelationByPlayerId$ = this.worlds.byId$.pipe(
+    map(worldsById => {
+      const result: { [playerId: string]: string[] } = {}
+      for (const world of Object.values(worldsById)) {
+        if (worldhasOwner(world)) {
+          result[world.ownerId] = result[world.ownerId] ?? [];
+          result[world.ownerId].push(world.id)
+        }
+      }
+      return result;
+    }),
+    map((ownedWorldsByPlayer: { [playerId: string]: string[] }) => {
+
+      const allPlayers = Object.getOwnPropertyNames(ownedWorldsByPlayer);
+
+      const allWorldsToRemember = new Set<string>()
+
+      Object.values(ownedWorldsByPlayer).forEach(values =>
+        values.forEach(worldId =>
+          allWorldsToRemember.add(worldId)
+        )
+      )
+
+      const result: { [playerId: string]: string[] } = {}
+      allPlayers.forEach((playerId) => {
+        result[playerId] = [...allWorldsToRemember].filter(it => !ownedWorldsByPlayer[playerId].includes(it))
+      })
+      return result;
+    })
+  )
+
   public nextRevealedWorld$ = this.visiblity$.pipe(
     switchMap(visibility => {
       const playerIds = Object.getOwnPropertyNames(visibility);
       return zip(...playerIds.map(playerId => {
-        return combineLatest(
+        return combineLatest([
           this.calculatedVisibleWorldsForPlayer(playerId),
           this.visibleWorldsForPlayerFromStore(playerId)
-        ).pipe(
+        ]).pipe(
           map(([calculatedWorlds, currentlyVisibleIds]) => {
             const idToReveal = calculatedWorlds.find(world => !currentlyVisibleIds.includes(world.id))?.id
             return idToReveal ? {
@@ -89,8 +119,14 @@ export class VisibilityProjector {
             || visibilityForPlayer[worldId].status === 'REMEMBERED'
         }
 
+        const fleetIsNotVisible = (fleet: FleetInTransit) => {
+          const worlds = pathOfFleetInTransit(fleet);
+          return worldIsNotVisible(worlds[0]) || worldIsNotVisible(worlds[1])
+        }
+
         Object.values(state.universe.fleets).filter(fleet => fleet.ownerId !== playerId).forEach(fleet => {
-          if (fleet.status === 'WARPING' && (worldIsNotVisible(fleet.originWorldId) || worldIsNotVisible(fleet.targetWorldId))) {
+
+          if (!fleetIsAtWorld(fleet) && fleetIsNotVisible(fleet)) {
             delete fleets[fleet.id];
           } else if (fleetIsAtWorld(fleet) && worldIsNotVisible(fleet.currentWorldId)) {
             delete fleets[fleet.id];
@@ -146,24 +182,24 @@ export class VisibilityProjector {
   }
 
   private calculatedVisibleWorldsForPlayer(playerId: string): Observable<World[]> {
-    return combineLatest(
+    return combineLatest([
       this.worlds.byId$,
       this.fleets.byId$,
       this.gates.all$
-    ).pipe(
+    ]).pipe(
       map(([worldsById, fleetsById, gates]) => {
         const allFleets = Object.values(fleetsById);
         return Object.values(worldsById).filter(world => {
           if (this.worldOwnedByPlayer(world, playerId)) {
             return true;
           }
-          if (this.playerHasFleetKeyAtWorld(allFleets, playerId, world)) {
+          if (this.playerHasFleetAtWorld(allFleets, playerId, world)) {
             return true;
           }
           const neighboringWorldIds = gates[world.id];
           if (neighboringWorldIds && neighboringWorldIds.some(id => {
             const neighboringWorld = worldsById[id];
-            return this.worldOwnedByPlayer(neighboringWorld, playerId)
+            return this.worldOwnedByPlayer(neighboringWorld, playerId) || this.playerHasFleetAtWorld(allFleets, playerId, neighboringWorld)
           })) {
             return true;
           }
@@ -174,7 +210,7 @@ export class VisibilityProjector {
     )
   }
 
-  private playerHasFleetKeyAtWorld(allFleets: Fleet[], playerId: string, world: World) {
+  private playerHasFleetAtWorld(allFleets: Fleet[], playerId: string, world: World) {
     return allFleets.some(fleet => this.fleetOwnedByPlayer(fleet, playerId) && fleetIsAtWorld(fleet) && fleet.currentWorldId === world.id);
   }
 

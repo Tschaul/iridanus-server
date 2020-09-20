@@ -70,7 +70,7 @@ export class Game {
               this.handleEvent(event, event.timestamp!, resolve);
             }, event.timestamp - now)
           } else {
-            this.handleEvent(event, event.timestamp ?? now, resolve);
+            this.handleEvent(event, event.timestamp ?? this.store.currentTimestamp, resolve);
           }
         } else {
           this.handleEvent(event, event.timestamp ?? this.store.currentTimestamp, resolve);

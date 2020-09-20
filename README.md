@@ -5,8 +5,10 @@ Server for Iridanus
 
 # TODOS
 
-- SHIFT to queue commands, default is replacing commands
+- Redo selected word view (no table for metal and population)
+- change vision: world with fleets allways see neighbors
 - CTRL to select multiple fleets
+
 
 # Bugs
 
@@ -30,6 +32,8 @@ Four modules:
 - fury: coordinates attacks with given ships.
 
 # Some Ideas
+
+- 4 classes of ships: freighter for cargo and building industry, and three sizes of military fleets with one, two or three slots for upgrades. Upgrades would be chosable in ship designer from those bought with research/developement.
 
 - ships have a delay when starting or ending a cargo mission (need to modify the ships to change between civil and military mode). During this swith all damage taken is doubled.
 

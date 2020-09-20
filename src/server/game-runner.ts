@@ -107,7 +107,7 @@ export class GameRunner {
       const state = this.instantiateMap(gameInfo, map);
 
       await this.gameRepository.startGame(gameInfo.id, map.drawingPositions);
-      
+
       await this.gameIsReadyMail.send(gameInfo, state.gameStartTimestamp);
 
       setup.initialState = state;
@@ -149,6 +149,11 @@ export class GameRunner {
   }
 
   private instantiateMap(gameInfo: Readonly<GameInfo>, map: Readonly<GameMap>): GameState {
+
+    const currentTimestamp = this.clock.getTimestamp();
+    const gameStartTimestamp = currentTimestamp + this.environment.millisecondsPerDay * 1;
+    const gameEndTimestamp = gameStartTimestamp + this.environment.millisecondsPerDay * 8 * 7;
+
     const players = Object.values(gameInfo.players)
       .filter(player => !player.isSpectator)
       .map(player => player.id);
@@ -165,15 +170,30 @@ export class GameRunner {
     })
 
     let universe = produce(map.universe, (state: Universe) => {
+      players.forEach(player => {
+        state.visibility[player] = {};
+      })
       map.seats.forEach((seat, index) => {
         const player = players[index];
-        state.visibility[player] = {};
+        const otherPlayers = players.filter(it => it !== player);
         Object.getOwnPropertyNames(state.worlds).forEach(worldId => {
           const world = state.worlds[worldId];
           if (worldhasOwner(world) && world.ownerId === seat) {
             if (player) {
               world.ownerId = player;
               state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
+              otherPlayers.forEach(otherPlayerId => {
+                state.visibility[otherPlayerId][worldId] = {
+                  status: 'REMEMBERED',
+                  id: worldId,
+                  industry: world.industry,
+                  mines: world.mines,
+                  population: world.population,
+                  populationLimit: world.populationLimit,
+                  rememberedTimestamp: currentTimestamp,
+                  ownerId: player
+                }
+              })
             }
           }
           if (player && state.gates[worldId].some(neighboringWorldId => {
@@ -193,10 +213,6 @@ export class GameRunner {
         })
       })
     })
-
-    const currentTimestamp = this.clock.getTimestamp();
-    const gameStartTimestamp = currentTimestamp + this.environment.millisecondsPerDay * 3;
-    const gameEndTimestamp = 99999999999999
 
     return {
       currentTimestamp,

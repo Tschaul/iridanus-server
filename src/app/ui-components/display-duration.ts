@@ -2,7 +2,8 @@ import { interval, of, Subscription } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 import React from "react";
 
-const millisecondsPerMinute = 60 * 1000;
+const millisecondsPerSecond = 1000;
+const millisecondsPerMinute = 60 * millisecondsPerSecond;
 const millisecondsPerHour = 60 * millisecondsPerMinute;
 const millisecondsPerDay = 24 * millisecondsPerHour;
 const millisecondsPerWeek = 7 * millisecondsPerDay;
@@ -39,6 +40,9 @@ function displayDuration(duration: number): string | null {
   duration -= hours * millisecondsPerHour
 
   const minutes = Math.floor(duration / millisecondsPerMinute)
+  duration -= minutes * millisecondsPerMinute
+
+  const seconds = Math.floor(duration / millisecondsPerSecond)
 
   if (weeks) {
     return `${weeks}w${days}d`
@@ -56,7 +60,7 @@ function displayDuration(duration: number): string | null {
     return `${minutes}m`
   }
 
-  return '<1m';
+  return `${seconds}s`;
 }
 
 export class Duration extends React.Component<{

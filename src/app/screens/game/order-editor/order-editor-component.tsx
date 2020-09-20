@@ -52,7 +52,7 @@ export class OrderEditor extends React.Component<{
 
   render() {
     if (!this.props.vm.selectedWorldOrFleetIsVisibleToUser) {
-      return this.renderPanel([<span  key="a">not yours</span>])
+      return this.renderPanel([<span key="a">not yours</span>])
     }
     switch (this.props.vm.selectionType) {
       case 'WORLD':
@@ -72,7 +72,7 @@ export class OrderEditor extends React.Component<{
           <PanelDivider></PanelDivider>
       </div>,
       <div key="b" style={{ flex: 1 }}>
-        
+
       </div>
     ])
   }
@@ -96,6 +96,10 @@ export class OrderEditor extends React.Component<{
                 return <WarpOrderEditor key={index} order={order}></WarpOrderEditor>
               case 'START_CARGO_MISSION':
                 return <span key={index}>Start Cargo Mission</span>
+              case 'DEPLOY_TO_WORLD':
+                return <span key={index}>Deploy to world</span>
+              case 'SPLIT_FLEET':
+                return <span key={index}>Split fleet</span>
             }
           }).map((content, index) => (
             <div key={index} {...mouseHandler} data-order-index={index} style={{ display: 'flex' }}>

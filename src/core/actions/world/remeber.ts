@@ -11,7 +11,7 @@ export function rememberWorld(
     describe: () => `RememberWorld ${JSON.stringify({ worldId, playerId })}`,
     apply: (state: GameState) => {
       const world = state.universe.worlds[worldId];
-      const timestampe = state.currentTimestamp;
+      const timestamp = state.currentTimestamp;
       return produce(state, draft => {
         draft.universe.visibility[playerId][worldId] = {
           id: worldId,
@@ -21,7 +21,7 @@ export function rememberWorld(
           population: world.population,
           populationLimit: world.populationLimit,
           ownerId: worldhasOwner(world) ? world.ownerId : undefined,
-          rememberedTimestamp: timestampe
+          rememberedTimestamp: timestamp
         };
       })
     }

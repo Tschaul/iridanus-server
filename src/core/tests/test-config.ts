@@ -17,6 +17,9 @@ export const testRules: GameRules = {
     populationDamagePerShip: 0.188552,
     meanFiringInterval: 1 * tick,
   },
+  visibility: {
+    revealPeriod: 3.5 * tick
+  },
   building: {
     buildShipDelay: 10 * tick,
   },

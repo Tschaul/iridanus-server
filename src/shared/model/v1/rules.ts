@@ -11,6 +11,9 @@ export interface GameRules {
   global: {
     maxAmount: number;
   },
+  visibility: {
+    revealPeriod: number;
+  },
   combat: {
     meanFiringInterval: number;
     integrityDamagePerShip: number;

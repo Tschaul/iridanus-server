@@ -56,6 +56,9 @@ const dummyRules: GameRules = {
     populationDamagePerShip: 1,
     meanFiringInterval: 1,
   },
+  visibility: {
+    revealPeriod: 1
+  },
   global: {
     maxAmount: 1,
   },

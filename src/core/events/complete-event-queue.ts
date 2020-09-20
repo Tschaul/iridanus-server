@@ -29,6 +29,7 @@ import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo
 import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
+import { RevealAllWorldsEventQueue } from "./visibility/reveal-all-worlds";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -74,6 +75,7 @@ export class CompleteEventQueue implements GameEventQueue {
 
     revealWorld: RevealWorldEventQueue,
     remeberWorld: RememberWorldEventQueue,
+    revealAllWorlds: RevealAllWorldsEventQueue,
 
     notifyFleetIdle: NotifyFleetIdleEventQueue,
 
@@ -84,6 +86,7 @@ export class CompleteEventQueue implements GameEventQueue {
     const allEventQueues = [
       revealWorld,
       remeberWorld,
+      revealAllWorlds,
       // startCapturingWorld,
       // captureWorld,
       // stopCapturingWorld,

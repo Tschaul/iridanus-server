@@ -90,7 +90,7 @@ export class SelectedWorldPanel extends React.Component<{
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div>{this.padSpaces(world.populationLimit)} <span style={{ textDecoration: 'overline' }}>P</span> &nbsp;</div>
             <div>{this.padSpaces(world.industry)} I &nbsp;</div>
-            <div>{this.padSpaces(world.mines)} M &nbsp;</div>
+            {/* <div>{this.padSpaces(world.mines)} M &nbsp;</div> */}
           </div>
           <PanelDivider></PanelDivider>
           {world.status !== 'REMEMBERED' && this.renderWorldRow(world, this.props.vm.fleetsAtStageSelection, this.props.vm.playerInfoOfSelectedWorld)}

@@ -127,7 +127,7 @@ export class GameStageForeground extends React.Component<{
             fontSize={33}
             style={{ transform: "translateY(1px)" }}
             opacity={opacity}
-      >{world.id /*◉*/ }</text>
+      >{/*world.id*/ '◉' }</text>
           <HoverTooltip
             svg={true}
             content={this.getTooltipForWorld(world)}
@@ -274,7 +274,10 @@ export class GameStageForeground extends React.Component<{
   getTooltipForWorld(world: VisibleWorld) {
     if (world.status === 'UNKNOWN') {
       return '';
+    } else if (world.status === 'REMEMBERED') {
+      return `${world.population}/${world.populationLimit} P ${world.industry} I`;
     }
-    return `${world.population}/${world.populationLimit} P ${world.industry} I ${world.mines} M`;
+    return `${world.population}/${world.populationLimit} P ${world.industry} I ${world.metal} ▮`;
+
   }
 }

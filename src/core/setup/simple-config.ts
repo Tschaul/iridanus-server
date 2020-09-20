@@ -3,29 +3,32 @@ import { GameRules } from "../../shared/model/v1/rules";
 export function makeConfig(millisecondsPerDay: number): GameRules {
   return {
     scoring: {
-      gameEndingScore: 10000 * millisecondsPerDay
+      gameEndingScore: 3000 * millisecondsPerDay
     },
     capture: {
-      captureDelay: 2.5 * millisecondsPerDay,
+      captureDelay: 0.7 * millisecondsPerDay,
     },
     population: {
-      minimumPopulationGrowthDelay: 35 * millisecondsPerDay
+      minimumPopulationGrowthDelay: 10 * millisecondsPerDay
+    },
+    visibility: {
+      revealPeriod: 3.5 * millisecondsPerDay
     },
     combat: {
       integrityDamagePerShip: 0.094276,
       populationDamagePerShip: 0.377104,
-      meanFiringInterval: 1 * millisecondsPerDay,
+      meanFiringInterval: 0.25 * millisecondsPerDay,
     },
     building: {
-      buildShipDelay: 35 * millisecondsPerDay,
+      buildShipDelay: 10 * millisecondsPerDay,
     },
     warping: {
-      arriveAtEnemyWorldDelay: 1 * millisecondsPerDay,
-      leaveEnemyWorldDelay: 1 * millisecondsPerDay,
-      warpToWorldDelay: 2.5 * millisecondsPerDay,
+      arriveAtEnemyWorldDelay: 0.3 * millisecondsPerDay,
+      leaveEnemyWorldDelay: 0.3 * millisecondsPerDay,
+      warpToWorldDelay: 0.7 * millisecondsPerDay,
     },
     mining: {
-      miningDelay: 7 * millisecondsPerDay,
+      miningDelay: 2 * millisecondsPerDay,
       maximumMetal: 10
     },
     global: {

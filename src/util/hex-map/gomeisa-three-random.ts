@@ -38,27 +38,27 @@ export function makeGomeisaThreeRandom(): GameMap {
         ownerId: seats[worldId],
         miningStatus: 'NOT_MINING',
         populationGrowthStatus: 'NOT_GROWING',
-        integrity: 0,
+        integrity: 1,
         metal: 0,
         mines: 0,
-        industry: 20,
+        industry: 25,
         population: 50,
         populationLimit: 50,
         captureStatus: 'NOT_BEING_CAPTURED',
         idleNotificationSent: true
       };
 
-      ([1, 2, 3, 4]).forEach((index) => {
+      ([1, 2, 3, 4, 5]).forEach((index) => {
         const fleetId = 'w' + worldId + 'f' + index;
         universe.fleets[fleetId] = {
           status: 'READY',
           combatStatus: 'AT_PEACE',
           currentWorldId: worldId,
           id: fleetId,
-          integrity: 0,
+          integrity: 1,
           orders: [],
           ownerId: seats[worldId],
-          ships: 6,
+          ships: 5,
           idleNotificationSent: true
         }
       })
@@ -77,8 +77,6 @@ export function makeGomeisaThreeRandom(): GameMap {
 
 function makeWorld(id: string): LostWorld {
 
-  let fleetKeyNumber = 1;
-
   const rank = getRank(id);
 
   const random = randomSphericArray(2);
@@ -94,7 +92,7 @@ function makeWorld(id: string): LostWorld {
   const world: LostWorld = {
     id,
     industry,
-    integrity: 0,
+    integrity: 1,
     metal: metal,
     mines: 0,
     population: 0,

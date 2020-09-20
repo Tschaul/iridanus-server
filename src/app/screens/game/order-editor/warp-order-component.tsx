@@ -11,7 +11,7 @@ export class WarpOrderEditor extends React.Component<{
     return (
       <div style={{display: 'flex'}}>
         <div>
-          WARP
+          Warp
         </div>
         <div style={{flex: 1}}></div>
       </div>

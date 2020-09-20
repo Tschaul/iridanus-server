@@ -156,20 +156,6 @@
         }
     ],
     "definitions": {
-        "AwaitCaptureOrder": {
-            "properties": {
-                "type": {
-                    "enum": [
-                        "AWAIT_CAPTURE"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        },
         "ConfirmEmailAddressCommand": {
             "properties": {
                 "id": {
@@ -508,9 +494,6 @@
                 "orders": {
                     "items": {
                         "anyOf": [
-                            {
-                                "$ref": "#/definitions/AwaitCaptureOrder"
-                            },
                             {
                                 "$ref": "#/definitions/WarpOrder"
                             },

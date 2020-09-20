@@ -93,10 +93,10 @@ export class TopBar extends React.Component<{
         <span {...mouseHandler} data-stat={'INFLUENCE'} className={classNames(classes.statsItem)}>{stats.influence} ⦀ </span>
         <span {...mouseHandler} data-stat={'POPULATION'} className={classNames(classes.statsItem)}>{stats.population} P </span>
         <span {...mouseHandler} data-stat={'INDUSTRY'} className={classNames(classes.statsItem)}>{stats.industry} I</span>
-        <span {...mouseHandler} data-stat={'MINES'} className={classNames(classes.statsItem)}>{stats.mines} M</span>
+        {/* <span {...mouseHandler} data-stat={'MINES'} className={classNames(classes.statsItem)}>{stats.mines} M</span> */}
         <span {...mouseHandler} data-stat={'METAL'} className={classNames(classes.statsItem)}>{stats.metal} ▮</span>
         <span {...mouseHandler} data-stat={'SHIPS'} className={classNames(classes.statsItem)}>{stats.ships} ►</span>
-        <span {...mouseHandler} data-stat={'FLEET_KEYS'} className={classNames(classes.statsItem)}>{stats.fleetKeys} ◈</span>
+        {/* <span {...mouseHandler} data-stat={'FLEET_KEYS'} className={classNames(classes.statsItem)}>{stats.fleetKeys} ◈</span> */}
       </div>}
       <div>
         {this.props.vm.isConnected ? this.props.vm.gameId : <span style={{ color: errorRed }}>DISCONNECTED</span>}
