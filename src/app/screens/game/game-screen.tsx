@@ -10,6 +10,8 @@ import { createClasses } from "../../ui-components/setup-jss";
 import { TopBar } from "./top-bar/top-bar-component";
 import { GameInfoPanel } from "./game-info/game-info-panel";
 
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+
 const TOP_BAR_HEIGHT = 65;
 const RIGHT_PANEL_WIDTH = 400;
 
@@ -53,6 +55,7 @@ const classes = createClasses({
 });
 
 export class GameScreen extends React.Component<{ vm: GameViewModel }> implements HasExitAnimation {
+  pinchzoom: HTMLDivElement | null;
 
   async fadeOut() { }
 
@@ -66,28 +69,48 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }> implement
 
   render() {
 
-    return (
-      <div className={classNames(classes.grid)}>
-        <TopBar
-          vm={this.props.vm.topBarViewModel}
-          panelClassName={classNames(classes.topLeft)}
-        />
-        <GameInfoPanel
-          vm={this.props.vm.infoPanelViewModel}
-          panelClassName={classNames(classes.topRight)}
-        />
-        <SelectedWorldPanel
-          vm={this.props.vm.selectedWorldViewModel}
-          panelClassName={classNames(classes.middleRight)}
-        />
-        <OrderEditor
-          vm={this.props.vm.orderEditorViewModel}
-          panelClassName={classNames(classes.bottomRight)}
-        />
-        <GameStage
-          className={classNames(classes.gameStage)}
-          vm={this.props.vm.gameStageViewModel} />
-      </div>
-    )
+    switch (this.props.vm.screenMode) {
+      case 'NONE':
+        return <span />;
+      case 'SMALL':
+        const [width, height] = this.props.vm.screenDimensions;
+        return <div style={{ width: '100%', height:'100%'}}><TransformWrapper
+          defaultScale={1}
+        >
+          <TransformComponent>
+            <div style={{ width: width, height: height}}>
+              <GameStage
+                className={classNames(classes.gameStage)}
+                vm={this.props.vm.gameStageViewModel} />
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
+        </div>
+      case 'LARGE':
+
+        return (
+          <div className={classNames(classes.grid)}>
+            <TopBar
+              vm={this.props.vm.topBarViewModel}
+              panelClassName={classNames(classes.topLeft)}
+            />
+            <GameInfoPanel
+              vm={this.props.vm.infoPanelViewModel}
+              panelClassName={classNames(classes.topRight)}
+            />
+            <SelectedWorldPanel
+              vm={this.props.vm.selectedWorldViewModel}
+              panelClassName={classNames(classes.middleRight)}
+            />
+            <OrderEditor
+              vm={this.props.vm.orderEditorViewModel}
+              panelClassName={classNames(classes.bottomRight)}
+            />
+            <GameStage
+              className={classNames(classes.gameStage)}
+              vm={this.props.vm.gameStageViewModel} />
+          </div>
+        )
+    }
   }
 }

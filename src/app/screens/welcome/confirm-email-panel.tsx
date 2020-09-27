@@ -23,20 +23,25 @@ export class ConfirmEmailPanel extends React.Component<{
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '100%'
+      height: '100%',
+      width: '100%'
     }
 
-    const panelContentStyle: React.CSSProperties = { 
-      width: 500, 
-      height: 250, 
-      display: 'flex', 
+    const panelContentStyle: React.CSSProperties = {
+      display: 'flex',
       justifyContent: 'stretch',
       flexDirection: 'column'
     }
 
+    const panelStyle: React.CSSProperties = {
+      width: '100%',
+      maxWidth: 500,
+      height: 250
+    }
+
     return (
         <div style={container}>
-          <Panel contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
+          <Panel panelStyle={panelStyle} contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
               <div style={{flex: 1}}>
                 Thank you for signing up. Please check your email account and follow the link that we sent you.
               </div>

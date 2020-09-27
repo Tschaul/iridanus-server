@@ -20,12 +20,12 @@ export class MainViewModel {
         this.environment.initialize();
         await this.parseLocation();
 
-        // this.welcomeViewModel.username = 'foobar';
-        // this.welcomeViewModel.password = '123456';
-        // this.welcomeViewModel.login();
-    
-        // this.lobbyViewModel.selectedGameId = 'itw632i6nv';
-        // this.lobbyViewModel.viewGame();
+        this.welcomeViewModel.username = 'foobar';
+        this.welcomeViewModel.password = '123456';
+        this.welcomeViewModel.login();
+
+        this.lobbyViewModel.selectedGameId = 'itw632i6nv';
+        this.lobbyViewModel.viewGame();
       }
     )
   }
@@ -46,6 +46,12 @@ export class MainViewModel {
   @observable
   activeGameId: string | null = null;
 
+  @observable
+  screenMode: 'SMALL' | 'LARGE' | 'NONE' = 'NONE'
+
+  @observable
+  screenDimensions: [number, number] = [0, 0]
+
   public gameViewModel = new GameViewModel(this);
   public welcomeViewModel = new WelcomeViewModel(this);
   public lobbyViewModel = new LobbyViewModel(this);
@@ -62,9 +68,9 @@ export class MainViewModel {
       case 'confirm-email':
         await this.welcomeViewModel.confirmEmail(split[1], split[2])
         break;
-        case 'reset-password':
-          await this.welcomeViewModel.prepareResetPassword(split[1], split[2])
-          break;
+      case 'reset-password':
+        await this.welcomeViewModel.prepareResetPassword(split[1], split[2])
+        break;
       default:
     }
 

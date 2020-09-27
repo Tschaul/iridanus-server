@@ -40,6 +40,14 @@ export class GameViewModel {
     return this.mainViewModel.activeGameId;
   }
 
+  @computed public get screenMode() {
+    return this.mainViewModel.screenMode;
+  }
+
+  @computed public get screenDimensions() {
+    return this.mainViewModel.screenDimensions;
+  }
+
   @computed public get isConnected() {
     return this.mainViewModel.connectionStatus.isConnected;
   }

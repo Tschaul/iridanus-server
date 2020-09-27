@@ -51,7 +51,7 @@ class App extends React.Component<{
   render() {
     return (
       <TooltipOverlay>
-        <Background>
+        <Background vm={this.props.vm}>
           {this.renderScreen()}
         </Background>
       </TooltipOverlay>

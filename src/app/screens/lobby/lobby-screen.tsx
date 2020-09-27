@@ -21,11 +21,14 @@ const classes = createClasses({
       color: hoverYellow
     }
   },
-  panel: {
-    width: 500,
-    height: 500,
+  panelContent: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    width: '100%',
+  },
+  panel: {
+    width: '100%',
+    maxWidth: 500,
   }
 });
 
@@ -59,7 +62,8 @@ export class LobbyScreen extends React.Component<{
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '100%'
+      height: '100%',
+      width: '100%'
     }
 
     return (
@@ -75,7 +79,7 @@ export class LobbyScreen extends React.Component<{
       return;
     }
     return (
-      <Panel contentClassName={classNames(classes.panel)} fadeDirection="top" ref={elem => this.panel = elem}>
+      <Panel panelClassName={classNames(classes.panel)} contentClassName={classNames(classes.panelContent)} fadeDirection="top" ref={elem => this.panel = elem}>
         <div>
           GAME {game.id.toUpperCase().slice(0, 6)} [{game.state}]
         <PanelDivider />
@@ -87,10 +91,11 @@ export class LobbyScreen extends React.Component<{
               <Button key="a" onClick={this.handleReadyClick}>READY</Button>,
               <Button key="b" spaceLeft onClick={this.handleToggleSpectatorClick}>TOGGLE SPEC.</Button>
             ] : [
-              <Button key="a" onClick={this.handleJoinClick}>JOIN</Button>
-            ]
+                <Button key="a" onClick={this.handleJoinClick}>JOIN</Button>
+              ]
           )}
           <PanelDivider />
+          <br />
           {game.state === 'STARTED' && this.playerHasJoinedGame() && (
             <Button onClick={this.handleViewClick} spaceRight>VIEW</Button>
           )}
@@ -128,7 +133,7 @@ export class LobbyScreen extends React.Component<{
 
   renderLobby() {
     return (
-      <Panel contentClassName={classNames(classes.panel)} fadeDirection="top" ref={elem => this.panel = elem}>
+      <Panel panelClassName={classNames(classes.panel)} contentClassName={classNames(classes.panel)} fadeDirection="top" ref={elem => this.panel = elem}>
         <div>
           LOBBY
           <PanelDivider />
@@ -136,6 +141,7 @@ export class LobbyScreen extends React.Component<{
         <div style={{ flex: 1 }}>
           {this.props.vm.gamesToDisplay.map(game => this.renderGameRow(game))}
         </div>
+        <br />
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button onClick={this.handleCreateGameClick}>CREATE GAME</Button>
         </div>

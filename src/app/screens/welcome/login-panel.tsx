@@ -29,7 +29,8 @@ export class LoginPanel extends React.Component<{
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '100%'
+      height: '100%',
+      width: '100%'
     }
 
     const iridanusAscii = (
@@ -45,19 +46,23 @@ export class LoginPanel extends React.Component<{
 
 
     const panelContentStyle: React.CSSProperties = {
-      width: 500,
-      height: 500,
       display: 'flex',
       justifyContent: 'stretch',
       flexDirection: 'column'
     }
 
+    const panelStyle: React.CSSProperties = {
+      width: '100%',
+      maxWidth: 500
+    }
+
     return (
       <div style={flexContainerStyle}>
-        <Panel contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
+        <Panel panelStyle={panelStyle} contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
           <div style={{ flex: 1 }}>
             <form>
-              Welcome to {iridanusAscii}
+              Welcome to IRIDANUS
+              <br />
               <br />
               please enter login<br />
               &gt;<Input autocomplete="username" type="text" value={wrapObservable(this.props.vm, 'username')} onEnterKey={this.handleLoginClick} /><br />
@@ -66,6 +71,8 @@ export class LoginPanel extends React.Component<{
               &gt;<Input autocomplete="current-password" type="password" value={wrapObservable(this.props.vm, 'password')} onEnterKey={this.handleLoginClick} /><br />
               <br />
               <a style={{ color: hoverYellow }} onClick={this.handlePasswordForgotten}>password forgotten?</a>
+              <br />
+              <br />
             </form>
           </div>
           <div>

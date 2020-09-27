@@ -23,24 +23,29 @@ export class ForgotPasswordPanel extends React.Component<{
 
   render() {
 
+
     const container: React.CSSProperties = {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '100%'
+      height: '100%',
+      width: '100%'
     }
 
-    const panelContentStyle: React.CSSProperties = { 
-      width: 500, 
-      height: 500, 
-      display: 'flex', 
+    const panelContentStyle: React.CSSProperties = {
+      display: 'flex',
       justifyContent: 'stretch',
-      flexDirection: 'column'
+      flexDirection: 'column',
+    }
+
+    const panelStyle: React.CSSProperties = {
+      width: '100%',
+      maxWidth: 500,
     }
 
     return (
         <div style={container}>
-          <Panel contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
+          <Panel panelStyle={panelStyle} contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
               <div style={{flex: 1}}>
                 Password forgotten? 
                 <br />
@@ -52,7 +57,7 @@ export class ForgotPasswordPanel extends React.Component<{
                 ><Input type="text" value={wrapObservable(this.props.vm, 'username')} /><br />
                 <br />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <Button onClick={this.handleBackClick} spaceRight>BACK</Button>
                 <Button onClick={this.handleSubmitClick}>SUBMIT</Button>
               </div>

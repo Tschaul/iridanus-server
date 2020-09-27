@@ -1,10 +1,13 @@
 
 export function generateStar(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, radius: number) {
+
+  const normStarsize = Math.max(canvas.width, canvas.height) / 750;
+
   context.beginPath();
   context.arc(
     radius + (Math.random() * canvas.width),
     radius + (Math.random() * canvas.height),
-    radius * Math.random(), 0, Math.PI * 2,
+    radius * Math.random(), 0, Math.PI * normStarsize,
     false
   );
 

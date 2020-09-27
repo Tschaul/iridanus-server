@@ -8,8 +8,8 @@ import classNames from 'classnames';
 import autobind from 'autobind-decorator';
 
 @observer
-export class GameStage extends React.Component<{ 
-  vm: GameStageViewModel, 
+export class GameStage extends React.Component<{
+  vm: GameStageViewModel,
   className?: string,
 }> {
 
@@ -19,7 +19,13 @@ export class GameStage extends React.Component<{
     const viewBox = `0 0 ${this.props.vm.stageWidth} ${this.props.vm.stageHeight}`
     return (
       <div ref={e => this.stageWrapper = e} style={{ width: '100%', height: '100%', position: 'absolute' }} className={classNames(this.props.className)}>
-        {this.props.vm.doneLoading && <svg className="fade-in-screen" viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
+        {this.props.vm.doneLoading && <svg style={{
+          position: 'absolute',
+          height: '100%',
+          width: '100%',
+          left: 0,
+          top: 0,
+        }} className="fade-in-screen" viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
           <GameStageBackdrop vm={this.props.vm}></GameStageBackdrop>
           <GameStageForeground vm={this.props.vm}></GameStageForeground>
           <GameStageSelectedFleet vm={this.props.vm}></GameStageSelectedFleet>
@@ -38,8 +44,8 @@ export class GameStage extends React.Component<{
       return;
     }
 
-    this.props.vm.stageWidth = element.offsetWidth;
-    this.props.vm.stageHeight = element.offsetHeight;
+    this.props.vm.stageWidth = Math.max(element.offsetWidth, 1024);
+    this.props.vm.stageHeight = Math.max(element.offsetHeight, 1024);
 
   }
 

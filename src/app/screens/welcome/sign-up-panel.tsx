@@ -27,23 +27,26 @@ export class SignUpPanel extends React.Component<{
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '100%'
+      height: '100%',
+      width: '100%'
     }
 
-    const panelContentStyle: React.CSSProperties = { 
-      width: 500, 
-      height: 500, 
-      display: 'flex', 
+    const panelContentStyle: React.CSSProperties = {
+      display: 'flex',
       justifyContent: 'stretch',
       flexDirection: 'column'
     }
 
+    const panelStyle: React.CSSProperties = {
+      width: '100%',
+      maxWidth: 500
+    }
+
     return (
         <div style={container}>
-          <Panel contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
+          <Panel panelStyle={panelStyle} contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
               <div style={{flex: 1}}>
                 Sign up for Iridanus
-                <br />
                 <br />
                 <br />
                 <br />
@@ -58,6 +61,8 @@ export class SignUpPanel extends React.Component<{
                 <br />
                 please enter password again<br />
                 ><Input type="password" value={wrapObservable(this.props.vm, 'passwordRepeated')} /><br />
+                <br />
+                <br />
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button onClick={this.handleBackClick} spaceRight>BACK</Button>

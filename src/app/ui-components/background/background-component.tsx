@@ -1,9 +1,12 @@
 import autobind from "autobind-decorator";
 import React from "react";
+import { MainViewModel } from "../../view-model/main-view-model";
 import { screenWhite } from "../colors/colors";
 import { generateStar } from "./star-generator";
 
-export class Background extends React.Component {
+export class Background extends React.Component<{
+  vm: MainViewModel
+}> {
   canvas: HTMLCanvasElement | null;
   content: HTMLDivElement | null;
 
@@ -41,6 +44,14 @@ export class Background extends React.Component {
         width = window.screen.availHeight;
         height = window.screen.availWidth;
       }
+
+      if (height < 1024) {
+        this.props.vm.screenMode = 'SMALL'
+      } else {
+        this.props.vm.screenMode = 'LARGE'
+      }
+
+      this.props.vm.screenDimensions = [width, height];
 
       this.content.style.width = width + 'px';
       this.content.style.height = height + 'px';
