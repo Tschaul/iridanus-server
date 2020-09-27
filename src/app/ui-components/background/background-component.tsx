@@ -1,11 +1,24 @@
+import autobind from "autobind-decorator";
 import React from "react";
 import { screenWhite } from "../colors/colors";
 import { generateStar } from "./star-generator";
 
 export class Background extends React.Component {
   canvas: HTMLCanvasElement | null;
+  content: HTMLDivElement | null;
 
   componentDidMount() {
+
+    this.setScreenDimensions();
+    window.addEventListener('resize', this.setScreenDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.setScreenDimensions);
+  }
+
+  @autobind
+  private generateStars() {
     if (this.canvas) {
       const canvas = this.canvas;
       canvas.width = canvas.clientWidth;
@@ -17,19 +30,41 @@ export class Background extends React.Component {
     }
   }
 
+  @autobind
+  private setScreenDimensions() {
+    if (this.content) {
+
+      let width = Math.min(window.screen.availWidth, document.documentElement.clientWidth);
+      let height = Math.min(window.screen.availHeight, document.documentElement.clientHeight);
+
+      if (window.orientation === 90 && height > width) {
+        width = window.screen.availHeight;
+        height = window.screen.availWidth;
+      }
+
+      this.content.style.width = width + 'px';
+      this.content.style.height = height + 'px';
+      // alert('new screen dimensions: ' + window.screen.availWidth + ' ' + window.screen.availHeight + ' ' + window.orientation);
+    }
+    this.generateStars();
+  }
+
   render() {
 
-    const backgroundStyle: React.CSSProperties = {
+    const contentStyle: React.CSSProperties = {
       top: 0,
       left: 0,
-      width: '100%',
-      height: '100%',
-      // backgroundImage: "url('assets/background/pexels-photo-1341279.jpeg')",
-      // backgroundColor: "darkblue",
       background: "linear-gradient(27deg, rgba(7,4,48,1) 0%, rgba(9,9,66,1) 35%, rgba(4,37,44,1) 100%)",
       backgroundSize: 'cover',
+      overflow: 'hidden',
+      position: 'absolute'
+    }
+
+    const backgroundStyle: React.CSSProperties = {
+      width: '100%',
+      height: '100%',
       zIndex: 2,
-      position: 'fixed',
+      position: 'absolute'
     }
 
     const foregroundStyle: React.CSSProperties = {
@@ -38,16 +73,16 @@ export class Background extends React.Component {
       color: screenWhite,
       width: '100%',
       height: '100%',
-      position: 'absolute',
+      position: 'absolute'
     }
 
-    return [
+    return <div ref={ref => this.content = ref} style={contentStyle}>
       <div style={backgroundStyle} key="background">
         <canvas style={{ height: "100%", width: "100%" }} ref={elem => this.canvas = elem}></canvas>
-      </div>,
+      </div>
       <div style={foregroundStyle} key="foreground">
         {this.props.children}
       </div>
-    ]
+    </div>
   }
 }

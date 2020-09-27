@@ -25,7 +25,7 @@ const classes = createClasses({
     width: '100%',
     gridTemplateColumns: `[start] auto [panels-start] ${RIGHT_PANEL_WIDTH}px [end]`,
     gridTemplateRows: `[start] ${TOP_BAR_HEIGHT}px [main-start] auto [top-start] ${TOP_PANEL_HEIGHT}px [middle-start] ${MIDDLE_PANEL_HEIGHT}px [bottom-start] ${BOTTOM_PANEL_HEIGHT}px [end]`,
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     left: 0
   },

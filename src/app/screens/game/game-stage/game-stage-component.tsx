@@ -18,7 +18,7 @@ export class GameStage extends React.Component<{
   render() {
     const viewBox = `0 0 ${this.props.vm.stageWidth} ${this.props.vm.stageHeight}`
     return (
-      <div ref={e => this.stageWrapper = e} style={{ width: '100%', height: '100%' }} className={classNames(this.props.className)}>
+      <div ref={e => this.stageWrapper = e} style={{ width: '100%', height: '100%', position: 'absolute' }} className={classNames(this.props.className)}>
         {this.props.vm.doneLoading && <svg className="fade-in-screen" viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
           <GameStageBackdrop vm={this.props.vm}></GameStageBackdrop>
           <GameStageForeground vm={this.props.vm}></GameStageForeground>

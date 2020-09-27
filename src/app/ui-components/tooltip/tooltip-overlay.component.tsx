@@ -24,15 +24,15 @@ export class TooltipHandle {
   private mouseItemText$$ = new ReplaySubject<string | null>(1);
 
   public updateMousePosition(pageX: number, pageY: number) {
-      this.mousePosition$$.next([pageX, pageY]);
+    this.mousePosition$$.next([pageX, pageY]);
   }
 
   public showMouseItem(text: string) {
-      this.mouseItemText$$.next(text);
+    this.mouseItemText$$.next(text);
   }
 
   public hideMouseItem() {
-      this.mouseItemText$$.next(null);
+    this.mouseItemText$$.next(null);
   }
 
   public showStaticItem(posX: number, posY: number, text: string): string {
@@ -92,7 +92,7 @@ export class TooltipOverlay extends React.Component<{}, {
         mouseItem
       })
     })
-    
+
     this.handle.items$.subscribe(items => {
       this.setState({
         items
@@ -114,11 +114,9 @@ export class TooltipOverlay extends React.Component<{}, {
     }
 
     return [
-      <div key="content">
-        <TooltipContext.Provider value={this.handle}>
-          {this.props.children}
-        </TooltipContext.Provider>
-      </div>,
+      <TooltipContext.Provider value={this.handle} key="content">
+        {this.props.children}
+      </TooltipContext.Provider>,
       <div style={tooltipOverlayStyle} key="tooltip">
         {this.state.mouseItem && (
           <TooltipItem key="a" item={this.state.mouseItem} />
@@ -140,7 +138,7 @@ export class TooltipOverlay extends React.Component<{}, {
 
 class TooltipItem extends React.Component<{
   item: TooltipContent
-},{
+}, {
   elemWidth: number;
   elemHeight: number;
   windowWidth: number;
@@ -195,10 +193,10 @@ class TooltipItem extends React.Component<{
       margin: '1em',
       padding: '0.25em 0.5em',
       borderRadius: '0.25em',
-      border: '1px solid '+ screenWhite
+      border: '1px solid ' + screenWhite
     }
 
-    let { posX, posY} = this.props.item;
+    let { posX, posY } = this.props.item;
 
     if (posX + this.state.elemWidth - this.state.windowWidth > -32) {
       posX -= this.props.item.text.length * 12 + 16;
