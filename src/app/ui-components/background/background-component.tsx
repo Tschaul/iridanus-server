@@ -40,10 +40,21 @@ export class Background extends React.Component<{
       let width = Math.min(window.screen.availWidth, document.documentElement.clientWidth);
       let height = Math.min(window.screen.availHeight, document.documentElement.clientHeight);
 
-      if (window.orientation === 90 && height > width) {
-        width = window.screen.availHeight;
-        height = window.screen.availWidth;
-      }
+      if(iOS()) {
+
+        width = window.screen.availWidth;
+        height = window.screen.availHeight;
+
+        if (window.orientation === 90 && height > width) {
+          width = window.screen.availHeight;
+          height = window.screen.availWidth;
+        }
+  
+        width = Math.min(width, document.documentElement.clientWidth);
+        height = Math.min(height, document.documentElement.clientHeight);
+        // alert('new screen dimensions: ' + width + ' ' + height);
+      } 
+
 
       if (height < 1024) {
         this.props.vm.screenMode = 'SMALL'
@@ -55,7 +66,7 @@ export class Background extends React.Component<{
 
       this.content.style.width = width + 'px';
       this.content.style.height = height + 'px';
-      // alert('new screen dimensions: ' + window.screen.availWidth + ' ' + window.screen.availHeight + ' ' + window.orientation);
+      // alert('new screen dimensions: ' + width + ' ' + height  + ' ' + window.screen.availWidth  + ' ' + document.documentElement.clientWidth );
     }
     this.generateStars();
   }
@@ -96,4 +107,17 @@ export class Background extends React.Component<{
       </div>
     </div>
   }
+}
+
+function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }

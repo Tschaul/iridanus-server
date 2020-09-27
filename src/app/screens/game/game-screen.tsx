@@ -11,6 +11,9 @@ import { TopBar } from "./top-bar/top-bar-component";
 import { GameInfoPanel } from "./game-info/game-info-panel";
 
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Button } from "../../ui-components/button/button";
+import autobind from "autobind-decorator";
+import { observer } from "mobx-react";
 
 const TOP_BAR_HEIGHT = 65;
 const RIGHT_PANEL_WIDTH = 400;
@@ -54,7 +57,13 @@ const classes = createClasses({
   }
 });
 
-export class GameScreen extends React.Component<{ vm: GameViewModel }> implements HasExitAnimation {
+@observer
+export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsOpen: boolean }> implements HasExitAnimation {
+
+  state = {
+    menuIsOpen: true
+  }
+
   pinchzoom: HTMLDivElement | null;
 
   async fadeOut() { }
@@ -74,18 +83,48 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }> implement
         return <span />;
       case 'SMALL':
         const [width, height] = this.props.vm.screenDimensions;
-        return <div style={{ width: '100%', height:'100%'}}><TransformWrapper
-          defaultScale={1}
-        >
-          <TransformComponent>
-            <div style={{ width: width, height: height}}>
-              <GameStage
-                className={classNames(classes.gameStage)}
-                vm={this.props.vm.gameStageViewModel} />
+        return [<div style={{ width: '100%', height: '100%' }}>
+          <TransformWrapper
+            defaultScale={1}
+          >
+            <TransformComponent>
+              <div style={{ width: width, height: height }}>
+                <GameStage
+                  className={classNames(classes.gameStage)}
+                  vm={this.props.vm.gameStageViewModel} />
+              </div>
+            </TransformComponent>
+          </TransformWrapper>
+        </div>,
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 0 }}>
+          <div style={{ display: 'flex' }}>
+            <TopBar
+              vm={this.props.vm.topBarViewModel}
+            />
+            <Button onClick={this.handleToggleMenu} style={{ position: 'absolute', right: 6, top: 12 }}>≡</Button>
+          </div>
+
+          <div style={{
+            transform: `translateX(${this.state.menuIsOpen ? 0 : width}px)`,
+            transition: 'transform 400ms',
+            position: 'relative',
+            height: height - 70,
+            overflowY: 'scroll',
+            overflowX: 'visible'
+          }}>
+            <div style={{ position: 'absolute', top: 0, left: 0 }}>
+              <GameInfoPanel
+                vm={this.props.vm.infoPanelViewModel}
+              />
+              <SelectedWorldPanel
+                vm={this.props.vm.selectedWorldViewModel}
+              />
+              <OrderEditor
+                vm={this.props.vm.orderEditorViewModel}
+              />
             </div>
-          </TransformComponent>
-        </TransformWrapper>
-        </div>
+          </div>
+        </div>]
       case 'LARGE':
 
         return (
@@ -112,5 +151,12 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }> implement
           </div>
         )
     }
+  }
+
+  @autobind
+  private handleToggleMenu() {
+    this.setState({
+      menuIsOpen: !this.state.menuIsOpen
+    })
   }
 }

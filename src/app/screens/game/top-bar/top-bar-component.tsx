@@ -16,7 +16,7 @@ import { reaction, IReactionDisposer } from "mobx";
 const classes = createClasses({
   statsItem: {
     transition: 'color 0.3s',
-    marginLeft: '1em',
+    marginLeft: '0.5em',
     "&:hover": {
       color: hoverYellow
     }
@@ -84,9 +84,9 @@ export class TopBar extends React.Component<{
         ) : (
             <Button
               disabled={this.props.vm.updatedOrdersCount === 0}
-              style={{ transform: 'translateY(-0.25em)' }}
+              style={{ transform: 'translateY(-0.25em)', fontSize: 16 }}
               onClick={this.handleSaveOrders}
-            >Save {this.props.vm.updatedOrdersCount} orders</Button>
+            >🖪</Button>
           )}
       </div>
       {this.state.gameStartDuration ? <div style={{ color: selectedYellow }}>Game will start in {this.state.gameStartDuration}. Place your initial orders.</div> : <div>
@@ -96,11 +96,10 @@ export class TopBar extends React.Component<{
         {/* <span {...mouseHandler} data-stat={'MINES'} className={classNames(classes.statsItem)}>{stats.mines} M</span> */}
         <span {...mouseHandler} data-stat={'METAL'} className={classNames(classes.statsItem)}>{stats.metal} ▮</span>
         <span {...mouseHandler} data-stat={'SHIPS'} className={classNames(classes.statsItem)}>{stats.ships} ►</span>
-        {/* <span {...mouseHandler} data-stat={'FLEET_KEYS'} className={classNames(classes.statsItem)}>{stats.fleetKeys} ◈</span> */}
       </div>}
-      <div>
+      {/* <div>
         {this.props.vm.isConnected ? this.props.vm.gameId : <span style={{ color: errorRed }}>DISCONNECTED</span>}
-      </div>
+      </div> */}
     </Panel>
   }
 
