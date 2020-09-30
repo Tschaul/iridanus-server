@@ -86,7 +86,7 @@ export class TopBar extends React.Component<{
               disabled={this.props.vm.updatedOrdersCount === 0}
               style={{ transform: 'translateY(-0.25em)', fontSize: 16 }}
               onClick={this.handleSaveOrders}
-            >🖪</Button>
+            >✓</Button>
           )}
       </div>
       {this.state.gameStartDuration ? <div style={{ color: selectedYellow }}>Game will start in {this.state.gameStartDuration}. Place your initial orders.</div> : <div>
@@ -97,6 +97,7 @@ export class TopBar extends React.Component<{
         <span {...mouseHandler} data-stat={'METAL'} className={classNames(classes.statsItem)}>{stats.metal} ▮</span>
         <span {...mouseHandler} data-stat={'SHIPS'} className={classNames(classes.statsItem)}>{stats.ships} ►</span>
       </div>}
+      <div/>
       {/* <div>
         {this.props.vm.isConnected ? this.props.vm.gameId : <span style={{ color: errorRed }}>DISCONNECTED</span>}
       </div> */}

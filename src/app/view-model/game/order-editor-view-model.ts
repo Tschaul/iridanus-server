@@ -97,7 +97,10 @@ export class OrderEditorViewModel {
       if (!this.appendOrders) {
         this.gameOrders.clearFleetOrders(fleet.id);
       }
-      if (fleet.status === 'WAITING_FOR_CARGO' && fleet.fromWorldId === worldId) {
+      if (
+        (fleet.status === 'WAITING_FOR_CARGO' && fleet.fromWorldId === worldId)
+        || (fleet.status === 'TRANSFERING_CARGO' && fleet.toWorldId === worldId)
+      ) {
         const stopOrder: StopCargoMissionOrder = {
           type: 'STOP_CARGO_MISSION',
         };

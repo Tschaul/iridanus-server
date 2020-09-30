@@ -468,6 +468,20 @@
             ],
             "type": "object"
         },
+        "StopCargoMissionOrder": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "STOP_CARGO_MISSION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "ToggleSpectatorForGameCommand": {
             "properties": {
                 "gameId": {
@@ -499,6 +513,9 @@
                             },
                             {
                                 "$ref": "#/definitions/StartCargoMissionOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StopCargoMissionOrder"
                             },
                             {
                                 "$ref": "#/definitions/SplitFleetOrder"

@@ -22,6 +22,9 @@
                                 "$ref": "#/definitions/StartCargoMissionOrder"
                             },
                             {
+                                "$ref": "#/definitions/StopCargoMissionOrder"
+                            },
+                            {
                                 "$ref": "#/definitions/SplitFleetOrder"
                             },
                             {
@@ -188,6 +191,9 @@
                                 "$ref": "#/definitions/StartCargoMissionOrder"
                             },
                             {
+                                "$ref": "#/definitions/StopCargoMissionOrder"
+                            },
+                            {
                                 "$ref": "#/definitions/SplitFleetOrder"
                             },
                             {
@@ -330,6 +336,9 @@
                                 "$ref": "#/definitions/StartCargoMissionOrder"
                             },
                             {
+                                "$ref": "#/definitions/StopCargoMissionOrder"
+                            },
+                            {
                                 "$ref": "#/definitions/SplitFleetOrder"
                             },
                             {
@@ -459,6 +468,20 @@
             ],
             "type": "object"
         },
+        "StopCargoMissionOrder": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "STOP_CARGO_MISSION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "TransferingCargoFleet": {
             "properties": {
                 "arrivingTimestamp": {
@@ -487,6 +510,9 @@
                             },
                             {
                                 "$ref": "#/definitions/StartCargoMissionOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StopCargoMissionOrder"
                             },
                             {
                                 "$ref": "#/definitions/SplitFleetOrder"
@@ -3227,6 +3253,9 @@
                 "id": {
                     "type": "string"
                 },
+                "idleNotificationSent": {
+                    "type": "boolean"
+                },
                 "integrity": {
                     "type": "number"
                 },
@@ -3238,6 +3267,9 @@
                             },
                             {
                                 "$ref": "#/definitions/StartCargoMissionOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StopCargoMissionOrder"
                             },
                             {
                                 "$ref": "#/definitions/SplitFleetOrder"
@@ -3314,6 +3346,9 @@
                             },
                             {
                                 "$ref": "#/definitions/StartCargoMissionOrder"
+                            },
+                            {
+                                "$ref": "#/definitions/StopCargoMissionOrder"
                             },
                             {
                                 "$ref": "#/definitions/SplitFleetOrder"
