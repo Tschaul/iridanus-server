@@ -1,16 +1,16 @@
 import { resolveFromRegistry } from "../container-registry";
 import { IStreamListener, fromStream } from "mobx-utils";
-import { empty } from "rxjs";
+import { EMPTY } from "rxjs";
 import { observable, computed } from "mobx";
 import { EnvironmentService } from "../client/environment.ts/environment.service";
 import { EnvironmentInfo } from "../../shared/messages/subscriptions/environment-subscription-results";
 
-const infoDummy = { millisecondsPerDay: 1 };
+const infoDummy: EnvironmentInfo = { millisecondsPerDay: 1, developmentMode: false };
 
 export class ServerEnvironment {
   private environmentService = resolveFromRegistry(EnvironmentService);
 
-  @observable private environmentStream: IStreamListener<EnvironmentInfo> = fromStream(empty(), infoDummy);
+  @observable private environmentStream: IStreamListener<EnvironmentInfo> = fromStream(EMPTY, infoDummy);
 
   constructor() {
   }

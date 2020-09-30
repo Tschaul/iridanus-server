@@ -20,12 +20,16 @@ export class MainViewModel {
         this.environment.initialize();
         await this.parseLocation();
 
-        this.welcomeViewModel.username = 'foobar';
-        this.welcomeViewModel.password = '123456';
-        this.welcomeViewModel.login();
+        when(() => this.environment.environmentInfo.developmentMode, () =>{
 
-        this.lobbyViewModel.selectedGameId = '7fym721abk';
-        this.lobbyViewModel.viewGame();
+          this.welcomeViewModel.username = 'foobar';
+          this.welcomeViewModel.password = '123456';
+          this.welcomeViewModel.login();
+
+          this.lobbyViewModel.selectedGameId = '7fym721abk';
+          this.lobbyViewModel.viewGame();
+        })
+
       }
     )
   }

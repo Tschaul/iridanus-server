@@ -2,6 +2,7 @@ export class Environment {
   dataPath: string;
   millisecondsPerDay: number;
   mailSettings: MailSettings;
+  developmentMode: boolean;
   baseUrl: string;
 }
 

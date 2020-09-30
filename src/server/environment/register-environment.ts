@@ -30,7 +30,8 @@ function extractEnvironment() {
     dataPath: envString('IRIDANUS_DATA_PATH', true),
     millisecondsPerDay: envNumber('IRIDANUS_MILLISECONDS_PER_DAY', true),
     mailSettings,
-    baseUrl: envString('IRIDANUS_BASE_URL')
+    baseUrl: envString('IRIDANUS_BASE_URL'),
+    developmentMode: envBoolean('IRIDANUS_DEVELOPMENT_MODE')
   }
 
   if (useTestMailAccount) {

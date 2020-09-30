@@ -17,7 +17,8 @@ export class EnvironmentInfoDataProvider implements DataProvider {
     return of({
       type: 'ENVIRONMENT/INFO',
       info: {
-        millisecondsPerDay: this.environment.millisecondsPerDay
+        millisecondsPerDay: this.environment.millisecondsPerDay,
+        developmentMode: this.environment.developmentMode
       }
     })
   }
