@@ -52,7 +52,6 @@ export class Background extends React.Component<{
   
         width = Math.min(width, document.documentElement.clientWidth);
         height = Math.min(height, document.documentElement.clientHeight);
-        // alert('new screen dimensions: ' + width + ' ' + height);
       } 
 
 

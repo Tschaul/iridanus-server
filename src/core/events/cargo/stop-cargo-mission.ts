@@ -21,14 +21,15 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
     private readonly combat: CombatAndCaptureProjector
   ) {
 
-    const readyFleetWithStarCargoMissionOrder$ = this.fleets.allByStatus<WaitingForCargoFleet>('WAITING_FOR_CARGO')
+    const waitingForCargoFleets = this.fleets.allByStatus<WaitingForCargoFleet>('WAITING_FOR_CARGO')
 
-    this.upcomingEvent$ = combineLatest(
-      readyFleetWithStarCargoMissionOrder$,
+    this.upcomingEvent$ = combineLatest([
+      waitingForCargoFleets,
       this.worlds.byId$,
       this.combat.playersAtWorldById$
-    ).pipe(
+    ]).pipe(
       map(([waitingFleets, worlds, playersAtWorld]) => {
+
 
         const otherPlayerAtWorld = (worldId: string, ownerId: string) => {
           return playersAtWorld[worldId]
@@ -37,13 +38,19 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
         }
 
         const fleet = waitingFleets.find(fleet => {
+          if (fleet.orders[0]?.type === 'STOP_CARGO_MISSION') {
+            return true;
+          }
+
           const fromWorld = worlds[fleet.fromWorldId];
           const toWorld = worlds[fleet.toWorldId];
+
           return (worldhasOwner(fromWorld) && fromWorld.ownerId !== fleet.ownerId)
             || (worldhasOwner(toWorld) && toWorld.ownerId !== fleet.ownerId)
             || !!fleet.orders.length
             || otherPlayerAtWorld(fleet.fromWorldId, fleet.ownerId)
             || otherPlayerAtWorld(fleet.toWorldId, fleet.ownerId)
+
         }) ?? null
 
         if (!fleet) {

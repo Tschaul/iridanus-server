@@ -1,6 +1,6 @@
 import { GameViewModel } from "./game-view-model";
 import { computed, observable } from "mobx";
-import { WarpOrder, FleetOrder, StartCargoMissionOrder, SplitFleetOrder, DeployToWorldOrder } from "../../../shared/model/v1/fleet-orders";
+import { WarpOrder, FleetOrder, StartCargoMissionOrder, SplitFleetOrder, DeployToWorldOrder, StopCargoMissionOrder } from "../../../shared/model/v1/fleet-orders";
 import { GameOrders } from "./game-orders";
 import { GameStageSelection } from "./stage-selection";
 import { WorldHints } from "./world-hints";
@@ -81,7 +81,7 @@ export class OrderEditorViewModel {
       const newOrders = this.orders.slice(0) as FleetOrder[];
       newOrders[index] = order as FleetOrder;
       this.gameOrders.updateFleetOrders(this.selectedWorldOrFleetId as string, newOrders);
-    } 
+    }
   }
 
   public newWarpOrder() {
@@ -97,7 +97,13 @@ export class OrderEditorViewModel {
       if (!this.appendOrders) {
         this.gameOrders.clearFleetOrders(fleet.id);
       }
-
+      if (fleet.status === 'WAITING_FOR_CARGO' && fleet.fromWorldId === worldId) {
+        const stopOrder: StopCargoMissionOrder = {
+          type: 'STOP_CARGO_MISSION',
+        };
+        this.gameOrders.addFleetOrder(fleet.id, stopOrder);
+        return;
+      }
       const startWorld = this.projectedLastWorld(fleet);
 
       const path = findPathFromWorldToWorld(startWorld, worldId, this.gameData.gates, this.gameData.distances)

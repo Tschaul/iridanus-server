@@ -111,7 +111,7 @@ export class GameStageSelectedFleet extends React.Component<{
   }
 
   renderCurrentWarpingPath(fleet: Fleet) {
-    if (!fleetIsAtWorld(fleet)) {
+    if (!fleetIsAtWorld(fleet) && fleet.status !== 'WAITING_FOR_CARGO') {
 
       const [w1,w2] = pathOfFleetInTransit(fleet);
 

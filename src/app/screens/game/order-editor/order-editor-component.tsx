@@ -96,6 +96,8 @@ export class OrderEditor extends React.Component<{
                 return <WarpOrderEditor key={index} order={order}></WarpOrderEditor>
               case 'START_CARGO_MISSION':
                 return <span key={index}>Start Cargo Mission</span>
+              case 'STOP_CARGO_MISSION':
+                return <span key={index}>Stop Cargo Mission</span>
               case 'DEPLOY_TO_WORLD':
                 return <span key={index}>Deploy to world</span>
               case 'SPLIT_FLEET':
@@ -110,7 +112,7 @@ export class OrderEditor extends React.Component<{
         </Scroll>
       </div>,
       ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
-        <HoverTooltip content="Warp to adjacent world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
+        <HoverTooltip content="Warp to world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
         <HoverTooltip content="Start cargo mission"><Button tight onClick={this.handleNewStartCargoMissionOrder}>⇄</Button></HoverTooltip>
         <HoverTooltip content="Split fleet"><Button tight onClick={this.handleNewSplitFleetOrder}>✂</Button></HoverTooltip>
         <HoverTooltip content="Deploy as industry"><Button tight onClick={this.handlenewDeployToWorldOrder}>I🡓</Button></HoverTooltip>

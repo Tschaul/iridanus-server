@@ -17,7 +17,8 @@ export class NotifyFleetIdleEventQueue implements GameEventQueue {
   ) {
     const idleFleet$ = fleets.byId$.pipe(map(fleetsById => {
       return Object.values(fleetsById).find((fleet: Fleet) => {
-        return fleet.status === 'READY' && fleet.orders.length === 0 && !fleet.idleNotificationSent;
+        return (fleet.status === 'READY' && fleet.orders.length === 0 && !fleet.idleNotificationSent)
+          || (fleet.status === 'WAITING_FOR_CARGO' && fleet.orders.length === 0 && !fleet.idleNotificationSent);
       })
     })) as Observable<ReadyFleet>
 

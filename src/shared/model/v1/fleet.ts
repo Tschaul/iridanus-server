@@ -102,4 +102,5 @@ export interface WaitingForCargoFleet extends BaseFleet {
     ownerId: string;
     fromWorldId: string,
     toWorldId: string,
+    idleNotificationSent?: boolean;
 }

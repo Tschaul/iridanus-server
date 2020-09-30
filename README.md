@@ -9,6 +9,7 @@ Server for Iridanus
 - Redo selected word view (no table for metal and population)
 - add industry while building ship. buildtime adjusted correctly?
 
+- stay logged in
 - CTRL to select multiple fleets
 
 
@@ -100,6 +101,7 @@ cooldown for most abilities: ~1 week
 - disable any artefact for a period of time
 - reduce production of ships at any world for a period of time
 - disable enemy ships weapons at given world for a period of time
+- population needs less space (populationLimit is bigger)
 
 ## Fast realtime challenges
 

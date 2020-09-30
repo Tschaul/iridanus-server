@@ -80,10 +80,30 @@ export class GameStageForeground extends React.Component<{
 
           const playerInfo = this.props.vm.playerInfos[fleet.ownerId];
           const rel = mul(parallel, WORLD_OUTER_RADIUS + relPos * (dist - 2 * WORLD_OUTER_RADIUS))
+
+          const idle = fleet.status === 'WAITING_FOR_CARGO';
           return (
-            <g
+            <g key={fleet.id}
               transform={`translate(${rel.x},${rel.y})`}
             >
+              {idle && (
+                <circle
+                  cx={world1Pos.x}
+                  cy={world1Pos.y}
+                  r={FLEET_OUTER_RADIUS}
+                  opacity="1"
+                  stroke={screenWhiteRaw.fade(0.5).toString()}
+                  fill="none"
+                  strokeWidth="3"
+                  strokeDasharray="5,5"
+                  data-world-id1={id1}
+                  data-world-id2={id2}
+                  data-fleet-id={fleet.id}
+                  onClick={this.handleGateClick}
+                  onContextMenu={this.handleGateRightClick}
+                  style={{ cursor: 'pointer' }}
+                />
+              )}
               <text
                 key={fleet.id}
                 x={world1Pos.x}
@@ -98,7 +118,7 @@ export class GameStageForeground extends React.Component<{
                 onClick={this.handleGateClick}
                 onContextMenu={this.handleGateRightClick}
                 cursor='pointer'
-              >◈</text>
+              >►</text>
             </g>
           );
         })}
@@ -127,7 +147,7 @@ export class GameStageForeground extends React.Component<{
             fontSize={33}
             style={{ transform: "translateY(1px)" }}
             opacity={opacity}
-      >{/*world.id*/ '◉' }</text>
+          >{/*world.id*/ '◉'}</text>
           <HoverTooltip
             svg={true}
             content={this.getTooltipForWorld(world)}
@@ -213,7 +233,7 @@ export class GameStageForeground extends React.Component<{
                   data-fleet-id={fleet.id}
                   onClick={this.handleWorldClick}
                   onContextMenu={this.handleWorldRightClick}
-                >◈</text>
+                >►</text>
               </g>
             );
           })}
@@ -244,12 +264,12 @@ export class GameStageForeground extends React.Component<{
     const world1Id = getClosestAttribute(event, 'data-world-id1');
     const world2Id = getClosestAttribute(event, 'data-world-id2');
     if (world1Id && world2Id) {
-      console.log("gate clicked",{world1Id, world2Id})
+      console.log("gate clicked", { world1Id, world2Id })
       this.props.vm.selectGate(world1Id, world2Id);
     }
     const fleetId = getClosestAttribute(event, 'data-fleet-id');
     if (fleetId) {
-      console.log("fleet clicked",{fleetId})
+      console.log("fleet clicked", { fleetId })
       this.props.vm.selectFleet(fleetId)
     }
   }

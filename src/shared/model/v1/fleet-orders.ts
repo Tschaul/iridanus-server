@@ -1,6 +1,7 @@
 export type FleetOrder =
   WarpOrder
   | StartCargoMissionOrder
+  | StopCargoMissionOrder
   | SplitFleetOrder
   | DeployToWorldOrder
 
@@ -12,6 +13,10 @@ export interface WarpOrder {
 export interface StartCargoMissionOrder {
   type: 'START_CARGO_MISSION',
   otherWorldId: string;
+}
+
+export interface StopCargoMissionOrder {
+  type: 'STOP_CARGO_MISSION',
 }
 
 export interface SplitFleetOrder {
