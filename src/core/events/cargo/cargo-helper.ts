@@ -4,8 +4,8 @@ export function cargoAmounts(
   worldFrom: World,
   worldTo: World,
   metalPotential: { [worldId: string]: number },
-  ships: number,
-  theoretical: boolean
+  populationPotential: { [worldId: string]: number },
+  ships: number
 ) {
 
   const metal = metalCargoAmount(
@@ -15,17 +15,13 @@ export function cargoAmounts(
     ships
   )
 
-  const theoreticalPopulation = theoreticalPopulationCargoAmount(
+  const population = populationCargoAmount(
+    populationPotential[worldFrom.id],
+    populationPotential[worldTo.id],
+    ships,
     worldFrom,
-    worldTo,
-    ships
+    worldTo
   )
-
-  const populationCargoFactor = theoretical
-    ? 1
-    : Math.random()
-
-  const population = Math.round(populationCargoFactor * theoreticalPopulation)
 
   return {
     metal,
@@ -46,23 +42,24 @@ function metalCargoAmount(
   } else return 0;
 }
 
-function theoreticalPopulationCargoAmount(
-  worldFrom: World,
-  worldTo: World,
+function populationCargoAmount(
+  fromPotential: number,
+  toPotential: number,
   ships: number,
+  worldFrom: World,
+  worldTo: World
 ) {
 
-  const worldFromCapacity = worldFrom.populationLimit - worldFrom.population;
-  const worldToCapacity = worldTo.populationLimit - worldTo.population;
+  const potentialDifference = Math.round(toPotential - fromPotential)
 
-  if (worldFromCapacity >= worldToCapacity) {
-    return 0;
-  }
+  if (potentialDifference > 0) {
+    return Math.min(
+      ships,
+      (worldTo.populationLimit - worldTo.population),
+      worldFrom.population,
+      potentialDifference
+    )
+  } else return 0;
 
-  const equilibriumCapacity = Math.floor((worldToCapacity + worldFromCapacity) / 2)
-
-  const maxPassangers = (equilibriumCapacity - worldFromCapacity)
-
-  return Math.min(maxPassangers, ships, worldFrom.population - 1)
 }
 

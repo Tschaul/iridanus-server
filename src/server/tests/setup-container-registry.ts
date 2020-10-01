@@ -8,7 +8,8 @@ export function setupContainerRegistry() {
     dataPath: './temp',
     millisecondsPerDay: 5000,
     mailSettings: undefined as any,
-    baseUrl: 'http://test'
+    baseUrl: 'http://test',
+    developmentMode: false
   });
 
   containerRegistry.globalContainer.unbind(CryptoWrapper);

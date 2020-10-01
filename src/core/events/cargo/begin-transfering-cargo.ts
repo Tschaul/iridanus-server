@@ -28,12 +28,13 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
 
     const readyFleetWithStarCargoMissionOrder$ = this.fleets.allByStatus<WaitingForCargoFleet>('WAITING_FOR_CARGO')
 
-    this.upcomingEvent$ = combineLatest(
+    this.upcomingEvent$ = combineLatest([
       readyFleetWithStarCargoMissionOrder$,
       this.cargo.metalPotentialByPlayer$,
+      this.cargo.populationPotentialByPlayer$,
       this.worlds.byId$
-    ).pipe(
-      map(([waitingFleets, metalPotential, worlds]) => {
+    ]).pipe(
+      map(([waitingFleets, metalPotential, populationPotential, worlds]) => {
 
         const fleet = waitingFleets.find(fleet => {
 
@@ -45,15 +46,16 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
             worlds[fleet.fromWorldId],
             worlds[fleet.toWorldId],
             metalPotential[fleet.ownerId],
+            populationPotential[fleet.ownerId],
             fleet.ships,
-            true
           )
+          
           const reverseCargo = cargoAmounts(
             worlds[fleet.toWorldId],
             worlds[fleet.fromWorldId],
             metalPotential[fleet.ownerId],
+            populationPotential[fleet.ownerId],
             fleet.ships,
-            true
           )
 
           return cargo.population !== 0 || cargo.metal !== 0 || reverseCargo.population !== 0 || reverseCargo.metal !== 0
@@ -70,12 +72,12 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
                 worlds[fleet.fromWorldId],
                 worlds[fleet.toWorldId],
                 metalPotential[fleet.ownerId],
+                populationPotential[fleet.ownerId],
                 fleet.ships,
-                false
               )
-            
+
               const arrivingTimestamp = timestamp + this.setup.rules.warping.warpToWorldDelay
-            
+
               return [
                 giveOrTakeWorldMetal(fleet.fromWorldId, -1 * cargo.metal),
                 giveOrTakeWorldPopulation(fleet.fromWorldId, -1 * cargo.population),
