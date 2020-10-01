@@ -5,7 +5,7 @@ import produce from "immer";
 import { runMap } from "../test-helper";
 import { ReadyWorld } from "../../../shared/model/v1/world";
 
-describe.only("cargo", () => {
+describe("cargo", () => {
 
   it("transports population and metal", async () => {
 
