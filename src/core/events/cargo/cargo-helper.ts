@@ -50,16 +50,28 @@ function populationCargoAmount(
   worldTo: World
 ) {
 
-  const potentialDifference = Math.round(toPotential - fromPotential)
+  // const potentialDifference = Math.round(toPotential - fromPotential)
 
-  if (potentialDifference > 0) {
+  // if (potentialDifference > 0) {
+  //   return Math.min(
+  //     ships,
+  //     (worldTo.populationLimit - worldTo.population),
+  //     worldFrom.population,
+  //     potentialDifference
+  //   )
+  // } else return 0;
+
+  if (worldFrom.population > (worldTo.population + 1) && worldFrom.population > 1) {
     return Math.min(
+      Math.round((worldFrom.population - worldTo.population - 1) / 2),
       ships,
-      (worldTo.populationLimit - worldTo.population),
-      worldFrom.population,
-      potentialDifference
+      worldFrom.population - 1,
+      worldTo.populationLimit - worldTo.population
     )
-  } else return 0;
+  } else {
+    return 0;
+  }
+
 
 }
 
