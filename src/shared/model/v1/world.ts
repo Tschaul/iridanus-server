@@ -4,9 +4,7 @@ export type World =
 
 export type WorldWithOwner =
     ReadyWorld
-    | BuildingShipWorld
-    | BuildingIndustryWorld
-    | ScrappingShipsWorld
+    | BuildingShipsWorld
 
 export interface BaseWorldBase {
     id: string;
@@ -119,27 +117,16 @@ export type LostWorld = BaseWorld & {
     status: 'LOST'
 }
 
-export type BuildingShipWorld = WorldWithOwnerBase & {
-    status: 'BUILDING_SHIP'
+export type BuildingShipsWorld = WorldWithOwnerBase & {
+    status: 'BUILDING_SHIPS'
     ownerId: string;
     readyTimestamp: number;
     buildingShipsAmount: number;
-}
-
-export type BuildingIndustryWorld = WorldWithOwnerBase & {
-    status: 'BUILDING_INDUSTRY'
-    ownerId: string;
-    readyTimestamp: number;
+    buildingShipsLastState: World;
 }
 
 export type ReadyWorld = WorldWithOwnerBase & {
     status: 'READY'
     ownerId: string;
     idleNotificationSent?: boolean;
-}
-
-export type ScrappingShipsWorld = WorldWithOwnerBase & {
-    status: 'SCRAPPING_SHIPS'
-    readyTimestamp: number;
-    ownerId: string;
 }

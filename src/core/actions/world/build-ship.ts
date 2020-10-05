@@ -1,25 +1,26 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
-import { ReadyWorld, BuildingShipWorld, baseWorld, combatAndMiningStatus } from "../../../shared/model/v1/world";
+import { ReadyWorld, BuildingShipsWorld, baseWorld, combatAndMiningStatus } from "../../../shared/model/v1/world";
 import { updateWorld } from "./update-world";
 
-export function buildShip(
+export function buildShips(
   worldId: string,
   readyTimestamp: number,
   amount: number
 ): Action {
   return {
-    describe: () => `BuildShip ${JSON.stringify({ worldId, readyTimestamp })}`,
+    describe: () => `BuildShips ${JSON.stringify({ worldId, readyTimestamp })}`,
     apply: (state: GameState) => {
 
-      return updateWorld<ReadyWorld, BuildingShipWorld>(state, worldId, (oldWorld) => {
+      return updateWorld<ReadyWorld, BuildingShipsWorld>(state, worldId, (oldWorld) => {
         return {
           ...baseWorld(oldWorld),
           ...combatAndMiningStatus(oldWorld),
-          status: 'BUILDING_SHIP',
+          status: 'BUILDING_SHIPS',
           readyTimestamp: readyTimestamp,
           ownerId: oldWorld.ownerId,
-          buildingShipsAmount: amount
+          buildingShipsAmount: amount,
+          buildingShipsLastState: oldWorld
         }
       })
     }

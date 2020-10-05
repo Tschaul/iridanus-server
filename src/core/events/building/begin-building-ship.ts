@@ -6,7 +6,7 @@ import { TimeProjector } from "../../projectors/time-projector";
 import { ReadyWorld } from "../../../shared/model/v1/world";
 import { map } from "rxjs/operators";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
-import { buildShip } from "../../actions/world/build-ship";
+import { buildShips } from "../../actions/world/build-ship";
 import { GameSetupProvider } from "../../game-setup-provider";
 
 @injectable()
@@ -30,7 +30,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
               const activeIndustry = Math.min(world.population, world.industry)
               const delay = this.setup.rules.building.buildShipDelay * shipsAmount / activeIndustry;
               return [
-                buildShip(world.id, timestamp + delay, shipsAmount),
+                buildShips(world.id, timestamp + delay, shipsAmount),
                 giveOrTakeWorldMetal(world.id, -1 * shipsAmount),
               ];
 

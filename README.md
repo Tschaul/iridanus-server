@@ -5,9 +5,7 @@ Server for Iridanus
 
 # TODOS
 
-- reveal not working because empty seat were not removed: redo revelation (instantly reveal all enemy worlds)
 - Redo selected word view (no table for metal and population)
-- add industry while building ship. buildtime adjusted correctly?
 
 - stay logged in
 - CTRL to select multiple fleets
@@ -15,7 +13,9 @@ Server for Iridanus
 
 # Bugs
 
-- sometimes: population = 1, but world is not captured (also sometimes: negative populations is being tranfered)
+- add industry while building ship. buildtime adjusted correctly?
+- reveal not working because empty seat were not removed: redo revelation (instantly reveal all enemy worlds)
+- vision of fleet warping between two worlds ajdecent to owned ones.
 - notification mail when game goes from PROPOSED to STARTED
 
 # Further Improvements
@@ -32,6 +32,8 @@ Server for Iridanus
 first palyer to reach a certain population wins.
 
 # Some Ideas
+
+- divide population by player. Ships in orbit have dominance  and convert population one by one. If no ships present. Population with majority converts the rest over time. World is owned by player if he has the absolute majority.
 
 - 4 classes of ships: freighter for cargo and building industry, and three sizes of military fleets with one, two or three slots for upgrades. Upgrades would be chosable in ship designer from those bought with research/developement.
 
@@ -85,7 +87,6 @@ cooldown for most abilities: ~1 week
 - repair: a fraction of destroyed ships per fleet get regenerated over time
 - reflection: percentage of damage on ships is reflected back
 - population grows faster
-- capture enemy world with 10 or less population with own fleets present and no enemy fleets present
 - drop ships as population
 - recall your ships from any world to one of your owned world
 - recycling: ships that are destroyed on one of your worlds have a chance to spawn metal

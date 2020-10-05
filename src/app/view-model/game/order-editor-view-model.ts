@@ -216,7 +216,7 @@ export class OrderEditorViewModel {
       return lastWarpOrder.targetWorldId
     }
 
-    if (fleet.status === 'WARPING') {
+    if (fleet.status === 'WARPING' || fleet.status === 'LEAVING') {
       return fleet.targetWorldId
     }
 

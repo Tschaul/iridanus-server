@@ -33,6 +33,7 @@ import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
 import { RevealAllWorldsEventQueue } from "./visibility/reveal-all-worlds";
+import { ContinueOrStopBuildingShipEventQueue } from "./building/continue-building-ship";
 
 export function registerEventQueues(container: Container) {
 
@@ -49,6 +50,7 @@ export function registerEventQueues(container: Container) {
   container.bind(LeaveWorldEventQueue).toSelf();
 
   container.bind(BeginBuildingShipEventQueue).toSelf();
+  container.bind(ContinueOrStopBuildingShipEventQueue).toSelf();
   container.bind(EndBuildShipsEventQueue).toSelf();
 
   container.bind(FleetStartFiringEventQueue).toSelf();

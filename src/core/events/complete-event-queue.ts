@@ -30,6 +30,7 @@ import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
 import { RevealAllWorldsEventQueue } from "./visibility/reveal-all-worlds";
+import { ContinueOrStopBuildingShipEventQueue } from "./building/continue-building-ship";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -50,6 +51,7 @@ export class CompleteEventQueue implements GameEventQueue {
 
     beginBuildShips: BeginBuildingShipEventQueue,
     endBuildShips: EndBuildShipsEventQueue,
+    continueOrStopBuildShips: ContinueOrStopBuildingShipEventQueue,
 
     fleetStartFiring: FleetStartFiringEventQueue,
     fleetFire: FleetFireEventQueue,
@@ -98,6 +100,7 @@ export class CompleteEventQueue implements GameEventQueue {
       beginWarp,
       endWarp,
       leaveWorld,
+      continueOrStopBuildShips,
       beginBuildShips,
       endBuildShips,
       fleetStopFiring,

@@ -177,9 +177,7 @@ export class SelectedWorldPanel extends React.Component<{
 
   private getDoneTimestamp(item: World | Fleet): number | null {
     switch (item.status) {
-      case 'SCRAPPING_SHIPS':
-      case 'BUILDING_SHIP':
-      case 'BUILDING_INDUSTRY':
+      case 'BUILDING_SHIPS':
       case 'ARRIVING':
         return item.readyTimestamp
       case 'LEAVING':
@@ -225,9 +223,7 @@ export class SelectedWorldPanel extends React.Component<{
 
   worldStatusIcon(status: World['status']) {
     switch (status) {
-      case 'BUILDING_INDUSTRY': return '+I';
-      case 'BUILDING_SHIP': return '+►';
-      case 'SCRAPPING_SHIPS': return '⮂I';
+      case 'BUILDING_SHIPS': return '+►';
       default: return ' ';
     }
   }
