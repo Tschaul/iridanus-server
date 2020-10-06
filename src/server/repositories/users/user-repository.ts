@@ -199,4 +199,22 @@ export class UserRepository {
     return token;
   }
 
+  async removeToken(id: string, token: string) {
+
+    await this.handle.do(async (data) => {
+      if (!data.users[id]) {
+        throw new Error(`user id '${id}' does not exist`)
+      }
+      if (!data.users[id].emailConfirmed) {
+        throw new Error(`email for user id '${id}' is not yet activated`)
+      }
+      return (data) => {
+        const user = data.users[id] as ConfirmedUser;
+        user.authTokens = user.authTokens.filter(it => it.name !== token);
+      }
+    })
+
+    return token;
+  }
+
 }

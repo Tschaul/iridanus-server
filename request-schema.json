@@ -84,6 +84,9 @@
                             "$ref": "#/definitions/ResetPasswordCommand"
                         },
                         {
+                            "$ref": "#/definitions/RemoveAuthTokenCommand"
+                        },
+                        {
                             "$ref": "#/definitions/CreateGameCommand"
                         },
                         {
@@ -401,6 +404,24 @@
             },
             "required": [
                 "gameId",
+                "type"
+            ],
+            "type": "object"
+        },
+        "RemoveAuthTokenCommand": {
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "USER/REMOVE_AUTH_TOKEN"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "token",
                 "type"
             ],
             "type": "object"

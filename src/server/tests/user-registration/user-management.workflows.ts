@@ -40,7 +40,10 @@ export async function signUpAndLogin(testBed: ServerTestBed, username: string, p
   await testBed.sendMessage({
     type: 'AUTHENTICATE',
     userId: username,
-    password: password,
+    credentials: {
+      type: 'password',
+      password
+    },
     requestId: 'auth'
   });
 

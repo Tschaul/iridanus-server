@@ -67,7 +67,7 @@ export class VisibilityProjector {
           ...state.universe.worlds
         }
         Object.values(state.universe.worlds).forEach(world => {
-          if (!visibilityForPlayer[world.id]) {
+          if (!visibilityForPlayer[world.id] || visibilityForPlayer[world.id] === 'HIDDEN') {
             worlds[world.id] = {
               status: 'UNKNOWN',
               id: world.id
@@ -110,7 +110,7 @@ export class VisibilityProjector {
         visibility[playerId][worldId] = 'PRESENT';
         allPlayerIds.filter(it => it !== playerId).forEach(id => {
           visibility[id] = visibility[id] ?? {}
-          if (visibility[id][worldId] !== 'HIDDEN') {
+          if (!visibility[id][worldId] || visibility[id][worldId] === 'HIDDEN') {
             visibility[id][worldId] = 'FOG_OF_WAR'
           }
         })

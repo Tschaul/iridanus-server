@@ -21,6 +21,13 @@ export class UserManagementService {
     },);
   }
 
+  async logout(userId: string, token: string) {
+    return await this.connection.sendCommand({
+      type: 'USER/REMOVE_AUTH_TOKEN',
+      token
+    },);
+  }
+
   async signUp(userId: string, email: string, password: string) {
     await this.connection.sendCommand({
       type: 'USER/SIGN_UP_USER',

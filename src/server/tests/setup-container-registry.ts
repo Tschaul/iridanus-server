@@ -9,7 +9,8 @@ export function setupContainerRegistry() {
     millisecondsPerDay: 5000,
     mailSettings: undefined as any,
     baseUrl: 'http://test',
-    developmentMode: false
+    developmentMode: false,
+    tokenExpirePeriod: 9999999999999
   });
 
   containerRegistry.globalContainer.unbind(CryptoWrapper);

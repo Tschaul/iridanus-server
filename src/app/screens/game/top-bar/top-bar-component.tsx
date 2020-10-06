@@ -79,31 +79,29 @@ export class TopBar extends React.Component<{
         {this.props.vm.selfIsSpectator ? (
           <span>SPECTATOR</span>
         ) : (
-            [<Button
-              disabled={this.props.vm.updatedOrdersCount === 0}
-              style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
-              onClick={this.handleSaveOrders}
-              spaceRight
-            >✓</Button>,
-            [<Button
-              style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
-              onClick={this.handleBackToLobby}
-              spaceRight
-            >⏎</Button>,
-            <div style={{ flex: 1 }}></div>,
-            this.props.onToggleBurgerButton && <Button
-              style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
-              onClick={this.props.onToggleBurgerButton}
-            >≡</Button>
+            [
+              <Button
+                disabled={this.props.vm.updatedOrdersCount === 0}
+                style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+                onClick={this.handleSaveOrders}
+                spaceRight
+              >✓</Button>,
+              <Button
+                style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+                onClick={this.handleBackToLobby}
+                spaceRight
+              >⏎</Button>,
+              <div style={{ flex: 1 }}></div>,
+              this.props.onToggleBurgerButton && <Button
+                style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+                onClick={this.props.onToggleBurgerButton}
+              >≡</Button>
             ]
           )}
       </div>
       {this.renderStats(stats)}
       <div style={{ flex: 1 }}></div>
       <div />
-      {/* <div>
-        {this.props.vm.isConnected ? this.props.vm.gameId : <span style={{ color: errorRed }}>DISCONNECTED</span>}
-      </div> */}
     </Panel>
   }
 

@@ -1,6 +1,6 @@
 import { MainViewModel } from "../main-view-model";
 import { resolveFromRegistry } from "../../container-registry";
-import { observable } from "mobx";
+import { autorun, observable } from "mobx";
 import { UserManagementService } from "../../client/user-management/user-management.service";
 
 const IRIDANUS_AUTH_TOKEN_LOCAL_STORAGE_LOCATION = 'iridanus_auth_token';
@@ -39,7 +39,6 @@ export class WelcomeViewModel {
     if (this.mode === 'LOGIN') {
       const authToken = window.localStorage.getItem(IRIDANUS_AUTH_TOKEN_LOCAL_STORAGE_LOCATION);
       const userId = window.localStorage.getItem(IRIDANUS_USER_ID_LOCAL_STORAGE_LOCATION);
-      console.log({authToken, userId})
       if (authToken && userId) {
         await this.userManagementervice.useAuthToken(userId, authToken)
         this.mainViewModel.loggedInUserId = userId;
@@ -87,8 +86,13 @@ export class WelcomeViewModel {
   }
 
   async logout() {
-    window.localStorage.removeItem(IRIDANUS_USER_ID_LOCAL_STORAGE_LOCATION);
-    window.localStorage.removeItem(IRIDANUS_AUTH_TOKEN_LOCAL_STORAGE_LOCATION);
+    const authToken = window.localStorage.getItem(IRIDANUS_AUTH_TOKEN_LOCAL_STORAGE_LOCATION);
+    const userId = window.localStorage.getItem(IRIDANUS_USER_ID_LOCAL_STORAGE_LOCATION);
+    if (authToken && userId) {
+      this.userManagementervice.logout(userId, authToken);
+      window.localStorage.removeItem(IRIDANUS_USER_ID_LOCAL_STORAGE_LOCATION);
+      window.localStorage.removeItem(IRIDANUS_AUTH_TOKEN_LOCAL_STORAGE_LOCATION);
+    }
     this.username = ''
     this.password = ''
     this.passwordRepeated = ''

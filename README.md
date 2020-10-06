@@ -5,7 +5,7 @@ Server for Iridanus
 
 # TODOS
 
-- stay logged in
+- remove token on logout
 - CTRL to select multiple fleets
 
 # Bugs

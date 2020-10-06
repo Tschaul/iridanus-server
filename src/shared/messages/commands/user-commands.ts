@@ -1,7 +1,8 @@
 export type UserCommand = SignUpUserCommand
   | ConfirmEmailAddressCommand
   | SendPasswordResetTokenCommand
-  | ResetPasswordCommand;
+  | ResetPasswordCommand
+  | RemoveAuthTokenCommand;
 
 export interface SignUpUserCommand {
   type: 'USER/SIGN_UP_USER',
@@ -31,9 +32,7 @@ export interface ResetPasswordCommand {
   password: string;
 }
 
-export interface CreateAuthTokenCommand {
-  type: 'USER/CREATE_AUTH_TOKEN',
-  id: string;
+export interface RemoveAuthTokenCommand {
+  type: 'USER/REMOVE_AUTH_TOKEN',
   token: string;
-  password: string;
 }

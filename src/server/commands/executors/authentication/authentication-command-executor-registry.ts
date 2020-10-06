@@ -6,6 +6,7 @@ import { SignUpUserExecutor } from "./sign-up-user-executor";
 import { ConfirmEmailAddressExecutor } from "./confirm-email-address-executor";
 import { ResetPasswordExecutor } from "./reset-password-executor";
 import { SendPasswordResetTokenExecutor } from "./send-password-reset-token-executor";
+import { RemoveAuthTokenCommandExecutor } from "./remove-token-executor";
 
 export function getAuthenticationCommandExecutor(registry: ContainerRegistry, command: Command): CommandExecutor<Command> {
   const container = registry.globalContainer;
@@ -18,6 +19,8 @@ export function getAuthenticationCommandExecutor(registry: ContainerRegistry, co
       return container.get(SendPasswordResetTokenExecutor) as CommandExecutor<Command>;
     case 'USER/RESET_PASSWORD':
       return container.get(ResetPasswordExecutor) as CommandExecutor<Command>;
+    case 'USER/REMOVE_AUTH_TOKEN':
+      return container.get(RemoveAuthTokenCommandExecutor) as CommandExecutor<Command>;
   }
 
   throw new Error('No command executor found for command type: ' + command.type)
@@ -29,4 +32,5 @@ export function registerAuthenticationCommandExecutors(container: Container) {
   container.bind(ConfirmEmailAddressExecutor).toSelf();
   container.bind(ResetPasswordExecutor).toSelf();
   container.bind(SendPasswordResetTokenExecutor).toSelf();
+  container.bind(RemoveAuthTokenCommandExecutor).toSelf();
 }
