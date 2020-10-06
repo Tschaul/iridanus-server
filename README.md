@@ -13,8 +13,6 @@ Server for Iridanus
 
 # Bugs
 
-- reveal not working because empty seat were not removed: redo revelation (instantly reveal all enemy worlds)
-- vision of fleet warping between two worlds ajdecent to owned ones.
 - notification mail when game goes from PROPOSED to STARTED
 
 # Further Improvements

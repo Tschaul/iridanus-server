@@ -181,6 +181,15 @@ export class GameRunner {
             }
           }
         })
+        Object.getOwnPropertyNames(state.worlds).forEach(worldId => {
+          const world = state.worlds[worldId];
+          if (worldhasOwner(world) && world.ownerId === seat) {
+            if (player) {
+              world.ownerId = player;
+              world.worldDiscoveredNotificationSent = true;
+            }
+          }
+        })
       })
     })
 
