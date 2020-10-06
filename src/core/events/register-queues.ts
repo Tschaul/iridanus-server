@@ -14,8 +14,7 @@ import { TickEventQueue } from "./tick";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
-import { RevealWorldEventQueue } from "./visibility/reveal-world";
-import { RememberWorldEventQueue } from "./visibility/remember-world";
+import { DiscoverWorldEventQueue } from "./discover-notification/notify-world-discovered";
 import { LooseFleetEventQueue } from "./combat/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
@@ -32,7 +31,6 @@ import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
 import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
-import { RevealAllWorldsEventQueue } from "./visibility/reveal-all-worlds";
 import { ContinueOrStopBuildingShipEventQueue } from "./building/continue-building-ship";
 
 export function registerEventQueues(container: Container) {
@@ -70,9 +68,7 @@ export function registerEventQueues(container: Container) {
   container.bind(StopCapturingWorldEventQueue).toSelf();
   container.bind(LooseFleetEventQueue).toSelf();
 
-  container.bind(RevealWorldEventQueue).toSelf();
-  container.bind(RememberWorldEventQueue).toSelf();
-  container.bind(RevealAllWorldsEventQueue).toSelf();
+  container.bind(DiscoverWorldEventQueue).toSelf();
 
   container.bind(TickEventQueue).toSelf();
 

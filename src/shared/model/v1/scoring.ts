@@ -1,10 +1,10 @@
-export interface Scoring {
+export interface PlayerState {
   playerId: string,
   score: number,
   lastScoringTimestamp: number;
   influence: number;
 }
 
-export type Scorings = {
-  [playerId: string]: Scoring
+export type PlayerStates = {
+  [playerId: string]: PlayerState
 }

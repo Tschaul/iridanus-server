@@ -23,7 +23,7 @@ export type FleetByTwoWorlds = {
 };
 
 const dummyState: VisibleState = {
-  scorings: {},
+  players: {},
   currentTimestamp: 0,
   gameStartTimestamp: 0,
   gameEndTimestamp: Number.MAX_SAFE_INTEGER,
@@ -119,7 +119,7 @@ export class GameData {
   }
 
   @computed public get scorings() {
-    return this.gameState.current.scorings;
+    return this.gameState.current.players;
   }
 
   @computed public get worlds() {

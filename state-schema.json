@@ -397,7 +397,7 @@
                 },
                 "status": {
                     "enum": [
-                        "REMEMBERED"
+                        "FOG_OF_WAR"
                     ],
                     "type": "string"
                 }

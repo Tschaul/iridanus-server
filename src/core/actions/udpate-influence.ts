@@ -8,12 +8,12 @@ export function updateScoring(palyerId: string, influence: number, timestamp: nu
     apply: (state: GameState) => {
       return produce(state, (draft) => {
 
-        const scoring = draft.scorings[palyerId];
+        const scoring = draft.players[palyerId];
         const newScore = scoring.score + scoring.influence * (timestamp - scoring.lastScoringTimestamp);
 
-        draft.scorings[palyerId].score = newScore;
-        draft.scorings[palyerId].influence = influence;
-        draft.scorings[palyerId].lastScoringTimestamp = timestamp;
+        draft.players[palyerId].score = newScore;
+        draft.players[palyerId].influence = influence;
+        draft.players[palyerId].lastScoringTimestamp = timestamp;
         return draft;
       })
     }

@@ -14,7 +14,7 @@ export class GameStartsEventQueue implements GameEventQueue {
       switchMap(state => {
         if (state.currentTimestamp < state.gameStartTimestamp) {
           const gameStartEvent: GameEvent = {
-            notifications: (timestamp) => Object.values(state.scorings).map(it => {
+            notifications: (timestamp) => Object.values(state.players).map(it => {
               return {
                 type: 'GAME_STARTED',
                 playerId: it.playerId,

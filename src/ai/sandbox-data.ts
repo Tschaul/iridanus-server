@@ -17,15 +17,11 @@ export const dummyReadyWorld: ReadyWorld = {
 }
 
 export const aiTestMap: GameState = {
-  scorings: {},
+  players: {},
   currentTimestamp: 0,
   gameStartTimestamp: 0,
   gameEndTimestamp: Number.MAX_SAFE_INTEGER,
   universe: {
-    visibility: {
-      p1: {},
-      p2: {}
-    },
     fleets: {
       "f1": {
         id: "f1",

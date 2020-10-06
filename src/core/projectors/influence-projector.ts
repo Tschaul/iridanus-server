@@ -6,7 +6,7 @@ import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { worldhasOwner } from "../../shared/model/v1/world";
 import equal from 'deep-equal';
-import { Scorings } from "../../shared/model/v1/scoring";
+import { PlayerStates } from "../../shared/model/v1/scoring";
 
 type Stat = { [playerId: string]: number }
 
@@ -24,9 +24,9 @@ export class InfluenceProjector {
   ) { }
 
   public byPlayerId$ = this.store.state$.pipe(
-    map(state => state.scorings),
+    map(state => state.players),
     shareReplay(1),
-  ) as Observable<Scorings>
+  ) as Observable<PlayerStates>
 
   private calculatedInfluenceForPlayers$ = combineLatest([
     this.worlds.byId$,

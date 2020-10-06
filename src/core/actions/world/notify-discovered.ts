@@ -2,18 +2,15 @@ import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
 import produce from "immer";
 
-export function revealWorld(
+export function notifyWorldDiscovered(
   worldId: string,
   playerId: string,
 ): Action {
   return {
-    describe: () => `RevealWorld ${JSON.stringify({ worldId, playerId })}`,
+    describe: () => `NotifyWorldDiscovered ${JSON.stringify({ worldId, playerId })}`,
     apply: (state: GameState) => {
       return produce(state, draft => {
-        draft.universe.visibility[playerId][worldId] = {
-          id: worldId,
-          status: 'VISIBLE'
-        };
+        draft.universe.worlds[worldId].worldDiscoveredNotificationSent = true;
       })
     }
   }

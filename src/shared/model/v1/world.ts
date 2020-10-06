@@ -14,6 +14,7 @@ export interface BaseWorldBase {
     populationLimit: number;
     mines: number;
     integrity: number;
+    worldDiscoveredNotificationSent?: boolean;
 }
 
 export type BaseWorld = BaseWorldBase & WorldWithCaptureStatus;

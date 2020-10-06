@@ -19,8 +19,7 @@ export function makeGomeisaThree(): GameMap {
   const universe: Universe = {
     fleets: {},
     worlds: {},
-    gates,
-    visibility: {}
+    gates
   }
 
   let fleetKeyNumber = 1;

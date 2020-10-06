@@ -7,14 +7,15 @@ import { map, switchMap, distinctUntilChanged, shareReplay } from "rxjs/operator
 import { worldhasOwner, World } from "../../shared/model/v1/world";
 import { Fleet, FleetInTransit, fleetIsAtWorld, pathOfFleetInTransit } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
-import { VisibleWorld, VisibleState } from "../../shared/model/v1/visible-state";
-import { RemeberedWorld, WorldVisibilityStatus } from "../../shared/model/v1/visibility-status";
+import { VisibleWorld, VisibleState, applyFogOfWar } from "../../shared/model/v1/visible-state";
+import { type } from "os";
+import { PlayerProjector } from "./player-projector";
 
-export interface WorldToRevealOrHide {
-  worldId: string,
-  playerId: string,
-  currentVisibility: WorldVisibilityStatus
-}
+export type WorldVisibility = 'VISIBLE' | 'FOG_OF_WAR' | 'HIDDEN'
+
+export type VisibilityByWorld = { [worldId: string]: WorldVisibility }
+
+export type VisibilityByPlayerId = { [playerId: string]: VisibilityByWorld }
 
 @injectable()
 export class VisibilityProjector {
@@ -22,10 +23,10 @@ export class VisibilityProjector {
     private store: ReadonlyStore,
     private worlds: WorldProjector,
     private fleets: FleetProjector,
-    private gates: GatesProjector
+    private gates: GatesProjector,
+    private players: PlayerProjector
   ) { }
 
-  private visiblity$ = this.store.state$.pipe(map(state => state.universe.visibility));
 
   public worldsToRememberFromGlobalRevelationByPlayerId$ = this.worlds.byId$.pipe(
     map(worldsById => {
@@ -58,65 +59,20 @@ export class VisibilityProjector {
     })
   )
 
-  public nextRevealedWorld$ = this.visiblity$.pipe(
-    switchMap(visibility => {
-      const playerIds = Object.getOwnPropertyNames(visibility);
-      return zip(...playerIds.map(playerId => {
-        return combineLatest([
-          this.calculatedVisibleWorldsForPlayer(playerId),
-          this.visibleWorldsForPlayerFromStore(playerId)
-        ]).pipe(
-          map(([calculatedWorlds, currentlyVisibleIds]) => {
-            const idToReveal = calculatedWorlds.find(world => !currentlyVisibleIds.includes(world.id))?.id
-            return idToReveal ? {
-              worldId: idToReveal,
-              playerId,
-              currentVisibility: visibility[playerId][idToReveal]
-            } as WorldToRevealOrHide : null;
-          })
-        )
-      })).pipe(
-        map(idsToRevealWithPlayerId => {
-          return idsToRevealWithPlayerId.find(it => it) || null;
-        })
-      )
-    }),
-    shareReplay(1),
-  ) as Observable<WorldToRevealOrHide | null>
-
-  public nextWorldToHide$ = this.visiblity$.pipe(
-    switchMap(visibility => {
-      const playerIds = Object.getOwnPropertyNames(visibility);
-      return zip(...playerIds.map(playerId => {
-        return combineLatest(
-          this.calculatedVisibleWorldsForPlayer(playerId),
-          this.visibleWorldsForPlayerFromStore(playerId)
-        ).pipe(
-          map(([calculatedWorlds, currentlyVisibleIds]) => {
-            const idToHide = currentlyVisibleIds.find(id => !calculatedWorlds.some(world => world.id === id))
-            return idToHide ? { worldId: idToHide, playerId } as WorldToRevealOrHide : null;
-          })
-        )
-      })).pipe(
-        map(idsToRevealWithPlayerId => {
-          return idsToRevealWithPlayerId.find(it => it) || null;
-        })
-      )
-    }),
-    shareReplay(1),
-  )
-
   public visibleUniverseForPlayer(playerId: string): Observable<VisibleState> {
-    return this.store.state$.pipe(
-      map(state => {
-        const visibilityForPlayer = state.universe.visibility[playerId];
+    return combineLatest([
+      this.store.state$,
+      this.calculatedVisibleWorldsForPlayer$
+    ]).pipe(
+      map(([state, visibility]) => {
+        const visibilityForPlayer = visibility[playerId];
         const fleets = {
           ...state.universe.fleets
         }
 
         const worldIsNotVisible = (worldId: string) => {
           return !visibilityForPlayer[worldId]
-            || visibilityForPlayer[worldId].status === 'REMEMBERED'
+            || visibilityForPlayer[worldId] === 'FOG_OF_WAR'
         }
 
         const fleetIsNotVisible = (fleet: FleetInTransit) => {
@@ -148,9 +104,8 @@ export class VisibilityProjector {
               status: 'UNKNOWN',
               id: world.id
             }
-          } else if (visibilityForPlayer[world.id].status === 'REMEMBERED') {
-            const rememberedWorld = visibilityForPlayer[world.id];
-            worlds[world.id] = rememberedWorld as RemeberedWorld;
+          } else if (visibilityForPlayer[world.id] === 'FOG_OF_WAR') {
+            worlds[world.id] = applyFogOfWar(world);
           }
         })
 
@@ -158,7 +113,7 @@ export class VisibilityProjector {
           currentTimestamp: state.currentTimestamp,
           gameEndTimestamp: state.gameEndTimestamp,
           gameStartTimestamp: state.gameStartTimestamp,
-          scorings: state.scorings,
+          players: state.players,
           universe: {
             worlds,
             fleets,
@@ -172,43 +127,81 @@ export class VisibilityProjector {
     )
   }
 
-  private visibleWorldsForPlayerFromStore(playerId: string) {
-    return this.visiblity$.pipe(map(visibility => {
-      const visibilityForPlayer = visibility[playerId];
-      return Object.values(visibilityForPlayer)
-        .filter(visibilityStatus => visibilityStatus.status === 'VISIBLE')
-        .map(it => it.id);
-    }))
-  }
+  private calculatedVisibleWorldsForPlayer$: Observable<VisibilityByPlayerId> = combineLatest([
+    this.worlds.byId$,
+    this.fleets.byId$,
+    this.gates.all$,
+    this.players.allPlayerIds$
+  ]).pipe(
+    map(([worldsById, fleetsById, gates, allPlayerIds]) => {
+      const allFleets = Object.values(fleetsById);
+      const result: VisibilityByPlayerId = {};
 
-  private calculatedVisibleWorldsForPlayer(playerId: string): Observable<World[]> {
-    return combineLatest([
-      this.worlds.byId$,
-      this.fleets.byId$,
-      this.gates.all$
-    ]).pipe(
-      map(([worldsById, fleetsById, gates]) => {
-        const allFleets = Object.values(fleetsById);
-        return Object.values(worldsById).filter(world => {
+      function markWorldVisibleForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string) {
+        visibility[worldId][playerId] = 'VISIBLE';
+        allPlayerIds.filter(it => it !== playerId).forEach(id => {
+          if (visibility[worldId][id] !== 'HIDDEN') {
+            visibility[worldId][id] = 'FOG_OF_WAR'
+          }
+        })
+      }
+
+      function markWorldHiddenForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string) {
+        visibility[worldId][playerId] = 'HIDDEN';
+        allPlayerIds.filter(it => it !== playerId).forEach(id => {
+          if (!visibility[worldId][id]) {
+            visibility[worldId][id] = 'HIDDEN'
+          }
+        })
+      }
+
+      allPlayerIds.forEach(playerId => {
+        Object.values(worldsById).forEach(world => {
           if (this.worldOwnedByPlayer(world, playerId)) {
-            return true;
+            markWorldVisibleForPlayer(result, world.id, playerId)
           }
           if (this.playerHasFleetAtWorld(allFleets, playerId, world)) {
-            return true;
+            markWorldVisibleForPlayer(result, world.id, playerId)
           }
           const neighboringWorldIds = gates[world.id];
           if (neighboringWorldIds && neighboringWorldIds.some(id => {
             const neighboringWorld = worldsById[id];
             return this.worldOwnedByPlayer(neighboringWorld, playerId) || this.playerHasFleetAtWorld(allFleets, playerId, neighboringWorld)
           })) {
-            return true;
+            markWorldVisibleForPlayer(result, world.id, playerId)
           }
-          return false;
+          markWorldHiddenForPlayer(result, world.id, playerId)
         })
-      }),
-      shareReplay(1),
-    )
-  }
+      })
+
+
+      return result;
+    }),
+    shareReplay(1),
+  )
+
+  public nextRevealedWorld$ = combineLatest([
+    this.calculatedVisibleWorldsForPlayer$,
+    this.worlds.byId$
+  ]).pipe(
+    map(([visibility, worldsById]) => {
+
+      for (const playerId of Object.getOwnPropertyNames(visibility)) {
+        for (const worldId of Object.getOwnPropertyNames(worldsById)) {
+          const world = worldsById[worldId];
+          if (visibility[playerId][worldId] === 'VISIBLE' && !world.worldDiscoveredNotificationSent){
+            return {
+              playerId,
+              worldId
+            }
+          }
+        }
+      }
+
+      return null;
+    }),
+    shareReplay(1),
+  ) as Observable<{ playerId: string, worldId: string } | null>
 
   private playerHasFleetAtWorld(allFleets: Fleet[], playerId: string, world: World) {
     return allFleets.some(fleet => this.fleetOwnedByPlayer(fleet, playerId) && fleetIsAtWorld(fleet) && fleet.currentWorldId === world.id);

@@ -7,7 +7,7 @@ export class PlayerProjector {
   constructor(private store: ReadonlyStore) { }
 
   public allPlayerIds$ = this.store.state$.pipe(
-    map(state => Object.getOwnPropertyNames(state.scorings)),
+    map(state => Object.getOwnPropertyNames(state.players)),
     distinctUntilChanged(),
     shareReplay(1)
   );

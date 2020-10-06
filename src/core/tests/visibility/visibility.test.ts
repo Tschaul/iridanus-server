@@ -36,7 +36,7 @@ describe("visibility", () => {
 
     expect((state.universe.visibility['p1']['w1']).status).to.equal("VISIBLE")
     expect((state.universe.visibility['p1']['w2']).status).to.equal("VISIBLE")
-    expect((state.universe.visibility['p1']['w3']).status).to.equal("REMEMBERED")
+    expect((state.universe.visibility['p1']['w3']).status).to.equal("FOG_OF_WAR")
   })
 })
 

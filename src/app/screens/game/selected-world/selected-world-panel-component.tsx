@@ -56,7 +56,7 @@ export class SelectedWorldPanel extends React.Component<{
 
   private renderFleets(): React.ReactNode {
     const world = this.props.vm.selectedWorld
-    if (world?.status === 'REMEMBERED') {
+    if (world?.status === 'FOG_OF_WAR') {
       return <span>world not in sight</span>
     }
     return this.props.vm.fleetsAtStageSelection.map(fleet => {
@@ -93,7 +93,7 @@ export class SelectedWorldPanel extends React.Component<{
             {/* <div>{this.padSpaces(world.mines)} M &nbsp;</div> */}
           </div>
           <PanelDivider></PanelDivider>
-          {world.status !== 'REMEMBERED' && this.renderWorldRow(world, this.props.vm.fleetsAtStageSelection, this.props.vm.playerInfoOfSelectedWorld)}
+          {world.status !== 'FOG_OF_WAR' && this.renderWorldRow(world, this.props.vm.fleetsAtStageSelection, this.props.vm.playerInfoOfSelectedWorld)}
         </div>
       )
     }

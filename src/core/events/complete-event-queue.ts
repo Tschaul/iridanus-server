@@ -14,8 +14,7 @@ import { FleetStopFiringEventQueue } from "./combat/fleet-stop-firing";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
-import { RevealWorldEventQueue } from "./visibility/reveal-world";
-import { RememberWorldEventQueue } from "./visibility/remember-world";
+import { DiscoverWorldEventQueue } from "./discover-notification/notify-world-discovered";
 import { LooseFleetEventQueue } from "./combat/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
@@ -29,7 +28,6 @@ import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo
 import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
-import { RevealAllWorldsEventQueue } from "./visibility/reveal-all-worlds";
 import { ContinueOrStopBuildingShipEventQueue } from "./building/continue-building-ship";
 
 @injectable()
@@ -75,9 +73,7 @@ export class CompleteEventQueue implements GameEventQueue {
     beginTransferingCargo: BeginTransferingCargoEventQueue,
     endTransferingCargo: EndTransferingCargoEventQueue,
 
-    revealWorld: RevealWorldEventQueue,
-    remeberWorld: RememberWorldEventQueue,
-    revealAllWorlds: RevealAllWorldsEventQueue,
+    revealWorld: DiscoverWorldEventQueue,
 
     notifyFleetIdle: NotifyFleetIdleEventQueue,
 
@@ -87,8 +83,6 @@ export class CompleteEventQueue implements GameEventQueue {
 
     const allEventQueues = [
       revealWorld,
-      remeberWorld,
-      revealAllWorlds,
       // startCapturingWorld,
       // captureWorld,
       // stopCapturingWorld,

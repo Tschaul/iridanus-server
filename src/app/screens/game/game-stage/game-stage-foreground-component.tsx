@@ -132,7 +132,7 @@ export class GameStageForeground extends React.Component<{
       const fleets = this.props.vm.fleetsByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
-      const opacity = world.status === 'UNKNOWN' || world.status === 'REMEMBERED' ? 0.5 : 1
+      const opacity = world.status === 'UNKNOWN' || world.status === 'FOG_OF_WAR' ? 0.5 : 1
 
       const positions = distributeOnCircle(fleets.length);
 
@@ -294,7 +294,7 @@ export class GameStageForeground extends React.Component<{
   getTooltipForWorld(world: VisibleWorld) {
     if (world.status === 'UNKNOWN') {
       return '';
-    } else if (world.status === 'REMEMBERED') {
+    } else if (world.status === 'FOG_OF_WAR') {
       return `${world.population}/${world.populationLimit} P ${world.industry} I`;
     }
     return `${world.population}/${world.populationLimit} P ${world.industry} I ${world.metal} ▮`;

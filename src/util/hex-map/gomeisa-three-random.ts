@@ -19,8 +19,7 @@ export function makeGomeisaThreeRandom(): GameMap {
   const universe: Universe = {
     fleets: {},
     worlds: {},
-    gates,
-    visibility: {}
+    gates
   }
 
 

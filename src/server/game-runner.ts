@@ -17,7 +17,7 @@ import { Universe } from "../shared/model/v1/universe";
 import { Initializer } from "./infrastructure/initialisation/initializer";
 import { makeConfig } from "../core/setup/simple-config";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
-import { Scorings } from "../shared/model/v1/scoring";
+import { PlayerStates } from "../shared/model/v1/scoring";
 import { NotificationHandler } from "../core/infrastructure/notification-handler";
 import { Environment } from "./environment/environment";
 import { NotificationMailer } from "./mails/notification-mail-handler";
@@ -158,7 +158,7 @@ export class GameRunner {
       .filter(player => !player.isSpectator)
       .map(player => player.id);
 
-    const scorings: Scorings = {};
+    const scorings: PlayerStates = {};
 
     players.forEach(playerId => {
       scorings[playerId] = {
@@ -170,39 +170,9 @@ export class GameRunner {
     })
 
     let universe = produce(map.universe, (state: Universe) => {
-      players.forEach(player => {
-        state.visibility[player] = {};
-      })
+
       map.seats.forEach((seat, index) => {
         const player = players[index];
-        const otherPlayers = players.filter(it => it !== player);
-        Object.getOwnPropertyNames(state.worlds).forEach(worldId => {
-          const world = state.worlds[worldId];
-          if (worldhasOwner(world) && world.ownerId === seat) {
-            if (player) {
-              world.ownerId = player;
-              state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
-              otherPlayers.forEach(otherPlayerId => {
-                state.visibility[otherPlayerId][worldId] = {
-                  status: 'REMEMBERED',
-                  id: worldId,
-                  industry: world.industry,
-                  mines: world.mines,
-                  population: world.population,
-                  populationLimit: world.populationLimit,
-                  rememberedTimestamp: currentTimestamp,
-                  ownerId: player
-                }
-              })
-            }
-          }
-          if (player && state.gates[worldId].some(neighboringWorldId => {
-            const neighboringWorld = state.worlds[neighboringWorldId];
-            return worldhasOwner(neighboringWorld) && [seat, player].includes(neighboringWorld.ownerId)
-          })) {
-            state.visibility[player][worldId] = { status: 'VISIBLE', id: worldId }
-          }
-        })
         Object.getOwnPropertyNames(state.fleets).forEach(fleetId => {
           const fleet = state.fleets[fleetId];
           if (fleet.ownerId === seat) {
@@ -219,7 +189,7 @@ export class GameRunner {
       gameStartTimestamp,
       gameEndTimestamp,
       universe,
-      scorings
+      players: scorings
     }
   }
 
