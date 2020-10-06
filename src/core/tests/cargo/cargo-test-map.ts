@@ -44,7 +44,7 @@ export const cargoTestMap: GameState = {
         ...dummyReadyWorld,
         id: "w2",
         ownerId: "p1",
-        population: 5,
+        population: { p1: 5 },
         metal: 10,
         industry: 0
       }

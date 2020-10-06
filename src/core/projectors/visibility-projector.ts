@@ -4,7 +4,7 @@ import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { WorldProjector } from "./world-projector";
 import { map, shareReplay } from "rxjs/operators";
-import { worldhasOwner, World } from "../../shared/model/v1/world";
+import { worldHasOwner, World } from "../../shared/model/v1/world";
 import { Fleet, FleetInTransit, fleetIsAtWorld, pathOfFleetInTransit } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
 import { VisibleWorld, VisibleState, applyFogOfWar } from "../../shared/model/v1/visible-state";
@@ -189,7 +189,7 @@ export class VisibilityProjector {
   }
 
   private worldOwnedByPlayer(world: World, playerId: string) {
-    return worldhasOwner(world) && world.ownerId === playerId;
+    return worldHasOwner(world) && world.ownerId === playerId;
   }
 
   private fleetOwnedByPlayer(fleet: Fleet, playerId: string) {

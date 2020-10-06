@@ -37,7 +37,7 @@ function makeWorld(id: string): LostWorld {
     integrity: 0,
     metal: 0,
     mines: 0,
-    population: 0,
+    population: {},
     populationLimit: 0,
     status: 'LOST',
     captureStatus: 'NOT_BEING_CAPTURED'

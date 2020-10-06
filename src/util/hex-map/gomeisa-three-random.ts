@@ -41,7 +41,7 @@ export function makeGomeisaThreeRandom(): GameMap {
         metal: 0,
         mines: 0,
         industry: 25,
-        population: 50,
+        population: { [seats[worldId]]: 50 },
         populationLimit: 50,
         captureStatus: 'NOT_BEING_CAPTURED',
         idleNotificationSent: true
@@ -94,7 +94,7 @@ function makeWorld(id: string): LostWorld {
     integrity: 1,
     metal: metal,
     mines: 0,
-    population: 0,
+    population: {},
     populationLimit,
     status: 'LOST',
     captureStatus: 'NOT_BEING_CAPTURED'

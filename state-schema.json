@@ -80,7 +80,10 @@
                     "type": "number"
                 },
                 "population": {
-                    "type": "number"
+                    "additionalProperties": {
+                        "type": "number"
+                    },
+                    "type": "object"
                 },
                 "populationLimit": {
                     "type": "number"
@@ -157,6 +160,9 @@
         },
         "GrowingWorld": {
             "properties": {
+                "growingPopulation": {
+                    "type": "number"
+                },
                 "nextPopulationGrowthTimestamp": {
                     "type": "number"
                 },
@@ -168,6 +174,7 @@
                 }
             },
             "required": [
+                "growingPopulation",
                 "nextPopulationGrowthTimestamp",
                 "populationGrowthStatus"
             ],

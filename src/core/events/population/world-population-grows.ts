@@ -4,10 +4,11 @@ import { injectable } from "inversify";
 import { map } from "rxjs/operators";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { WorldProjector } from "../../projectors/world-projector";
-import { GrowingWorld, World } from "../../../shared/model/v1/world";
+import { GrowingWorld, pickPopulationOwner, totalPopulation, World } from "../../../shared/model/v1/world";
 import { worldStartGrowing } from "../../actions/world/start-growing";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 import { calculatePopulationGrowthDelay } from "./growth-dealy-helper";
+import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 
 @injectable()
 export class WorldPopulationGrowsEventQueue implements GameEventQueue {
@@ -15,7 +16,9 @@ export class WorldPopulationGrowsEventQueue implements GameEventQueue {
 
   constructor(
     private worlds: WorldProjector,
-    private setup: GameSetupProvider) {
+    private setup: GameSetupProvider,
+    private random: RandomNumberGenerator
+  ) {
 
     const nextGrowingWorld$ = this.worlds.byId$.pipe(
       map((worldsById) => {
@@ -38,11 +41,12 @@ export class WorldPopulationGrowsEventQueue implements GameEventQueue {
           timestamp: world.nextPopulationGrowthTimestamp,
           happen: () => {
 
-            const nextPopulationGrowthTimestamp = world.nextPopulationGrowthTimestamp + calculatePopulationGrowthDelay(world, this.setup.rules.population.minimumPopulationGrowthDelay);
+            const nextPopulationGrowthTimestamp = world.nextPopulationGrowthTimestamp
+              + calculatePopulationGrowthDelay(world, this.setup.rules.population.minimumPopulationGrowthDelay) * this.random.exponential();
 
             return [
-              giveOrTakeWorldPopulation(world.id, 1),
-              worldStartGrowing(world.id, nextPopulationGrowthTimestamp)
+              giveOrTakeWorldPopulation(world.id, 1, pickPopulationOwner(world, random.equal())),
+              worldStartGrowing(world.id, nextPopulationGrowthTimestamp, totalPopulation(world))
             ]
           }
         }

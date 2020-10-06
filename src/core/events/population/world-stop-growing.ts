@@ -5,7 +5,7 @@ import { TimeProjector } from "../../projectors/time-projector";
 import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { worldStopGrowing } from "../../actions/world/stop-growing";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { totalPopulation, worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class WorldStopGrowingEventQueue implements GameEventQueue {
@@ -24,7 +24,7 @@ export class WorldStopGrowingEventQueue implements GameEventQueue {
         return worlds.find(world =>
           'populationGrowthStatus' in world
           && world.populationGrowthStatus === 'GROWING'
-          && world.population >= world.populationLimit
+          && totalPopulation(world) >= world.populationLimit
         )
       })
     )
@@ -35,7 +35,7 @@ export class WorldStopGrowingEventQueue implements GameEventQueue {
           return null;
         }
         return {
-          notifications:  (timestamp: number) => worldhasOwner(world) ? [{
+          notifications:  (timestamp: number) => worldHasOwner(world) ? [{
             type: 'POPULATION_LIMIT_REACHED',
             worldId: world.id,
             playerId: world.ownerId,

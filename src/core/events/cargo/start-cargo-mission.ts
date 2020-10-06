@@ -11,7 +11,7 @@ import { GatesProjector } from "../../projectors/gates-projector";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { WorldProjector } from "../../projectors/world-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 import { waitForCargo } from "../../actions/fleet/wait-for-cargo";
 
 @injectable()
@@ -49,7 +49,7 @@ export class StartCargoMissionEventQueue implements GameEventQueue {
 
               const otherWorld = worlds[order.otherWorldId];
 
-              if (worldhasOwner(otherWorld) && otherWorld.ownerId !== fleet.ownerId) {
+              if (worldHasOwner(otherWorld) && otherWorld.ownerId !== fleet.ownerId) {
                 return [
                   popFleetOrder(fleet.id)
                 ]

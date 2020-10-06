@@ -10,7 +10,7 @@ import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-p
 import { GameSetupProvider } from "../../game-setup-provider";
 import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import { WorldProjector } from "../../projectors/world-projector";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class FleetStartFiringEventQueue implements GameEventQueue {

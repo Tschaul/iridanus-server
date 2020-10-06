@@ -13,7 +13,7 @@ export const testMap: GameState = {
       "w1": {
         ...dummyReadyWorld,
         id: "w1",
-        population: 1,
+        population: { p1: 1 },
         populationLimit: 2,
         ownerId: "p1",
       },

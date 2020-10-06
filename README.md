@@ -5,12 +5,11 @@ Server for Iridanus
 
 # TODOS
 
-- remove token on logout
+- new capture mechanic
+- world modifiers
 - CTRL to select multiple fleets
 
 # Bugs
-
-- notification mail when game goes from PROPOSED to STARTED
 
 # Further Improvements
 

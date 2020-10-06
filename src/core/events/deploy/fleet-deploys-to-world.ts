@@ -7,7 +7,7 @@ import { injectable } from "inversify";
 import { DeployToWorldOrder } from "../../../shared/model/v1/fleet-orders";
 import { popFleetOrder } from "../../actions/fleet/pop-fleet-order";
 import { WorldProjector } from "../../projectors/world-projector";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 import { giveOrTakeWorldIndustry } from "../../actions/world/give-or-take-industry";
 import { looseFleet } from "../../actions/fleet/loose-fleet";
 
@@ -33,7 +33,7 @@ export class FleetDeploysToWorldEventQueue implements GameEventQueue {
 
               const world = worldsById[fleet.currentWorldId];
 
-              if (!worldhasOwner(world) || world.ownerId !== fleet.ownerId) {
+              if (!worldHasOwner(world) || world.ownerId !== fleet.ownerId) {
                 return [
                   popFleetOrder(fleet.id)
                 ]

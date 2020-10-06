@@ -6,15 +6,37 @@ export type WorldWithOwner =
     ReadyWorld
     | BuildingShipsWorld
 
+export type PopulationByPlayer = {
+    [playerId: string]: number
+}
+
 export interface BaseWorldBase {
     id: string;
     metal: number;
     industry: number;
-    population: number;
+    population: PopulationByPlayer;
     populationLimit: number;
     mines: number;
     integrity: number;
     worldDiscoveredNotificationSent?: boolean;
+}
+
+export function totalPopulation(world: World){
+    return Object.values(world.population).reduce((pv, cv) => pv + cv, 0)
+}
+
+export function pickPopulationOwner(world: World, random: number) {
+
+    const total = totalPopulation(world);
+
+    let pick = total * random;
+
+    for (const playerId of Object.getOwnPropertyNames(world.population)) {
+        pick -= world.population[playerId]
+        if (pick < 0) {
+            return playerId;
+        }
+    }
 }
 
 export type BaseWorld = BaseWorldBase & WorldWithCaptureStatus;
@@ -57,7 +79,7 @@ export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithMinin
     return result;
 }
 
-export function worldhasOwner(world: World): world is WorldWithOwner {
+export function worldHasOwner(world: World): world is WorldWithOwner {
     return world.status !== 'LOST';
 }
 
@@ -111,7 +133,8 @@ export interface NotGrowingWorld {
 
 export interface GrowingWorld {
     populationGrowthStatus: 'GROWING',
-    nextPopulationGrowthTimestamp: number
+    nextPopulationGrowthTimestamp: number,
+    growingPopulation: number
 }
 
 export type LostWorld = BaseWorld & {

@@ -1,12 +1,10 @@
-import { Subject, Observable, throwError, concat, ReplaySubject } from 'rxjs';
-import { scan, startWith, tap, withLatestFrom, sample, publishReplay, publish, shareReplay, map } from 'rxjs/operators';
-import { injectable, inject } from 'inversify';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
+import { scan, startWith, tap, sample, shareReplay, map } from 'rxjs/operators';
+import { injectable } from 'inversify';
 import { Action } from './actions/action';
 import { GameState } from '../shared/model/v1/state';
 import { GameSetupProvider } from './game-setup-provider';
 import { GameStateValidator } from './infrastructure/game- state-message-validator';
-import { Clock } from './infrastructure/clock';
-import { Logger } from './infrastructure/logger';
 import { ActionLogger } from './infrastructure/action-logger';
 import { setTimestamp } from './actions/set-timestamp';
 
@@ -43,6 +41,7 @@ export class Store {
       scan((state: GameState, action: Action) => {
         const nextState = action.apply(state);
         this.logger.logAction(action);
+        // this.validator.assertGameStateValid(nextState)
         return nextState;
       }, this.setup.initialState),
       sample(this.commits$$),
@@ -85,7 +84,7 @@ export class ReadonlyStore {
 
   public state$: Observable<GameState>;
 
-  constructor(private store: Store) {
+  constructor(store: Store) {
     this.state$ = store.state$;
   }
 }

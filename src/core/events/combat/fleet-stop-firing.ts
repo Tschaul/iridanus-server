@@ -13,9 +13,11 @@ export class FleetStopFiringEventQueue implements GameEventQueue {
 
   constructor(
     private fleets: FleetProjector,
-    private combat: CombatAndCaptureProjector,
-    private time: TimeProjector) {
-    const stopFiringFleets$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.fleets.byId$).pipe(
+    private combat: CombatAndCaptureProjector) {
+    const stopFiringFleets$ = combineLatest([
+      this.combat.worldIdsAtPeaceAndAtWar$,
+      this.fleets.byId$
+    ]).pipe(
       map(([[_, nonCombatWorldIds], fleetsById]) => {
 
         const fleets = Object.values(fleetsById);

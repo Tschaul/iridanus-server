@@ -5,10 +5,11 @@ import { WorldWithOwner } from "../../../shared/model/v1/world";
 
 export function worldStartGrowing(
   worldId: string,
-  nextPopulationGrowthTimestamp: number
+  nextPopulationGrowthTimestamp: number,
+  growingPopulation: number
 ): Action {
   return {
-    describe: () => `WorldStartGrowing ${JSON.stringify({ worldId, nextPopulationGrowthTimestamp })}`,
+    describe: () => `WorldStartGrowing ${JSON.stringify({ worldId, nextPopulationGrowthTimestamp, growingPopulation })}`,
     apply: (state: GameState) => {
 
       return updateWorld<WorldWithOwner, WorldWithOwner>(state, worldId, (oldWorld) => {
@@ -16,6 +17,7 @@ export function worldStartGrowing(
           ...oldWorld,
           populationGrowthStatus: 'GROWING',
           nextPopulationGrowthTimestamp,
+          growingPopulation
         }
       })
     }

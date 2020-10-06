@@ -8,7 +8,7 @@ import { injectable } from "inversify";
 import { arriveAtWorld } from "../../actions/fleet/arrive-at-world";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { WorldProjector } from "../../projectors/world-projector";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class EndWarpEventQueue implements GameEventQueue {
@@ -33,7 +33,7 @@ export class EndWarpEventQueue implements GameEventQueue {
 
           const targetWorld = worlds[fleet.targetWorldId];
 
-          if (worldhasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) {
+          if (worldHasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) {
             delay = this.setup.rules.warping.leaveEnemyWorldDelay;
           }
 

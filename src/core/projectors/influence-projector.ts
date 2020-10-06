@@ -4,7 +4,7 @@ import { map, distinctUntilChanged, shareReplay, startWith } from "rxjs/operator
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
-import { worldhasOwner } from "../../shared/model/v1/world";
+import { worldHasOwner } from "../../shared/model/v1/world";
 import equal from 'deep-equal';
 import { PlayerStates } from "../../shared/model/v1/scoring";
 
@@ -41,8 +41,8 @@ export class InfluenceProjector {
         const ships: Stat = {}
 
         Object.values(worldsbyId).forEach(world => {
-          if (worldhasOwner(world)) {
-            incrementStat(population, world.ownerId, world.population)
+          if (worldHasOwner(world)) {
+            incrementStat(population, world.ownerId, world.population[world.ownerId] ?? 0)
             incrementStat(industry, world.ownerId, world.industry)
             incrementStat(mines, world.ownerId, world.mines)
           }

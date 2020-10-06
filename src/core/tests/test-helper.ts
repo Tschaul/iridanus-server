@@ -88,7 +88,7 @@ export const dummyReadyWorld: ReadyWorld = {
   metal: 10,
   mines: 0,
   ownerId: "",
-  population: 25,
+  population: {},
   populationLimit: 25,
   integrity: 1,
   miningStatus: 'NOT_MINING',
@@ -102,7 +102,7 @@ export const dummyLostWorld: LostWorld = {
   industry: 0,
   metal: 10,
   mines: 1,
-  population: 25,
+  population: {},
   populationLimit: 25,
   integrity: 1,
   captureStatus: 'NOT_BEING_CAPTURED'

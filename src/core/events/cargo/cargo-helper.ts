@@ -1,10 +1,9 @@
-import { World } from "../../../shared/model/v1/world";
+import { WorldWithOwner } from "../../../shared/model/v1/world";
 
 export function cargoAmounts(
-  worldFrom: World,
-  worldTo: World,
+  worldFrom: WorldWithOwner,
+  worldTo: WorldWithOwner,
   metalPotential: { [worldId: string]: number },
-  populationPotential: { [worldId: string]: number },
   ships: number
 ) {
 
@@ -16,8 +15,6 @@ export function cargoAmounts(
   )
 
   const population = populationCargoAmount(
-    populationPotential[worldFrom.id],
-    populationPotential[worldTo.id],
     ships,
     worldFrom,
     worldTo
@@ -43,30 +40,20 @@ function metalCargoAmount(
 }
 
 function populationCargoAmount(
-  fromPotential: number,
-  toPotential: number,
   ships: number,
-  worldFrom: World,
-  worldTo: World
+  worldFrom: WorldWithOwner,
+  worldTo: WorldWithOwner
 ) {
 
-  // const potentialDifference = Math.round(toPotential - fromPotential)
+  const worldFromPopulation = worldFrom.population[worldFrom.ownerId];
+  const worldToPopulation = worldFrom.population[worldTo.ownerId];
 
-  // if (potentialDifference > 0) {
-  //   return Math.min(
-  //     ships,
-  //     (worldTo.populationLimit - worldTo.population),
-  //     worldFrom.population,
-  //     potentialDifference
-  //   )
-  // } else return 0;
-
-  if (worldFrom.population > (worldTo.population + 1) && worldFrom.population > 1) {
+  if (worldFromPopulation > (worldToPopulation + 1) && worldFromPopulation > 1) {
     return Math.min(
-      Math.round((worldFrom.population - worldTo.population - 1) / 2),
+      Math.round((worldFromPopulation - worldToPopulation - 1) / 2),
       ships,
-      worldFrom.population - 1,
-      worldTo.populationLimit - worldTo.population
+      worldFromPopulation - 1,
+      worldTo.populationLimit - worldToPopulation
     )
   } else {
     return 0;

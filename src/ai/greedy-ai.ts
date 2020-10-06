@@ -7,7 +7,7 @@ import { Store } from "../core/store";
 import { floydWarshall } from "../shared/math/path-finding/floydWarshall";
 import { Fleet, fleetIsAtWorld } from "../shared/model/v1/fleet";
 import { GameState } from "../shared/model/v1/state";
-import { worldhasOwner } from "../shared/model/v1/world";
+import { worldHasOwner } from "../shared/model/v1/world";
 import { Ai, FleetOrders } from "./model";
 import { IModel, Solution } from "./solver";
 
@@ -50,7 +50,9 @@ export class GreedyAi implements Ai {
 
     for (const world of worlds) {
 
-      if (!worldhasOwner(world) || world.ownerId === playerId) {
+      if (!worldHasOwner(world) || world.ownerId === playerId) {
+
+        const population = worldHasOwner(world) ? world.population[world.ownerId] : 0;
 
         totalIndustry += world.industry;
 
@@ -61,8 +63,8 @@ export class GreedyAi implements Ai {
         model.constraints['delta_metal_' + world.id] = { min: -1 * world.metal }
 
         // free and occupied living space
-        model.constraints['free_living_space_' + world.id] = { max: (world.populationLimit - world.population) * timeFrame }
-        model.constraints['occupied_living_space_' + world.id] = { max: world.population * timeFrame }
+        model.constraints['free_living_space_' + world.id] = { max: (world.populationLimit - population) * timeFrame }
+        model.constraints['occupied_living_space_' + world.id] = { max: population * timeFrame }
 
         // run industry option
         model.variables['run_industry_' + world.id] = {

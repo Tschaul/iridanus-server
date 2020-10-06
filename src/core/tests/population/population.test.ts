@@ -10,7 +10,9 @@ describe("population", () => {
 
     const state = await runMap(testMap)
 
-    expect((state.universe.worlds["w1"] as World).population).to.equal(2)
+    console.log((state.universe.worlds["w1"] as World).population)
+
+    expect((state.universe.worlds["w1"] as World).population["p1"]).to.equal(2)
   })
 
 })

@@ -18,7 +18,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
     this.upcomingEvent$ = worlds.allByStatus<ReadyWorld>('READY').pipe(
       map((worlds) => {
         const world = worlds.find(world => {
-          const activeIndustry = Math.min(world.population, world.industry)
+          const activeIndustry = Math.min(world.population[world.ownerId], world.industry)
           return activeIndustry > 0 && world.metal >= shipsAmount
         })
 
@@ -27,7 +27,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
         } else {
           return {
             happen: (timestamp: number) => {
-              const activeIndustry = Math.min(world.population, world.industry)
+              const activeIndustry = Math.min(world.population[world.ownerId], world.industry)
               const delay = this.setup.rules.building.buildShipDelay * shipsAmount / activeIndustry;
               return [
                 buildShips(world.id, timestamp + delay, shipsAmount, activeIndustry),

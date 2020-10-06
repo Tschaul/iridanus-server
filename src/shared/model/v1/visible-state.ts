@@ -1,5 +1,5 @@
 import { Gates } from "./universe";
-import { World, worldhasOwner, WorldWithOwner } from "./world";
+import { PopulationByPlayer, World, worldHasOwner, WorldWithOwner } from "./world";
 import { Fleet } from "./fleet";
 import { PlayerStates } from "./scoring";
 
@@ -27,7 +27,7 @@ export interface WorldInFogOfWar {
   ownerId?: string,
   industry: number,
   mines: number,
-  population: number,
+  population: PopulationByPlayer,
   populationLimit: number,
 }
 
@@ -49,7 +49,7 @@ export function applyFogOfWar(world: World): WorldInFogOfWar {
     population: world.population,
     populationLimit: world.populationLimit,
     status: 'FOG_OF_WAR',
-    ownerId: worldhasOwner(world) ? world.ownerId : undefined
+    ownerId: worldHasOwner(world) ? world.ownerId : undefined
   }
 }
 

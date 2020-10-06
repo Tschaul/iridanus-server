@@ -8,7 +8,7 @@ export const dummyReadyWorld: ReadyWorld = {
   metal: 0,
   mines: 0,
   ownerId: "",
-  population: 0,
+  population: {},
   populationLimit: 25,
   integrity: 1,
   miningStatus: 'NOT_MINING',
@@ -60,7 +60,7 @@ export const aiTestMap: GameState = {
         id: "w1",
         ownerId: "p1",
         industry: 50,
-        population: 25
+        population: { p1: 25 }
       },
       "w2": {
         ...dummyReadyWorld,

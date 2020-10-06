@@ -13,7 +13,7 @@ import { GameSetupProvider } from "../../game-setup-provider";
 import { Gates } from "../../../shared/model/v1/universe";
 import { GatesProjector } from "../../projectors/gates-projector";
 import { WorldProjector } from "../../projectors/world-projector";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class LeaveWorldEventQueue implements GameEventQueue {
@@ -50,14 +50,14 @@ export class LeaveWorldEventQueue implements GameEventQueue {
           let delay = 0;
 
           const currentWorld = worlds[fleet.currentWorldId];
-          if (worldhasOwner(currentWorld) && currentWorld.ownerId !== fleet.ownerId) {
+          if (worldHasOwner(currentWorld) && currentWorld.ownerId !== fleet.ownerId) {
             delay = this.setup.rules.warping.leaveEnemyWorldDelay;
           }
 
           const targetWorld = worlds[order.targetWorldId];
 
           return {
-            notifications: (timestamp) => (worldhasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) ? [{
+            notifications: (timestamp) => (worldHasOwner(targetWorld) && targetWorld.ownerId !== fleet.ownerId) ? [{
               type: 'ENEMY_WARP_IN_DETECTED',
               worldId: order.targetWorldId,
               playerId: targetWorld.ownerId,

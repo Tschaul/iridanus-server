@@ -45,6 +45,7 @@ export const scoringTestMap: GameState = {
     worlds: {
       "w1": {
         ...dummyReadyWorld,
+        population: {p1: 25},
         id: "w1",
         ownerId: "p1",
       },
@@ -52,6 +53,7 @@ export const scoringTestMap: GameState = {
         ...dummyReadyWorld,
         id: "w2",
         ownerId: "p2",
+        population: {p2: 25},
       }
     },
     gates: {

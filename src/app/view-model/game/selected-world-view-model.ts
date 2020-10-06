@@ -1,6 +1,6 @@
 import { GameViewModel } from "./game-view-model";
 import { computed } from "mobx";
-import { worldhasOwner, World } from "../../../shared/model/v1/world";
+import { worldHasOwner, World } from "../../../shared/model/v1/world";
 import { Fleet } from "../../../shared/model/v1/fleet";
 import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { GameData } from "./game-data";

@@ -12,6 +12,7 @@ import { GameSetupProvider } from "../../game-setup-provider";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 import { transferCargoToWorld } from "../../actions/fleet/transfer-cargo-to-world";
+import { worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class BeginTransferingCargoEventQueue implements GameEventQueue {
@@ -31,30 +32,36 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
     this.upcomingEvent$ = combineLatest([
       readyFleetWithStarCargoMissionOrder$,
       this.cargo.metalPotentialByPlayer$,
-      this.cargo.populationPotentialByPlayer$,
       this.worlds.byId$
     ]).pipe(
-      map(([waitingFleets, metalPotential, populationPotential, worlds]) => {
+      map(([waitingFleets, metalPotential, worlds]) => {
 
         const fleet = waitingFleets.find(fleet => {
 
-          if (fleet.orders.length) {
+          const worldFrom = worlds[fleet.fromWorldId];
+          const worldTo = worlds[fleet.toWorldId];
+
+          if (
+            fleet.orders.length
+            || !worldHasOwner(worldFrom)
+            || worldFrom.ownerId !== fleet.ownerId
+            || !worldHasOwner(worldTo)
+            || worldTo.ownerId !== fleet.ownerId
+          ) {
             return false;
           }
 
           const cargo = cargoAmounts(
-            worlds[fleet.fromWorldId],
-            worlds[fleet.toWorldId],
+            worldFrom,
+            worldTo,
             metalPotential[fleet.ownerId],
-            populationPotential[fleet.ownerId],
             fleet.ships,
           )
-          
+
           const reverseCargo = cargoAmounts(
-            worlds[fleet.toWorldId],
-            worlds[fleet.fromWorldId],
+            worldTo,
+            worldFrom,
             metalPotential[fleet.ownerId],
-            populationPotential[fleet.ownerId],
             fleet.ships,
           )
 
@@ -69,10 +76,9 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
             happen: (timestamp: number) => {
 
               const cargo = cargoAmounts(
-                worlds[fleet.fromWorldId],
-                worlds[fleet.toWorldId],
+                worlds[fleet.fromWorldId] as WorldWithOwner,
+                worlds[fleet.toWorldId] as WorldWithOwner,
                 metalPotential[fleet.ownerId],
-                populationPotential[fleet.ownerId],
                 fleet.ships,
               )
 

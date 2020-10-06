@@ -10,6 +10,7 @@ import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-p
 import { GameSetupProvider } from "../../game-setup-provider";
 import { calculatePopulationGrowthDelay } from "./growth-dealy-helper";
 import { worldStartGrowing } from "../../actions/world/start-growing";
+import { totalPopulation } from "../../../shared/model/v1/world";
 
 @injectable()
 export class WorldStartGrowingEventQueue implements GameEventQueue {
@@ -17,19 +18,27 @@ export class WorldStartGrowingEventQueue implements GameEventQueue {
 
   constructor(
     private worlds: WorldProjector,
-    private time: TimeProjector,
-    private setup: GameSetupProvider) {
+    private setup: GameSetupProvider,
+    private random: RandomNumberGenerator) {
 
     const startGrowingWorld$ = this.worlds.byId$.pipe(
       map((worldsById) => {
 
         const worlds = Object.values(worldsById);
 
-        return worlds.find(world =>
-          'populationGrowthStatus' in world
-          && world.populationGrowthStatus === 'NOT_GROWING'
-          && world.population > 0
-          && world.population < world.populationLimit
+        return worlds.find(world => {
+          if ('populationGrowthStatus' in world
+            && totalPopulation(world) > 0
+            && totalPopulation(world) < world.populationLimit) {
+            if (world.populationGrowthStatus === 'NOT_GROWING') {
+              return true;
+            } else if (world.populationGrowthStatus === 'GROWING'
+              && world.growingPopulation !== totalPopulation(world)) {
+              return true;
+            }
+          }
+        }
+
         )
       })
     )
@@ -42,10 +51,11 @@ export class WorldStartGrowingEventQueue implements GameEventQueue {
         return {
           happen: (timestamp: number) => {
 
-            const nextMetalMinedTimestamp = timestamp + calculatePopulationGrowthDelay(world, this.setup.rules.population.minimumPopulationGrowthDelay);
+            const nextPopulationGrowthTimestamp = timestamp
+              + calculatePopulationGrowthDelay(world, this.setup.rules.population.minimumPopulationGrowthDelay) * this.random.exponential();
 
             return [
-              worldStartGrowing(world.id, nextMetalMinedTimestamp)
+              worldStartGrowing(world.id, nextPopulationGrowthTimestamp, totalPopulation(world))
             ]
           }
         }

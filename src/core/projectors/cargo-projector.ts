@@ -9,7 +9,7 @@ import { TransferingCargoFleet, WaitingForCargoFleet } from "../../shared/model/
 import { floydWarshall } from "../../shared/math/path-finding/floydWarshall";
 import { Gates } from "../../shared/model/v1/universe";
 import { WorldProjector } from "./world-projector";
-import { World, worldhasOwner } from "../../shared/model/v1/world";
+import { World, worldHasOwner } from "../../shared/model/v1/world";
 import { generatePotential } from "../../shared/math/path-finding/potential";
 import equal from "deep-equal";
 
@@ -83,7 +83,7 @@ export class CargoProjector {
       const attractivity: { [worldId: string]: number } = {}
 
       for (const world of Object.values(worldsById)) {
-        if (worldhasOwner(world) && world.ownerId === playerId) {
+        if (worldHasOwner(world) && world.ownerId === playerId) {
           attractivity[world.id] = Math.max(world.industry - world.metal / 2, 0)
         }
       }
@@ -93,35 +93,5 @@ export class CargoProjector {
     
     return result;
   }), distinctUntilChanged(equal))
-
-
-  public populationPotentialByPlayer$: Observable<{ [playerId: string]: { [worldId: string]: number } }> = combineLatest([
-    this.cargoDistancesByPlayer$,
-    this.worlds.byId$
-  ]).pipe(map(([cargoDistances, worldsById]) => {
-
-    const result: { [playerId: string]: { [worldId: string]: number } } = {}
-
-    for (const playerId of Object.getOwnPropertyNames(cargoDistances)) {
-
-      const attractivity: { [worldId: string]: number } = {}
-
-      for (const world of Object.values(worldsById)) {
-        if (worldhasOwner(world) && world.ownerId === playerId) {
-          attractivity[world.id] = this.calculatePopulationAttractivity(world)
-        }
-      }
-
-      result[playerId] = generatePotential(attractivity, cargoDistances[playerId])
-    }
-
-    return result;
-  }), distinctUntilChanged(equal))
-
-  private calculatePopulationAttractivity(world: World): number {
-
-    return 20 * (world.populationLimit - world.population) / world.populationLimit;
-
-  }
 
 }

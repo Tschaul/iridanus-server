@@ -76,7 +76,7 @@ export class GameStats {
         stats.industry += world.industry;
         stats.metal += world.metal;
         stats.mines += world.mines;
-        stats.population += world.population;
+        stats.population += world.population[world.ownerId];
       }
     })
 
@@ -140,8 +140,12 @@ export class GameStats {
 
       let value = 0;
 
-      if (property !== 'ships' && visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
-        value += world[property]
+      if (property === 'metal' && visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
+        value += world.metal
+      }
+
+      if (property === 'population' && visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
+        value += world.population[world.ownerId]
       }
 
       const fleetsAtWorld = this.gameData.fleetsByWorldId[world.id] || [];
@@ -250,7 +254,7 @@ export class GameStats {
       let value = 0;
 
       if (visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
-        value += world.population - world.industry - world.mines;
+        value += world.population[world.ownerId] - world.industry - world.mines;
       }
 
       const fleetsAtWorld = this.gameData.fleetsByWorldId[world.id] || [];

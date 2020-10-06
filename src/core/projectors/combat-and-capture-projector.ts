@@ -4,7 +4,7 @@ import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
 import { Fleet, ReadyFleetBase, FiringFleet, FleetAtWorld, fleetIsAtWorld } from "../../shared/model/v1/fleet";
-import { World, FiringWorld, WorldWithOwner, worldhasOwner, WorldBeingCaptured } from "../../shared/model/v1/world";
+import { World, FiringWorld, WorldWithOwner, worldHasOwner, WorldBeingCaptured } from "../../shared/model/v1/world";
 import equal from 'deep-equal';
 
 @injectable()
@@ -39,7 +39,7 @@ export class CombatAndCaptureProjector {
       shareReplay(1)
     )
 
-    this.playersAtWorldById$ = combineLatest(this.worlds.byId$, this.fleets.byId$).pipe(
+    this.playersAtWorldById$ = combineLatest([this.worlds.byId$, this.fleets.byId$]).pipe(
       map(([worldsById, fleetsById]) => {
 
         const fleets = Object.values(fleetsById);
@@ -66,7 +66,7 @@ export class CombatAndCaptureProjector {
       shareReplay(1)
     )
 
-    this.nextStartCapturingWorld$ = combineLatest(this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$).pipe(
+    this.nextStartCapturingWorld$ = combineLatest([this.worlds.byId$, this.playersAtWorldById$, this.fleets.byCurrentWorldId$]).pipe(
       map(([worldsById, playersAtWorldById, fleetsByWorldId]) => {
         const worldsNotBeingCaptured = Object.values(worldsById).filter(world => world.captureStatus === 'NOT_BEING_CAPTURED');
 
@@ -118,7 +118,7 @@ export class CombatAndCaptureProjector {
   private getCapturingPlayer(world: World, playersAtWorldById: { [k: string]: string[] }, fleetsByWorldId: { [k: string]: Fleet[] }) {
     const players = playersAtWorldById[world.id] || [];
 
-    if (!worldhasOwner(world)) {
+    if (!worldHasOwner(world)) {
       return null
     }
 
@@ -149,17 +149,17 @@ export class CombatAndCaptureProjector {
       }
     }
 
-    for (const world of worlds) {
-      if (worldhasOwner(world)) {
-        const value = playersByWorldId[world.id];
-        if (!value) {
-          playersByWorldId[world.id] = [world.ownerId];
-        }
-        else if (value.indexOf(world.ownerId) === -1) {
-          value.push(world.ownerId);
-        }
-      }
-    }
+    // for (const world of worlds) {
+    //   if (worldHasOwner(world)) {
+    //     const value = playersByWorldId[world.id];
+    //     if (!value) {
+    //       playersByWorldId[world.id] = [world.ownerId];
+    //     }
+    //     else if (value.indexOf(world.ownerId) === -1) {
+    //       value.push(world.ownerId);
+    //     }
+    //   }
+    // }
 
     return playersByWorldId;
   }

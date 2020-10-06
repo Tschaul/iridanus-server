@@ -10,7 +10,7 @@ import { GameInfo } from "../shared/model/v1/game-info";
 import { GameMap } from "../shared/model/v1/game-map";
 import { GameState } from "../shared/model/v1/state";
 import produce from "immer";
-import { worldhasOwner } from "../shared/model/v1/world";
+import { worldHasOwner } from "../shared/model/v1/world";
 import { Clock } from "../core/infrastructure/clock";
 import { Logger } from "../core/infrastructure/logger";
 import { Universe } from "../shared/model/v1/universe";
@@ -183,7 +183,7 @@ export class GameRunner {
         })
         Object.getOwnPropertyNames(state.worlds).forEach(worldId => {
           const world = state.worlds[worldId];
-          if (worldhasOwner(world) && world.ownerId === seat) {
+          if (worldHasOwner(world) && world.ownerId === seat) {
             if (player) {
               world.ownerId = player;
               world.worldDiscoveredNotificationSent = true;

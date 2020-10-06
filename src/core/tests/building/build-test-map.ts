@@ -16,7 +16,7 @@ export const buildTestMap: GameState = {
         industry: 5,
         metal: 5,
         ownerId: "p1",
-        population: 25,
+        population: { p1: 25 },
       },
     },
     gates: {

@@ -7,7 +7,7 @@ import { Fleet, fleetIsAtWorld } from "../shared/model/v1/fleet";
 import { makeConfig } from "../core/setup/simple-config";
 import { generatePotential } from "../shared/math/path-finding/potential";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
-import { worldhasOwner } from "../shared/model/v1/world";
+import { worldHasOwner } from "../shared/model/v1/world";
 
 // const modela: IModel = {
 //   optimize: "production",
@@ -95,7 +95,9 @@ let totalShips = 0;
 
 for (const world of worlds) {
 
-  if (!worldhasOwner(world) || world.ownerId === playerId) {
+  if (!worldHasOwner(world) || world.ownerId === playerId) {
+
+    const population = worldHasOwner(world) ? world.population[world.ownerId] : 0;
 
     totalIndustry += world.industry;
 
@@ -106,8 +108,8 @@ for (const world of worlds) {
     model.constraints['delta_metal_' + world.id] = { min: -1 * world.metal }
 
     // free and occupied living space
-    model.constraints['free_living_space_' + world.id] = { max: (world.populationLimit - world.population) * timeFrame }
-    model.constraints['occupied_living_space_' + world.id] = { max: world.population * timeFrame }
+    model.constraints['free_living_space_' + world.id] = { max: (world.populationLimit - population) * timeFrame }
+    model.constraints['occupied_living_space_' + world.id] = { max: population * timeFrame }
 
     // run industry option
     model.variables['run_industry_' + world.id] = {

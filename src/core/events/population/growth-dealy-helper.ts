@@ -1,6 +1,8 @@
-import { World } from "../../../shared/model/v1/world";
+import { totalPopulation, World } from "../../../shared/model/v1/world";
 
 export function calculatePopulationGrowthDelay(world: World, minimumPopulationGrowthDelay: number) {
-  const growthRate = 2 * world.population * (world.populationLimit - world.population) / world.populationLimit;
+  const population = totalPopulation(world);
+  const growthRate = 2 * population * (world.populationLimit - population) / world.populationLimit;
+  console.log({population, growthRate, limit: world.populationLimit})
   return minimumPopulationGrowthDelay / growthRate;
 }

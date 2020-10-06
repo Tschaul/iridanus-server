@@ -6,7 +6,7 @@ import { WaitingForCargoFleet } from "../../../shared/model/v1/fleet";
 import { TimeProjector } from "../../projectors/time-projector";
 import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 import { fleetReady } from "../../actions/fleet/fleet-ready";
 import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 
@@ -45,8 +45,8 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
           const fromWorld = worlds[fleet.fromWorldId];
           const toWorld = worlds[fleet.toWorldId];
 
-          return (worldhasOwner(fromWorld) && fromWorld.ownerId !== fleet.ownerId)
-            || (worldhasOwner(toWorld) && toWorld.ownerId !== fleet.ownerId)
+          return (worldHasOwner(fromWorld) && fromWorld.ownerId !== fleet.ownerId)
+            || (worldHasOwner(toWorld) && toWorld.ownerId !== fleet.ownerId)
             || !!fleet.orders.length
             || otherPlayerAtWorld(fleet.fromWorldId, fleet.ownerId)
             || otherPlayerAtWorld(fleet.toWorldId, fleet.ownerId)

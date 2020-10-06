@@ -9,7 +9,7 @@ import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-popu
 import { waitForCargo } from "../../actions/fleet/wait-for-cargo";
 import { fleetReady } from "../../actions/fleet/fleet-ready";
 import { WorldProjector } from "../../projectors/world-projector";
-import { worldhasOwner } from "../../../shared/model/v1/world";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 import { transferCargoToWorld } from "../../actions/fleet/transfer-cargo-to-world";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { Action } from "../../actions/action";
@@ -42,7 +42,7 @@ export class EndTransferingCargoEventQueue implements GameEventQueue {
 
               const world = worldsById[fleet.toWorldId]
 
-              if (worldhasOwner(world) && world.ownerId !== fleet.ownerId) {
+              if (worldHasOwner(world) && world.ownerId !== fleet.ownerId) {
 
                 const arrivingTimestamp = fleet.arrivingTimestamp + this.setup.rules.warping.warpToWorldDelay;
 
@@ -53,7 +53,7 @@ export class EndTransferingCargoEventQueue implements GameEventQueue {
 
               let captureAction: Action[] = []
 
-              if (!worldhasOwner(world) && fleet.cargoPopulation > 0) {
+              if (!worldHasOwner(world) && fleet.cargoPopulation > 0) {
                 captureAction = [
                   captureWorld(world.id, fleet.ownerId)
                 ]
