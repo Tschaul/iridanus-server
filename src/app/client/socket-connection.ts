@@ -6,13 +6,14 @@ import { filter, take, map } from "rxjs/operators";
 import { makeId } from "./make-id";
 import { Command } from "../../shared/messages/commands/commands";
 import { response } from "express";
+import { Credentials } from "../../shared/messages/credentials";
 
 @injectable()
 export class SocketConnection {
 
   socket: WebSocket;
 
-  private requests$$ = new ReplaySubject<RequestMessage>(1);
+  private requests$$ = new ReplaySubject<RequestMessage>();
   private responses$$ = new ReplaySubject<ResponseMessage>(1);
   private isConnected$$ = new ReplaySubject<boolean>(1);
 
@@ -44,12 +45,13 @@ export class SocketConnection {
     this.requests$$.next(msg);
   }
 
-  public authenticate(userId: string, password: string) {
+  public authenticate(userId: string, credentials: Credentials): Promise<string | undefined> {
     const requestId = makeId();
+    console.log('authenticate',{userId, credentials})
     this.send({
       type: 'AUTHENTICATE',
       userId,
-      password,
+      credentials,
       requestId
     })
     return new Promise((resolve, reject) => {
@@ -61,7 +63,7 @@ export class SocketConnection {
         take(1)
       ).subscribe(response => {
         if (response.type === 'AUTHENTICATION_SUCCESSFULL') {
-          resolve();
+          resolve(response.token);
         } else {
           reject('Authentication was not successfull');
         }

@@ -1,10 +1,16 @@
 export type User = UnconfirmedUser | ConfirmedUser;
 
+export interface Token {
+  name: string,
+  validUntil: number
+}
+
 export interface UserBase {
   id: string;
   email: string;
   passwordHash: string;
   salt: string;
+  authTokens: Token[]
 }
 
 export interface UnconfirmedUser extends UserBase {

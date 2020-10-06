@@ -7,7 +7,18 @@ export class UserManagementService {
   constructor(private connection: SocketConnection) {}
 
   async login(userId: string, password: string) {
-    await this.connection.authenticate(userId, password);
+    return await this.connection.authenticate(userId, {
+      type: 'password',
+      password,
+      createToken: true
+    });
+  }
+
+  async useAuthToken(userId: string, token: string) {
+    return await this.connection.authenticate(userId, {
+      type: 'token',
+      token
+    },);
   }
 
   async signUp(userId: string, email: string, password: string) {

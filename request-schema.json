@@ -3,8 +3,48 @@
     "anyOf": [
         {
             "properties": {
-                "password": {
-                    "type": "string"
+                "credentials": {
+                    "anyOf": [
+                        {
+                            "properties": {
+                                "createToken": {
+                                    "type": "boolean"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "enum": [
+                                        "password"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "password",
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "token": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "enum": [
+                                        "token"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "type"
+                            ],
+                            "type": "object"
+                        }
+                    ]
                 },
                 "requestId": {
                     "type": "string"
@@ -20,7 +60,7 @@
                 }
             },
             "required": [
-                "password",
+                "credentials",
                 "requestId",
                 "type",
                 "userId"

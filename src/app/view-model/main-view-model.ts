@@ -1,11 +1,13 @@
 import { GameViewModel } from "./game/game-view-model";
-import { observable, computed, when } from "mobx";
+import { observable, computed, when, autorun } from "mobx";
 import { WelcomeViewModel } from "./welcome/welcome-view-model";
 import { LobbyViewModel } from "./lobby/lobby-view-model";
 import { ConnectionStatus } from "./connection-status";
 import { ServerEnvironment } from "./server-environment";
 
 export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
+
+const IRIDANUS_GAME_ID_LOCAL_STORAGE_LOCATION = 'iridanus_selected_game_id'
 
 export class MainViewModel {
 
@@ -20,14 +22,26 @@ export class MainViewModel {
         this.environment.initialize();
         await this.parseLocation();
 
-        when(() => this.environment.environmentInfo.developmentMode, () =>{
+        when(() => this.environment.environmentInfo.developmentMode, () => {
 
-          this.welcomeViewModel.username = 'foobar';
-          this.welcomeViewModel.password = '123456';
-          this.welcomeViewModel.login();
+          // this.welcomeViewModel.username = 'foobar';
+          // this.welcomeViewModel.password = '123456';
+          // this.welcomeViewModel.login();
 
-          this.lobbyViewModel.selectedGameId = '7fym721abk';
+          // this.lobbyViewModel.selectedGameId = '7fym721abk';
+          // this.lobbyViewModel.viewGame();
+        })
+
+        const gameId = window.localStorage.getItem(IRIDANUS_GAME_ID_LOCAL_STORAGE_LOCATION);
+        if (gameId){
+          this.lobbyViewModel.selectedGameId = gameId;
           this.lobbyViewModel.viewGame();
+        }
+
+        autorun((gameId) => {
+          if (this.activeGameId){
+            window.localStorage.setItem(IRIDANUS_GAME_ID_LOCAL_STORAGE_LOCATION, this.activeGameId)
+          }
         })
 
       }
@@ -59,6 +73,11 @@ export class MainViewModel {
   public gameViewModel = new GameViewModel(this);
   public welcomeViewModel = new WelcomeViewModel(this);
   public lobbyViewModel = new LobbyViewModel(this);
+
+  logout() {
+    this.welcomeViewModel.logout();
+    this.loggedInUserId = null;
+  }
 
   private async parseLocation() {
     const hash = location.hash;

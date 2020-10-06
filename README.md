@@ -5,11 +5,8 @@ Server for Iridanus
 
 # TODOS
 
-- Redo selected word view (no table for metal and population)
-
 - stay logged in
 - CTRL to select multiple fleets
-
 
 # Bugs
 

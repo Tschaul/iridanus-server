@@ -1,10 +1,11 @@
 import { Command } from "./commands/commands";
+import { Credentials } from "./credentials";
 import { Subscription } from "./subscriptions";
 
 export type RequestMessage = {
   type: 'AUTHENTICATE',
   userId: string,
-  password: string,
+  credentials: Credentials,
   requestId: string
 } | {
   type: 'COMMAND',

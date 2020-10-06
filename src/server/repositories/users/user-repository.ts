@@ -5,6 +5,7 @@ import { CryptoWrapper } from "../../infrastructure/crypto/crypto-wrapper";
 import { Initializer } from "../../infrastructure/initialisation/initializer";
 import { Clock } from "../../../core/infrastructure/clock";
 import { Environment } from "../../environment/environment";
+import { makeId } from "../../../app/client/make-id";
 
 const USER_DATA_PATH = 'users/users.json';
 
@@ -48,7 +49,8 @@ export class UserRepository {
           passwordHash,
           salt,
           emailConfirmed: false,
-          emailConfirmationToken: token
+          emailConfirmationToken: token,
+          authTokens: []
         }
       }
     })
@@ -74,7 +76,8 @@ export class UserRepository {
           passwordHash: user.passwordHash,
           salt: user.salt,
           passwordResetToken: '',
-          passwortResetTokenValidUntil: 0
+          passwortResetTokenValidUntil: 0,
+          authTokens: []
         }
       }
     })
@@ -109,7 +112,7 @@ export class UserRepository {
         throw new Error(`email for user id '${id}' is not yet activated`)
       }
       const confirmedUser = data.users[id] as ConfirmedUser;
-      if (confirmedUser.passwordResetToken !== token || confirmedUser.passwortResetTokenValidUntil < now ) {
+      if (confirmedUser.passwordResetToken !== token || confirmedUser.passwortResetTokenValidUntil < now) {
         throw new Error(`password reset token for user '${id}' is not valid`)
       }
       const salt = await this.crypto.secureRandom();
@@ -125,7 +128,7 @@ export class UserRepository {
     })
   }
 
-  async authenticateUser(id: string, password: string) {
+  async authenticateUserWithPassword(id: string, password: string) {
     const data = await this.handle.read();
     if (!data.users[id] || !data.users[id].emailConfirmed) {
       return false;
@@ -135,6 +138,65 @@ export class UserRepository {
     const passwordHash = this.crypto.hashPassword(password, data.users[id].salt, pepper);
 
     return passwordHash === data.users[id].passwordHash;
+  }
+
+  async authenticateUserWithToken(id: string, token: string) {
+    const data = await this.handle.read();
+    if (!data.users[id] || !data.users[id].emailConfirmed) {
+      return false;
+    }
+
+    const user = data.users[id];
+
+    const authToken = user.authTokens.find(it => it.name === token);
+
+    if (!authToken || authToken.validUntil < this.clock.getTimestamp()) {
+      return false;
+    }
+    return true;
+  }
+
+  async renewToken(id: string, token: string) {
+
+    await this.handle.do(async (data) => {
+      if (!data.users[id]) {
+        throw new Error(`user id '${id}' does not exist`)
+      }
+      if (!data.users[id].emailConfirmed) {
+        throw new Error(`email for user id '${id}' is not yet activated`)
+      }
+      if (!data.users[id].authTokens.some(it => it.name === token)) {
+        throw new Error(`token '${token}' for user id '${id}' not found`)
+      }
+      return (data) => {
+        const user = data.users[id] as ConfirmedUser;
+        const authToken = user.authTokens.find(it => it.name === token);
+        authToken!.validUntil = this.clock.getTimestamp() + this.environment.tokenExpirePeriod;
+      }
+    })
+  }
+
+  async createToken(id: string) {
+
+    const token = makeId();
+
+    await this.handle.do(async (data) => {
+      if (!data.users[id]) {
+        throw new Error(`user id '${id}' does not exist`)
+      }
+      if (!data.users[id].emailConfirmed) {
+        throw new Error(`email for user id '${id}' is not yet activated`)
+      }
+      return (data) => {
+        const user = data.users[id] as ConfirmedUser;
+        user.authTokens.push({
+          name: token,
+          validUntil: this.clock.getTimestamp() + this.environment.tokenExpirePeriod
+        })
+      }
+    })
+
+    return token;
   }
 
 }

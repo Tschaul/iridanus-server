@@ -25,6 +25,10 @@ export class WelcomeScreen extends React.Component<{
     }
   }
 
+  componentDidMount() {
+    this.props.vm.focus();
+  }
+
   constructor(props: any) {
     super(props);
     this.state = {

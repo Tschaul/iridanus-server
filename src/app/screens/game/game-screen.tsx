@@ -100,8 +100,8 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
           <div style={{ display: 'flex' }}>
             <TopBar
               vm={this.props.vm.topBarViewModel}
+              onToggleBurgerButton={this.handleToggleMenu}
             />
-            <Button onClick={this.handleToggleMenu} style={{ position: 'absolute', right: 6, top: 12 }}>≡</Button>
           </div>
 
           <div style={{

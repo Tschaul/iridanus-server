@@ -4,6 +4,7 @@ export class Environment {
   mailSettings: MailSettings;
   developmentMode: boolean;
   baseUrl: string;
+  tokenExpirePeriod: number;
 }
 
 export interface MailSettings {

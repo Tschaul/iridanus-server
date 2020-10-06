@@ -45,4 +45,9 @@ export class TopBarViewModel {
     this.gameStats.highlightedStat = type;
   }
 
+  public backToLobby(){
+    this.gameOrders.saveOrderDrafts();
+    this.gameViewModel.backToLobby();
+  }
+
 }

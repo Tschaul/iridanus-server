@@ -61,20 +61,36 @@ export class ConnectionHandler {
         case 'AUTHENTICATE':
           this.queue.add(async () => {
             await this.initializer.initializeAllRequested();
-            const authResult =  await  this.userRepository.authenticateUser(message.userId, message.password)
-              if (authResult) {
-                this.authenticatedUserId = message.userId;
-                this.sendfn({
-                  type: 'AUTHENTICATION_SUCCESSFULL',
-                  requestId: message.requestId
-                })
-              } else {
-                this.sendfn({
-                  type: 'AUTHENTICATION_NOT_SUCCESSFULL',
-                  requestId: message.requestId
-                })
-              }
-            })
+            let authResult = false;
+            let token: string | undefined = undefined;
+            switch (message.credentials.type) {
+              case 'password':
+                authResult = await this.userRepository.authenticateUserWithPassword(message.userId, message.credentials.password)
+                if (authResult && message.credentials.createToken) {
+                  token = await this.userRepository.createToken(message.userId)
+                }
+                break;
+              case 'token':
+                authResult = await this.userRepository.authenticateUserWithToken(message.userId, message.credentials.token)
+                if (authResult) {
+                  await this.userRepository.renewToken(message.userId, message.credentials.token)
+                }
+                break;
+            }
+            if (authResult) {
+              this.authenticatedUserId = message.userId;
+              this.sendfn({
+                type: 'AUTHENTICATION_SUCCESSFULL',
+                requestId: message.requestId,
+                token
+              })
+            } else {
+              this.sendfn({
+                type: 'AUTHENTICATION_NOT_SUCCESSFULL',
+                requestId: message.requestId
+              })
+            }
+          })
           break;
         case 'BEGIN_SUBSCRIPTION':
           this.subscriptionHandler.newSubscription(

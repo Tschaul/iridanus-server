@@ -143,6 +143,7 @@ export class LobbyScreen extends React.Component<{
         </div>
         <br />
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button onClick={this.handleLogout} spaceRight>LOGOUT</Button>
           <Button onClick={this.handleCreateGameClick}>CREATE GAME</Button>
         </div>
       </Panel>
@@ -151,7 +152,14 @@ export class LobbyScreen extends React.Component<{
 
   @autobind
   handleCreateGameClick() {
-    this.props.vm.createGame();
+    if (window.confirm("Click ok to create a new game")) {
+      this.props.vm.createGame();
+    }
+  }
+
+  @autobind
+  handleLogout() {
+    this.props.vm.logout();
   }
 
   renderGameRow(game: GameInfo): JSX.Element {

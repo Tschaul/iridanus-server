@@ -31,7 +31,8 @@ function extractEnvironment() {
     millisecondsPerDay: envNumber('IRIDANUS_MILLISECONDS_PER_DAY', true),
     mailSettings,
     baseUrl: envString('IRIDANUS_BASE_URL'),
-    developmentMode: envBoolean('IRIDANUS_DEVELOPMENT_MODE')
+    developmentMode: envBoolean('IRIDANUS_DEVELOPMENT_MODE'),
+    tokenExpirePeriod: envNumber('IRIDANUS_TOKEN_EXPIRE_PERIOD', true),
   }
 
   if (useTestMailAccount) {

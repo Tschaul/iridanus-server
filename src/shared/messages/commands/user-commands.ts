@@ -30,3 +30,10 @@ export interface ResetPasswordCommand {
   token: string;
   password: string;
 }
+
+export interface CreateAuthTokenCommand {
+  type: 'USER/CREATE_AUTH_TOKEN',
+  id: string;
+  token: string;
+  password: string;
+}
