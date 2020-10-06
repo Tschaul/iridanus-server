@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import produce from "immer";
 import { runMap } from "../test-helper";
 
-describe.only("visibility", () => {
+describe("visibility", () => {
 
   it("worlds are discovered", async () => {
 

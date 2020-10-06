@@ -1,17 +1,16 @@
 import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
 import { FleetProjector } from "./fleet-projector";
-import { combineLatest, zip, Observable } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { WorldProjector } from "./world-projector";
-import { map, switchMap, distinctUntilChanged, shareReplay } from "rxjs/operators";
+import { map, shareReplay } from "rxjs/operators";
 import { worldhasOwner, World } from "../../shared/model/v1/world";
 import { Fleet, FleetInTransit, fleetIsAtWorld, pathOfFleetInTransit } from "../../shared/model/v1/fleet";
 import { GatesProjector } from "./gates-projector";
 import { VisibleWorld, VisibleState, applyFogOfWar } from "../../shared/model/v1/visible-state";
-import { type } from "os";
 import { PlayerProjector } from "./player-projector";
 
-export type WorldVisibility = 'VISIBLE' | 'FOG_OF_WAR' | 'HIDDEN'
+export type WorldVisibility = 'VISIBLE' | 'PRESENT' | 'FOG_OF_WAR' | 'HIDDEN'
 
 export type VisibilityByWorld = { [worldId: string]: WorldVisibility }
 
@@ -26,38 +25,6 @@ export class VisibilityProjector {
     private gates: GatesProjector,
     private players: PlayerProjector
   ) { }
-
-
-  public worldsToRememberFromGlobalRevelationByPlayerId$ = this.worlds.byId$.pipe(
-    map(worldsById => {
-      const result: { [playerId: string]: string[] } = {}
-      for (const world of Object.values(worldsById)) {
-        if (worldhasOwner(world)) {
-          result[world.ownerId] = result[world.ownerId] ?? [];
-          result[world.ownerId].push(world.id)
-        }
-      }
-      return result;
-    }),
-    map((ownedWorldsByPlayer: { [playerId: string]: string[] }) => {
-
-      const allPlayers = Object.getOwnPropertyNames(ownedWorldsByPlayer);
-
-      const allWorldsToRemember = new Set<string>()
-
-      Object.values(ownedWorldsByPlayer).forEach(values =>
-        values.forEach(worldId =>
-          allWorldsToRemember.add(worldId)
-        )
-      )
-
-      const result: { [playerId: string]: string[] } = {}
-      allPlayers.forEach((playerId) => {
-        result[playerId] = [...allWorldsToRemember].filter(it => !ownedWorldsByPlayer[playerId].includes(it))
-      })
-      return result;
-    })
-  )
 
   public visibleUniverseForPlayer(playerId: string): Observable<VisibleState> {
     return combineLatest([
@@ -75,14 +42,15 @@ export class VisibilityProjector {
             || visibilityForPlayer[worldId] === 'FOG_OF_WAR'
         }
 
-        const fleetIsNotVisible = (fleet: FleetInTransit) => {
+        const warpingFleetIsNotVisible = (fleet: FleetInTransit) => {
           const worlds = pathOfFleetInTransit(fleet);
-          return worldIsNotVisible(worlds[0]) || worldIsNotVisible(worlds[1])
+          const playerNotPresentAtWorld = (worldId: string) => visibilityForPlayer[worldId] !== 'PRESENT'
+          return playerNotPresentAtWorld(worlds[0]) && playerNotPresentAtWorld(worlds[1])
         }
 
         Object.values(state.universe.fleets).filter(fleet => fleet.ownerId !== playerId).forEach(fleet => {
 
-          if (!fleetIsAtWorld(fleet) && fleetIsNotVisible(fleet)) {
+          if (!fleetIsAtWorld(fleet) && warpingFleetIsNotVisible(fleet)) {
             delete fleets[fleet.id];
           } else if (fleetIsAtWorld(fleet) && worldIsNotVisible(fleet.currentWorldId)) {
             delete fleets[fleet.id];
@@ -137,13 +105,24 @@ export class VisibilityProjector {
       const allFleets = Object.values(fleetsById);
       const result: VisibilityByPlayerId = {};
 
+      function markWorldPresentForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string) {
+        visibility[playerId] = visibility[playerId] ?? {}
+        visibility[playerId][worldId] = 'PRESENT';
+        allPlayerIds.filter(it => it !== playerId).forEach(id => {
+          visibility[id] = visibility[id] ?? {}
+          if (visibility[id][worldId] !== 'HIDDEN') {
+            visibility[id][worldId] = 'FOG_OF_WAR'
+          }
+        })
+      }
+
       function markWorldVisibleForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string) {
         visibility[playerId] = visibility[playerId] ?? {}
         visibility[playerId][worldId] = 'VISIBLE';
         allPlayerIds.filter(it => it !== playerId).forEach(id => {
           visibility[id] = visibility[id] ?? {}
-          if (visibility[id][worldId] !== 'HIDDEN') {
-            visibility[id][worldId] = 'FOG_OF_WAR'
+          if (!visibility[id][worldId]) {
+            visibility[id][worldId] = 'HIDDEN'
           }
         })
       }
@@ -161,10 +140,10 @@ export class VisibilityProjector {
       allPlayerIds.forEach(playerId => {
         Object.values(worldsById).forEach(world => {
           if (this.worldOwnedByPlayer(world, playerId)) {
-            markWorldVisibleForPlayer(result, world.id, playerId)
+            markWorldPresentForPlayer(result, world.id, playerId)
           }
           if (this.playerHasFleetAtWorld(allFleets, playerId, world)) {
-            markWorldVisibleForPlayer(result, world.id, playerId)
+            markWorldPresentForPlayer(result, world.id, playerId)
           }
           const neighboringWorldIds = gates[world.id];
           if (neighboringWorldIds && neighboringWorldIds.some(id => {
@@ -191,7 +170,7 @@ export class VisibilityProjector {
       for (const playerId of Object.getOwnPropertyNames(visibility)) {
         for (const worldId of Object.getOwnPropertyNames(worldsById)) {
           const world = worldsById[worldId];
-          if (visibility[playerId][worldId] === 'VISIBLE' && !world.worldDiscoveredNotificationSent) {
+          if (['VISIBLE', 'PRESENT'].includes(visibility[playerId][worldId]) && !world.worldDiscoveredNotificationSent) {
             return {
               playerId,
               worldId
