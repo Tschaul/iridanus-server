@@ -4,39 +4,20 @@ import { expect } from 'chai';
 import produce from "immer";
 import { runMap } from "../test-helper";
 
-describe("visibility", () => {
+describe.only("visibility", () => {
 
-  it("warps back and forth remebers world", async () => {
+  it("worlds are discovered", async () => {
 
     const map = produce(visibilityTestMap, draft => {
 
-      draft.universe.fleets["f1"].orders.push({
-        type: 'WARP',
-        targetWorldId: "w2"
-      })
-
-      draft.universe.fleets["f1"].orders.push({
-        type: 'WARP',
-        targetWorldId: "w3"
-      })
-
-      draft.universe.fleets["f1"].orders.push({
-        type: 'WARP',
-        targetWorldId: "w2"
-      })
-
-      draft.universe.fleets["f1"].orders.push({
-        type: 'WARP',
-        targetWorldId: "w1"
-      })
 
     });
 
     const state = await runMap(map);
 
-    expect((state.universe.visibility['p1']['w1']).status).to.equal("VISIBLE")
-    expect((state.universe.visibility['p1']['w2']).status).to.equal("VISIBLE")
-    expect((state.universe.visibility['p1']['w3']).status).to.equal("FOG_OF_WAR")
+    expect((state.universe.worlds['w1']).worldDiscoveredNotificationSent).to.equal(true)
+    expect((state.universe.worlds['w2']).worldDiscoveredNotificationSent).to.equal(true)
+    expect((state.universe.worlds['w3']).worldDiscoveredNotificationSent).to.not.equal(true)
   })
 })
 

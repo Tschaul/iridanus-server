@@ -5,7 +5,7 @@ export const scoringTestMap: GameState = {
   currentTimestamp: 0,
   gameStartTimestamp: 0,
   gameEndTimestamp: 100000,
-  scorings: {
+  players: {
     "p1": {
       influence: 0,
       lastScoringTimestamp: 0,
@@ -20,10 +20,6 @@ export const scoringTestMap: GameState = {
     },
   },
   universe: {
-    visibility: {
-      p1: {},
-      p2: {}
-    },
     fleets: {
       "f1": {
         id: "f1",

@@ -30,7 +30,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
               const activeIndustry = Math.min(world.population, world.industry)
               const delay = this.setup.rules.building.buildShipDelay * shipsAmount / activeIndustry;
               return [
-                buildShips(world.id, timestamp + delay, shipsAmount),
+                buildShips(world.id, timestamp + delay, shipsAmount, activeIndustry),
                 giveOrTakeWorldMetal(world.id, -1 * shipsAmount),
               ];
 

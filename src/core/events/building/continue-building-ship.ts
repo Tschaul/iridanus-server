@@ -19,7 +19,7 @@ export class ContinueOrStopBuildingShipEventQueue implements GameEventQueue {
       map((worlds) => {
         const world = worlds.find(world => {
           const activeIndustry = calculateActiveIndustry(world);
-          const currentlyBuildingIndustry = calculateActiveIndustry(world.buildingShipsLastState)
+          const currentlyBuildingIndustry = world.buildingShipsActiveIndustry
           return activeIndustry !== currentlyBuildingIndustry;
         })
 
@@ -35,7 +35,7 @@ export class ContinueOrStopBuildingShipEventQueue implements GameEventQueue {
 
                 const newDelay = this.setup.rules.building.buildShipDelay * world.buildingShipsAmount / activeIndustry;
 
-                const currentlyBuildingIndustry = calculateActiveIndustry(world.buildingShipsLastState);
+                const currentlyBuildingIndustry = world.buildingShipsActiveIndustry;
 
                 const oldDelay = this.setup.rules.building.buildShipDelay * world.buildingShipsAmount / currentlyBuildingIndustry;
 
@@ -44,7 +44,7 @@ export class ContinueOrStopBuildingShipEventQueue implements GameEventQueue {
                 const adjustedNewDelay = newDelay * (1 - progress)
 
                 return [
-                  buildShips(world.id, timestamp + adjustedNewDelay, world.buildingShipsAmount),
+                  buildShips(world.id, timestamp + adjustedNewDelay, world.buildingShipsAmount, activeIndustry),
                 ];
               } else {
 

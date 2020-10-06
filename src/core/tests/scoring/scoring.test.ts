@@ -27,7 +27,7 @@ describe("scoring", () => {
 
     expect(state.currentTimestamp).not.to.equal(state.gameEndTimestamp);
 
-    expect(state.scorings["p1"].score).to.be.greaterThan(state.scorings["p2"].score)
+    expect(state.players["p1"].score).to.be.greaterThan(state.players["p2"].score)
 
   })
   

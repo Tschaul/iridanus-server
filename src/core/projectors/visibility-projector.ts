@@ -138,19 +138,22 @@ export class VisibilityProjector {
       const result: VisibilityByPlayerId = {};
 
       function markWorldVisibleForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string) {
-        visibility[worldId][playerId] = 'VISIBLE';
+        visibility[playerId] = visibility[playerId] ?? {}
+        visibility[playerId][worldId] = 'VISIBLE';
         allPlayerIds.filter(it => it !== playerId).forEach(id => {
-          if (visibility[worldId][id] !== 'HIDDEN') {
-            visibility[worldId][id] = 'FOG_OF_WAR'
+          visibility[id] = visibility[id] ?? {}
+          if (visibility[id][worldId] !== 'HIDDEN') {
+            visibility[id][worldId] = 'FOG_OF_WAR'
           }
         })
       }
 
       function markWorldHiddenForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string) {
-        visibility[worldId][playerId] = 'HIDDEN';
-        allPlayerIds.filter(it => it !== playerId).forEach(id => {
-          if (!visibility[worldId][id]) {
-            visibility[worldId][id] = 'HIDDEN'
+        visibility[playerId] = visibility[playerId] ?? {}
+        allPlayerIds.forEach(id => {
+          visibility[id] = visibility[id] ?? {}
+          if (!visibility[id][worldId]) {
+            visibility[id][worldId] = 'HIDDEN'
           }
         })
       }
@@ -174,7 +177,6 @@ export class VisibilityProjector {
         })
       })
 
-
       return result;
     }),
     shareReplay(1),
@@ -189,7 +191,7 @@ export class VisibilityProjector {
       for (const playerId of Object.getOwnPropertyNames(visibility)) {
         for (const worldId of Object.getOwnPropertyNames(worldsById)) {
           const world = worldsById[worldId];
-          if (visibility[playerId][worldId] === 'VISIBLE' && !world.worldDiscoveredNotificationSent){
+          if (visibility[playerId][worldId] === 'VISIBLE' && !world.worldDiscoveredNotificationSent) {
             return {
               playerId,
               worldId

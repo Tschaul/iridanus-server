@@ -123,7 +123,7 @@ export type BuildingShipsWorld = WorldWithOwnerBase & {
     ownerId: string;
     readyTimestamp: number;
     buildingShipsAmount: number;
-    buildingShipsLastState: World;
+    buildingShipsActiveIndustry: number;
 }
 
 export type ReadyWorld = WorldWithOwnerBase & {

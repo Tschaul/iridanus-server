@@ -2,7 +2,7 @@ import { GameState } from "../../../shared/model/v1/state";
 import { dummyReadyWorld } from '../test-helper';
 
 export const cargoTestMap: GameState = {
-  scorings: {
+  players: {
     p1: {
       influence: 0,
       lastScoringTimestamp: 0,
@@ -20,10 +20,6 @@ export const cargoTestMap: GameState = {
   gameStartTimestamp: 0,
   gameEndTimestamp: 3000,
   universe: {
-    visibility: {
-      p1: {},
-      p2: {}
-    },
     fleets: {
       "f1": {
         id: "f1",

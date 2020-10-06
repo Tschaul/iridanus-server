@@ -6,10 +6,11 @@ import { updateWorld } from "./update-world";
 export function buildShips(
   worldId: string,
   readyTimestamp: number,
-  amount: number
+  amount: number,
+  activeIndustry: number
 ): Action {
   return {
-    describe: () => `BuildShips ${JSON.stringify({ worldId, readyTimestamp })}`,
+    describe: () => `BuildShips ${JSON.stringify({ worldId, readyTimestamp, amount, activeIndustry })}`,
     apply: (state: GameState) => {
 
       return updateWorld<ReadyWorld, BuildingShipsWorld>(state, worldId, (oldWorld) => {
@@ -20,7 +21,8 @@ export function buildShips(
           readyTimestamp: readyTimestamp,
           ownerId: oldWorld.ownerId,
           buildingShipsAmount: amount,
-          buildingShipsLastState: oldWorld
+          buildingShipsActiveIndustry: activeIndustry
+
         }
       })
     }
