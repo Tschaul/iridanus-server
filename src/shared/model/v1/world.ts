@@ -10,6 +10,12 @@ export type PopulationByPlayer = {
     [playerId: string]: number
 }
 
+
+export type DominationByPlayerId = {
+    [playerId: string]: number;
+  };
+  
+
 export interface BaseWorldBase {
     id: string;
     metal: number;
@@ -56,8 +62,9 @@ export function baseWorld(world: World): BaseWorld {
 
     result.captureStatus = world.captureStatus
     if (world.captureStatus === 'BEING_CAPTURED') {
-        result.capturingPlayerId = world.capturingPlayerId;
-        result.captureTimestamp = world.captureTimestamp;
+        result.nextConvertedPlayerId = world.nextConvertedPlayerId;
+        result.nextConvertingPlayerId = world.nextConvertingPlayerId;
+        result.nextConversionTimestamp = world.nextConversionTimestamp;
     }
 
     return result;
@@ -106,8 +113,11 @@ export interface WorldNotBeingCaptured {
 
 export interface WorldBeingCaptured {
     captureStatus: 'BEING_CAPTURED',
-    capturingPlayerId: string,
-    captureTimestamp: number,
+    nextConvertingPlayerId: string,
+    nextConvertedPlayerId: string,
+    nextConversionTimestamp: number,
+    lastDomination: DominationByPlayerId,
+    lastPopulation: PopulationByPlayer
 }
 
 export type WorldWithMiningStatus =

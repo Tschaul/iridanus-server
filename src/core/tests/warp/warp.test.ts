@@ -1,6 +1,4 @@
 import { warpTestMap } from "./warp-test-map";
-import { Clock } from "../../infrastructure/clock";
-import { Game } from "../../game";
 
 import { expect } from 'chai';
 import { ReadyFleet } from "../../../shared/model/v1/fleet";

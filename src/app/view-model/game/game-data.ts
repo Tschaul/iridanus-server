@@ -10,9 +10,6 @@ import { FleetAtWorld, fleetIsAtWorld, FleetInTransit, pathOfFleetInTransit } fr
 import { VisibleState } from "../../../shared/model/v1/visible-state";
 import { GameRules } from "../../../shared/model/v1/rules";
 import { Distances } from "../../../shared/model/v1/distances";
-import { Gates } from "../../../shared/model/v1/universe";
-import { distinctUntilChanged } from "rxjs/operators";
-import deepEqual from "deep-equal";
 import { floydWarshall } from "../../../shared/math/path-finding/floydWarshall";
 import { reactionToObservable } from "../../../shared/util/reactionToObservable";
 
@@ -49,7 +46,8 @@ const dummyRules: GameRules = {
     buildShipDelay: 1,
   },
   capture: {
-    captureDelay: 1,
+    populationConversionRate: 1,
+    shipConversionMultiplier: 1,
   },
   combat: {
     integrityDamagePerShip: 1,

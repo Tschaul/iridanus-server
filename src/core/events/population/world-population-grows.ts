@@ -4,11 +4,10 @@ import { injectable } from "inversify";
 import { map } from "rxjs/operators";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { WorldProjector } from "../../projectors/world-projector";
-import { GrowingWorld, pickPopulationOwner, totalPopulation, World } from "../../../shared/model/v1/world";
-import { worldStartGrowing } from "../../actions/world/start-growing";
+import { GrowingWorld, pickPopulationOwner, World } from "../../../shared/model/v1/world";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
-import { calculatePopulationGrowthDelay } from "./growth-dealy-helper";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
+import { worldStopGrowing } from "../../actions/world/stop-growing";
 
 @injectable()
 export class WorldPopulationGrowsEventQueue implements GameEventQueue {
@@ -16,7 +15,6 @@ export class WorldPopulationGrowsEventQueue implements GameEventQueue {
 
   constructor(
     private worlds: WorldProjector,
-    private setup: GameSetupProvider,
     private random: RandomNumberGenerator
   ) {
 
@@ -40,13 +38,9 @@ export class WorldPopulationGrowsEventQueue implements GameEventQueue {
         return {
           timestamp: world.nextPopulationGrowthTimestamp,
           happen: () => {
-
-            const nextPopulationGrowthTimestamp = world.nextPopulationGrowthTimestamp
-              + calculatePopulationGrowthDelay(world, this.setup.rules.population.minimumPopulationGrowthDelay) * this.random.exponential();
-
             return [
-              giveOrTakeWorldPopulation(world.id, 1, pickPopulationOwner(world, random.equal())),
-              worldStartGrowing(world.id, nextPopulationGrowthTimestamp, totalPopulation(world))
+              giveOrTakeWorldPopulation(world.id, 1, pickPopulationOwner(world, this.random.equal())),
+              worldStopGrowing(world.id)
             ]
           }
         }

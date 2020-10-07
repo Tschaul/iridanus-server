@@ -8,7 +8,7 @@ import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { worldHasOwner } from "../../../shared/model/v1/world";
 import { fleetReady } from "../../actions/fleet/fleet-ready";
-import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
+import { CombatProjector } from "../../projectors/combat-projector";
 
 @injectable()
 export class StopCargoMissionEventQueue implements GameEventQueue {
@@ -18,7 +18,7 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
   constructor(
     private readonly fleets: FleetProjector,
     private readonly worlds: WorldProjector,
-    private readonly combat: CombatAndCaptureProjector
+    private readonly combat: CombatProjector
   ) {
 
     const waitingForCargoFleets = this.fleets.allByStatus<WaitingForCargoFleet>('WAITING_FOR_CARGO')

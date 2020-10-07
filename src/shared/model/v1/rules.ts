@@ -3,7 +3,8 @@ export interface GameRules {
     gameEndingScore: number;
   },
   capture: {
-    captureDelay: number;
+    shipConversionMultiplier: number;
+    populationConversionRate: number;
   },
   population: {
     minimumPopulationGrowthDelay: number;

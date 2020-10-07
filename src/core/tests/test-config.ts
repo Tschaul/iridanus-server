@@ -7,7 +7,8 @@ export const testRules: GameRules = {
     gameEndingScore: 1000 * tick,
   },
   capture: {
-    captureDelay: 2.5 * tick,
+    populationConversionRate: 3.5 * tick,
+    shipConversionMultiplier: 5,
   },
   population: {
     minimumPopulationGrowthDelay: 7 * tick

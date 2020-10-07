@@ -1,12 +1,9 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable, combineLatest } from "rxjs";
+import { Observable } from "rxjs";
 import { injectable } from "inversify";
-import { TimeProjector } from "../../projectors/time-projector";
-import { map, withLatestFrom } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
-import { worldStartMining } from "../../actions/world/start-mining";
-import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { calculatePopulationGrowthDelay } from "./growth-dealy-helper";
 import { worldStartGrowing } from "../../actions/world/start-growing";

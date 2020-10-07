@@ -2134,17 +2134,35 @@
                     ],
                     "type": "string"
                 },
-                "captureTimestamp": {
+                "lastDomination": {
+                    "additionalProperties": {
+                        "type": "number"
+                    },
+                    "type": "object"
+                },
+                "lastPopulation": {
+                    "additionalProperties": {
+                        "type": "number"
+                    },
+                    "type": "object"
+                },
+                "nextConversionTimestamp": {
                     "type": "number"
                 },
-                "capturingPlayerId": {
+                "nextConvertedPlayerId": {
+                    "type": "string"
+                },
+                "nextConvertingPlayerId": {
                     "type": "string"
                 }
             },
             "required": [
                 "captureStatus",
-                "captureTimestamp",
-                "capturingPlayerId"
+                "lastDomination",
+                "lastPopulation",
+                "nextConversionTimestamp",
+                "nextConvertedPlayerId",
+                "nextConvertingPlayerId"
             ],
             "type": "object"
         },

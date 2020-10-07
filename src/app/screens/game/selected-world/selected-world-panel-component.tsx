@@ -149,8 +149,8 @@ export class SelectedWorldPanel extends React.Component<{
             {this.worldStatusIcon(world.status)}
           </HoverTooltip>
           {world.captureStatus === 'BEING_CAPTURED' && (
-            <HoverTooltip content$={this.getCaptureTooltip(world)}>
-              <span style={{ color: this.props.vm.playerInfoOfWorldBeingCaptured?.color }}>⚑</span>
+            <HoverTooltip content={this.getCaptureTooltip(world)}>
+              <span>⚑</span>
             </HoverTooltip>
           )}
         </div>
@@ -158,11 +158,8 @@ export class SelectedWorldPanel extends React.Component<{
     )
   }
 
-  private getCaptureTooltip(item: WorldBeingCaptured): Observable<string> {
-    const doneTimestamp = item.captureTimestamp
-    return getDisplayDuration(doneTimestamp).pipe(map(duration => {
-      return `${item.captureStatus} ${duration}`
-    }))
+  private getCaptureTooltip(item: WorldBeingCaptured): string {
+    return JSON.stringify(item.lastDomination, null, 2)
   }
 
   private getStatusTooltip(item: World | Fleet): Observable<string> {

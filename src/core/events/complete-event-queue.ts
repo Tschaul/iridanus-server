@@ -29,6 +29,10 @@ import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
 import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
 import { ContinueOrStopBuildingShipEventQueue } from "./building/continue-building-ship";
+import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
+import { CaptureWorldEventQueue } from "./capture/capture-world";
+import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
+import { ConvertPopulationEventQueue } from "./capture/convert-population";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -63,9 +67,11 @@ export class CompleteEventQueue implements GameEventQueue {
     worldGrows: WorldPopulationGrowsEventQueue,
     worldStopsGrowing: WorldStopGrowingEventQueue,
 
-    // startCapturingWorld: StartCapturingWorldEventQueue,
-    // captureWorld: CaptureWorldEventQueue,
-    // stopCapturingWorld: StopCapturingWorldEventQueue,
+    startCapturingWorld: StartCapturingWorldEventQueue,
+    captureWorld: CaptureWorldEventQueue,
+    stopCapturingWorld: StopCapturingWorldEventQueue,
+    convertPopulation: ConvertPopulationEventQueue,
+
     looseFleet: LooseFleetEventQueue,
 
     startCargoMission: StartCargoMissionEventQueue,
@@ -83,9 +89,10 @@ export class CompleteEventQueue implements GameEventQueue {
 
     const allEventQueues = [
       revealWorld,
-      // startCapturingWorld,
-      // captureWorld,
-      // stopCapturingWorld,
+      startCapturingWorld,
+      captureWorld,
+      stopCapturingWorld,
+      convertPopulation,
       looseFleet,
       // awaitCapture,
       gameEnds,

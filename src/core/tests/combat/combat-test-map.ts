@@ -32,7 +32,8 @@ export const map: GameState = {
     worlds: {
       "w1": {
         ...dummyReadyWorld,
-        population: { p1: 15 },
+        population: { p1: 2 },
+        populationLimit: 2,
         id: "w1",
         ownerId: "p1",
         integrity: 1,

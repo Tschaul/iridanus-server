@@ -6,7 +6,7 @@ import { map, withLatestFrom } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { worldStartMining } from "../../actions/world/start-mining";
-import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
+import { CombatProjector } from "../../projectors/combat-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
 
 @injectable()

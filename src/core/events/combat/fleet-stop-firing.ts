@@ -4,7 +4,7 @@ import { injectable } from "inversify";
 import { TimeProjector } from "../../projectors/time-projector";
 import { map, withLatestFrom } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
-import { CombatAndCaptureProjector } from "../../projectors/combat-and-capture-projector";
+import { CombatProjector } from "../../projectors/combat-projector";
 import { fleetStopFiring } from "../../actions/fleet/stop-firing";
 
 @injectable()
@@ -13,7 +13,7 @@ export class FleetStopFiringEventQueue implements GameEventQueue {
 
   constructor(
     private fleets: FleetProjector,
-    private combat: CombatAndCaptureProjector) {
+    private combat: CombatProjector) {
     const stopFiringFleets$ = combineLatest([
       this.combat.worldIdsAtPeaceAndAtWar$,
       this.fleets.byId$
