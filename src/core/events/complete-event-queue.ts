@@ -122,14 +122,14 @@ export class CompleteEventQueue implements GameEventQueue {
       fleetDeploysToWorld
     ]
 
-    this.upcomingEvent$ = combineLatest(
+    this.upcomingEvent$ = combineLatest([
       ...allEventQueues.map(queue => {
 
         if (!queue.upcomingEvent$) console.log(queue.constructor.name,)
 
         return queue.upcomingEvent$
       })
-    ).pipe(
+    ]).pipe(
       map((events) => {
         return events.reduce((acc, event) => {
           if (event === null) {

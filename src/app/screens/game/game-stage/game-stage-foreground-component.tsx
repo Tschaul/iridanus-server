@@ -285,9 +285,6 @@ export class GameStageForeground extends React.Component<{
     if (!visibleWorldhasOwner(world)) {
       return 'lightgray'
     } else {
-      if (!this.props.vm.playerInfos[world.ownerId]) {
-        console.log(this.props.vm.playerInfos, world.ownerId)
-      }
       return this.props.vm.playerInfos[world.ownerId].color;
     }
   }

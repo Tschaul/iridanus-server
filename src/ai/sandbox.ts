@@ -206,10 +206,8 @@ const fleetsToDeploy = Math.max(0, totalShips - (totalShips + totalIndustry) / 2
 
 model.constraints.deployed_fleet = { max: fleetsToDeploy}
 
-// console.log(model);
 
 const result = solver.Solve(model);
-console.log(result);
 
 
 function nextWorldId(fleet: Fleet, now: number): [string, number] {

@@ -47,7 +47,6 @@ export class SocketConnection {
 
   public authenticate(userId: string, credentials: Credentials): Promise<string | undefined> {
     const requestId = makeId();
-    console.log('authenticate',{userId, credentials})
     this.send({
       type: 'AUTHENTICATE',
       userId,

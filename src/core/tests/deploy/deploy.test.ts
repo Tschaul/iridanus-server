@@ -23,6 +23,3 @@ describe("deploy ships to world", () => {
     expect((state.universe.worlds["w1"] as World).industry).to.equal(20);
   })
 })
-
-
-

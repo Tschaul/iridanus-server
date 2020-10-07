@@ -21,7 +21,7 @@ export function captureWorld(
           populationGrowthStatus: { type: 'NOT_GROWING' },
           populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
           buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' },
-          population: {}
+          population: oldWorld.status === 'OWNED' ? oldWorld.population : {}
         }
 
         return result;
