@@ -185,6 +185,8 @@ export class GameRunner {
           const world = state.worlds[worldId];
           if (worldHasOwner(world) && world.ownerId === seat) {
             if (player) {
+              world.population[player] = world.population[seat];
+              delete world.population[seat];
               world.ownerId = player;
               world.worldDiscoveredNotificationSent = true;
             }

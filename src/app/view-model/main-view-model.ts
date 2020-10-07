@@ -38,9 +38,11 @@ export class MainViewModel {
           this.lobbyViewModel.viewGame();
         }
 
-        autorun((gameId) => {
-          if (this.activeGameId){
+        autorun(() => {
+          if (this.activeGameId) {
             window.localStorage.setItem(IRIDANUS_GAME_ID_LOCAL_STORAGE_LOCATION, this.activeGameId)
+          } else {
+            window.localStorage.removeItem(IRIDANUS_GAME_ID_LOCAL_STORAGE_LOCATION)
           }
         })
 

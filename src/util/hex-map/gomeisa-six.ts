@@ -40,7 +40,6 @@ function makeWorld(id: string): LostWorld {
     population: {},
     populationLimit: 0,
     status: 'LOST',
-    captureStatus: 'NOT_BEING_CAPTURED'
   }
 }
 

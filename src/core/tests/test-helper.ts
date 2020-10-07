@@ -93,6 +93,7 @@ export const dummyReadyWorld: ReadyWorld = {
   integrity: 1,
   miningStatus: 'NOT_MINING',
   populationGrowthStatus: 'NOT_GROWING',
+  combatStatus: 'AT_PEACE',
   captureStatus: 'NOT_BEING_CAPTURED'
 }
 

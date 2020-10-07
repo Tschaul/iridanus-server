@@ -13,8 +13,8 @@ export type PopulationByPlayer = {
 
 export type DominationByPlayerId = {
     [playerId: string]: number;
-  };
-  
+};
+
 
 export interface BaseWorldBase {
     id: string;
@@ -27,7 +27,7 @@ export interface BaseWorldBase {
     worldDiscoveredNotificationSent?: boolean;
 }
 
-export function totalPopulation(world: World){
+export function totalPopulation(world: World) {
     return Object.values(world.population).reduce((pv, cv) => pv + cv, 0)
 }
 
@@ -45,11 +45,12 @@ export function pickPopulationOwner(world: World, random: number) {
     }
 }
 
-export type BaseWorld = BaseWorldBase & WorldWithCaptureStatus;
+export type BaseWorld = BaseWorldBase;
 
-export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & WorldWithPopulationGrowth & WorldWithCaptureStatus
+export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & WorldWithPopulationGrowth & WorldWithCaptureStatus & WorldWithCombatStatus
 
 export function baseWorld(world: World): BaseWorld {
+
     const result: any = {
         id: world.id,
         industry: world.industry,
@@ -58,19 +59,13 @@ export function baseWorld(world: World): BaseWorld {
         population: world.population,
         populationLimit: world.populationLimit,
         integrity: world.integrity,
-    }
-
-    result.captureStatus = world.captureStatus
-    if (world.captureStatus === 'BEING_CAPTURED') {
-        result.nextConvertedPlayerId = world.nextConvertedPlayerId;
-        result.nextConvertingPlayerId = world.nextConvertingPlayerId;
-        result.nextConversionTimestamp = world.nextConversionTimestamp;
+        worldDiscoveredNotificationSent: world.worldDiscoveredNotificationSent
     }
 
     return result;
 }
 
-export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithMiningStatus & WorldWithPopulationGrowth {
+export function combatCaptureAndMiningStatus(world: WorldWithOwnerBase): WorldWithMiningStatus & WorldWithPopulationGrowth & WorldWithCombatStatus {
     const result = {} as any;
 
     result.miningStatus = world.miningStatus;
@@ -81,9 +76,22 @@ export function combatAndMiningStatus(world: WorldWithOwnerBase): WorldWithMinin
     result.populationGrowthStatus = world.populationGrowthStatus
     if (world.populationGrowthStatus === 'GROWING') {
         result.nextPopulationGrowthTimestamp = world.nextPopulationGrowthTimestamp
+        result.growingPopulation = world.growingPopulation
+    }
+
+    result.combatStatus = world.combatStatus
+    if (world.combatStatus === 'FIRING') {
+        result.weaponsReadyTimestamp = world.weaponsReadyTimestamp
     }
 
     return result;
+}
+
+export function worldWithOwnerBase(world: WorldWithOwner): WorldWithOwnerBase {
+    return {
+        ...baseWorld(world),
+        ...combatCaptureAndMiningStatus(world)
+    } as any
 }
 
 export function worldHasOwner(world: World): world is WorldWithOwner {
@@ -152,7 +160,7 @@ export type LostWorld = BaseWorld & {
 }
 
 export type BuildingShipsWorld = WorldWithOwnerBase & {
-    status: 'BUILDING_SHIPS'
+    status: 'BUILDING_SHIPS';
     ownerId: string;
     readyTimestamp: number;
     buildingShipsAmount: number;

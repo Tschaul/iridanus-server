@@ -43,10 +43,8 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
 
           if (
             fleet.orders.length
-            || !worldHasOwner(worldFrom)
-            || worldFrom.ownerId !== fleet.ownerId
-            || !worldHasOwner(worldTo)
-            || worldTo.ownerId !== fleet.ownerId
+            || (worldHasOwner(worldFrom) && worldFrom.ownerId !== fleet.ownerId)
+            || (worldHasOwner(worldTo) && worldTo.ownerId !== fleet.ownerId)
           ) {
             return false;
           }
@@ -56,6 +54,7 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
             worldTo,
             metalPotential[fleet.ownerId],
             fleet.ships,
+            fleet.ownerId
           )
 
           const reverseCargo = cargoAmounts(
@@ -63,6 +62,7 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
             worldFrom,
             metalPotential[fleet.ownerId],
             fleet.ships,
+            fleet.ownerId
           )
 
           return cargo.population !== 0 || cargo.metal !== 0 || reverseCargo.population !== 0 || reverseCargo.metal !== 0
@@ -80,6 +80,7 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
                 worlds[fleet.toWorldId] as WorldWithOwner,
                 metalPotential[fleet.ownerId],
                 fleet.ships,
+                fleet.ownerId
               )
 
               const arrivingTimestamp = timestamp + this.setup.rules.warping.warpToWorldDelay

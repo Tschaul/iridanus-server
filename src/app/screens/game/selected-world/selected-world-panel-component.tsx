@@ -148,7 +148,7 @@ export class SelectedWorldPanel extends React.Component<{
           <HoverTooltip content$={this.getStatusTooltip(world)}>
             {this.worldStatusIcon(world.status)}
           </HoverTooltip>
-          {world.captureStatus === 'BEING_CAPTURED' && (
+          {worldHasOwner(world) && world.captureStatus === 'BEING_CAPTURED' && (
             <HoverTooltip content={this.getCaptureTooltip(world)}>
               <span>⚑</span>
             </HoverTooltip>

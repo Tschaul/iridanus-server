@@ -54,7 +54,7 @@ export function applyFogOfWar(world: World): WorldInFogOfWar {
 }
 
 export function visibleWorldhasOwner(world: VisibleWorld): world is WorldWithOwner | WorldInFogOfWar & {ownerid: string} {
-  return world.status !== 'LOST' && world.status !== 'UNKNOWN' && !!world.ownerId;
+  return world.status !== 'LOST' && world.status !== 'UNKNOWN' && world.status !== 'FOG_OF_WAR' && !!world.ownerId;
 }
 
 export function visibleWorldIsWorld(world: VisibleWorld): world is World {

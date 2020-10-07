@@ -11,6 +11,11 @@ export function captureWorld(
     describe: () => `CaptureWorld ${JSON.stringify({ worldId, newOwnerId })}`,
     apply: (state: GameState) => {
 
+      if (!newOwnerId) {
+        throw new Error("BOOOOOOOOOOOOM");
+        
+      }
+
       return updateWorld<World & WorldBeingCaptured, ReadyWorld & WorldNotBeingCaptured>(state, worldId, (oldWorld) => {
         const result: any = {
           ...baseWorld(oldWorld),

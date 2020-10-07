@@ -37,6 +37,7 @@ export function makeGomeisaThreeRandom(): GameMap {
         ownerId: seats[worldId],
         miningStatus: 'NOT_MINING',
         populationGrowthStatus: 'NOT_GROWING',
+        combatStatus: 'AT_PEACE',
         integrity: 1,
         metal: 0,
         mines: 0,
@@ -97,7 +98,6 @@ function makeWorld(id: string): LostWorld {
     population: {},
     populationLimit,
     status: 'LOST',
-    captureStatus: 'NOT_BEING_CAPTURED'
   }
 
   return world;

@@ -1,10 +1,11 @@
-import { WorldWithOwner } from "../../../shared/model/v1/world";
+import { World } from "../../../shared/model/v1/world";
 
 export function cargoAmounts(
-  worldFrom: WorldWithOwner,
-  worldTo: WorldWithOwner,
+  worldFrom: World,
+  worldTo: World,
   metalPotential: { [worldId: string]: number },
-  ships: number
+  ships: number,
+  playerId: string
 ) {
 
   const metal = metalCargoAmount(
@@ -17,7 +18,8 @@ export function cargoAmounts(
   const population = populationCargoAmount(
     ships,
     worldFrom,
-    worldTo
+    worldTo,
+    playerId
   )
 
   return {
@@ -41,12 +43,13 @@ function metalCargoAmount(
 
 function populationCargoAmount(
   ships: number,
-  worldFrom: WorldWithOwner,
-  worldTo: WorldWithOwner
+  worldFrom: World,
+  worldTo: World,
+  playerId: string
 ) {
 
-  const worldFromPopulation = worldFrom.population[worldFrom.ownerId];
-  const worldToPopulation = worldFrom.population[worldTo.ownerId];
+  const worldFromPopulation = worldFrom.population[playerId] ?? 0;
+  const worldToPopulation = worldTo.population[playerId] ?? 0;
 
   if (worldFromPopulation > (worldToPopulation + 1) && worldFromPopulation > 1) {
     return Math.min(

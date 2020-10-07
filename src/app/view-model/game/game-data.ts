@@ -97,6 +97,7 @@ export class GameData {
   }
 
   @computed public get playerInfos(): PlayerInfos {
+    console.log(this.gameInfo.current.players)
     return this.gameInfo.current.players;
   };
 

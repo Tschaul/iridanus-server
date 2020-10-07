@@ -264,12 +264,10 @@ export class GameStageForeground extends React.Component<{
     const world1Id = getClosestAttribute(event, 'data-world-id1');
     const world2Id = getClosestAttribute(event, 'data-world-id2');
     if (world1Id && world2Id) {
-      console.log("gate clicked", { world1Id, world2Id })
       this.props.vm.selectGate(world1Id, world2Id);
     }
     const fleetId = getClosestAttribute(event, 'data-fleet-id');
     if (fleetId) {
-      console.log("fleet clicked", { fleetId })
       this.props.vm.selectFleet(fleetId)
     }
   }
@@ -287,6 +285,9 @@ export class GameStageForeground extends React.Component<{
     if (!visibleWorldhasOwner(world)) {
       return 'lightgray'
     } else {
+      if (!this.props.vm.playerInfos[world.ownerId]) {
+        console.log(this.props.vm.playerInfos, world.ownerId)
+      }
       return this.props.vm.playerInfos[world.ownerId].color;
     }
   }
@@ -295,9 +296,9 @@ export class GameStageForeground extends React.Component<{
     if (world.status === 'UNKNOWN') {
       return '';
     } else if (world.status === 'FOG_OF_WAR') {
-      return `${world.population}/${world.populationLimit} P ${world.industry} I`;
+      return `${JSON.stringify(world.population)}/${world.populationLimit} P ${world.industry} I`;
     }
-    return `${world.population}/${world.populationLimit} P ${world.industry} I ${world.metal} ▮`;
+    return `${JSON.stringify(world.population)}/${world.populationLimit} P ${world.industry} I ${world.metal} ▮`;
 
   }
 }

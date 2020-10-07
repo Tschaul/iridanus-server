@@ -62,7 +62,7 @@ export class GameStateValidator {
   public assertGameStateValid(state: GameState) {
     this.validator.validate(state, schema, {
       allowUnknownAttributes: false,
-      throwError: true
+      throwError: true,
     });
   }
 

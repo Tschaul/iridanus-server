@@ -41,7 +41,7 @@ export class Store {
       scan((state: GameState, action: Action) => {
         const nextState = action.apply(state);
         this.logger.logAction(action);
-        // this.validator.assertGameStateValid(nextState)
+        this.validator.assertGameStateValid(nextState)
         return nextState;
       }, this.setup.initialState),
       sample(this.commits$$),

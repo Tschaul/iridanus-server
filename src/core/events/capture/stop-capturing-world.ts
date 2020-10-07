@@ -12,6 +12,7 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { calculateNextConversionEvent } from "./conversion-helper";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { stopConversionAtWorld } from "../../actions/world/stop-capturing";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class StopCapturingWorldEventQueue implements GameEventQueue {
@@ -32,7 +33,7 @@ export class StopCapturingWorldEventQueue implements GameEventQueue {
       map(([worldsById, contestedWOrldIds, dominationByWorldId]) => {
 
         const world = Object.values(worldsById).find(world => {
-          if (world.captureStatus === 'BEING_CAPTURED' && !contestedWOrldIds.includes(world.id)) {
+          if (worldHasOwner(world) && world.captureStatus === 'BEING_CAPTURED' && !contestedWOrldIds.includes(world.id)) {
             return true
           }
         })

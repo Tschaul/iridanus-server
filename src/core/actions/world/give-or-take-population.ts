@@ -12,6 +12,10 @@ export function giveOrTakeWorldPopulation(worldId: string, amount: number, playe
 
         const affectedPlayerId = playerId ?? oldWorld.ownerId
 
+        if (!affectedPlayerId) {
+          throw new Error("No player to give or take population");
+        }
+
         const currentPopulation = oldWorld.population[affectedPlayerId] ?? 0;
 
         const newPopulation = Math.max(currentPopulation + amount, 0);

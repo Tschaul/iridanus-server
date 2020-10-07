@@ -135,6 +135,24 @@
             ],
             "type": "object"
         },
+        "FiringWorld": {
+            "properties": {
+                "combatStatus": {
+                    "enum": [
+                        "FIRING"
+                    ],
+                    "type": "string"
+                },
+                "weaponsReadyTimestamp": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "combatStatus",
+                "weaponsReadyTimestamp"
+            ],
+            "type": "object"
+        },
         "FleetAtPeace": {
             "properties": {
                 "combatStatus": {
@@ -549,53 +567,16 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
                                         "$ref": "#/definitions/NotMiningWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/NotGrowingWorld"
                                     },
                                     {
-                                        "properties": {
-                                            "idleNotificationSent": {
-                                                "type": "boolean"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "READY"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "ownerId",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotGrowingWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                        "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "properties": {
@@ -624,240 +605,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
-                                    },
-                                    {
-                                        "properties": {
-                                            "idleNotificationSent": {
-                                                "type": "boolean"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "READY"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "ownerId",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
-                                    },
-                                    {
-                                        "properties": {
-                                            "idleNotificationSent": {
-                                                "type": "boolean"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "READY"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "ownerId",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotGrowingWorld"
-                                    },
-                                    {
-                                        "properties": {
-                                            "idleNotificationSent": {
-                                                "type": "boolean"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "READY"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "ownerId",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotGrowingWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
-                                    },
-                                    {
-                                        "properties": {
-                                            "idleNotificationSent": {
-                                                "type": "boolean"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "READY"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "ownerId",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
-                                    },
-                                    {
-                                        "properties": {
-                                            "idleNotificationSent": {
-                                                "type": "boolean"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "READY"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "ownerId",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
-                                    },
-                                    {
-                                        "properties": {
-                                            "idleNotificationSent": {
-                                                "type": "boolean"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "READY"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "ownerId",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -869,6 +616,9 @@
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -895,9 +645,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -906,6 +653,12 @@
                                         "$ref": "#/definitions/NotGrowingWorld"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -934,7 +687,44 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
                                         "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -946,6 +736,9 @@
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -972,9 +765,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -983,6 +773,12 @@
                                         "$ref": "#/definitions/GrowingWorld"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -1011,7 +807,84 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
                                         "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1023,6 +896,9 @@
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -1049,9 +925,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1060,6 +933,12 @@
                                         "$ref": "#/definitions/NotGrowingWorld"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -1088,7 +967,84 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
                                         "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1100,6 +1056,9 @@
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -1126,9 +1085,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1137,6 +1093,12 @@
                                         "$ref": "#/definitions/GrowingWorld"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
                                         "properties": {
                                             "idleNotificationSent": {
                                                 "type": "boolean"
@@ -1165,13 +1127,96 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "idleNotificationSent": {
+                                                "type": "boolean"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "READY"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ownerId",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
                                     },
                                     {
                                         "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "properties": {
@@ -1211,7 +1256,53 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "buildingShipsActiveIndustry": {
+                                                "type": "number"
+                                            },
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "buildingShipsActiveIndustry",
+                                            "buildingShipsAmount",
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -1223,50 +1314,7 @@
                                         "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
-                                        "properties": {
-                                            "buildingShipsActiveIndustry": {
-                                                "type": "number"
-                                            },
-                                            "buildingShipsAmount": {
-                                                "type": "number"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "readyTimestamp": {
-                                                "type": "number"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "BUILDING_SHIPS"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "buildingShipsActiveIndustry",
-                                            "buildingShipsAmount",
-                                            "ownerId",
-                                            "readyTimestamp",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
+                                        "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "properties": {
@@ -1304,248 +1352,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
-                                    },
-                                    {
-                                        "properties": {
-                                            "buildingShipsActiveIndustry": {
-                                                "type": "number"
-                                            },
-                                            "buildingShipsAmount": {
-                                                "type": "number"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "readyTimestamp": {
-                                                "type": "number"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "BUILDING_SHIPS"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "buildingShipsActiveIndustry",
-                                            "buildingShipsAmount",
-                                            "ownerId",
-                                            "readyTimestamp",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotGrowingWorld"
-                                    },
-                                    {
-                                        "properties": {
-                                            "buildingShipsActiveIndustry": {
-                                                "type": "number"
-                                            },
-                                            "buildingShipsAmount": {
-                                                "type": "number"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "readyTimestamp": {
-                                                "type": "number"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "BUILDING_SHIPS"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "buildingShipsActiveIndustry",
-                                            "buildingShipsAmount",
-                                            "ownerId",
-                                            "readyTimestamp",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotGrowingWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
-                                    },
-                                    {
-                                        "properties": {
-                                            "buildingShipsActiveIndustry": {
-                                                "type": "number"
-                                            },
-                                            "buildingShipsAmount": {
-                                                "type": "number"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "readyTimestamp": {
-                                                "type": "number"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "BUILDING_SHIPS"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "buildingShipsActiveIndustry",
-                                            "buildingShipsAmount",
-                                            "ownerId",
-                                            "readyTimestamp",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
-                                    },
-                                    {
-                                        "properties": {
-                                            "buildingShipsActiveIndustry": {
-                                                "type": "number"
-                                            },
-                                            "buildingShipsAmount": {
-                                                "type": "number"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "readyTimestamp": {
-                                                "type": "number"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "BUILDING_SHIPS"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "buildingShipsActiveIndustry",
-                                            "buildingShipsAmount",
-                                            "ownerId",
-                                            "readyTimestamp",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/MiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/GrowingWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
-                                    },
-                                    {
-                                        "properties": {
-                                            "buildingShipsActiveIndustry": {
-                                                "type": "number"
-                                            },
-                                            "buildingShipsAmount": {
-                                                "type": "number"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "readyTimestamp": {
-                                                "type": "number"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "BUILDING_SHIPS"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "buildingShipsActiveIndustry",
-                                            "buildingShipsAmount",
-                                            "ownerId",
-                                            "readyTimestamp",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -1554,7 +1360,10 @@
                                         "$ref": "#/definitions/NotGrowingWorld"
                                     },
                                     {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
                                     },
                                     {
                                         "properties": {
@@ -1592,55 +1401,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotMiningWorld"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/NotGrowingWorld"
-                                    },
-                                    {
-                                        "properties": {
-                                            "buildingShipsActiveIndustry": {
-                                                "type": "number"
-                                            },
-                                            "buildingShipsAmount": {
-                                                "type": "number"
-                                            },
-                                            "ownerId": {
-                                                "type": "string"
-                                            },
-                                            "readyTimestamp": {
-                                                "type": "number"
-                                            },
-                                            "status": {
-                                                "enum": [
-                                                    "BUILDING_SHIPS"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "buildingShipsActiveIndustry",
-                                            "buildingShipsAmount",
-                                            "ownerId",
-                                            "readyTimestamp",
-                                            "status"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -1652,6 +1412,9 @@
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
                                         "properties": {
                                             "buildingShipsActiveIndustry": {
                                                 "type": "number"
@@ -1687,9 +1450,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/NotMiningWorld"
@@ -1698,6 +1458,12 @@
                                         "$ref": "#/definitions/GrowingWorld"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
                                         "properties": {
                                             "buildingShipsActiveIndustry": {
                                                 "type": "number"
@@ -1735,7 +1501,102 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
                                         "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "properties": {
+                                            "buildingShipsActiveIndustry": {
+                                                "type": "number"
+                                            },
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "buildingShipsActiveIndustry",
+                                            "buildingShipsAmount",
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotMiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "buildingShipsActiveIndustry": {
+                                                "type": "number"
+                                            },
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "buildingShipsActiveIndustry",
+                                            "buildingShipsAmount",
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1747,6 +1608,9 @@
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
                                         "properties": {
                                             "buildingShipsActiveIndustry": {
                                                 "type": "number"
@@ -1782,9 +1646,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1793,6 +1654,12 @@
                                         "$ref": "#/definitions/NotGrowingWorld"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
                                         "properties": {
                                             "buildingShipsActiveIndustry": {
                                                 "type": "number"
@@ -1830,7 +1697,102 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
                                         "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
+                                        "properties": {
+                                            "buildingShipsActiveIndustry": {
+                                                "type": "number"
+                                            },
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "buildingShipsActiveIndustry",
+                                            "buildingShipsAmount",
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/NotGrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "buildingShipsActiveIndustry": {
+                                                "type": "number"
+                                            },
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "buildingShipsActiveIndustry",
+                                            "buildingShipsAmount",
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1842,6 +1804,9 @@
                                         "$ref": "#/definitions/WorldNotBeingCaptured"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldAtPeace"
+                                    },
+                                    {
                                         "properties": {
                                             "buildingShipsActiveIndustry": {
                                                 "type": "number"
@@ -1877,9 +1842,6 @@
                                 "allOf": [
                                     {
                                         "$ref": "#/definitions/BaseWorldBase"
-                                    },
-                                    {
-                                        "$ref": "#/definitions/WorldBeingCaptured"
                                     },
                                     {
                                         "$ref": "#/definitions/MiningWorld"
@@ -1888,6 +1850,12 @@
                                         "$ref": "#/definitions/GrowingWorld"
                                     },
                                     {
+                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
                                         "properties": {
                                             "buildingShipsActiveIndustry": {
                                                 "type": "number"
@@ -1925,18 +1893,43 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
-                                        "$ref": "#/definitions/WorldNotBeingCaptured"
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/WorldAtPeace"
                                     },
                                     {
                                         "properties": {
+                                            "buildingShipsActiveIndustry": {
+                                                "type": "number"
+                                            },
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
                                             "status": {
                                                 "enum": [
-                                                    "LOST"
+                                                    "BUILDING_SHIPS"
                                                 ],
                                                 "type": "string"
                                             }
                                         },
                                         "required": [
+                                            "buildingShipsActiveIndustry",
+                                            "buildingShipsAmount",
+                                            "ownerId",
+                                            "readyTimestamp",
                                             "status"
                                         ],
                                         "type": "object"
@@ -1949,7 +1942,53 @@
                                         "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
+                                        "$ref": "#/definitions/MiningWorld"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/GrowingWorld"
+                                    },
+                                    {
                                         "$ref": "#/definitions/WorldBeingCaptured"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/FiringWorld"
+                                    },
+                                    {
+                                        "properties": {
+                                            "buildingShipsActiveIndustry": {
+                                                "type": "number"
+                                            },
+                                            "buildingShipsAmount": {
+                                                "type": "number"
+                                            },
+                                            "ownerId": {
+                                                "type": "string"
+                                            },
+                                            "readyTimestamp": {
+                                                "type": "number"
+                                            },
+                                            "status": {
+                                                "enum": [
+                                                    "BUILDING_SHIPS"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "buildingShipsActiveIndustry",
+                                            "buildingShipsAmount",
+                                            "ownerId",
+                                            "readyTimestamp",
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/BaseWorldBase"
                                     },
                                     {
                                         "properties": {
@@ -2123,6 +2162,20 @@
                 "ships",
                 "status",
                 "targetWorldId"
+            ],
+            "type": "object"
+        },
+        "WorldAtPeace": {
+            "properties": {
+                "combatStatus": {
+                    "enum": [
+                        "AT_PEACE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "combatStatus"
             ],
             "type": "object"
         },
