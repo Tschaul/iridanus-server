@@ -5,7 +5,7 @@ import { map } from "rxjs/operators";
 import { worldStartMining } from "../../actions/world/start-mining";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { WorldProjector } from "../../projectors/world-projector";
-import { MiningWorld, BaseWorld } from "../../../shared/model/v1/world";
+import { MiningWorld, BaseWorld, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 
 @injectable()
@@ -22,9 +22,9 @@ export class WorldMinesMetalEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return (worlds.filter(world =>
-          'miningStatus' in world
-          && world.miningStatus === 'MINING'
-        ) as Array<MiningWorld & BaseWorld>).sort((a, b) => a.nextMetalMinedTimestamp - b.nextMetalMinedTimestamp)[0] || null
+          worldHasOwner(world)
+          && world.miningStatus.type === 'MINING'
+        ) as Array<WorldWithOwner & { miningStatus: MiningWorld }>).sort((a, b) => a.miningStatus.nextMetalMinedTimestamp - b.miningStatus.nextMetalMinedTimestamp)[0] || null
       })
     )
 
@@ -34,10 +34,10 @@ export class WorldMinesMetalEventQueue implements GameEventQueue {
           return null;
         }
         return {
-          timestamp: world.nextMetalMinedTimestamp,
+          timestamp: world.miningStatus.nextMetalMinedTimestamp,
           happen: () => {
 
-            const weaponsReadyTimestamp = world.nextMetalMinedTimestamp + this.setup.rules.mining.miningDelay / world.mines
+            const weaponsReadyTimestamp = world.miningStatus.nextMetalMinedTimestamp + this.setup.rules.mining.miningDelay / world.mines
 
 
             return [

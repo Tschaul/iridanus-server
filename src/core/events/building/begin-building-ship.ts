@@ -3,7 +3,7 @@ import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { ReadyWorld } from "../../../shared/model/v1/world";
+import { ReadyWorld, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 import { map } from "rxjs/operators";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { buildShips } from "../../actions/world/build-ship";
@@ -13,14 +13,31 @@ import { GameSetupProvider } from "../../game-setup-provider";
 export class BeginBuildingShipEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
 
-  constructor(worlds: WorldProjector, private time: TimeProjector, private setup: GameSetupProvider) {
+  constructor(
+    private worlds: WorldProjector,
+    private setup: GameSetupProvider
+  ) {
     const shipsAmount = 5;
-    this.upcomingEvent$ = worlds.allByStatus<ReadyWorld>('READY').pipe(
-      map((worlds) => {
-        const world = worlds.find(world => {
-          const activeIndustry = Math.min(world.population[world.ownerId], world.industry)
-          return activeIndustry > 0 && world.metal >= shipsAmount
-        })
+
+    const startBuildingShipsWorld$ = this.worlds.byId$.pipe(
+      map((worldsById) => {
+
+        const worlds = Object.values(worldsById);
+
+        return worlds.find(world => {
+          if (worldHasOwner(world)) {
+            const activeIndustry = Math.min(world.population[world.ownerId], world.industry)
+            if (world.buildShipsStatus.type === 'NOT_BUILDING_SHIPS' && activeIndustry > 0 && world.metal >= shipsAmount) {
+              return true
+            }
+          }
+        }) as WorldWithOwner
+
+      })
+    )
+
+    this.upcomingEvent$ = startBuildingShipsWorld$.pipe(
+      map((world) => {
 
         if (!world) {
           return null

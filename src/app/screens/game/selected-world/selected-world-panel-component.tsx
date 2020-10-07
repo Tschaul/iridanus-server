@@ -145,11 +145,8 @@ export class SelectedWorldPanel extends React.Component<{
         {/* TODO: show population by all players */}
         {worldHasOwner(world) && this.tableAmount(world.population[world.ownerId], 'P')}
         <div className={classes.col} style={{ width: "3em" }}>
-          <HoverTooltip content$={this.getStatusTooltip(world)}>
-            {this.worldStatusIcon(world.status)}
-          </HoverTooltip>
-          {worldHasOwner(world) && world.captureStatus === 'BEING_CAPTURED' && (
-            <HoverTooltip content={this.getCaptureTooltip(world)}>
+          {worldHasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED' && (
+            <HoverTooltip content={this.getCaptureTooltip(world.populationConversionStatus)}>
               <span>⚑</span>
             </HoverTooltip>
           )}
@@ -175,7 +172,6 @@ export class SelectedWorldPanel extends React.Component<{
 
   private getDoneTimestamp(item: World | Fleet): number | null {
     switch (item.status) {
-      case 'BUILDING_SHIPS':
       case 'ARRIVING':
         return item.readyTimestamp
       case 'LEAVING':
@@ -219,10 +215,4 @@ export class SelectedWorldPanel extends React.Component<{
     }
   }
 
-  worldStatusIcon(status: World['status']) {
-    switch (status) {
-      case 'BUILDING_SHIPS': return '+►';
-      default: return ' ';
-    }
-  }
 }

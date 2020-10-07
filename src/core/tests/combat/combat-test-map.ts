@@ -36,7 +36,6 @@ export const map: GameState = {
         populationLimit: 2,
         id: "w1",
         ownerId: "p1",
-        integrity: 1,
       }
     },
     gates: {

@@ -4,7 +4,7 @@ import { injectable } from "inversify";
 import { map } from "rxjs/operators";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { WorldProjector } from "../../projectors/world-projector";
-import { GrowingWorld, pickPopulationOwner, World } from "../../../shared/model/v1/world";
+import { GrowingWorld, pickPopulationOwner, World, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { worldStopGrowing } from "../../actions/world/stop-growing";
@@ -24,9 +24,9 @@ export class WorldPopulationGrowsEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return (worlds.filter(world =>
-          'populationGrowthStatus' in world
-          && world.populationGrowthStatus === 'GROWING'
-        ) as Array<GrowingWorld & World>).sort((a, b) => a.nextPopulationGrowthTimestamp - b.nextPopulationGrowthTimestamp)[0] || null
+          worldHasOwner(world)
+          && world.populationGrowthStatus.type === 'GROWING'
+        ) as Array<WorldWithOwner & { populationGrowthStatus: GrowingWorld }>).sort((a, b) => a.populationGrowthStatus.nextPopulationGrowthTimestamp - b.populationGrowthStatus.nextPopulationGrowthTimestamp)[0] || null
       })
     )
 
@@ -36,7 +36,7 @@ export class WorldPopulationGrowsEventQueue implements GameEventQueue {
           return null;
         }
         return {
-          timestamp: world.nextPopulationGrowthTimestamp,
+          timestamp: world.populationGrowthStatus.nextPopulationGrowthTimestamp,
           happen: () => {
             return [
               giveOrTakeWorldPopulation(world.id, 1, pickPopulationOwner(world, this.random.equal())),

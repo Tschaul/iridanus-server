@@ -1,7 +1,7 @@
 
 import { expect } from 'chai';
 import { runMap } from "../test-helper";
-import { World } from "../../../shared/model/v1/world";
+import { World, WorldWithOwner } from "../../../shared/model/v1/world";
 import { testMap } from './population-test-map';
 
 describe("population", () => {
@@ -10,9 +10,7 @@ describe("population", () => {
 
     const state = await runMap(testMap)
 
-    console.log((state.universe.worlds["w1"] as World).population)
-
-    expect((state.universe.worlds["w1"] as World).population["p1"]).to.equal(2)
+    expect((state.universe.worlds["w1"] as WorldWithOwner).population["p1"]).to.equal(2)
   })
 
 })

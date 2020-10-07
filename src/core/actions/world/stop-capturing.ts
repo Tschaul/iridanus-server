@@ -13,7 +13,7 @@ export function stopConversionAtWorld(
       return updateWorld<World & WorldBeingCaptured, World & WorldNotBeingCaptured>(state, worldId, (oldWorld) => {
         const result = {
           ...oldWorld,
-          captureStatus: 'NOT_BEING_CAPTURED',
+          populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
         } as any
 
         delete result.nextConversionTimestamp;

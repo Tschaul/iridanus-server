@@ -298,7 +298,7 @@ export class GameStageForeground extends React.Component<{
     } else if (world.status === 'FOG_OF_WAR') {
       return `${JSON.stringify(world.population)}/${world.populationLimit} P ${world.industry} I`;
     }
-    return `${JSON.stringify(world.population)}/${world.populationLimit} P ${world.industry} I ${world.metal} ▮`;
+    return `${JSON.stringify((world as any).population)}/${world.populationLimit} P ${world.industry} I ${world.metal} ▮`;
 
   }
 }

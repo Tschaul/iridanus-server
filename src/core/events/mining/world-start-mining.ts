@@ -8,6 +8,7 @@ import { RandomNumberGenerator } from "../../infrastructure/random-number-genera
 import { worldStartMining } from "../../actions/world/start-mining";
 import { CombatProjector } from "../../projectors/combat-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class WorldStartMiningEventQueue implements GameEventQueue {
@@ -24,8 +25,8 @@ export class WorldStartMiningEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return worlds.find(world =>
-          'miningStatus' in world
-          && world.miningStatus === 'NOT_MINING'
+          worldHasOwner(world)
+          && world.miningStatus.type === 'NOT_MINING'
           && world.mines > 0
           && world.metal < setup.rules.mining.maximumMetal
         )

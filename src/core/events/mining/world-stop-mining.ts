@@ -6,6 +6,7 @@ import { map, withLatestFrom } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { worldStopMining } from "../../actions/world/stop-mining";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class WorldStopMiningEventQueue implements GameEventQueue {
@@ -23,8 +24,8 @@ export class WorldStopMiningEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return worlds.find(world =>
-          'miningStatus' in world
-          && world.miningStatus === 'MINING'
+          worldHasOwner(world)
+          && world.miningStatus.type === 'MINING'
           && world.metal >= setup.rules.mining.maximumMetal
         )
       })

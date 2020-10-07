@@ -7,7 +7,7 @@ import { RandomNumberGenerator } from "../../infrastructure/random-number-genera
 import { GameSetupProvider } from "../../game-setup-provider";
 import { calculatePopulationGrowthDelay } from "./growth-dealy-helper";
 import { worldStartGrowing } from "../../actions/world/start-growing";
-import { totalPopulation } from "../../../shared/model/v1/world";
+import { totalPopulation, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class WorldStartGrowingEventQueue implements GameEventQueue {
@@ -24,19 +24,17 @@ export class WorldStartGrowingEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return worlds.find(world => {
-          if ('populationGrowthStatus' in world
+          if (worldHasOwner(world)
             && totalPopulation(world) > 0
             && totalPopulation(world) < world.populationLimit) {
-            if (world.populationGrowthStatus === 'NOT_GROWING') {
+            if (world.populationGrowthStatus.type === 'NOT_GROWING') {
               return true;
-            } else if (world.populationGrowthStatus === 'GROWING'
-              && world.growingPopulation !== totalPopulation(world)) {
+            } else if (world.populationGrowthStatus.type === 'GROWING'
+              && world.populationGrowthStatus.growingPopulation !== totalPopulation(world)) {
               return true;
             }
           }
-        }
-
-        )
+        }) as WorldWithOwner | null
       })
     )
 

@@ -11,7 +11,7 @@ import deepEqual from "deep-equal";
 import { WorldProjector } from "../../projectors/world-projector";
 import { calculateNextConversionEvent } from "./conversion-helper";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
-import { worldHasOwner } from "../../../shared/model/v1/world";
+import { totalPopulation, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class StartCapturingWorldEventQueue implements GameEventQueue {
@@ -32,14 +32,14 @@ export class StartCapturingWorldEventQueue implements GameEventQueue {
       map(([worldsById, contestedWOrldIds, dominationByWorldId]) => {
 
         const world = Object.values(worldsById).find(world => {
-          if (worldHasOwner(world) && world.captureStatus === 'NOT_BEING_CAPTURED' && contestedWOrldIds.includes(world.id)) {
+          if (worldHasOwner(world) && world.populationConversionStatus.type === 'NOT_BEING_CAPTURED' && contestedWOrldIds.includes(world.id)) {
             return true
           }
-          if (worldHasOwner(world) && world.captureStatus === 'BEING_CAPTURED') {
-            return !deepEqual(world.lastDomination, dominationByWorldId[world.id])
-              || !deepEqual(world.lastPopulation, world.population);
+          if (worldHasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED') {
+            return !deepEqual(world.populationConversionStatus.lastDomination, dominationByWorldId[world.id])
+              || !deepEqual(world.populationConversionStatus.lastPopulation, world.population);
           }
-        })
+        }) as WorldWithOwner
 
         if (!world) {
           return null

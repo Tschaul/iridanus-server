@@ -46,7 +46,7 @@ export function applyFogOfWar(world: World): WorldInFogOfWar {
     id: world.id,
     industry: world.industry,
     mines: world.mines,
-    population: world.population,
+    population: worldHasOwner(world) ? world.population : {},
     populationLimit: world.populationLimit,
     status: 'FOG_OF_WAR',
     ownerId: worldHasOwner(world) ? world.ownerId : undefined

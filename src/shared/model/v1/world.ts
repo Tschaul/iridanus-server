@@ -2,9 +2,16 @@ export type World =
     WorldWithOwner
     | LostWorld;
 
-export type WorldWithOwner =
-    ReadyWorld
-    | BuildingShipsWorld
+export type WorldWithOwner = BaseWorld & {
+    status: 'OWNED';
+    ownerId: string;
+    population: PopulationByPlayer;
+    miningStatus: WorldWithMiningStatus;
+    combatStatus: WorldCombatStatus;
+    populationGrowthStatus: PopulationGrowthStatus;
+    populationConversionStatus: PopulationConverstionStatus;
+    buildShipsStatus: BuildingShipsStatus;
+}
 
 export type PopulationByPlayer = {
     [playerId: string]: number
@@ -20,18 +27,16 @@ export interface BaseWorldBase {
     id: string;
     metal: number;
     industry: number;
-    population: PopulationByPlayer;
     populationLimit: number;
     mines: number;
-    integrity: number;
-    worldDiscoveredNotificationSent?: boolean;
+    worldDiscoveredNotificationSent: boolean;
 }
 
-export function totalPopulation(world: World) {
+export function totalPopulation(world: WorldWithOwner) {
     return Object.values(world.population).reduce((pv, cv) => pv + cv, 0)
 }
 
-export function pickPopulationOwner(world: World, random: number) {
+export function pickPopulationOwner(world: WorldWithOwner, random: number) {
 
     const total = totalPopulation(world);
 
@@ -47,80 +52,49 @@ export function pickPopulationOwner(world: World, random: number) {
 
 export type BaseWorld = BaseWorldBase;
 
-export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & WorldWithPopulationGrowth & WorldWithCaptureStatus & WorldWithCombatStatus
+export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & PopulationGrowthStatus & PopulationConverstionStatus & WorldCombatStatus
 
 export function baseWorld(world: World): BaseWorld {
 
-    const result: any = {
+    const result: BaseWorld = {
         id: world.id,
         industry: world.industry,
         metal: world.metal,
         mines: world.mines,
-        population: world.population,
         populationLimit: world.populationLimit,
-        integrity: world.integrity,
-        worldDiscoveredNotificationSent: world.worldDiscoveredNotificationSent
+        worldDiscoveredNotificationSent: !!world.worldDiscoveredNotificationSent
     }
 
     return result;
-}
-
-export function combatCaptureAndMiningStatus(world: WorldWithOwnerBase): WorldWithMiningStatus & WorldWithPopulationGrowth & WorldWithCombatStatus {
-    const result = {} as any;
-
-    result.miningStatus = world.miningStatus;
-    if (world.miningStatus === 'MINING') {
-        result.nextMetalMinedTimestamp = world.nextMetalMinedTimestamp;
-    }
-
-    result.populationGrowthStatus = world.populationGrowthStatus
-    if (world.populationGrowthStatus === 'GROWING') {
-        result.nextPopulationGrowthTimestamp = world.nextPopulationGrowthTimestamp
-        result.growingPopulation = world.growingPopulation
-    }
-
-    result.combatStatus = world.combatStatus
-    if (world.combatStatus === 'FIRING') {
-        result.weaponsReadyTimestamp = world.weaponsReadyTimestamp
-    }
-
-    return result;
-}
-
-export function worldWithOwnerBase(world: WorldWithOwner): WorldWithOwnerBase {
-    return {
-        ...baseWorld(world),
-        ...combatCaptureAndMiningStatus(world)
-    } as any
 }
 
 export function worldHasOwner(world: World): world is WorldWithOwner {
-    return world.status !== 'LOST';
+    return world.status === 'OWNED';
 }
 
-export type WorldWithCombatStatus =
+export type WorldCombatStatus =
     WorldAtPeace
     | FiringWorld;
 
 export interface WorldAtPeace {
-    combatStatus: 'AT_PEACE'
+    type: 'AT_PEACE'
 }
 
 export interface FiringWorld {
-    combatStatus: 'FIRING',
+    type: 'FIRING',
     weaponsReadyTimestamp: number
 }
 
-export type WorldWithCaptureStatus =
+export type PopulationConverstionStatus =
     WorldNotBeingCaptured
     | WorldBeingCaptured;
 
 export interface WorldNotBeingCaptured {
-    captureStatus: 'NOT_BEING_CAPTURED'
+    type: 'NOT_BEING_CAPTURED'
 }
 
 export interface WorldBeingCaptured {
-    captureStatus: 'BEING_CAPTURED',
+    type: 'BEING_CAPTURED',
     nextConvertingPlayerId: string,
     nextConvertedPlayerId: string,
     nextConversionTimestamp: number,
@@ -133,24 +107,24 @@ export type WorldWithMiningStatus =
     | MiningWorld;
 
 export interface NotMiningWorld {
-    miningStatus: 'NOT_MINING'
+    type: 'NOT_MINING'
 }
 
 export interface MiningWorld {
-    miningStatus: 'MINING',
+    type: 'MINING',
     nextMetalMinedTimestamp: number
 }
 
-export type WorldWithPopulationGrowth =
+export type PopulationGrowthStatus =
     NotGrowingWorld
     | GrowingWorld;
 
 export interface NotGrowingWorld {
-    populationGrowthStatus: 'NOT_GROWING'
+    type: 'NOT_GROWING'
 }
 
 export interface GrowingWorld {
-    populationGrowthStatus: 'GROWING',
+    type: 'GROWING',
     nextPopulationGrowthTimestamp: number,
     growingPopulation: number
 }
@@ -159,16 +133,18 @@ export type LostWorld = BaseWorld & {
     status: 'LOST'
 }
 
-export type BuildingShipsWorld = WorldWithOwnerBase & {
-    status: 'BUILDING_SHIPS';
+export type BuildingShipsStatus =
+    BuildingShipsWorld
+    | ReadyWorld;
+
+export type BuildingShipsWorld = {
+    type: 'BUILDING_SHIPS';
     ownerId: string;
     readyTimestamp: number;
-    buildingShipsAmount: number;
-    buildingShipsActiveIndustry: number;
+    amount: number;
+    activeIndustry: number;
 }
 
-export type ReadyWorld = WorldWithOwnerBase & {
-    status: 'READY'
-    ownerId: string;
-    idleNotificationSent?: boolean;
+export type ReadyWorld = {
+    type: 'NOT_BUILDING_SHIPS'
 }

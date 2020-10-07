@@ -10,7 +10,7 @@ describe("combat", () => {
     const state = await runMap(map);
 
     expect(state.universe.fleets["f1"]).to.be.undefined
-    expect(state.universe.worlds["w1"].status).to.equal("READY")
+    expect(state.universe.worlds["w1"].status).to.equal("OWNED")
   })
   
 })

@@ -113,9 +113,7 @@ export class GameStats {
 
     Object.values(this.gameData.worlds).forEach(world => {
       if (visibleWorldhasOwner(world) && world.ownerId === currentPlayer) {
-        const hintText = property === 'population'
-          ? world[property] + '/' + world.populationLimit
-          : world[property];
+        const hintText = world[property];
 
         if (hintText) {
           hints.push({

@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import produce from "immer";
 import { runMap } from "../test-helper";
-import { ReadyWorld } from "../../../shared/model/v1/world";
+import { ReadyWorld, World, WorldWithOwner } from "../../../shared/model/v1/world";
 
 describe("deploy ships to world", () => {
 
@@ -20,7 +20,7 @@ describe("deploy ships to world", () => {
     const state = await runMap(map);
 
     expect((state.universe.fleets["f1"] as ReadyFleet)).to.be.undefined;
-    expect((state.universe.worlds["w1"] as ReadyWorld).industry).to.equal(20);
+    expect((state.universe.worlds["w1"] as World).industry).to.equal(20);
   })
 })
 

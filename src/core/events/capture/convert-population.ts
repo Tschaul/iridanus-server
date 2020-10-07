@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { injectable } from "inversify";
 import { WorldProjector } from "../../projectors/world-projector";
-import { World, WorldBeingCaptured } from "../../../shared/model/v1/world";
+import { World, WorldBeingCaptured, WorldWithOwner } from "../../../shared/model/v1/world";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 import { stopConversionAtWorld } from "../../actions/world/stop-capturing";
 
@@ -22,9 +22,10 @@ export class ConvertPopulationEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return (worlds.filter(world =>
-          'captureStatus' in world
-          && world.captureStatus === 'BEING_CAPTURED'
-        ) as Array<WorldBeingCaptured & World>).sort((a, b) => a.nextConversionTimestamp - b.nextConversionTimestamp)[0] || null
+          world.status === 'OWNED'
+          && world.populationConversionStatus.type === 'BEING_CAPTURED'
+        ) as Array<WorldWithOwner & { populationConversionStatus: WorldBeingCaptured }>).sort((a, b) =>
+          a.populationConversionStatus.nextConversionTimestamp - b.populationConversionStatus.nextConversionTimestamp)[0] || null
       })
     )
 
@@ -35,11 +36,11 @@ export class ConvertPopulationEventQueue implements GameEventQueue {
           return null;
         }
         return {
-          timestamp: world.nextConversionTimestamp,
+          timestamp: world.populationConversionStatus.nextConversionTimestamp,
           happen: () => {
             return [
-              giveOrTakeWorldPopulation(world.id, -1, world.nextConvertedPlayerId),
-              giveOrTakeWorldPopulation(world.id, 1, world.nextConvertingPlayerId),
+              giveOrTakeWorldPopulation(world.id, -1, world.populationConversionStatus.nextConvertedPlayerId),
+              giveOrTakeWorldPopulation(world.id, 1, world.populationConversionStatus.nextConvertingPlayerId),
               stopConversionAtWorld(world.id)
             ]
           }

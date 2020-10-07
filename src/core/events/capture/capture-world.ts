@@ -6,7 +6,7 @@ import { CombatProjector } from "../../projectors/combat-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { captureWorld } from "../../actions/world/capture";
 import { WorldProjector } from "../../projectors/world-projector";
-import { PopulationByPlayer, totalPopulation, worldHasOwner } from "../../../shared/model/v1/world";
+import { PopulationByPlayer, totalPopulation, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class CaptureWorldEventQueue implements GameEventQueue {
@@ -20,9 +20,12 @@ export class CaptureWorldEventQueue implements GameEventQueue {
       map((worldsById) => {
 
         const world = Object.values(worldsById).find(world => {
+          if (!worldHasOwner(world)) {
+            return false;
+          }
           const majorityHolder = absoluteMajorityHolder(world.population);
-          return worldHasOwner(world) && majorityHolder && absoluteMajorityHolder(world.population) !== world.ownerId
-        })
+          return majorityHolder && absoluteMajorityHolder(world.population) !== world.ownerId
+        }) as WorldWithOwner
 
         if (!world) {
           return null

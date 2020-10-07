@@ -3,7 +3,7 @@ import { cargoTestMap } from "./cargo-test-map";
 import { expect } from 'chai';
 import produce from "immer";
 import { runMap } from "../test-helper";
-import { ReadyWorld, totalPopulation } from "../../../shared/model/v1/world";
+import { ReadyWorld, totalPopulation, World, WorldWithOwner } from "../../../shared/model/v1/world";
 
 describe("cargo", () => {
 
@@ -19,11 +19,11 @@ describe("cargo", () => {
 
     const state = await runMap(map);
 
-    expect((state.universe.worlds["w2"] as ReadyWorld).metal)
+    expect((state.universe.worlds["w2"] as World).metal)
       .to.be.lessThan(cargoTestMap.universe.worlds["w2"].metal)
 
-    expect(totalPopulation(state.universe.worlds["w2"] as ReadyWorld))
-      .to.be.greaterThan(totalPopulation(cargoTestMap.universe.worlds["w2"]))
+    expect(totalPopulation(state.universe.worlds["w2"] as WorldWithOwner))
+      .to.be.greaterThan(totalPopulation(cargoTestMap.universe.worlds["w2"] as WorldWithOwner))
   })
 })
 

@@ -1,16 +1,16 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
 import { updateWorld } from "./update-world";
-import { ReadyWorld, LostWorld } from "../../../shared/model/v1/world";
+import { ReadyWorld, LostWorld, WorldWithOwner, World, baseWorld } from "../../../shared/model/v1/world";
 
 export function giveOrTakeWorldPopulation(worldId: string, amount: number, playerId: string | null = null): Action {
-  let worldLost = false;
+  let affectedPlayerId = ''
   return {
-    describe: () => `GiveOrTakeWorldPopulation ${JSON.stringify({worldId, amount, worldLost})}`,
+    describe: () => `GiveOrTakeWorldPopulation ${JSON.stringify({ worldId, amount, affectedPlayerId })}`,
     apply: (state: GameState) => {
-      return updateWorld<ReadyWorld, ReadyWorld | LostWorld>(state, worldId, oldWorld => {
+      return updateWorld<WorldWithOwner, World>(state, worldId, oldWorld => {
 
-        const affectedPlayerId = playerId ?? oldWorld.ownerId
+        affectedPlayerId = playerId ?? oldWorld.ownerId
 
         if (!affectedPlayerId) {
           throw new Error("No player to give or take population");

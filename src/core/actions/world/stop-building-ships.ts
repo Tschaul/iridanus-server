@@ -3,19 +3,18 @@ import { GameState } from "../../../shared/model/v1/state";
 import { updateWorld } from "./update-world";
 import { WorldWithOwner } from "../../../shared/model/v1/world";
 
-export function worldStopGrowing(
+export function stopBuildingShips(
   worldId: string,
 ): Action {
   return {
-    describe: () => `WorldStopGrowing ${JSON.stringify({ worldId })}`,
+    describe: () => `StopBuildingShips ${JSON.stringify({ worldId })}`,
     apply: (state: GameState) => {
 
       return updateWorld<WorldWithOwner, WorldWithOwner>(state, worldId, (oldWorld) => {
-        const newWorld = {
+        return {
           ...oldWorld,
-          populationGrowthStatus: { type: 'NOT_GROWING' },
+          buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' }
         }
-        return newWorld as WorldWithOwner;
       })
     }
   }

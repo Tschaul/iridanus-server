@@ -1,7 +1,7 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
 import { updateWorld } from "./update-world";
-import { baseWorld, ReadyWorld, LostWorld, World, WorldBeingCaptured, WorldNotBeingCaptured } from "../../../shared/model/v1/world";
+import { baseWorld, ReadyWorld, LostWorld, World, WorldBeingCaptured, WorldNotBeingCaptured, WorldWithOwner } from "../../../shared/model/v1/world";
 
 export function captureWorld(
   worldId: string,
@@ -11,25 +11,18 @@ export function captureWorld(
     describe: () => `CaptureWorld ${JSON.stringify({ worldId, newOwnerId })}`,
     apply: (state: GameState) => {
 
-      if (!newOwnerId) {
-        throw new Error("BOOOOOOOOOOOOM");
-        
-      }
-
-      return updateWorld<World & WorldBeingCaptured, ReadyWorld & WorldNotBeingCaptured>(state, worldId, (oldWorld) => {
-        const result: any = {
+      return updateWorld<World, WorldWithOwner>(state, worldId, (oldWorld) => {
+        const result: WorldWithOwner = {
           ...baseWorld(oldWorld),
-          status: 'READY',
-          combatStatus: 'AT_PEACE',
+          status: 'OWNED',
+          combatStatus: { type: 'AT_PEACE' },
           ownerId: newOwnerId,
-          miningStatus: 'NOT_MINING',
-          populationGrowthStatus: 'NOT_GROWING',
-          captureStatus: 'NOT_BEING_CAPTURED',
-          orders: []
+          miningStatus: { type: 'NOT_MINING' },
+          populationGrowthStatus: { type: 'NOT_GROWING' },
+          populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
+          buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' },
+          population: {}
         }
-
-        delete result.capturingPlayerId;
-        delete result.captureTimestamp;
 
         return result;
       })

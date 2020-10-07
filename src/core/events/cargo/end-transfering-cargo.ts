@@ -60,9 +60,9 @@ export class EndTransferingCargoEventQueue implements GameEventQueue {
               }
 
               return [
+                ...captureAction,
                 giveOrTakeWorldMetal(fleet.toWorldId, fleet.cargoMetal),
                 giveOrTakeWorldPopulation(fleet.toWorldId, fleet.cargoPopulation, fleet.ownerId),
-                ...captureAction,
                 waitForCargo(fleet.id, fleet.fromWorldId, fleet.toWorldId),
               ]
             }

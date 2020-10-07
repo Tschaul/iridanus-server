@@ -1,4 +1,4 @@
-import { World } from "../../../shared/model/v1/world";
+import { World, worldHasOwner } from "../../../shared/model/v1/world";
 
 export function cargoAmounts(
   worldFrom: World,
@@ -48,8 +48,8 @@ function populationCargoAmount(
   playerId: string
 ) {
 
-  const worldFromPopulation = worldFrom.population[playerId] ?? 0;
-  const worldToPopulation = worldTo.population[playerId] ?? 0;
+  const worldFromPopulation = worldHasOwner(worldFrom) ? worldFrom.population[playerId] ?? 0 : 0;
+  const worldToPopulation = worldHasOwner(worldTo) ? worldTo.population[playerId] ?? 0 : 0;
 
   if (worldFromPopulation > (worldToPopulation + 1) && worldFromPopulation > 1) {
     return Math.min(

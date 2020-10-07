@@ -33,19 +33,19 @@ export function makeGomeisaThreeRandom(): GameMap {
     if (homeWorlds.includes(worldId)) {
       universe.worlds[worldId] = {
         id: worldId,
-        status: 'READY',
+        status: 'OWNED',
         ownerId: seats[worldId],
-        miningStatus: 'NOT_MINING',
-        populationGrowthStatus: 'NOT_GROWING',
-        combatStatus: 'AT_PEACE',
-        integrity: 1,
+        miningStatus: { type: 'NOT_MINING' },
+        populationGrowthStatus: { type: 'NOT_GROWING' },
+        combatStatus: { type: 'AT_PEACE' },
         metal: 0,
         mines: 0,
         industry: 25,
         population: { [seats[worldId]]: 50 },
         populationLimit: 50,
-        captureStatus: 'NOT_BEING_CAPTURED',
-        idleNotificationSent: true
+        populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
+        buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' },
+        worldDiscoveredNotificationSent: false
       };
 
       ([1, 2, 3, 4, 5]).forEach((index) => {
@@ -92,12 +92,11 @@ function makeWorld(id: string): LostWorld {
   const world: LostWorld = {
     id,
     industry,
-    integrity: 1,
     metal: metal,
     mines: 0,
-    population: {},
     populationLimit,
     status: 'LOST',
+    worldDiscoveredNotificationSent: false
   }
 
   return world;

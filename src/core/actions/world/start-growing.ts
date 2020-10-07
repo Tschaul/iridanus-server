@@ -15,9 +15,11 @@ export function worldStartGrowing(
       return updateWorld<WorldWithOwner, WorldWithOwner>(state, worldId, (oldWorld) => {
         return {
           ...oldWorld,
-          populationGrowthStatus: 'GROWING',
-          nextPopulationGrowthTimestamp,
-          growingPopulation
+          populationGrowthStatus: {
+            type: 'GROWING',
+            nextPopulationGrowthTimestamp,
+            growingPopulation
+          }
         }
       })
     }

@@ -23,7 +23,7 @@ export class WorldStopGrowingEventQueue implements GameEventQueue {
 
         return worlds.find(world =>
           'populationGrowthStatus' in world
-          && world.populationGrowthStatus === 'GROWING'
+          && world.populationGrowthStatus.type === 'GROWING'
           && totalPopulation(world) >= world.populationLimit
         )
       })

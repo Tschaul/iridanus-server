@@ -33,7 +33,7 @@ export class StopCapturingWorldEventQueue implements GameEventQueue {
       map(([worldsById, contestedWOrldIds, dominationByWorldId]) => {
 
         const world = Object.values(worldsById).find(world => {
-          if (worldHasOwner(world) && world.captureStatus === 'BEING_CAPTURED' && !contestedWOrldIds.includes(world.id)) {
+          if (worldHasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED' && !contestedWOrldIds.includes(world.id)) {
             return true
           }
         })

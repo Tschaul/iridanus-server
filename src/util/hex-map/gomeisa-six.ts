@@ -34,12 +34,11 @@ function makeWorld(id: string): LostWorld {
   return {
     id,
     industry: 0,
-    integrity: 0,
     metal: 0,
     mines: 0,
-    population: {},
     populationLimit: 0,
     status: 'LOST',
+    worldDiscoveredNotificationSent: false
   }
 }
 

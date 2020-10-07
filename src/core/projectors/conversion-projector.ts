@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { DominationByPlayerId, totalPopulation, World } from "../../shared/model/v1/world";
+import { DominationByPlayerId, totalPopulation, World, worldHasOwner } from "../../shared/model/v1/world";
 import { GameSetupProvider } from "../game-setup-provider";
 import { FleetProjector } from "./fleet-projector";
 import { WorldProjector } from "./world-projector";
@@ -42,8 +42,10 @@ export class ConversionProjector {
             addDomination(result[world.id], fleet.ownerId, fleet.ships * this.setup.rules.capture.shipConversionMultiplier)
           }
 
-          for (const playerId of Object.getOwnPropertyNames(world.population)) {
-            addDomination(result[world.id], playerId, world.population[playerId] ?? 0)
+          if (worldHasOwner(world)) {
+            for (const playerId of Object.getOwnPropertyNames(world.population)) {
+              addDomination(result[world.id], playerId, world.population[playerId] ?? 0)
+            }
           }
 
           // square all values
@@ -74,7 +76,7 @@ export class ConversionProjector {
       const result: string[] = []
 
       for (const world of Object.values(worldsById)) {
-        if (totalPopulation(world) > 0 && !Object.values(dominationByWorldId[world.id]).includes(1)) {
+        if (worldHasOwner(world) && totalPopulation(world) > 0  && !Object.values(dominationByWorldId[world.id]).includes(1)) {
           result.push(world.id)
         }
       }

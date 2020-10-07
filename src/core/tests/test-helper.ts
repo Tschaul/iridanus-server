@@ -14,7 +14,7 @@ import { ActionLogger } from '../infrastructure/action-logger';
 import { map } from 'rxjs/operators';
 import { GameStateValidator } from '../infrastructure/game- state-message-validator';
 import { GameRules } from '../../shared/model/v1/rules';
-import { ReadyWorld, LostWorld } from '../../shared/model/v1/world';
+import { ReadyWorld, LostWorld, WorldWithOwner } from '../../shared/model/v1/world';
 import { NotificationHandler } from '../infrastructure/notification-handler';
 
 let totalTime = 0;
@@ -81,8 +81,8 @@ export async function runMap(testMap: GameState, options?: {
   return result;
 }
 
-export const dummyReadyWorld: ReadyWorld = {
-  status: 'READY',
+export const dummyReadyWorld: WorldWithOwner = {
+  status: 'OWNED',
   id: "",
   industry: 0,
   metal: 10,
@@ -90,11 +90,12 @@ export const dummyReadyWorld: ReadyWorld = {
   ownerId: "",
   population: {},
   populationLimit: 25,
-  integrity: 1,
-  miningStatus: 'NOT_MINING',
-  populationGrowthStatus: 'NOT_GROWING',
-  combatStatus: 'AT_PEACE',
-  captureStatus: 'NOT_BEING_CAPTURED'
+  miningStatus: { type: 'NOT_MINING' },
+  combatStatus: { type: 'AT_PEACE' },
+  populationGrowthStatus: { type: 'NOT_GROWING' },
+  populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
+  buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' },
+  worldDiscoveredNotificationSent: false
 }
 
 export const dummyLostWorld: LostWorld = {
@@ -103,8 +104,6 @@ export const dummyLostWorld: LostWorld = {
   industry: 0,
   metal: 10,
   mines: 1,
-  population: {},
   populationLimit: 25,
-  integrity: 1,
-  captureStatus: 'NOT_BEING_CAPTURED'
+  worldDiscoveredNotificationSent: false
 }

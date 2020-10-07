@@ -1,8 +1,8 @@
 import { GameState } from "../shared/model/v1/state";
-import { ReadyWorld } from "../shared/model/v1/world";
+import { WorldWithOwner } from "../shared/model/v1/world";
 
-export const dummyReadyWorld: ReadyWorld = {
-  status: 'READY',
+export const dummyReadyWorld: WorldWithOwner = {
+  status: 'OWNED',
   id: "",
   industry: 0,
   metal: 0,
@@ -10,11 +10,12 @@ export const dummyReadyWorld: ReadyWorld = {
   ownerId: "",
   population: {},
   populationLimit: 25,
-  integrity: 1,
-  miningStatus: 'NOT_MINING',
-  combatStatus: 'AT_PEACE',
-  populationGrowthStatus: 'NOT_GROWING',
-  captureStatus: 'NOT_BEING_CAPTURED'
+  miningStatus: { type: 'NOT_MINING' },
+  combatStatus: { type: 'AT_PEACE' },
+  populationGrowthStatus: { type: 'NOT_GROWING' },
+  populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
+  buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' },
+  worldDiscoveredNotificationSent: false
 }
 
 export const aiTestMap: GameState = {
