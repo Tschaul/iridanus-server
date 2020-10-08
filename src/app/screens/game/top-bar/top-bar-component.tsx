@@ -77,7 +77,14 @@ export class TopBar extends React.Component<{
     >
       <div style={{ display: 'flex', flex: 1 }}>
         {this.props.vm.selfIsSpectator ? (
-          <span>SPECTATOR</span>
+          [
+            <span>SPECTATOR</span>,
+            <Button
+              style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+              onClick={this.handleBackToLobby}
+              spaceLeft
+            >⏎</Button>
+          ]
         ) : (
             [
               <Button

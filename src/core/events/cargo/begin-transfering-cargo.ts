@@ -12,7 +12,7 @@ import { GameSetupProvider } from "../../game-setup-provider";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 import { transferCargoToWorld } from "../../actions/fleet/transfer-cargo-to-world";
-import { worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
+import { World, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class BeginTransferingCargoEventQueue implements GameEventQueue {
@@ -76,8 +76,8 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
             happen: (timestamp: number) => {
 
               const cargo = cargoAmounts(
-                worlds[fleet.fromWorldId] as WorldWithOwner,
-                worlds[fleet.toWorldId] as WorldWithOwner,
+                worlds[fleet.fromWorldId],
+                worlds[fleet.toWorldId],
                 metalPotential[fleet.ownerId],
                 fleet.ships,
                 fleet.ownerId
@@ -85,9 +85,11 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
 
               const arrivingTimestamp = timestamp + this.setup.rules.warping.warpToWorldDelay
 
+              
+
               return [
                 giveOrTakeWorldMetal(fleet.fromWorldId, -1 * cargo.metal),
-                giveOrTakeWorldPopulation(fleet.fromWorldId, -1 * cargo.population),
+                giveOrTakeWorldPopulation(fleet.fromWorldId, -1 * cargo.population, fleet.ownerId),
                 transferCargoToWorld(fleet.id, arrivingTimestamp, cargo.metal, cargo.population, fleet.toWorldId)
               ]
             }

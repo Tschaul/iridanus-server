@@ -6,6 +6,7 @@ import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
 import { GameMap } from "../../shared/model/v1/game-map";
 import { choseWorldType } from "./chose-world-type";
 import { distributeWorldTypes } from "./distribute-world-types";
+import { applyWorldTypes } from "./apply-world-types";
 
 const homeWorlds = ['c3', 'c7', 'c11'];
 
@@ -48,7 +49,7 @@ export function makeGomeisaThreeRandom(): GameMap {
         populationLimit: 50,
         populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
         buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' },
-        worldDiscoveredNotificationSent: false
+        worldHasBeenDiscovered: false
       };
 
       ([1, 2, 3, 4, 5]).forEach((index) => {
@@ -72,6 +73,7 @@ export function makeGomeisaThreeRandom(): GameMap {
   })
 
   distributeWorldTypes(universe)
+  applyWorldTypes(universe)
 
   return {
     seats: Object.values(seats),
@@ -102,7 +104,7 @@ function makeWorld(id: string): LostWorld {
     mines: 0,
     populationLimit,
     status: 'LOST',
-    worldDiscoveredNotificationSent: false
+    worldHasBeenDiscovered: false
   }
 
   return world;

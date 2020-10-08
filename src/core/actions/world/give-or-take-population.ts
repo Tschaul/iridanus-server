@@ -1,22 +1,27 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
 import { updateWorld } from "./update-world";
-import { ReadyWorld, LostWorld, WorldWithOwner, World, baseWorld } from "../../../shared/model/v1/world";
+import { World } from "../../../shared/model/v1/world";
 
-export function giveOrTakeWorldPopulation(worldId: string, amount: number, playerId: string | null = null): Action {
-  let affectedPlayerId = ''
+export function giveOrTakeWorldPopulation(worldId: string, amount: number, playerId: string): Action {
   return {
-    describe: () => `GiveOrTakeWorldPopulation ${JSON.stringify({ worldId, amount, affectedPlayerId })}`,
+    describe: () => `GiveOrTakeWorldPopulation ${JSON.stringify({ worldId, amount, playerId })}`,
     apply: (state: GameState) => {
-      return updateWorld<WorldWithOwner, World>(state, worldId, oldWorld => {
+      return updateWorld<World, World>(state, worldId, oldWorld => {
 
-        affectedPlayerId = playerId ?? oldWorld.ownerId
-
-        if (!affectedPlayerId) {
+        if (!playerId) {
           throw new Error("No player to give or take population");
         }
 
-        const currentPopulation = oldWorld.population[affectedPlayerId] ?? 0;
+        if (oldWorld.status === 'LOST') {
+          if (amount !== 0) {
+            throw new Error("Cannot give or take population from lsot world.");
+          } else {
+            return oldWorld;
+          }
+        }
+
+        const currentPopulation = oldWorld.population[playerId] ?? 0;
 
         const newPopulation = Math.max(currentPopulation + amount, 0);
 
@@ -24,7 +29,7 @@ export function giveOrTakeWorldPopulation(worldId: string, amount: number, playe
           ...oldWorld,
           population: {
             ...oldWorld.population,
-            [affectedPlayerId]: newPopulation
+            [playerId]: newPopulation
           }
         }
       })

@@ -10,7 +10,7 @@ export function notifyWorldDiscovered(
     describe: () => `NotifyWorldDiscovered ${JSON.stringify({ worldId, playerId })}`,
     apply: (state: GameState) => {
       return produce(state, draft => {
-        draft.universe.worlds[worldId].worldDiscoveredNotificationSent = true;
+        draft.universe.worlds[worldId].worldHasBeenDiscovered = true;
       })
     }
   }

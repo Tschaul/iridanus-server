@@ -39,7 +39,7 @@ function makeWorld(id: string): LostWorld {
     mines: 0,
     populationLimit: 0,
     status: 'LOST',
-    worldDiscoveredNotificationSent: false
+    worldHasBeenDiscovered: false
   }
 }
 

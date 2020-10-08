@@ -79,7 +79,6 @@ export class GameStageForeground extends React.Component<{
 
           const relPos = fromId === id1 ? fleet.transitPosition : (1 - fleet.transitPosition);
 
-          const playerInfo = this.props.vm.playerInfos[fleet.ownerId];
           const rel = mul(parallel, WORLD_OUTER_RADIUS + relPos * (dist - 2 * WORLD_OUTER_RADIUS))
 
           const idle = fleet.status === 'WAITING_FOR_CARGO';
@@ -111,7 +110,7 @@ export class GameStageForeground extends React.Component<{
                 y={world1Pos.y}
                 dominantBaseline="middle"
                 textAnchor="middle"
-                fill={playerInfo.color}
+                fill={this.getColorForPlayer(fleet.ownerId)}
                 fontSize={22}
                 data-world-id1={id1}
                 data-world-id2={id2}
@@ -199,7 +198,6 @@ export class GameStageForeground extends React.Component<{
             </StaticTooltip>
           </HoverTooltip>
           {fleets.map((fleet, index) => {
-            const playerInfo = this.props.vm.playerInfos[fleet.ownerId];
             const idle = fleet.status === 'READY' && !fleet.orders.length
             const pos = positions[index]
             return (
@@ -227,7 +225,7 @@ export class GameStageForeground extends React.Component<{
                   y={world.y + FLEET_DISTANCE * pos.y}
                   dominantBaseline="middle"
                   textAnchor="middle"
-                  fill={playerInfo.color}
+                  fill={this.getColorForPlayer(fleet.ownerId)}
                   fontSize={22}
                   style={{ transform: "translateY(1px)", cursor: 'pointer' }}
                   data-world-id={world.id}
@@ -318,8 +316,12 @@ export class GameStageForeground extends React.Component<{
     if (!visibleWorldhasOwner(world)) {
       return 'lightgray'
     } else {
-      return this.props.vm.playerInfos[world.ownerId].color;
+      return this.getColorForPlayer(world.ownerId);
     }
+  }
+
+  getColorForPlayer(playerId: string) {
+    return this.props.vm.playerInfos[playerId]?.color ?? 'lightgray';
   }
 
   getTooltipForWorld(world: VisibleWorld) {

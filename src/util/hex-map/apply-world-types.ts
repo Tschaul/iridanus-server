@@ -3,7 +3,7 @@ import { Fleet } from "../../shared/model/v1/fleet";
 import { Universe } from "../../shared/model/v1/universe";
 import { baseWorld, LostWorld } from "../../shared/model/v1/world";
 
-export function applyWorldType(universe: Universe) {
+export function applyWorldTypes(universe: Universe) {
 
   for (const worldId of Object.getOwnPropertyNames(universe.worlds)) {
     const world = universe.worlds[worldId];

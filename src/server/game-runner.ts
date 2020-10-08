@@ -188,7 +188,7 @@ export class GameRunner {
               world.population[player] = world.population[seat];
               delete world.population[seat];
               world.ownerId = player;
-              world.worldDiscoveredNotificationSent = true;
+              world.worldHasBeenDiscovered = true;
             }
           }
         })

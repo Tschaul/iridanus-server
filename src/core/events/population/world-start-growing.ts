@@ -26,6 +26,7 @@ export class WorldStartGrowingEventQueue implements GameEventQueue {
         return worlds.find(world => {
           if (worldHasOwner(world)
             && !['VOID', 'NEBULA'].includes(world.worldType.type)
+            && world.ownerId !== '@natives'
             && totalPopulation(world) > 0
             && totalPopulation(world) < world.populationLimit) {
             if (world.populationGrowthStatus.type === 'NOT_GROWING') {

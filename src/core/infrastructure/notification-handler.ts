@@ -14,7 +14,7 @@ export class NotificationHandler {
 
   handleNotifications(event: GameEvent, timestamp: number) {
     const notifications = event.notifications ? event.notifications(timestamp) : [];
-    notifications.forEach(notifiction => {
+    notifications.filter(it => !it.playerId.startsWith('@')).forEach(notifiction => {
       this.notifications$$.next(notifiction);
       this.logger.info('GameNotification: ' + JSON.stringify(notifiction))
     })

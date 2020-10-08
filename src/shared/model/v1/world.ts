@@ -33,7 +33,7 @@ export interface BaseWorld {
     industry: number;
     populationLimit: number;
     mines: number;
-    worldDiscoveredNotificationSent: boolean;
+    worldHasBeenDiscovered: boolean;
 }
 
 export function totalPopulation(world: WorldWithOwner) {
@@ -51,7 +51,7 @@ export function baseWorld(world: World): BaseWorld {
         metal: world.metal,
         mines: world.mines,
         populationLimit: world.populationLimit,
-        worldDiscoveredNotificationSent: !!world.worldDiscoveredNotificationSent
+        worldHasBeenDiscovered: !!world.worldHasBeenDiscovered
     }
 
     return result;

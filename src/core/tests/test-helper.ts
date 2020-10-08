@@ -96,7 +96,7 @@ export const dummyReadyWorld: WorldWithOwner = {
   populationGrowthStatus: { type: 'NOT_GROWING' },
   populationConversionStatus: { type: 'NOT_BEING_CAPTURED' },
   buildShipsStatus: { type: 'NOT_BUILDING_SHIPS' },
-  worldDiscoveredNotificationSent: false
+  worldHasBeenDiscovered: false
 }
 
 export const dummyLostWorld: LostWorld = {
@@ -107,5 +107,5 @@ export const dummyLostWorld: LostWorld = {
   metal: 10,
   mines: 1,
   populationLimit: 25,
-  worldDiscoveredNotificationSent: false
+  worldHasBeenDiscovered: false
 }

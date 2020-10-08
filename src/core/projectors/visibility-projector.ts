@@ -40,7 +40,7 @@ export class VisibilityProjector {
 
         const worldIsNotVisible = (worldId: string) => {
           return !visibilityForPlayer[worldId]
-            || visibilityForPlayer[worldId] === 'FOG_OF_WAR'
+            || ['FOG_OF_WAR', 'HIDDEN'].includes(visibilityForPlayer[worldId])
         }
 
         const warpingFleetIsNotVisible = (fleet: FleetInTransit) => {
@@ -119,7 +119,9 @@ export class VisibilityProjector {
 
       function markWorldVisibleForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string, worldType: WorldType['type']) {
         visibility[playerId] = visibility[playerId] ?? {}
-        visibility[playerId][worldId] = worldType === 'NEBULA' ? 'FOG_OF_WAR' : 'VISIBLE';
+        if (!(visibility[playerId][worldId] === 'PRESENT')) {
+          visibility[playerId][worldId] = worldType === 'NEBULA' ? 'FOG_OF_WAR' : 'VISIBLE';
+        }
         allPlayerIds.filter(it => it !== playerId).forEach(id => {
           visibility[id] = visibility[id] ?? {}
           if (!visibility[id][worldId]) {
@@ -171,7 +173,7 @@ export class VisibilityProjector {
       for (const playerId of Object.getOwnPropertyNames(visibility)) {
         for (const worldId of Object.getOwnPropertyNames(worldsById)) {
           const world = worldsById[worldId];
-          if (['VISIBLE', 'PRESENT'].includes(visibility[playerId][worldId]) && !world.worldDiscoveredNotificationSent) {
+          if (['VISIBLE', 'PRESENT'].includes(visibility[playerId][worldId]) && !world.worldHasBeenDiscovered) {
             return {
               playerId,
               worldId
@@ -186,14 +188,11 @@ export class VisibilityProjector {
   ) as Observable<{ playerId: string, worldId: string } | null>
 
   private playerHasFleetAtWorld(allFleets: Fleet[], playerId: string, world: World) {
-    return allFleets.some(fleet => this.fleetOwnedByPlayer(fleet, playerId) && fleetIsAtWorld(fleet) && fleet.currentWorldId === world.id);
+    return allFleets.some(fleet => fleet.ownerId === playerId && fleetIsAtWorld(fleet) && fleet.currentWorldId === world.id);
   }
 
   private worldOwnedByPlayer(world: World, playerId: string) {
     return worldHasOwner(world) && world.ownerId === playerId;
   }
 
-  private fleetOwnedByPlayer(fleet: Fleet, playerId: string) {
-    return fleet.ownerId === playerId;
-  }
 }
