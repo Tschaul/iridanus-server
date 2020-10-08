@@ -35,8 +35,8 @@ export class StartCapturingWorldEventQueue implements GameEventQueue {
           if (worldHasOwner(world) && world.populationConversionStatus.type === 'NOT_BEING_CAPTURED' && contestedWOrldIds.includes(world.id)) {
             return true
           }
-          if (worldHasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED' && dominationByWorldId[world.id]) {
-            return world.populationConversionStatus.nextConvertingPlayerId !== dominationByWorldId[world.id]
+          if (worldHasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED') {
+            return (dominationByWorldId[world.id] && world.populationConversionStatus.nextConvertingPlayerId !== dominationByWorldId[world.id])
               || !deepEqual(world.populationConversionStatus.lastPopulation, world.population);
           }
         }) as WorldWithOwner
@@ -49,7 +49,7 @@ export class StartCapturingWorldEventQueue implements GameEventQueue {
 
               const converionEvent = calculateNextConversionEvent(
                 world.population,
-                dominationByWorldId[world.id] as string,
+                dominationByWorldId[world.id],
                 this.setup.rules.capture.populationConversionRate,
                 this.random
               )

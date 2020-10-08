@@ -1,7 +1,7 @@
-import { injectable } from "inversify";
+import { id, injectable } from "inversify";
 import { combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { Distribution, majorityHolder } from "../../shared/math/distributions/distribution-helper";
+import { allFromPlayer, Distribution, majorityHolder } from "../../shared/math/distributions/distribution-helper";
 import { totalPopulation, worldHasOwner } from "../../shared/model/v1/world";
 import { GameSetupProvider } from "../game-setup-provider";
 import { FleetProjector } from "./fleet-projector";
@@ -65,8 +65,13 @@ export class ConversionProjector {
       const result: string[] = []
 
       for (const world of Object.values(worldsById)) {
-        if (worldHasOwner(world) && totalPopulation(world) > 0 && dominationByWorldId[world.id] && dominationByWorldId[world.id] !== world.ownerId) {
-          result.push(world.id)
+        if (worldHasOwner(world) && totalPopulation(world) > 0) {
+          const dominatingPlayer = dominationByWorldId[world.id];
+          if (!dominatingPlayer && !allFromPlayer(world.population, world.ownerId)) {
+            result.push(world.id)
+          } else if(dominatingPlayer && !allFromPlayer(world.population, dominatingPlayer)) {
+            result.push(world.id)
+          }
         }
       }
       return result;

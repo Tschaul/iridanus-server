@@ -49,3 +49,7 @@ export function absoluteMajorityHolder(distribution: Distribution) {
   }
 
 }
+
+export function allFromPlayer(distribution: Distribution, playerId: string) {
+  return (distribution[playerId] ?? 0) === total(distribution);
+}

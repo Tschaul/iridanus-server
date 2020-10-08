@@ -7,7 +7,7 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
     },
     capture: {
       populationConversionRate: 0.25 * millisecondsPerDay,
-      shipConversionMultiplier: 5,
+      shipConversionMultiplier: 3,
     },
     population: {
       minimumPopulationGrowthDelay: 10 * millisecondsPerDay

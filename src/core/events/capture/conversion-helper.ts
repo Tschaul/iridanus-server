@@ -4,7 +4,7 @@ import { RandomNumberGenerator } from "../../infrastructure/random-number-genera
 
 export function calculateNextConversionEvent(
   population: PopulationByPlayer,
-  dominatingPlayerId: string,
+  dominatingPlayerId: string | null,
   baseConversionRate: number,
   random: RandomNumberGenerator
 ) {
@@ -12,16 +12,16 @@ export function calculateNextConversionEvent(
   const generateDelay = () => random.exponential() * baseConversionRate;
 
   let delay = 0;
-  const convertingPlayerId = dominatingPlayerId;
+  let convertingPlayerId = '';
   let convertedPlayerId = '';
   let counter = 0;
 
-  while (counter < 100 && !(convertingPlayerId && convertedPlayerId && convertingPlayerId !== convertedPlayerId)) {
+  while (counter < 10 && !(convertingPlayerId && convertedPlayerId && convertingPlayerId !== convertedPlayerId)) {
 
     delay += generateDelay();
     counter++;
     convertedPlayerId = pickFromDistribution(population, random.equal())
-
+    convertingPlayerId = dominatingPlayerId ?? pickFromDistribution(population, random.equal())
   }
 
   return {
