@@ -1,16 +1,13 @@
 import { GameEventQueue, GameEvent } from "../event";
 import { Observable, combineLatest } from "rxjs";
-import { injectable, inject } from "inversify";
-import { TimeProjector } from "../../projectors/time-projector";
-import { map, withLatestFrom } from "rxjs/operators";
+import { injectable } from "inversify";
+import { map } from "rxjs/operators";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { fleetStartFiring } from "../../actions/fleet/start-firing";
 import { CombatProjector } from "../../projectors/combat-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { ReadyFleet } from "../../../shared/model/v1/fleet";
-import { WorldProjector } from "../../projectors/world-projector";
-import { worldHasOwner } from "../../../shared/model/v1/world";
 
 @injectable()
 export class FleetStartFiringEventQueue implements GameEventQueue {
@@ -18,12 +15,10 @@ export class FleetStartFiringEventQueue implements GameEventQueue {
 
   constructor(
     private fleets: FleetProjector,
-    private worlds: WorldProjector,
     private combat: CombatProjector,
-    private time: TimeProjector,
-    private random: RandomNumberGenerator,
+    random: RandomNumberGenerator,
     private setup: GameSetupProvider) {
-    const startFiringFleet$ = combineLatest(this.combat.worldIdsAtPeaceAndAtWar$, this.fleets.byId$).pipe(
+    const startFiringFleet$ = combineLatest([this.combat.worldIdsAtPeaceAndAtWar$, this.fleets.byId$]).pipe(
       map(([[combatWorldIds, _], fleetsById]) => {
 
         const fleets = Object.values(fleetsById);

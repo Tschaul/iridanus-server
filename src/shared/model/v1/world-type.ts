@@ -36,7 +36,7 @@ export type DefensiveWorldType = {
 }
 
 export type PopulatedWorldType = {
-  type: 'POPULATED'
+  type: 'POPULATED',
 }
 
 export type CreepWorldType = {

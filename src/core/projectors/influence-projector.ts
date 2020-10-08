@@ -1,11 +1,10 @@
 import { injectable } from "inversify";
 import { ReadonlyStore } from "../store";
-import { map, distinctUntilChanged, shareReplay, startWith } from "rxjs/operators";
+import { map, shareReplay } from "rxjs/operators";
 import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { worldHasOwner } from "../../shared/model/v1/world";
-import equal from 'deep-equal';
 import { PlayerStates } from "../../shared/model/v1/scoring";
 
 type Stat = { [playerId: string]: number }
@@ -37,14 +36,16 @@ export class InfluenceProjector {
 
         const population: Stat = {}
         const industry: Stat = {}
-        const mines: Stat = {}
         const ships: Stat = {}
 
         Object.values(worldsbyId).forEach(world => {
           if (worldHasOwner(world)) {
-            incrementStat(population, world.ownerId, world.population[world.ownerId] ?? 0)
+            let effectivePopulation = world.population[world.ownerId] ?? 0;
+            if (world.worldType.type === 'INSPIRING') {
+              effectivePopulation *= 1.5;
+            }
+            incrementStat(population, world.ownerId, effectivePopulation)
             incrementStat(industry, world.ownerId, world.industry)
-            incrementStat(mines, world.ownerId, world.mines)
           }
         })
 
@@ -55,14 +56,13 @@ export class InfluenceProjector {
         const allPlayerIds = new Set([
           ...Object.getOwnPropertyNames(population),
           ...Object.getOwnPropertyNames(industry),
-          ...Object.getOwnPropertyNames(mines),
           ...Object.getOwnPropertyNames(ships),
         ])
 
         const influence: Stat = {};
 
         allPlayerIds.forEach(playerId => {
-          influence[playerId] = Math.max(0, (population[playerId] || 0) - (industry[playerId] || 0) - (mines[playerId] || 0) - (ships[playerId] || 0))
+          influence[playerId] = Math.max(0, (population[playerId] || 0) - (industry[playerId] || 0) - (ships[playerId] || 0))
         })
 
         return influence;

@@ -11,7 +11,8 @@ export function handleFiring(attacker: ReadyFleet, world: World, fleetsByCurrent
     return []
   }
 
-  const [fleetDamage, integrityDamage] = determineFleetDamage(attacker, config);
+
+  const [fleetDamage, integrityDamage] = determineFleetDamage(attacker, target, world, config);
 
   return [
     giveOrTakeFleetShips(target.id, -1 * fleetDamage, -1 * integrityDamage)
@@ -36,9 +37,13 @@ function determineTargetFleet(attacker: ReadyFleet, otherFleetsAtWorld: Fleet[],
 
 }
 
-function determineFleetDamage(attacker: Fleet, config: GameRules): [number, number] {
+function determineFleetDamage(attacker: Fleet, target: Fleet, world: World, config: GameRules,): [number, number] {
 
-  const rawDamage = attacker.ships * config.combat.integrityDamagePerShip;
+  let rawDamage = attacker.ships * config.combat.integrityDamagePerShip;
+
+  if (world.worldType.type === 'DEFENSIVE' && world.status === 'OWNED' && world.ownerId === target.ownerId) {
+    rawDamage /= 1.5
+  }
 
   return [Math.floor(rawDamage), rawDamage % 1];
 

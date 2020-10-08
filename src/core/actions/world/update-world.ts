@@ -6,8 +6,8 @@ export function updateWorld<Told extends World, Tnew extends World>(
   state: GameState, 
   worldId: string, 
   updater: (oldWorld: Told) => Tnew): GameState {
-  return produce(state, draft => {
-    const oldWorld = draft.universe.worlds[worldId] as Told;
+    const oldWorld = state.universe.worlds[worldId] as Told;
+    return produce(state, draft => {
     const newWorld = updater(oldWorld);
     draft.universe.worlds[worldId] = newWorld;
   })

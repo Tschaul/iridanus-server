@@ -1,12 +1,10 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable, combineLatest } from "rxjs";
+import { Observable } from "rxjs";
 import { injectable } from "inversify";
 import { TimeProjector } from "../../projectors/time-projector";
-import { map, withLatestFrom } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
-import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { worldStartMining } from "../../actions/world/start-mining";
-import { CombatProjector } from "../../projectors/combat-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { worldHasOwner } from "../../../shared/model/v1/world";
 
@@ -16,7 +14,6 @@ export class WorldStartMiningEventQueue implements GameEventQueue {
 
   constructor(
     private worlds: WorldProjector,
-    private time: TimeProjector,
     private setup: GameSetupProvider) {
 
     const startMiningWorld$ = this.worlds.byId$.pipe(

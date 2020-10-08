@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { buildShips } from "../../actions/world/build-ship";
 import { GameSetupProvider } from "../../game-setup-provider";
-import { calculateActiveIndustry } from "./build-helper";
+import { calculateActiveIndustry, calculateBuildDelay, calculateOldBuildDelay } from "./build-helper";
 import { stopBuildingShips } from "../../actions/world/stop-building-ships";
 
 @injectable()
@@ -47,11 +47,9 @@ export class ContinueOrStopBuildingShipEventQueue implements GameEventQueue {
 
               if (activeIndustry !== 0) {
 
-                const newDelay = this.setup.rules.building.buildShipDelay * world.buildShipsStatus.amount / activeIndustry;
+                const newDelay = calculateBuildDelay(world, world.buildShipsStatus.amount, this.setup.rules.building.buildShipDelay)
 
-                const currentlyBuildingIndustry = world.buildShipsStatus.activeIndustry;
-
-                const oldDelay = this.setup.rules.building.buildShipDelay * world.buildShipsStatus.amount / currentlyBuildingIndustry;
+                const oldDelay =  calculateOldBuildDelay(world, this.setup.rules.building.buildShipDelay)
 
                 const progress = (timestamp - (world.buildShipsStatus.readyTimestamp - oldDelay)) / (oldDelay);
 

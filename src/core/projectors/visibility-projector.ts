@@ -9,6 +9,7 @@ import { Fleet, FleetInTransit, fleetIsAtWorld, pathOfFleetInTransit } from "../
 import { GatesProjector } from "./gates-projector";
 import { VisibleWorld, VisibleState, applyFogOfWar } from "../../shared/model/v1/visible-state";
 import { PlayerProjector } from "./player-projector";
+import { WorldType } from "../../shared/model/v1/world-type";
 
 export type WorldVisibility = 'VISIBLE' | 'PRESENT' | 'FOG_OF_WAR' | 'HIDDEN'
 
@@ -116,9 +117,9 @@ export class VisibilityProjector {
         })
       }
 
-      function markWorldVisibleForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string) {
+      function markWorldVisibleForPlayer(visibility: VisibilityByPlayerId, worldId: string, playerId: string, worldType: WorldType['type']) {
         visibility[playerId] = visibility[playerId] ?? {}
-        visibility[playerId][worldId] = 'VISIBLE';
+        visibility[playerId][worldId] = worldType === 'NEBULA' ? 'FOG_OF_WAR' : 'VISIBLE';
         allPlayerIds.filter(it => it !== playerId).forEach(id => {
           visibility[id] = visibility[id] ?? {}
           if (!visibility[id][worldId]) {
@@ -150,7 +151,7 @@ export class VisibilityProjector {
             const neighboringWorld = worldsById[id];
             return this.worldOwnedByPlayer(neighboringWorld, playerId) || this.playerHasFleetAtWorld(allFleets, playerId, neighboringWorld)
           })) {
-            markWorldVisibleForPlayer(result, world.id, playerId)
+            markWorldVisibleForPlayer(result, world.id, playerId, worldsById[world.id].worldType.type)
           }
           markWorldHiddenForPlayer(result, world.id, playerId)
         })

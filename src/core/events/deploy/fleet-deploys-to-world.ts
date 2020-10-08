@@ -1,7 +1,7 @@
 import { GameEvent, GameEventQueue } from "../event";
 import { Observable, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import {  ReadyFleet } from "../../../shared/model/v1/fleet";
+import { ReadyFleet } from "../../../shared/model/v1/fleet";
 import { FleetProjector } from "../../projectors/fleet-projector";
 import { injectable } from "inversify";
 import { DeployToWorldOrder } from "../../../shared/model/v1/fleet-orders";
@@ -33,7 +33,7 @@ export class FleetDeploysToWorldEventQueue implements GameEventQueue {
 
               const world = worldsById[fleet.currentWorldId];
 
-              if (!worldHasOwner(world) || world.ownerId !== fleet.ownerId) {
+              if (!worldHasOwner(world) || world.ownerId !== fleet.ownerId || ['VOID', 'NEBULA'].includes(world.worldType.type)) {
                 return [
                   popFleetOrder(fleet.id)
                 ]

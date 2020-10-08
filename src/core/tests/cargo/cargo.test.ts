@@ -3,7 +3,7 @@ import { cargoTestMap } from "./cargo-test-map";
 import { expect } from 'chai';
 import produce from "immer";
 import { runMap } from "../test-helper";
-import { ReadyWorld, totalPopulation, World, WorldWithOwner } from "../../../shared/model/v1/world";
+import { totalPopulation, World, WorldWithOwner } from "../../../shared/model/v1/world";
 
 describe("cargo", () => {
 

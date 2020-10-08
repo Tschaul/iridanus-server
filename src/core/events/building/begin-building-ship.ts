@@ -3,11 +3,12 @@ import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
 import { WorldProjector } from "../../projectors/world-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { ReadyWorld, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
+import { BuildingShipsWorld, ReadyWorld, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 import { map } from "rxjs/operators";
 import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { buildShips } from "../../actions/world/build-ship";
 import { GameSetupProvider } from "../../game-setup-provider";
+import { calculateActiveIndustry, calculateBuildDelay } from "./build-helper";
 
 @injectable()
 export class BeginBuildingShipEventQueue implements GameEventQueue {
@@ -31,7 +32,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
               return true
             }
           }
-        }) as WorldWithOwner
+        }) as WorldWithOwner & { buildShipsStatus: BuildingShipsWorld }
 
       })
     )
@@ -44,8 +45,8 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
         } else {
           return {
             happen: (timestamp: number) => {
-              const activeIndustry = Math.min(world.population[world.ownerId], world.industry)
-              const delay = this.setup.rules.building.buildShipDelay * shipsAmount / activeIndustry;
+              const activeIndustry = calculateActiveIndustry(world);
+              const delay = calculateBuildDelay(world, shipsAmount, this.setup.rules.building.buildShipDelay);
               return [
                 buildShips(world.id, timestamp + delay, shipsAmount, activeIndustry),
                 giveOrTakeWorldMetal(world.id, -1 * shipsAmount),

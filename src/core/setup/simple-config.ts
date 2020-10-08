@@ -29,8 +29,8 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
       warpToWorldDelay: 0.7 * millisecondsPerDay,
     },
     mining: {
-      miningDelay: 2 * millisecondsPerDay,
-      maximumMetal: 10
+      miningDelay: 0.5 * millisecondsPerDay,
+      maximumMetal: 20
     },
     global: {
       maxAmount: 99

@@ -23,4 +23,5 @@ export function choseWorldType(random: number): WorldType {
   return {
     type
   }
+
 }
