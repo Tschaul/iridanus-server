@@ -40,7 +40,8 @@ export type VisibleWorld =
 
 export interface UnknownWorld {
   id: string
-  status: 'UNKNOWN'
+  status: 'HIDDEN',
+  worldType: WorldType | { type: 'UNKOWN' }
 }
 
 export function applyFogOfWar(world: World): WorldInFogOfWar {
@@ -56,10 +57,10 @@ export function applyFogOfWar(world: World): WorldInFogOfWar {
   }
 }
 
-export function visibleWorldhasOwner(world: VisibleWorld): world is WorldWithOwner | WorldInFogOfWar & {ownerid: string} {
-  return world.status !== 'LOST' && world.status !== 'UNKNOWN' && !!world.ownerId;
+export function visibleWorldhasOwner(world: VisibleWorld): world is WorldWithOwner | WorldInFogOfWar & { ownerid: string } {
+  return world.status !== 'LOST' && world.status !== 'HIDDEN' && !!world.ownerId;
 }
 
 export function visibleWorldIsWorld(world: VisibleWorld): world is World {
-  return world.status !== 'UNKNOWN' && world.status !== 'FOG_OF_WAR';
+  return world.status !== 'HIDDEN' && world.status !== 'FOG_OF_WAR';
 }

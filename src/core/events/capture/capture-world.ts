@@ -7,6 +7,7 @@ import { TimeProjector } from "../../projectors/time-projector";
 import { captureWorld } from "../../actions/world/capture";
 import { WorldProjector } from "../../projectors/world-projector";
 import { PopulationByPlayer, totalPopulation, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
+import { absoluteMajorityHolder } from "../../../shared/math/distributions/distribution-helper";
 
 @injectable()
 export class CaptureWorldEventQueue implements GameEventQueue {
@@ -52,24 +53,4 @@ export class CaptureWorldEventQueue implements GameEventQueue {
       })
     )
   }
-}
-
-function absoluteMajorityHolder(population: PopulationByPlayer) {
-  let totalPopulation = 0;
-  let maxPopulation = 0;
-  let majorityHolder: string | null = null;
-  for (const playerId of Object.getOwnPropertyNames(population)) {
-    totalPopulation += population[playerId];
-    if (population[playerId] >= maxPopulation) {
-      maxPopulation = population[playerId];
-      majorityHolder = playerId;
-    }
-  }
-
-  if (maxPopulation > Math.ceil(totalPopulation / 2)) {
-    return majorityHolder
-  } else {
-    return null
-  }
-
 }

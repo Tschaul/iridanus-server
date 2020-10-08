@@ -132,7 +132,7 @@ export class GameStageForeground extends React.Component<{
       const fleets = this.props.vm.fleetsByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
-      const opacity = world.status === 'UNKNOWN' || world.status === 'FOG_OF_WAR' ? 0.5 : 1
+      const opacity = world.status === 'HIDDEN' || world.status === 'FOG_OF_WAR' ? 0.5 : 1
 
       const positions = distributeOnCircle(fleets.length);
 
@@ -241,34 +241,31 @@ export class GameStageForeground extends React.Component<{
   }
 
   private getWorldSymbol(world: VisibleWorld) {
-    switch (world.status) {
-      case 'UNKNOWN':
+    switch (world.worldType.type) {
+      case 'UNKOWN':
         return '?'
+      case 'VOID':
+        return ' ';
+      case 'NEBULA':
+        return '≋';
+      case 'MINING':
+        return 'M';
+      case 'DOUBLE':
+        return '⚉';
+      case 'DEFENSIVE':
+        return 'D';
+      case 'INDUSTRIAL':
+        return 'I';
+      case 'INSPIRING':
+        return '★';
+      case 'LUSH':
+        return 'L';
+      case 'POPULATED':
+        return 'P';
+      case 'CREEP':
+        return 'C';
       default:
-        switch (world.worldType.type) {
-          case 'VOID':
-            return ' ';
-          case 'NEBULA':
-            return '≋';
-          case 'MINING':
-            return 'M';
-          case 'DOUBLE':
-            return '⚉';
-          case 'DEFENSIVE':
-            return 'D';
-          case 'INDUSTRIAL':
-            return 'I';
-          case 'INSPIRING':
-            return '★';
-          case 'LUSH':
-            return 'L';
-          case 'POPULATED':
-            return 'P';
-          case 'CREEP':
-            return 'C';
-          default:
-            return '●';
-        }
+        return '●';
     }
   }
 
@@ -325,7 +322,7 @@ export class GameStageForeground extends React.Component<{
   }
 
   getTooltipForWorld(world: VisibleWorld) {
-    if (world.status === 'UNKNOWN') {
+    if (world.status === 'HIDDEN') {
       return '';
     } else if (world.status === 'FOG_OF_WAR') {
       return `${JSON.stringify(world.population)}/${world.populationLimit} P ${world.industry} I`;

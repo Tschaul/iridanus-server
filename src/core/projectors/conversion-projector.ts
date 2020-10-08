@@ -1,20 +1,21 @@
 import { injectable } from "inversify";
 import { combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { DominationByPlayerId, totalPopulation, World, worldHasOwner } from "../../shared/model/v1/world";
+import { Distribution, majorityHolder } from "../../shared/math/distributions/distribution-helper";
+import { totalPopulation, worldHasOwner } from "../../shared/model/v1/world";
 import { GameSetupProvider } from "../game-setup-provider";
 import { FleetProjector } from "./fleet-projector";
 import { WorldProjector } from "./world-projector";
 
-type DominationByWorldId = {
-  [worldId: string]: DominationByPlayerId;
+type DominatingPlayerByWorldId = {
+  [worldId: string]: string | null;
 };
 
 @injectable()
 export class ConversionProjector {
 
   contestedWorldIds$: Observable<string[]>;
-  dominationByWorldId$: Observable<{ [worldId: string]: { [playerId: string]: number } }>
+  dominationByWorldId$: Observable<DominatingPlayerByWorldId>
 
   constructor(
     private worlds: WorldProjector,
@@ -24,45 +25,33 @@ export class ConversionProjector {
     this.dominationByWorldId$ = combineLatest([this.worlds.byId$, this.fleets.byCurrentWorldId$]).pipe(
       map(([worldsById, fleetsByWorldId]) => {
 
-        const result: DominationByWorldId = {}
+        const result: DominatingPlayerByWorldId = {}
 
-        const addDomination = (domination: DominationByPlayerId, playerId: string, amount: number) => {
+        const addDomination = (domination: Distribution, playerId: string, amount: number) => {
           const current = domination[playerId] ?? 0;
           domination[playerId] = current + amount;
         }
 
         for (const world of Object.values(worldsById)) {
-          result[world.id] = {};
+          const dist: Distribution = {};
 
           // gather base values
 
           const fleets = fleetsByWorldId[world.id] ?? [];
 
           for (const fleet of fleets) {
-            addDomination(result[world.id], fleet.ownerId, fleet.ships * this.setup.rules.capture.shipConversionMultiplier)
+            addDomination(dist, fleet.ownerId, fleet.ships * this.setup.rules.capture.shipConversionMultiplier)
           }
 
           if (worldHasOwner(world)) {
             for (const playerId of Object.getOwnPropertyNames(world.population)) {
-              addDomination(result[world.id], playerId, world.population[playerId] ?? 0)
+              addDomination(dist, playerId, world.population[playerId] ?? 0)
             }
           }
 
           // square all values
 
-          let squareSum = 0;
-
-          for (const playerId of Object.getOwnPropertyNames(result[world.id])) {
-            const square = result[world.id][playerId] * result[world.id][playerId];
-            result[world.id][playerId] = square;
-            squareSum += square
-          }
-
-          // normalize
-
-          for (const playerId of Object.getOwnPropertyNames(result[world.id])) {
-            result[world.id][playerId] = result[world.id][playerId] / squareSum;
-          }
+          result[world.id] = majorityHolder(dist);
         }
 
         return result;
@@ -76,7 +65,7 @@ export class ConversionProjector {
       const result: string[] = []
 
       for (const world of Object.values(worldsById)) {
-        if (worldHasOwner(world) && totalPopulation(world) > 0  && !Object.values(dominationByWorldId[world.id]).includes(1)) {
+        if (worldHasOwner(world) && totalPopulation(world) > 0 && dominationByWorldId[world.id] && dominationByWorldId[world.id] !== world.ownerId) {
           result.push(world.id)
         }
       }

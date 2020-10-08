@@ -6,7 +6,7 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
       gameEndingScore: 3000 * millisecondsPerDay
     },
     capture: {
-      populationConversionRate: 3.5 * millisecondsPerDay,
+      populationConversionRate: 0.25 * millisecondsPerDay,
       shipConversionMultiplier: 5,
     },
     population: {

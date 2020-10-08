@@ -20,12 +20,6 @@ export type PopulationByPlayer = {
     [playerId: string]: number
 }
 
-
-export type DominationByPlayerId = {
-    [playerId: string]: number;
-};
-
-
 export interface BaseWorld {
     worldType: WorldType;
     id: string;
@@ -87,7 +81,6 @@ export interface WorldBeingCaptured {
     nextConvertingPlayerId: string,
     nextConvertedPlayerId: string,
     nextConversionTimestamp: number,
-    lastDomination: DominationByPlayerId,
     lastPopulation: PopulationByPlayer
 }
 

@@ -15,9 +15,9 @@ describe("visibility", () => {
 
     const state = await runMap(map);
 
-    expect((state.universe.worlds['w1']).worldDiscoveredNotificationSent).to.equal(true)
-    expect((state.universe.worlds['w2']).worldDiscoveredNotificationSent).to.equal(true)
-    expect((state.universe.worlds['w3']).worldDiscoveredNotificationSent).to.not.equal(true)
+    expect((state.universe.worlds['w1']).worldHasBeenDiscovered).to.equal(true)
+    expect((state.universe.worlds['w2']).worldHasBeenDiscovered).to.equal(true)
+    expect((state.universe.worlds['w3']).worldHasBeenDiscovered).to.not.equal(true)
   })
 })
 

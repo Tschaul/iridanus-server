@@ -79,7 +79,7 @@
                 "populationLimit": {
                     "type": "number"
                 },
-                "worldDiscoveredNotificationSent": {
+                "worldHasBeenDiscovered": {
                     "type": "boolean"
                 },
                 "worldType": {
@@ -247,7 +247,7 @@
                 "metal",
                 "mines",
                 "populationLimit",
-                "worldDiscoveredNotificationSent",
+                "worldHasBeenDiscovered",
                 "worldType"
             ],
             "type": "object"
@@ -1031,12 +1031,6 @@
         },
         "WorldBeingCaptured": {
             "properties": {
-                "lastDomination": {
-                    "additionalProperties": {
-                        "type": "number"
-                    },
-                    "type": "object"
-                },
                 "lastPopulation": {
                     "additionalProperties": {
                         "type": "number"
@@ -1060,7 +1054,6 @@
                 }
             },
             "required": [
-                "lastDomination",
                 "lastPopulation",
                 "nextConversionTimestamp",
                 "nextConvertedPlayerId",

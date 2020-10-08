@@ -70,7 +70,8 @@ export class VisibilityProjector {
         Object.values(state.universe.worlds).forEach(world => {
           if (!visibilityForPlayer[world.id] || visibilityForPlayer[world.id] === 'HIDDEN') {
             worlds[world.id] = {
-              status: 'UNKNOWN',
+              status: 'HIDDEN',
+              worldType: world.worldHasBeenDiscovered ? world.worldType : { type: 'UNKOWN' },
               id: world.id
             }
           } else if (visibilityForPlayer[world.id] === 'FOG_OF_WAR') {

@@ -12,12 +12,20 @@ export class SelectedWorldViewModel {
   constructor(
     private gameData: GameData,
     private selection: GameStageSelection,
-    ) { }
+  ) { }
 
 
   @computed public get playerInfoOfSelectedWorld() {
     if (this.selection.selectedWorld && visibleWorldhasOwner(this.selection.selectedWorld)) {
       return this.gameData.playerInfos[this.selection.selectedWorld.ownerId];
+    } else {
+      return null;
+    }
+  }
+  @computed public get capturingPlayerInfo() {
+    const world = this.selection.selectedWorld;
+    if (world && visibleWorldhasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED') {
+      return this.gameData.playerInfos[world.populationConversionStatus.nextConvertingPlayerId];
     } else {
       return null;
     }

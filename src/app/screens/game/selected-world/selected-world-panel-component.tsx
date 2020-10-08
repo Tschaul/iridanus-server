@@ -81,7 +81,7 @@ export class SelectedWorldPanel extends React.Component<{
       return (
         <span />
       )
-    } else if (world.status === 'UNKNOWN') {
+    } else if (world.status === 'HIDDEN') {
       return <div>unknown world</div>
     }
     else {
@@ -147,7 +147,7 @@ export class SelectedWorldPanel extends React.Component<{
         <div className={classes.col} style={{ width: "3em" }}>
           {worldHasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED' && (
             <HoverTooltip content={this.getCaptureTooltip(world.populationConversionStatus)}>
-              <span>⚑</span>
+              <span style={{color: this.props.vm.capturingPlayerInfo?.color}}>⚑</span>
             </HoverTooltip>
           )}
         </div>
@@ -156,7 +156,7 @@ export class SelectedWorldPanel extends React.Component<{
   }
 
   private getCaptureTooltip(item: WorldBeingCaptured): string {
-    return JSON.stringify(item.lastDomination, null, 2)
+    return `Being captured by ${item.nextConvertingPlayerId}`
   }
 
   private getStatusTooltip(item: World | Fleet): Observable<string> {
