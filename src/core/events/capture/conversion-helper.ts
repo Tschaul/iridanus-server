@@ -1,5 +1,5 @@
 import { pickFromDistribution, total } from "../../../shared/math/distributions/distribution-helper";
-import { PopulationByPlayer } from "../../../shared/model/v1/world";
+import { PopulationByPlayer, worldHasOwner } from "../../../shared/model/v1/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 
 export function calculateNextConversionEvent(
@@ -9,20 +9,15 @@ export function calculateNextConversionEvent(
   random: RandomNumberGenerator
 ) {
 
-  const generateDelay = () => random.exponential() * baseConversionRate;
+  const delay = random.exponential() * baseConversionRate;
+  const convertingPlayerId = dominatingPlayerId ?? pickFromDistribution(population, random.equal())
 
-  let delay = 0;
-  let convertingPlayerId = '';
-  let convertedPlayerId = '';
-  let counter = 0;
-
-  while (counter < 10 && !(convertingPlayerId && convertedPlayerId && convertingPlayerId !== convertedPlayerId)) {
-
-    delay += generateDelay();
-    counter++;
-    convertedPlayerId = pickFromDistribution(population, random.equal())
-    convertingPlayerId = dominatingPlayerId ?? pickFromDistribution(population, random.equal())
+  const populationWithoutConvertingPlayer = {
+    ...population,
+    [convertingPlayerId]: 0
   }
+
+  const convertedPlayerId = pickFromDistribution(populationWithoutConvertingPlayer, random.equal())
 
   return {
     delay,
