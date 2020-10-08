@@ -2,6 +2,7 @@ import { GameState } from "../shared/model/v1/state";
 import { WorldWithOwner } from "../shared/model/v1/world";
 
 export const dummyReadyWorld: WorldWithOwner = {
+  worldType: { type: 'REGULAR' },
   status: 'OWNED',
   id: "",
   industry: 0,

@@ -32,6 +32,7 @@ export function makeGomeisaSix(): GameMap {
 
 function makeWorld(id: string): LostWorld {
   return {
+    worldType: { type: 'REGULAR' },
     id,
     industry: 0,
     metal: 0,

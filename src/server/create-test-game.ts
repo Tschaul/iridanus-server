@@ -10,12 +10,15 @@ export async function createTestGame(containerRegistry: ContainerRegistry) {
   await gameRepository.createGame(gameId)
 
   await gameRepository.joinGame(gameId, 'tschaul')
-  await gameRepository.joinGame(gameId, 'foobar')
   await gameRepository.joinGame(gameId, 'knalltuete')
+  await gameRepository.joinGame(gameId, 'qwertz')
+  await gameRepository.joinGame(gameId, 'foobar')
+  await gameRepository.toggleSpecatorMode(gameId, 'foobar')
 
   await gameRepository.setReady(gameId, 'tschaul')
   await gameRepository.setReady(gameId, 'foobar')
   await gameRepository.setReady(gameId, 'knalltuete')
+  await gameRepository.setReady(gameId, 'qwertz')
 
   console.log("CREATED TEST GAME "+ gameId);
 }

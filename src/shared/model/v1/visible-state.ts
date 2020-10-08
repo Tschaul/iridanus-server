@@ -2,6 +2,7 @@ import { Gates } from "./universe";
 import { PopulationByPlayer, World, worldHasOwner, WorldWithOwner } from "./world";
 import { Fleet } from "./fleet";
 import { PlayerStates } from "./scoring";
+import { WorldType } from "./world-type";
 
 export interface VisibleState {
   currentTimestamp: number;
@@ -22,6 +23,7 @@ export interface VisibleUniverse {
 }
 
 export interface WorldInFogOfWar {
+  worldType: WorldType;
   id: string
   status: 'FOG_OF_WAR',
   ownerId?: string,
@@ -43,6 +45,7 @@ export interface UnknownWorld {
 
 export function applyFogOfWar(world: World): WorldInFogOfWar {
   return {
+    worldType: world.worldType,
     id: world.id,
     industry: world.industry,
     mines: world.mines,

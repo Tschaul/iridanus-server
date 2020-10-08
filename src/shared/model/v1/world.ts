@@ -1,3 +1,6 @@
+import { total } from "../../math/distributions/distribution-helper";
+import { WorldType } from "./world-type";
+
 export type World =
     WorldWithOwner
     | LostWorld;
@@ -23,7 +26,8 @@ export type DominationByPlayerId = {
 };
 
 
-export interface BaseWorldBase {
+export interface BaseWorld {
+    worldType: WorldType;
     id: string;
     metal: number;
     industry: number;
@@ -33,30 +37,15 @@ export interface BaseWorldBase {
 }
 
 export function totalPopulation(world: WorldWithOwner) {
-    return Object.values(world.population).reduce((pv, cv) => pv + cv, 0)
+    return total(world.population)
 }
-
-export function pickPopulationOwner(world: WorldWithOwner, random: number) {
-
-    const total = totalPopulation(world);
-
-    let pick = total * random;
-
-    for (const playerId of Object.getOwnPropertyNames(world.population)) {
-        pick -= world.population[playerId]
-        if (pick < 0) {
-            return playerId;
-        }
-    }
-}
-
-export type BaseWorld = BaseWorldBase;
 
 export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & PopulationGrowthStatus & PopulationConverstionStatus & WorldCombatStatus
 
 export function baseWorld(world: World): BaseWorld {
 
     const result: BaseWorld = {
+        worldType: world.worldType,
         id: world.id,
         industry: world.industry,
         metal: world.metal,

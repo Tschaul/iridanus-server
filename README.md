@@ -5,7 +5,6 @@ Server for Iridanus
 
 # TODOS
 
-- new capture mechanic
 - world modifiers
 - CTRL to select multiple fleets
 
@@ -54,7 +53,7 @@ Artefacts are randomly scattered across the map at random. Artefacts cannot be t
 
 - Defensive: Fleet of owner takes less damage
 
-- Representative: Population here generates more influence/upkeep
+- Inspiring: Population here generates more influence/upkeep
 
 - Industrial: Industry at this world produces ships faster
 

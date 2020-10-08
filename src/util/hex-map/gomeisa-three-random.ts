@@ -4,6 +4,8 @@ import { Vec2 } from "../../shared/math/vec2";
 import { LostWorld, ReadyWorld } from "../../shared/model/v1/world";
 import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
 import { GameMap } from "../../shared/model/v1/game-map";
+import { choseWorldType } from "./chose-world-type";
+import { distributeWorldTypes } from "./distribute-world-types";
 
 const homeWorlds = ['c3', 'c7', 'c11'];
 
@@ -32,6 +34,7 @@ export function makeGomeisaThreeRandom(): GameMap {
 
     if (homeWorlds.includes(worldId)) {
       universe.worlds[worldId] = {
+        worldType: { type: 'REGULAR' },
         id: worldId,
         status: 'OWNED',
         ownerId: seats[worldId],
@@ -68,6 +71,8 @@ export function makeGomeisaThreeRandom(): GameMap {
 
   })
 
+  distributeWorldTypes(universe)
+
   return {
     seats: Object.values(seats),
     universe,
@@ -90,6 +95,7 @@ function makeWorld(id: string): LostWorld {
   const populationLimit = Math.max(populationLimitRandom + populationLimitStatic, metal + industry)
 
   const world: LostWorld = {
+    worldType: choseWorldType(Math.random()),
     id,
     industry,
     metal: metal,

@@ -62,7 +62,7 @@
             ],
             "type": "object"
         },
-        "BaseWorldBase": {
+        "BaseWorld": {
             "properties": {
                 "id": {
                     "type": "string"
@@ -81,6 +81,164 @@
                 },
                 "worldDiscoveredNotificationSent": {
                     "type": "boolean"
+                },
+                "worldType": {
+                    "anyOf": [
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "REGULAR"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "VOID"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "NEBULA"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "LUSH"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "DEFENSIVE"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "INSPIRING"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "INDUSTRIAL"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "MINING"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "POPULATED"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "CREEP"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "DOUBLE"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        }
+                    ]
                 }
             },
             "required": [
@@ -88,7 +246,9 @@
                 "industry",
                 "metal",
                 "mines",
-                "populationLimit"
+                "populationLimit",
+                "worldDiscoveredNotificationSent",
+                "worldType"
             ],
             "type": "object"
         },
@@ -553,7 +713,7 @@
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/BaseWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "properties": {
@@ -678,7 +838,7 @@
                             {
                                 "allOf": [
                                     {
-                                        "$ref": "#/definitions/BaseWorldBase"
+                                        "$ref": "#/definitions/BaseWorld"
                                     },
                                     {
                                         "properties": {

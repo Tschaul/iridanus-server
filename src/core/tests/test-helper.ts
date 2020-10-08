@@ -82,6 +82,7 @@ export async function runMap(testMap: GameState, options?: {
 }
 
 export const dummyReadyWorld: WorldWithOwner = {
+  worldType: { type: 'REGULAR' },
   status: 'OWNED',
   id: "",
   industry: 0,
@@ -99,6 +100,7 @@ export const dummyReadyWorld: WorldWithOwner = {
 }
 
 export const dummyLostWorld: LostWorld = {
+  worldType: { type: 'REGULAR' },
   status: 'LOST',
   id: "w1",
   industry: 0,

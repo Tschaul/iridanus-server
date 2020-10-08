@@ -11,6 +11,7 @@ import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.com
 import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
 import { pathForGate } from './helper';
 import { pathOfFleetInTransit } from '../../../../shared/model/v1/fleet';
+import { World } from '../../../../shared/model/v1/world';
 
 
 @observer
@@ -147,7 +148,7 @@ export class GameStageForeground extends React.Component<{
             fontSize={33}
             style={{ transform: "translateY(1px)" }}
             opacity={opacity}
-          >{/*world.id*/ '◉'}</text>
+          >{/*world.id ◉*/ this.getWorldSymbol(world)}</text>
           <HoverTooltip
             svg={true}
             content={this.getTooltipForWorld(world)}
@@ -239,6 +240,38 @@ export class GameStageForeground extends React.Component<{
           })}
         </g>);
     });
+  }
+
+  private getWorldSymbol(world: VisibleWorld) {
+    switch (world.status) {
+      case 'UNKNOWN':
+        return '?'
+      default:
+        switch (world.worldType.type) {
+          case 'VOID':
+            return ' ';
+          case 'NEBULA':
+            return '≋';
+          case 'MINING':
+            return 'M';
+          case 'DOUBLE':
+            return '⚉';
+          case 'DEFENSIVE':
+            return 'D';
+          case 'INDUSTRIAL':
+            return 'I';
+          case 'INSPIRING':
+            return '★';
+          case 'LUSH':
+            return 'L';
+          case 'POPULATED':
+            return 'P';
+          case 'CREEP':
+            return 'C';
+          default:
+            return '●';
+        }
+    }
   }
 
   @autobind
