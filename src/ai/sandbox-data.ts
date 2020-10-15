@@ -34,7 +34,8 @@ export const aiTestMap: GameState = {
         orders: [],
         ownerId: "p1",
         ships: 10,
-        integrity: 1
+        integrity: 1,
+        lastDamageTimestamp: 0
       },
       "f2": {
         id: "f2",
@@ -44,7 +45,8 @@ export const aiTestMap: GameState = {
         orders: [],
         ownerId: "p1",
         ships: 10,
-        integrity: 1
+        integrity: 1,
+        lastDamageTimestamp: 0
       },
       "f3": {
         id: "f3",
@@ -54,7 +56,8 @@ export const aiTestMap: GameState = {
         orders: [],
         ownerId: "p1",
         ships: 10,
-        integrity: 1
+        integrity: 1,
+        lastDamageTimestamp: 0
       }
     },
     worlds: {

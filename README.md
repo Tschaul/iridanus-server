@@ -37,34 +37,17 @@ first palyer to reach a certain population wins.
 
 - you can only have as many ships + industry as you have population
 
+- instead of spell casting upgrades, the particular upgrade enables you to build a 'big ship' (a.k.a death start, juggernaut) at a world, which can cast the spell.
+
 ## Research
 
 # Artefact Worlds
 
 Artefacts are randomly scattered across the map at random. Artefacts cannot be transfered. When a world with an artefact is captured the type fo artefact can be chosen from a hand of cards that is shared between all players. When one artefact is placed a new card is chosen from the deck and all players get notified. Every artefact exists at most once per game. The artefact of a world can not be switched afterwards and is fixed for the game. The player that controls the world of the artefacts gains the perc/bonus of the artefact. Therefore artefacts are taken over by other players when the world is captured.
 
-# Special Worlds / World types / World boni
-
-- Void: populationLimit = 0. Cannot be captured. Open question: How does Population migrate passed/over it???
-
-- Nebula: like void but ships cannot be seen from neighbors
-
-- Lush: Population reproduces faster
-
-- Defensive: Fleet of owner takes less damage
-
-- Inspiring: Population here generates more influence/upkeep
-
-- Industrial: Industry at this world produces ships faster
-
-- Mines: world produces metal in regular intervals when captured
-
-- Artefacts: see above
-
 # Possible Upgrades:
 
 cooldown for most abilities: ~1 week
-
 
 - armor: a percentage of damage is absorbed
 - warp bomb: worlds can send bombs that do AoE damage to all ships in probed system
@@ -127,26 +110,6 @@ Four modules:
 OR:
 
 first palyer to reach a certain population wins.
-
-# Special Worlds / World types / World boni
-
-- Void: populationLimit = 0. Cannot be captured. Open question: How does Population migrate passed/over it???
-
-- Lush: Population reproduces twice as fast
-
-- Defensive: Fleet of owner takes less damage
-
-- Natives: allready has population that is captured with the world
-
-- Pirates: World is defendet by creeps
-
-- Nebula: like void but ships cannot be seen from neighbors
-
-- Mines: world produces metal in regular intervals when captured
-
-- Artefacts: can be transfered back and then exchanged for upgrades? Or: Artefact worlds unlock percs/spells for the player that ownes the world. Player can chose to activate one of 3 three upgrades/percs for every world (can switch later) each upgrade/perc has a constant cost of influence/upkeep.
-
-- Double world: populationLimit and metal multiplied by two
 
 # Possible Upgrades:
 

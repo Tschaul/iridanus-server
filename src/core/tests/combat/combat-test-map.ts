@@ -17,6 +17,7 @@ export const map: GameState = {
         ownerId: "p1",
         ships: 10,
         integrity: 1,
+        lastDamageTimestamp: 0
       },
       "f2": {
         id: "f2",
@@ -27,6 +28,7 @@ export const map: GameState = {
         ownerId: "p2",
         ships: 20,
         integrity: 1,
+        lastDamageTimestamp: 0
       }
     },
     worlds: {

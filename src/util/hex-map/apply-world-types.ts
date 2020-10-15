@@ -48,7 +48,8 @@ export function applyWorldTypes(universe: Universe) {
             orders: [],
             ownerId: '@creep',
             ships: 5,
-            idleNotificationSent: true
+            idleNotificationSent: true,
+            lastDamageTimestamp: 0
           }
           universe.fleets[pirateFleetId] = pirateFleet;
           break;

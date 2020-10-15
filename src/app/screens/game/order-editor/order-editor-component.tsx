@@ -15,6 +15,7 @@ import { hoverYellow } from "../../../ui-components/colors/colors";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
 import { Scroll } from "../../../ui-components/scroll-area/scroll-component";
 import { AmountOrderEditor } from "./amount-oder-component";
+import { symbol } from "../helper/symbols";
 
 const classes = createClasses({
   panel: {
@@ -115,7 +116,7 @@ export class OrderEditor extends React.Component<{
         <HoverTooltip content="Warp to world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
         <HoverTooltip content="Start cargo mission"><Button tight onClick={this.handleNewStartCargoMissionOrder}>⇄</Button></HoverTooltip>
         <HoverTooltip content="Split fleet"><Button tight onClick={this.handleNewSplitFleetOrder}>✂</Button></HoverTooltip>
-        <HoverTooltip content="Deploy as industry"><Button tight onClick={this.handlenewDeployToWorldOrder}>I🡓</Button></HoverTooltip>
+        <HoverTooltip content="Deploy as industry"><Button tight onClick={this.handlenewDeployToWorldOrder}>{symbol('industry')}🡓</Button></HoverTooltip>
       </div>)])
     ])
   }

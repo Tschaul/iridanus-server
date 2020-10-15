@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
 import { WrappedObservable } from "../../helper/wrap-observable";
 import { Input } from "../../../ui-components/input/input-component";
+import { symbol } from "../helper/symbols";
 
 export type AmountOrderEditorOrder = {
   type: string,
@@ -65,10 +66,10 @@ export class AmountOrderEditor extends React.Component<AmountOrderEditorProps, {
   symbol() {
     switch (this.props.order.type) {
       case 'BUILD_SHIPS':
-        return '►';
+        return symbol('ships');
       case 'BUILD_INDUSTRY':
       case 'SCRAP_SHIPS_FOR_INDUSTRY':
-        return 'I';
+        return symbol('industry');
     }
   }
 

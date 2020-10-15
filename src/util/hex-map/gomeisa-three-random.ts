@@ -63,7 +63,8 @@ export function makeGomeisaThreeRandom(): GameMap {
           orders: [],
           ownerId: seats[worldId],
           ships: 5,
-          idleNotificationSent: true
+          idleNotificationSent: true,
+          lastDamageTimestamp: 0
         }
       })
     } else {

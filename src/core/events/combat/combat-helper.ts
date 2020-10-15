@@ -3,6 +3,7 @@ import { World } from "../../../shared/model/v1/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { GameRules } from "../../../shared/model/v1/rules";
 import { giveOrTakeFleetShips } from "../../actions/fleet/give-or-take-ships";
+import { dealDamageToFleet } from "../../actions/fleet/deal-damage-to-ships";
 
 export function handleFiring(attacker: ReadyFleet, world: World, fleetsByCurrentworldId: any, config: GameRules, random: RandomNumberGenerator) {
   const target = determineTargetFleet(attacker, fleetsByCurrentworldId[world.id], random);
@@ -11,11 +12,10 @@ export function handleFiring(attacker: ReadyFleet, world: World, fleetsByCurrent
     return []
   }
 
-
-  const [fleetDamage, integrityDamage] = determineFleetDamage(attacker, target, world, config);
+  const fleetDamage = determineFleetDamage(attacker, target, world, config);
 
   return [
-    giveOrTakeFleetShips(target.id, -1 * fleetDamage, -1 * integrityDamage)
+    dealDamageToFleet(target.id, fleetDamage)
   ]
 
 }
@@ -37,7 +37,7 @@ function determineTargetFleet(attacker: ReadyFleet, otherFleetsAtWorld: Fleet[],
 
 }
 
-function determineFleetDamage(attacker: Fleet, target: Fleet, world: World, config: GameRules,): [number, number] {
+function determineFleetDamage(attacker: Fleet, target: Fleet, world: World, config: GameRules,): number {
 
   let rawDamage = attacker.ships * config.combat.integrityDamagePerShip;
 
@@ -45,6 +45,6 @@ function determineFleetDamage(attacker: Fleet, target: Fleet, world: World, conf
     rawDamage /= 1.5
   }
 
-  return [Math.floor(rawDamage), rawDamage % 1];
+  return rawDamage;
 
 }

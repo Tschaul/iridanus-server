@@ -32,6 +32,7 @@ export function baseFleet(fleet: Fleet): BaseFleet {
         ships: fleet.ships,
         orders: fleet.orders,
         integrity: fleet.integrity,
+        lastDamageTimestamp: fleet.lastDamageTimestamp
     }
 }
 
@@ -40,6 +41,7 @@ export interface BaseFleet {
     ships: number;
     orders: FleetOrder[];
     integrity: number;
+    lastDamageTimestamp: number
 }
 
 export interface ReadyFleetBase extends BaseFleet {

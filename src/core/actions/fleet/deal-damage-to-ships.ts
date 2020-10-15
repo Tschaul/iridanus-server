@@ -3,18 +3,24 @@ import { GameState } from "../../../shared/model/v1/state";
 import { updateFleet } from "./update-fleet";
 import produce from "immer";
 
-export function giveOrTakeFleetShips(fleetId: string, amount: number): Action {
+export function dealDamageToFleet(fleetId: string, amount: number): Action {
 
   let fleetDestroyed = false;
 
   return {
-    describe: () => `GiveOrTakeFleetShips ${JSON.stringify({ fleetId, amount, shipDestroyed: fleetDestroyed })}`,
+    describe: () => `DealDamageToShips ${JSON.stringify({ fleetId, amount, shipDestroyed: fleetDestroyed })}`,
     apply: (state: GameState) => {
 
       const fleet = state.universe.fleets[fleetId];
-      const newShipsPlusIntegrity = fleet.ships + fleet.integrity + amount
+      const newShipsPlusIntegrity = fleet.ships + fleet.integrity - amount
       
       let newShips = Math.floor(newShipsPlusIntegrity);
+      let newIntegrity = newShipsPlusIntegrity % 1;
+
+      if (newIntegrity === 0 && fleet.integrity !== 0) {
+        newIntegrity = 1;
+        newShips--;
+      }
 
       if ( newShips <= 0) {
         fleetDestroyed = true;
@@ -27,6 +33,8 @@ export function giveOrTakeFleetShips(fleetId: string, amount: number): Action {
         return {
           ...fleet,
           ships: newShips,
+          integrity: newIntegrity,
+          lastDamageTimestamp: state.currentTimestamp
         }
       })
     }

@@ -17,6 +17,7 @@ export const captureTestMap: GameState = {
         ownerId: "p1",
         ships: 10,
         integrity: 1,
+        lastDamageTimestamp: 0
       }
     },
     worlds: {

@@ -16,6 +16,7 @@ import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.compo
 import { getDisplayDuration } from "../../../ui-components/display-duration";
 import { map } from "rxjs/operators";
 import { of, Observable } from "rxjs";
+import { symbol } from "../helper/symbols";
 
 const classes = createClasses({
   row: {
@@ -88,8 +89,8 @@ export class SelectedWorldPanel extends React.Component<{
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div>{this.padSpaces(world.populationLimit)} <span style={{ textDecoration: 'overline' }}>P</span> &nbsp;</div>
-            <div>{this.padSpaces(world.industry)} I &nbsp;</div>
+            <div>{this.padSpaces(world.populationLimit)} <span style={{ textDecoration: 'overline' }}>{symbol('population')}</span> &nbsp;</div>
+            <div>{this.padSpaces(world.industry)}{symbol('industry')} &nbsp;</div>
             {/* <div>{this.padSpaces(world.mines)} M &nbsp;</div> */}
           </div>
           <PanelDivider></PanelDivider>
@@ -111,15 +112,15 @@ export class SelectedWorldPanel extends React.Component<{
 
     const color = owner ? owner.color : screenWhite;
 
-    const icon = '◈'
+    const icon = symbol('ships')
 
     return (
       <div className={classNames([classes.row, { selected }])} key={fleet.id} data-fleet-id={fleet.id} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
         {this.tableAmount(fleet.ships, '►')}
-        {fleet.status === 'TRANSFERING_CARGO' && this.tableAmount(fleet.cargoMetal, '▮')}
-        {fleet.status === 'TRANSFERING_CARGO' && this.tableAmount(fleet.cargoPopulation, 'P')}
+        {fleet.status === 'TRANSFERING_CARGO' && this.tableAmount(fleet.cargoMetal, symbol('metal'))}
+        {fleet.status === 'TRANSFERING_CARGO' && this.tableAmount(fleet.cargoPopulation, symbol('population'))}
         <div className={classes.col} style={{ width: "3em" }}>
           <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             {this.fleetStatusIcon(fleet.status)}
@@ -141,13 +142,13 @@ export class SelectedWorldPanel extends React.Component<{
       <div className={classNames([classes.row, { selected }])} key={world.id} data-fleet-id={null} onClick={this.handleRowClick}>
         <div>{topIcon} </div>
         <div className={classes.col} style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>{icon}</div>
-        {this.tableAmount(world.metal, '▮')}
+        {this.tableAmount(world.metal, symbol('metal'))}
         {/* TODO: show population by all players */}
-        {worldHasOwner(world) && this.tableAmount(world.population[world.ownerId], 'P')}
+        {worldHasOwner(world) && this.tableAmount(world.population[world.ownerId], symbol('population'))}
         <div className={classes.col} style={{ width: "3em" }}>
           {worldHasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED' && (
             <HoverTooltip content={this.getCaptureTooltip(world.populationConversionStatus)}>
-              <span style={{color: this.props.vm.capturingPlayerInfo?.color}}>⚑</span>
+              <span style={{ color: this.props.vm.capturingPlayerInfo?.color }}>⚑</span>
             </HoverTooltip>
           )}
         </div>

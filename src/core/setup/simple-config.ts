@@ -24,8 +24,8 @@ export function makeConfig(millisecondsPerDay: number): GameRules {
       buildShipDelay: 10 * millisecondsPerDay,
     },
     warping: {
-      arriveAtEnemyWorldDelay: 0.3 * millisecondsPerDay,
-      leaveEnemyWorldDelay: 0.3 * millisecondsPerDay,
+      arriveAtEnemyWorldDelay: 0.15 * millisecondsPerDay,
+      leaveEnemyWorldDelay: 0.15 * millisecondsPerDay,
       warpToWorldDelay: 0.7 * millisecondsPerDay,
     },
     mining: {

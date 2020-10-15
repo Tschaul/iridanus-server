@@ -16,7 +16,8 @@ export const splitTestMap: GameState = {
         orders: [],
         ownerId: "p1",
         ships: 10,
-        integrity: 1
+        integrity: 1,
+        lastDamageTimestamp: 0
       }
     },
     worlds: {

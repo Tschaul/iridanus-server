@@ -11,11 +11,11 @@ import { StaticTooltip } from '../../../ui-components/tooltip/static-tooltip.com
 import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
 import { pathForGate } from './helper';
 import { pathOfFleetInTransit } from '../../../../shared/model/v1/fleet';
-import { World } from '../../../../shared/model/v1/world';
+import { PopulationByPlayer, World } from '../../../../shared/model/v1/world';
+import { GameStageWorld } from './game-stage-world-component';
 
 
 @observer
-@autobind
 export class GameStageForeground extends React.Component<{
   vm: GameStageViewModel
 }> {
@@ -132,25 +132,18 @@ export class GameStageForeground extends React.Component<{
       const fleets = this.props.vm.fleetsByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
-      const opacity = world.status === 'HIDDEN' || world.status === 'FOG_OF_WAR' ? 0.5 : 1
 
       const positions = distributeOnCircle(fleets.length);
 
       return (
         <g key={world.id}>
-          <text
-            x={world.x}
-            y={world.y}
-            dominantBaseline="middle"
-            textAnchor="middle"
-            fill={color}
-            fontSize={33}
-            style={{ transform: "translateY(1px)" }}
-            opacity={opacity}
-          >{/*world.id ◉*/ this.getWorldSymbol(world)}</text>
+          <GameStageWorld
+            playerInfos={this.props.vm.playerInfos}
+            world={world}
+          />
           <HoverTooltip
             svg={true}
-            content={this.getTooltipForWorld(world)}
+            content={this.getTooltipForWorld(world) as any}
           >
             <StaticTooltip svg content={hint}>
               {selected && (
@@ -240,35 +233,6 @@ export class GameStageForeground extends React.Component<{
     });
   }
 
-  private getWorldSymbol(world: VisibleWorld) {
-    switch (world.worldType.type) {
-      case 'UNKOWN':
-        return '?'
-      case 'VOID':
-        return ' ';
-      case 'NEBULA':
-        return '≋';
-      case 'MINING':
-        return 'M';
-      case 'DOUBLE':
-        return '⚉';
-      case 'DEFENSIVE':
-        return 'D';
-      case 'INDUSTRIAL':
-        return 'I';
-      case 'INSPIRING':
-        return '★';
-      case 'LUSH':
-        return 'L';
-      case 'POPULATED':
-        return 'P';
-      case 'CREEP':
-        return 'C';
-      default:
-        return '●';
-    }
-  }
-
   @autobind
   handleWorldClick(event: React.MouseEvent) {
     const worldId = getClosestAttribute(event, 'data-world-id');
@@ -325,9 +289,24 @@ export class GameStageForeground extends React.Component<{
     if (world.status === 'HIDDEN') {
       return '';
     } else if (world.status === 'FOG_OF_WAR') {
-      return `${JSON.stringify(world.population)}/${world.populationLimit} P ${world.industry} I`;
+      return <span>
+        {this.renderPopulation(world.population)}
+      /{world.populationLimit} P {world.industry}
+      </span>;
     }
-    return `${JSON.stringify((world as any).population)}/${world.populationLimit} P ${world.industry} I ${world.metal} ▮`;
+    return <span>
+      {world.status === 'OWNED' ? this.renderPopulation(world.population) : '0'}
+      /{world.populationLimit} P {world.industry} I {world.metal} ▮
+    </span>;
 
+  }
+
+  renderPopulation(population: PopulationByPlayer) {
+    const keys = Object.getOwnPropertyNames(population).filter(key => population[key]);
+    return <span>
+      {keys.map((key, index) => {
+        return <span key={key} style={{ color: this.getColorForPlayer(key) }}>{population[key]}{(index !== keys.length - 1) && '+'}</span>
+      })}
+    </span>
   }
 }
