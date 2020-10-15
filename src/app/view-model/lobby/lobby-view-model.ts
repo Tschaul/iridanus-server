@@ -95,4 +95,8 @@ export class LobbyViewModel {
     this.mainViewModel.activeGameId = this.selectedGameId;
   }
 
+  public showAccountSettings() {
+    this.mainViewModel.showAccountSettings = true;
+  }
+
 }

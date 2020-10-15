@@ -6,6 +6,7 @@ export class Environment {
   baseUrl: string;
   tokenExpirePeriod: number;
   telegramBotToken: string;
+  telegramBotName: string;
 }
 
 export interface MailSettings {

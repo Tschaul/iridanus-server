@@ -18,7 +18,8 @@ export class EnvironmentInfoDataProvider implements DataProvider {
       type: 'ENVIRONMENT/INFO',
       info: {
         millisecondsPerDay: this.environment.millisecondsPerDay,
-        developmentMode: this.environment.developmentMode
+        developmentMode: this.environment.developmentMode,
+        telegramBotName: this.environment.telegramBotName
       }
     })
   }

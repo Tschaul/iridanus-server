@@ -162,6 +162,9 @@
                         },
                         {
                             "$ref": "#/definitions/EnvironmentInfoSubscription"
+                        },
+                        {
+                            "$ref": "#/definitions/UserInfoSubscription"
                         }
                     ]
                 },
@@ -598,6 +601,20 @@
             "required": [
                 "fleetId",
                 "orders",
+                "type"
+            ],
+            "type": "object"
+        },
+        "UserInfoSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "USER/INFO"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
                 "type"
             ],
             "type": "object"

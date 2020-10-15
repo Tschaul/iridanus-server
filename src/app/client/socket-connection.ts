@@ -97,7 +97,7 @@ export class SocketConnection {
 
   public subscribe<TSubscriptionResponse, TSubscriptionResult>(subscription: TSubscriptionResponse, gameId: string | null = null): Observable<TSubscriptionResult> {
 
-    return Observable.create((observer: any) => {
+    return new Observable((observer: any) => {
       const subscriptionId = makeId(12);
       this.send({
         type: 'BEGIN_SUBSCRIPTION',

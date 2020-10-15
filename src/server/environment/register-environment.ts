@@ -33,7 +33,8 @@ function extractEnvironment() {
     baseUrl: envString('IRIDANUS_BASE_URL'),
     developmentMode: envBoolean('IRIDANUS_DEVELOPMENT_MODE'),
     tokenExpirePeriod: envNumber('IRIDANUS_TOKEN_EXPIRE_PERIOD', true),
-    telegramBotToken: envString('IRIDANUS_TELEGRAM_BOT_TOKEN', true),
+    telegramBotToken: envString('IRIDANUS_TELEGRAM_BOT_TOKEN'),
+    telegramBotName: envString('IRIDANUS_TELEGRAM_BOT_NAME'),
   }
 
   if (useTestMailAccount) {

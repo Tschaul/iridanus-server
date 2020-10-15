@@ -3,6 +3,7 @@ export type EnvironmentSubscriptionResult = EnvironmentInfoSubscriptionResult;
 export type EnvironmentInfo = {
   millisecondsPerDay: number;
   developmentMode: boolean;
+  telegramBotName: string;
 };
 
 export interface EnvironmentInfoSubscriptionResult {

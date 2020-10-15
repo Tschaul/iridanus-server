@@ -11,6 +11,7 @@ import { TooltipOverlay } from './ui-components/tooltip/tooltip-overlay.componen
 import { HasExitAnimation } from './ui-components/animatable-components';
 import { reaction } from 'mobx';
 import { Background } from './ui-components/background/background-component';
+import { AccountScreen } from './screens/account/account-screen';
 
 setupContainerRegistry();
 
@@ -66,6 +67,8 @@ class App extends React.Component<{
         return <WelcomeScreen vm={this.props.vm.welcomeViewModel} ref={elem => this.activeScreenComponent = elem}></WelcomeScreen>
       case 'LOBBY':
         return <LobbyScreen vm={this.props.vm.lobbyViewModel} ref={elem => this.activeScreenComponent = elem}></LobbyScreen>
+      case 'ACCOUNT':
+        return <AccountScreen vm={this.props.vm.accountViewModel} ref={elem => this.activeScreenComponent = elem}></AccountScreen>
     }
   }
 }

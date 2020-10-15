@@ -6,6 +6,8 @@ import { Initializer } from "../../infrastructure/initialisation/initializer";
 import { Clock } from "../../../core/infrastructure/clock";
 import { Environment } from "../../environment/environment";
 import { makeId, makePin } from "../../../app/client/make-id";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 const USER_DATA_PATH = 'users/users.json';
 
@@ -28,7 +30,16 @@ export class UserRepository {
     await this.handle.createIfMissing(initialData(await this.crypto.secureRandom()))
   }
 
+  getUserInfo(userId: string): Observable<User | null> {
+    return this.handle.asObservable().pipe(map(data => data.users[userId] ?? null))
+  }
+
   async getUserInfos(userIds: string[]): Promise<User[]> {
+    const data = await this.handle.read();
+    return userIds.map(id => data.users[id])
+  }
+
+  async getUserInfoAsObservable(userIds: string[]): Promise<User[]> {
     const data = await this.handle.read();
     return userIds.map(id => data.users[id])
   }

@@ -1,5 +1,9 @@
 import { SocketConnection } from "../socket-connection";
 import { injectable } from "inversify";
+import { UserInfoSubscription } from "../../../shared/messages/subscriptions/user-subscriptions";
+import { UserInfo, UserInfoSubscriptionResult } from "../../../shared/messages/subscriptions/user-subscription-results";
+import { map, shareReplay } from "rxjs/operators";
+import { Observable } from "rxjs";
 
 @injectable()
 export class UserManagementService {
@@ -60,5 +64,13 @@ export class UserManagementService {
       password
     })
   }
+
+  
+  userInfo$ = this.connection.subscribe<UserInfoSubscription, UserInfoSubscriptionResult>({
+    type: 'USER/INFO'
+  }).pipe(
+    map(result => result.info),
+    shareReplay(1)
+  ) as Observable<UserInfo>
 
 }

@@ -4,8 +4,9 @@ import { WelcomeViewModel } from "./welcome/welcome-view-model";
 import { LobbyViewModel } from "./lobby/lobby-view-model";
 import { ConnectionStatus } from "./connection-status";
 import { ServerEnvironment } from "./server-environment";
+import { AccountViewModel } from "./account/account-view-model";
 
-export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY';
+export type PossibleScreen = 'GAME' | 'WELCOME' | 'LOBBY' | 'ACCOUNT';
 
 const IRIDANUS_GAME_ID_LOCAL_STORAGE_LOCATION = 'iridanus_selected_game_id'
 
@@ -19,18 +20,10 @@ export class MainViewModel {
     when(
       () => this.connectionStatus.isConnected,
       async () => {
+
         this.environment.initialize();
+
         await this.parseLocation();
-
-        when(() => this.environment.environmentInfo.developmentMode, () => {
-
-          // this.welcomeViewModel.username = 'foobar';
-          // this.welcomeViewModel.password = '123456';
-          // this.welcomeViewModel.login();
-
-          // this.lobbyViewModel.selectedGameId = '7fym721abk';
-          // this.lobbyViewModel.viewGame();
-        })
 
         const gameId = window.localStorage.getItem(IRIDANUS_GAME_ID_LOCAL_STORAGE_LOCATION);
         if (gameId){
@@ -54,6 +47,9 @@ export class MainViewModel {
     if (!this.loggedInUserId) {
       return 'WELCOME'
     }
+    if (this.showAccountSettings) {
+      return 'ACCOUNT'
+    }
     if (!this.activeGameId) {
       return 'LOBBY'
     }
@@ -67,6 +63,9 @@ export class MainViewModel {
   activeGameId: string | null = null;
 
   @observable
+  showAccountSettings: boolean = false;
+
+  @observable
   screenMode: 'SMALL' | 'LARGE' | 'NONE' = 'NONE'
 
   @observable
@@ -75,6 +74,7 @@ export class MainViewModel {
   public gameViewModel = new GameViewModel(this);
   public welcomeViewModel = new WelcomeViewModel(this);
   public lobbyViewModel = new LobbyViewModel(this);
+  public accountViewModel = new AccountViewModel(this, this.environment);
 
   logout() {
     this.welcomeViewModel.logout();

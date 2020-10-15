@@ -22,16 +22,15 @@ export class TelegramConnection {
 
       this.bot.onText(/\/start/, async (msg, match) => {
         const chatId = msg.chat.id;
-        await this.bot.sendMessage(chatId, 'Welcome to the iridanus bot. Type /code [user] [code] to set up notifications');
+        await this.bot.sendMessage(chatId, 'Welcome to the Iridanus Telegram Bot. Type /code [user] [code] to set up notifications. To find out you user and code visit the account page from the lobby inside Iridanus.');
       });
 
-      this.bot.onText(/\/code (?=.{3,15})(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.]) ([0-9][0-9][0-9][0-9])/, async (msg, match) => {
+      this.bot.onText(/\/code (.+)/, async (msg, match) => {
         const chatId = msg.chat.id;
         // return;
         const userId = (match && match[0].split(' ')[1]) ?? ''
         const code = (match && match[0].split(' ')[2]) ?? ''
 
-        console.log({ userId, code })
         await this.userRepository.confirmUserTelegram(userId, code, chatId)
 
         await this.bot.sendMessage(chatId, `Thank you ${userId}. This chat has been set up for notifications. Type /disable to disable notifications again.`);
@@ -60,7 +59,7 @@ export class TelegramConnection {
 
       const chatId = user.telegram.chatId;
 
-      await this.bot.sendMessage(chatId, message);
+      await this.bot.sendMessage(chatId, message, {parse_mode: 'Markdown', disable_web_page_preview: true});
     }
   }
 

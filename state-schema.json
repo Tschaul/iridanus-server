@@ -12,6 +12,9 @@
                 "integrity": {
                     "type": "number"
                 },
+                "lastDamageTimestamp": {
+                    "type": "number"
+                },
                 "orders": {
                     "items": {
                         "anyOf": [
@@ -54,6 +57,7 @@
                 "currentWorldId",
                 "id",
                 "integrity",
+                "lastDamageTimestamp",
                 "orders",
                 "ownerId",
                 "readyTimestamp",
@@ -358,6 +362,9 @@
                 "integrity": {
                     "type": "number"
                 },
+                "lastDamageTimestamp": {
+                    "type": "number"
+                },
                 "orders": {
                     "items": {
                         "anyOf": [
@@ -403,6 +410,7 @@
                 "currentWorldId",
                 "id",
                 "integrity",
+                "lastDamageTimestamp",
                 "orders",
                 "ownerId",
                 "ships",
@@ -495,6 +503,9 @@
                 "integrity": {
                     "type": "number"
                 },
+                "lastDamageTimestamp": {
+                    "type": "number"
+                },
                 "orders": {
                     "items": {
                         "anyOf": [
@@ -534,6 +545,7 @@
                 "currentWorldId",
                 "id",
                 "integrity",
+                "lastDamageTimestamp",
                 "orders",
                 "ownerId",
                 "ships",
@@ -607,6 +619,9 @@
                 "integrity": {
                     "type": "number"
                 },
+                "lastDamageTimestamp": {
+                    "type": "number"
+                },
                 "orders": {
                     "items": {
                         "anyOf": [
@@ -652,6 +667,7 @@
                 "fromWorldId",
                 "id",
                 "integrity",
+                "lastDamageTimestamp",
                 "orders",
                 "ownerId",
                 "ships",
@@ -882,6 +898,9 @@
                 "integrity": {
                     "type": "number"
                 },
+                "lastDamageTimestamp": {
+                    "type": "number"
+                },
                 "orders": {
                     "items": {
                         "anyOf": [
@@ -924,6 +943,7 @@
                 "fromWorldId",
                 "id",
                 "integrity",
+                "lastDamageTimestamp",
                 "orders",
                 "ownerId",
                 "ships",
@@ -959,6 +979,9 @@
                     "type": "string"
                 },
                 "integrity": {
+                    "type": "number"
+                },
+                "lastDamageTimestamp": {
                     "type": "number"
                 },
                 "orders": {
@@ -1006,6 +1029,7 @@
                 "arrivingTimestamp",
                 "id",
                 "integrity",
+                "lastDamageTimestamp",
                 "orders",
                 "originWorldId",
                 "ownerId",
