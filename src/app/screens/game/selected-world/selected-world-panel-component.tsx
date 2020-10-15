@@ -105,6 +105,7 @@ export class SelectedWorldPanel extends React.Component<{
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div className={classes.colRight}><PopulationStats population={population} playerInfos={this.props.vm.players}></PopulationStats>/{world.populationLimit}</div>
             <div className={classes.colRight}>{world.industry}&thinsp;{symbol('industry')} </div>
+            {'metal' in world && world.metal !== 0 && <div className={classes.colRight}>{world.metal}&thinsp;{symbol('metal')}</div>}
             {world.mines !== 0 && <div className={classes.colRight}>{world.mines}&thinsp;M</div>}
             {visibleWorldhasOwner(world) && world.miningStatus?.type === 'MINING' && (
               <HoverTooltip content$={getDisplayDuration(world.miningStatus.nextMetalMinedTimestamp).pipe(map(duration => {
