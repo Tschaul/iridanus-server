@@ -1,4 +1,4 @@
-import { total } from "../../math/distributions/distribution-helper";
+import { totalAmount } from "../../math/distributions/distribution-helper";
 import { WorldType } from "./world-type";
 
 export type World =
@@ -31,7 +31,7 @@ export interface BaseWorld {
 }
 
 export function totalPopulation(world: WorldWithOwner) {
-    return total(world.population)
+    return totalAmount(world.population)
 }
 
 export type WorldWithOwnerBase = BaseWorld & WorldWithMiningStatus & PopulationGrowthStatus & PopulationConverstionStatus & WorldCombatStatus

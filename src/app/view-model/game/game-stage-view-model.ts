@@ -1,6 +1,6 @@
 import { observable, computed } from "mobx";
 import { DrawingPositions } from "../../../shared/model/v1/drawing-positions";
-import { FleetInTransit, fleetIsAtWorld, FleetAtWorld } from "../../../shared/model/v1/fleet";
+import { FleetInTransit } from "../../../shared/model/v1/fleet";
 import { Vec2 } from "../../../shared/math/vec2";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
@@ -8,8 +8,8 @@ import { WorldHints } from "./world-hints";
 import { VisibleWorld } from "../../../shared/model/v1/visible-state";
 import { GameNotifications } from "./game-notifications";
 import { GameClock } from "./clock";
-import { GameOrders } from "./game-orders";
 import { OrderEditorViewModel } from "./order-editor-view-model";
+import { PlayersViewModel } from "./player-infos-view-model";
 
 
 const STAGE_OFFSET = 75;
@@ -45,11 +45,12 @@ export class GameStageViewModel {
     private worldHints: WorldHints,
     private gameNotifcations: GameNotifications,
     private orderEditor: OrderEditorViewModel,
-    private clock: GameClock
+    private clock: GameClock,
+    private playersViewModel: PlayersViewModel
   ) { }
 
-  @computed get playerInfos() {
-    return this.gameData.playerInfos;
+  @computed get players() {
+    return this.playersViewModel;
   }
 
   @computed get doneLoading() {

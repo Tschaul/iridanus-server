@@ -1,4 +1,4 @@
-import { pickFromDistribution, total } from "../../../shared/math/distributions/distribution-helper";
+import { pickFromDistribution, totalAmount } from "../../../shared/math/distributions/distribution-helper";
 import { PopulationByPlayer, worldHasOwner } from "../../../shared/model/v1/world";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 

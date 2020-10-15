@@ -3,7 +3,7 @@ export type Distribution = {
 };
 
 export function pickFromDistribution(dist: Distribution, random: number): string {
-  const sum = total(dist);
+  const sum = totalAmount(dist);
 
   let pick = sum * random;
 
@@ -17,7 +17,7 @@ export function pickFromDistribution(dist: Distribution, random: number): string
   throw new Error("Cannot pick from empty distribution");
 }
 
-export function total(dist: Distribution) {
+export function totalAmount(dist: Distribution) {
   return Object.values(dist).reduce((pv, cv) => pv + cv, 0)
 }
 
@@ -34,7 +34,7 @@ export function majorityHolder(distribution: Distribution) {
 }
 
 export function absoluteMajorityHolder(distribution: Distribution) {
-  let sum = total(distribution);
+  let sum = totalAmount(distribution);
   const maj = majorityHolder(distribution)
   if (!maj || !sum) {
     return null;
@@ -51,5 +51,5 @@ export function absoluteMajorityHolder(distribution: Distribution) {
 }
 
 export function allFromPlayer(distribution: Distribution, playerId: string) {
-  return (distribution[playerId] ?? 0) === total(distribution);
+  return (distribution[playerId] ?? 0) === totalAmount(distribution);
 }

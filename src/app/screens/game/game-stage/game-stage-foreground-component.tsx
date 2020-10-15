@@ -13,6 +13,7 @@ import { pathForGate } from './helper';
 import { pathOfFleetInTransit } from '../../../../shared/model/v1/fleet';
 import { PopulationByPlayer, World } from '../../../../shared/model/v1/world';
 import { GameStageWorld } from './game-stage-world-component';
+import { PopulationStats } from '../shared/population-stats-component';
 
 
 @observer
@@ -110,7 +111,7 @@ export class GameStageForeground extends React.Component<{
                 y={world1Pos.y}
                 dominantBaseline="middle"
                 textAnchor="middle"
-                fill={this.getColorForPlayer(fleet.ownerId)}
+                fill={this.props.vm.players.getColorForPlayer(fleet.ownerId)}
                 fontSize={22}
                 data-world-id1={id1}
                 data-world-id2={id2}
@@ -128,7 +129,7 @@ export class GameStageForeground extends React.Component<{
 
   private renderWorlds(): React.ReactNode {
     return this.props.vm.worldsToDisplay.map(world => {
-      const color = this.getColorForWorld(world);
+      const color = this.props.vm.players.getColorForWorld(world);
       const fleets = this.props.vm.fleetsByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
       const hint = this.props.vm.hintForWorld(world.id);
@@ -138,7 +139,7 @@ export class GameStageForeground extends React.Component<{
       return (
         <g key={world.id}>
           <GameStageWorld
-            playerInfos={this.props.vm.playerInfos}
+            playerInfos={this.props.vm.players}
             world={world}
           />
           <HoverTooltip
@@ -218,7 +219,7 @@ export class GameStageForeground extends React.Component<{
                   y={world.y + FLEET_DISTANCE * pos.y}
                   dominantBaseline="middle"
                   textAnchor="middle"
-                  fill={this.getColorForPlayer(fleet.ownerId)}
+                  fill={this.props.vm.players.getColorForPlayer(fleet.ownerId)}
                   fontSize={22}
                   style={{ transform: "translateY(1px)", cursor: 'pointer' }}
                   data-world-id={world.id}
@@ -273,40 +274,21 @@ export class GameStageForeground extends React.Component<{
     }
   }
 
-  getColorForWorld(world: VisibleWorld) {
-    if (!visibleWorldhasOwner(world)) {
-      return 'lightgray'
-    } else {
-      return this.getColorForPlayer(world.ownerId);
-    }
-  }
-
-  getColorForPlayer(playerId: string) {
-    return this.props.vm.playerInfos[playerId]?.color ?? 'lightgray';
-  }
-
   getTooltipForWorld(world: VisibleWorld) {
     if (world.status === 'HIDDEN') {
       return '';
     } else if (world.status === 'FOG_OF_WAR') {
       return <span>
-        {this.renderPopulation(world.population)}
+        <PopulationStats population={world.population} playerInfos={this.props.vm.players}></PopulationStats>
       /{world.populationLimit} P {world.industry}
       </span>;
     }
     return <span>
-      {world.status === 'OWNED' ? this.renderPopulation(world.population) : '0'}
+      {world.status === 'OWNED' ? <PopulationStats population={world.population} playerInfos={this.props.vm.players}></PopulationStats> : '0'}
       /{world.populationLimit} P {world.industry} I {world.metal} ▮
     </span>;
 
   }
 
-  renderPopulation(population: PopulationByPlayer) {
-    const keys = Object.getOwnPropertyNames(population).filter(key => population[key]);
-    return <span>
-      {keys.map((key, index) => {
-        return <span key={key} style={{ color: this.getColorForPlayer(key) }}>{population[key]}{(index !== keys.length - 1) && '+'}</span>
-      })}
-    </span>
-  }
+  
 }

@@ -7,6 +7,7 @@ Server for Iridanus
 
 - world modifiers
 - CTRL to select multiple fleets
+- remove player from game when home world is captured by other player. all ships become creep and population becomes natives
 
 # Bugs
 

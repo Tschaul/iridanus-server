@@ -1,14 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { PlayerInfos } from '../../../../shared/model/v1/player-info';
 import { WorldToDisplay } from '../../../view-model/game/game-stage-view-model';
 import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
 import { symbol } from '../helper/symbols';
+import { PlayersViewModel } from '../../../view-model/game/player-infos-view-model';
 
 @observer
 export class GameStageWorld extends React.Component<{
   world: WorldToDisplay,
-  playerInfos: PlayerInfos
+  playerInfos: PlayersViewModel
 }> {
   render() {
     const { world } = this.props;
@@ -77,13 +77,8 @@ export class GameStageWorld extends React.Component<{
     if (!visibleWorldhasOwner(world)) {
       return 'lightgray'
     } else {
-      return this.getColorForPlayer(world.ownerId);
+      return this.props.playerInfos.getColorForPlayer(world.ownerId);
     }
   }
-
-  getColorForPlayer(playerId: string) {
-    return this.props.playerInfos[playerId]?.color ?? 'lightgray';
-  }
-
 
 }

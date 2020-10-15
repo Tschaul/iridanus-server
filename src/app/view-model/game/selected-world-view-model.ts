@@ -6,28 +6,27 @@ import { PlayerInfo } from "../../../shared/model/v1/player-info";
 import { GameData } from "./game-data";
 import { GameStageSelection } from "./stage-selection";
 import { visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
+import { PlayersViewModel } from "./player-infos-view-model";
+import { GameClock } from "./clock";
 
 export class SelectedWorldViewModel {
 
   constructor(
     private gameData: GameData,
     private selection: GameStageSelection,
+    public readonly players: PlayersViewModel,
+    private clock: GameClock
   ) { }
 
 
-  @computed public get playerInfoOfSelectedWorld() {
-    if (this.selection.selectedWorld && visibleWorldhasOwner(this.selection.selectedWorld)) {
-      return this.gameData.playerInfos[this.selection.selectedWorld.ownerId];
-    } else {
-      return null;
-    }
+  @computed public get colorOfSelectedWorld() {
+    return this.players.getColorForWorld(this.selection.selectedWorld)
   }
-  @computed public get capturingPlayerInfo() {
+
+  @computed public get colorOrCapturingPlayer() {
     const world = this.selection.selectedWorld;
     if (world && visibleWorldhasOwner(world) && world.populationConversionStatus.type === 'BEING_CAPTURED') {
-      return this.gameData.playerInfos[world.populationConversionStatus.nextConvertingPlayerId];
-    } else {
-      return null;
+      return this.players.getColorForPlayer(world.populationConversionStatus.nextConvertingPlayerId)
     }
   }
 
@@ -79,5 +78,9 @@ export class SelectedWorldViewModel {
   public isWorldOrFleetSelected(isWorld: boolean, item: World | Fleet) {
     return (isWorld && !this.selection.selectedFleet)
       || (!isWorld && this.selection.selectedFleet && this.selection.selectedFleet.id === item.id)
+  }
+
+  public showDamageStatusForFleet(fleet: Fleet) {
+    return (this.clock.now - fleet.lastDamageTimestamp) < this.gameData.gameRules.combat.meanFiringInterval;
   }
 }
