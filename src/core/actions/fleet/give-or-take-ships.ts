@@ -12,10 +12,8 @@ export function giveOrTakeFleetShips(fleetId: string, amount: number): Action {
     apply: (state: GameState) => {
 
       const fleet = state.universe.fleets[fleetId];
-      const newShipsPlusIntegrity = fleet.ships + fleet.integrity + amount
+      const newShips = fleet.ships + amount
       
-      let newShips = Math.floor(newShipsPlusIntegrity);
-
       if ( newShips <= 0) {
         fleetDestroyed = true;
         return produce(state, draft => {

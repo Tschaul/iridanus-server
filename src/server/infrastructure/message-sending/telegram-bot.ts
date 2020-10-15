@@ -12,7 +12,7 @@ export class TelegramConnection {
 
   constructor(
     private userRepository: UserRepository,
-    environment: Environment
+    environment: Environment,
   ) {
 
     this.enabled = !!environment.telegramBotToken;

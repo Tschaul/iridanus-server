@@ -1,16 +1,15 @@
 import { ContainerRegistry } from "../container-registry";
 import { Environment } from "../environment/environment";
-import { mkdirSync, rmdirSync, writeFileSync } from "fs";
+import { mkdirSync, rmdirSync } from "fs";
 import { ResponseMessage, SubscriptionResponse, CommandResponse, AuthenticationResponse, ErrorReponse } from "../../shared/messages/response-message";
 import { ConnectionHandler } from "../connection-handler";
 import { RequestMessage } from "../../shared/messages/request-message";
 
 import a from 'assertron';
-import { join, dirname } from "path";
 import { DataHandleRegistry } from "../repositories/data-handle-registry";
 import { Initializer } from "../infrastructure/initialisation/initializer";
-import { AccountConfirmationMail } from "../mails/account-confirmation-mail";
-import { AccountConfirmationMailMock } from "./mocks/mail-mocks";
+import { AccountConfirmationMessageMock } from "./mocks/mail-mocks";
+import { AccountConfirmationMessage } from "../messages/account-confirmation-message";
 
 export class ServerTestBed {
   path: string;
@@ -19,13 +18,13 @@ export class ServerTestBed {
   server: ConnectionHandler;
   dataHandleRegistry: DataHandleRegistry;
   initializer: Initializer;
-  accountConfirmationMailMock: AccountConfirmationMailMock;
+  accountConfirmationMailMock: AccountConfirmationMessageMock;
 
   constructor(private registry: ContainerRegistry) {
     this.path = registry.globalContainer.get(Environment).dataPath;
     this.dataHandleRegistry = registry.globalContainer.get(DataHandleRegistry);
     this.initializer = registry.globalContainer.get(Initializer);
-    this.accountConfirmationMailMock = registry.globalContainer.get(AccountConfirmationMail) as any as AccountConfirmationMailMock;
+    this.accountConfirmationMailMock = registry.globalContainer.get(AccountConfirmationMessage) as any as AccountConfirmationMessageMock;
   }
 
   logout() {
