@@ -79,11 +79,12 @@ export class AccountScreen extends React.Component<{
             user id: {infos.userId} <br />
             email: {infos.email} {infos.emailConfirmed && '(confirmed)'} <br />
             {infos.telegramConfirmed ? (
-              <p>Telegram is set up for game notifications</p>
+              [<p>Telegram is set up for game notifications. </p>,
+              <p> To disable Telegram notifications and switch back to email notifications enter /disable in the telegram chat.</p>]
             ) : (
                 <p>Set up Telegram for game notifications:
                   <ol>
-                    <li>Visit the Iridanus Telegram Bot at <a style={{color: selectedYellow}} target="blank" href={'https://t.me/' + this.props.vm.telegramBotName}>{this.props.vm.telegramBotName}</a></li>
+                    <li>Visit the Iridanus Telegram Bot at <a style={{ color: selectedYellow }} target="blank" href={'https://t.me/' + this.props.vm.telegramBotName}>{this.props.vm.telegramBotName}</a></li>
                     <li>Hit /start</li>
                     <li>Enter /code <b>{infos.userId}</b> <b>{infos.telegramCode}</b></li>
                   </ol>
