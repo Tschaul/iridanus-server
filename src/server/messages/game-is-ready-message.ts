@@ -1,12 +1,12 @@
 import { injectable } from "inversify";
-import { MailSender } from "../infrastructure/mail/mail-sender";
 import { Environment } from "../environment/environment";
 import { GameInfo } from "../../shared/model/v1/game-info";
+import { MessageRouter } from "../infrastructure/message-sending/message-router";
 
 @injectable()
-export class GameIsReadyMail {
+export class GameIsReadyMessage {
 
-  constructor(private mailSender: MailSender, private environment: Environment) {}
+  constructor(private messageRouter: MessageRouter, private environment: Environment) {}
 
   async send(gameInfo: GameInfo, gameStartTimestamp: number) {
 
@@ -15,7 +15,7 @@ export class GameIsReadyMail {
 
     const gameStartDate = new Date(gameStartTimestamp).toISOString();
 
-    await this.mailSender.send({
+    await this.messageRouter.send({
       recipients: recipients,
       subject: `Your Iridanus game '${gameId}' will start soon`,
       text: 
@@ -24,6 +24,6 @@ export class GameIsReadyMail {
 your Iridanus game '${gameId}' is ready and will start at ${gameStartDate}. Please place your initial orders.
 
 ${this.environment.baseUrl}`
-    })
+    }, true)
   }
 }

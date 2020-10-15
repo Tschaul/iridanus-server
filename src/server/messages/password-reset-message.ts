@@ -1,14 +1,15 @@
 import { injectable } from "inversify";
-import { MailSender } from "../infrastructure/mail/mail-sender";
+import { MailSender } from "../infrastructure/message-sending/mail-sender";
 import { Environment } from "../environment/environment";
+import { MessageRouter } from "../infrastructure/message-sending/message-router";
 
 @injectable()
-export class PasswordResetMail {
+export class PasswordResetMessage {
 
-  constructor(private mailSender: MailSender, private environment: Environment) {}
+  constructor(private messageRouter: MessageRouter, private environment: Environment) {}
 
   async send(recipient: string, token: string) {
-    await this.mailSender.send({
+    await this.messageRouter.send({
       recipients: [recipient],
       subject: 'Your Iridanus account',
       text: 

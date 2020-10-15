@@ -5,6 +5,7 @@ export class Environment {
   developmentMode: boolean;
   baseUrl: string;
   tokenExpirePeriod: number;
+  telegramBotToken: string;
 }
 
 export interface MailSettings {

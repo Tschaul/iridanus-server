@@ -5,7 +5,7 @@ import { CryptoWrapper } from "../../infrastructure/crypto/crypto-wrapper";
 import { Initializer } from "../../infrastructure/initialisation/initializer";
 import { Clock } from "../../../core/infrastructure/clock";
 import { Environment } from "../../environment/environment";
-import { makeId } from "../../../app/client/make-id";
+import { makeId, makePin } from "../../../app/client/make-id";
 
 const USER_DATA_PATH = 'users/users.json';
 
@@ -77,7 +77,57 @@ export class UserRepository {
           salt: user.salt,
           passwordResetToken: '',
           passwortResetTokenValidUntil: 0,
-          authTokens: []
+          authTokens: [],
+          telegram: {
+            confirmed: false,
+            code: makePin()
+          }
+        }
+      }
+    })
+  }
+
+  async confirmUserTelegram(id: string, code: string, chatId: number) {
+    await this.handle.do(async (data) => {
+      if (!data.users[id]) {
+        throw new Error(`user id '${id}' does not exist`)
+      }
+      const user = data.users[id];
+      if (!user.emailConfirmed || user.telegram.confirmed || user.telegram.code !== code) {
+        throw new Error(`telegram for user id '${id}' could not be confirmed`)
+      }
+      return (data) => {
+        const user = data.users[id] as ConfirmedUser;
+        data.users[id] = {
+          ...user,
+          telegram: {
+            confirmed: true,
+            chatId
+          }
+        }
+      }
+    })
+  }
+
+  async unconfirmUserTelegram(chatId: number) {
+    await this.handle.do(async (data) => {
+
+      const user = Object.values(data.users).find(it => it.emailConfirmed && it.telegram.confirmed && it.telegram.chatId === chatId)
+
+      if (!user) {
+        throw new Error("No user found for given chat id");
+      }
+
+      const id = user.id;
+
+      return (data) => {
+        const user = data.users[id] as ConfirmedUser;
+        data.users[id] = {
+          ...user,
+          telegram: {
+            confirmed: false,
+            code: makePin()
+          }
         }
       }
     })

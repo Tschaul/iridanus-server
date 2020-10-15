@@ -20,8 +20,8 @@ import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
 import { PlayerStates } from "../shared/model/v1/scoring";
 import { NotificationHandler } from "../core/infrastructure/notification-handler";
 import { Environment } from "./environment/environment";
-import { NotificationMailer } from "./mails/notification-mail-handler";
-import { GameIsReadyMail } from "./mails/game-is-ready-mail";
+import { NotificationMessageHandler } from "./messages/notification-message-handler";
+import { GameIsReadyMessage } from "./messages/game-is-ready-message";
 
 @injectable()
 export class GameRunner {
@@ -32,7 +32,7 @@ export class GameRunner {
   private readonly logger: Logger;
   private readonly initializer: Initializer;
   private readonly environment: Environment;
-  private readonly gameIsReadyMail: GameIsReadyMail;
+  private readonly gameIsReadyMail: GameIsReadyMessage;
 
   constructor(
     private registry: ContainerRegistry,
@@ -43,7 +43,7 @@ export class GameRunner {
     this.logger = registry.globalContainer.get(Logger);
     this.initializer = registry.globalContainer.get(Initializer);
     this.environment = registry.globalContainer.get(Environment);
-    this.gameIsReadyMail = registry.globalContainer.get(GameIsReadyMail);
+    this.gameIsReadyMail = registry.globalContainer.get(GameIsReadyMessage);
   }
 
   run() {
@@ -92,7 +92,7 @@ export class GameRunner {
     const setup = container.get(GameSetupProvider);
     const store = container.get(Store);
     const notificationHandler = container.get(NotificationHandler);
-    const notificationMailer = container.get(NotificationMailer);
+    const notificationMailer = container.get(NotificationMessageHandler);
 
     setup.rules = makeConfig(this.environment.millisecondsPerDay);
 

@@ -22,7 +22,16 @@ export interface ConfirmedUser extends UserBase {
   emailConfirmationTimestamp: number,
   emailConfirmed: true,
   passwordResetToken: string,
-  passwortResetTokenValidUntil: number
+  passwortResetTokenValidUntil: number,
+  telegram: TelegramChat
+}
+
+export type TelegramChat = {
+  confirmed: false,
+  code: string,
+} | {
+  confirmed: true,
+  chatId: number
 }
 
 export interface UsersSchema {

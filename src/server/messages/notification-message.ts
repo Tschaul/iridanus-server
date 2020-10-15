@@ -1,12 +1,13 @@
 import { injectable } from "inversify";
-import { MailSender } from "../infrastructure/mail/mail-sender";
+import { MailSender } from "../infrastructure/message-sending/mail-sender";
 import { Environment } from "../environment/environment";
 import { GameNotification } from "../../shared/model/v1/notification";
+import { MessageRouter } from "../infrastructure/message-sending/message-router";
 
 @injectable()
-export class NotificationMail {
+export class NotificationMessage {
 
-  constructor(private mailSender: MailSender, private environment: Environment) { }
+  constructor(private messageRouter: MessageRouter, private environment: Environment) { }
 
   async send(playerId: string, gameId: string, notifications: GameNotification[]) {
 
@@ -16,7 +17,7 @@ export class NotificationMail {
 
     notifications.sort((a, b) => importance(b) - importance(a))
 
-    await this.mailSender.send({
+    await this.messageRouter.send({
       recipients: [playerId],
       subject: notifications[0].type + ' Iridanus notification from game ' + gameId,
       text:
@@ -27,7 +28,7 @@ there are important updates in your Iridanus game ${gameId}:
 ${notifications.map(it => '- ' + it.type).join('\n')}
 
 Have a look now: ${this.environment.baseUrl}`
-    })
+    }, true)
   }
 }
 

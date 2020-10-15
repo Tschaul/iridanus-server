@@ -17,6 +17,14 @@ export function calculateNextConversionEvent(
     [convertingPlayerId]: 0
   }
 
+  if (totalAmount(populationWithoutConvertingPlayer) === 0) {
+    return {
+      delay,
+      convertedPlayerId: convertingPlayerId,
+      convertingPlayerId
+    }
+  }
+
   const convertedPlayerId = pickFromDistribution(populationWithoutConvertingPlayer, random.equal())
 
   return {

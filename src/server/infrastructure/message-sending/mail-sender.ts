@@ -1,23 +1,16 @@
 import { injectable } from "inversify";
 import { createTransport, getTestMessageUrl } from "nodemailer";
 import { Environment } from "../../environment/environment";
-import Mail from "nodemailer/lib/mailer";
 import { UserRepository } from "../../repositories/users/user-repository";
 import { Logger } from "../../../core/infrastructure/logger";
-
-export interface MailPayload {
-  recipients: string[]
-  subject: string,
-  text: string,
-  html?: string,
-}
+import { MessagePayload } from "./message-payload";
 
 @injectable()
 export class MailSender {
   constructor(private environment: Environment, private userRepository: UserRepository, private logger: Logger) {
   }
 
-  async send(mail: MailPayload) {
+  async send(mail: MessagePayload) {
 
     const transporter = createTransport({
       host: this.environment.mailSettings.host,

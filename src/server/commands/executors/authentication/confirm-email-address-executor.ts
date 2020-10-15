@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { CommandExecutor } from "../command-executor";
 import { UserRepository } from "../../../repositories/users/user-repository";
 import { SignUpUserCommand, ConfirmEmailAddressCommand } from "../../../../shared/messages/commands/user-commands";
-import { AccountConfirmationMail } from "../../../mails/account-confirmation-mail";
+import { AccountConfirmationMessage } from "../../../messages/account-confirmation-message";
 
 @injectable()
 export class ConfirmEmailAddressExecutor implements CommandExecutor<ConfirmEmailAddressCommand> {

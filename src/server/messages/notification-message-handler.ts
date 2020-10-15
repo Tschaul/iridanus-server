@@ -4,18 +4,18 @@ import { windowWhen, debounceTime, toArray, mergeMap } from "rxjs/operators";
 
 import { GameSetupProvider } from "../../core/game-setup-provider";
 import { GlobalErrorHandler } from "../infrastructure/error-handling/global-error-handler";
-import { NotificationMail } from "./notification-mail";
+import { NotificationMessage } from "./notification-message";
 import { Subscription } from "rxjs";
 import { Environment } from "../environment/environment";
 
 @injectable()
-export class NotificationMailer {
+export class NotificationMessageHandler {
   subscription: Subscription;
   constructor(
     private notificationHandler: NotificationHandler,
     private setup: GameSetupProvider,
     private errorHandler: GlobalErrorHandler,
-    private notificationMail: NotificationMail,
+    private notification: NotificationMessage,
     private environment: Environment
   ) {
   }
@@ -29,7 +29,7 @@ export class NotificationMailer {
         const byPlayerId = groupBy(notifications, 'playerId');
         for (const playerId of Object.getOwnPropertyNames(byPlayerId)) {
           const notifications = byPlayerId[playerId];
-          await this.notificationMail.send(playerId, this.setup.gameId, notifications)
+          await this.notification.send(playerId, this.setup.gameId, notifications)
         }
       })())
     })

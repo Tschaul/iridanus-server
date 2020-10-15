@@ -10,6 +10,8 @@ import { createProxyServer } from 'http-proxy'
 import { shutdown } from './shutdown';
 import { createTestGame } from './create-test-game';
 
+import './infrastructure/message-sending/telegram-bot'
+
 const app = express();
 
 if (process.env.IRIDANUS_USE_PROXY === 'true') {
