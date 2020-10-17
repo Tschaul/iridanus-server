@@ -1,7 +1,7 @@
 import { observable, computed, when, toJS } from "mobx";
 import { IStreamListener, fromStream, toStream } from "mobx-utils";
 import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
-import { empty, from, ObservableInput, Subscription } from "rxjs";
+import { EMPTY, Subscription } from "rxjs";
 import { PlayerInfos } from "../../../shared/model/v1/player-info";
 import { GameViewModel } from "./game-view-model";
 import { resolveFromRegistry } from "../../container-registry";
@@ -12,6 +12,7 @@ import { GameRules } from "../../../shared/model/v1/rules";
 import { Distances } from "../../../shared/model/v1/distances";
 import { floydWarshall } from "../../../shared/math/path-finding/floydWarshall";
 import { reactionToObservable } from "../../../shared/util/reactionToObservable";
+import { Distribution } from "../../../shared/math/distributions/distribution-helper";
 
 export type FleetByTwoWorlds = {
   [worldId1: string]: {
@@ -81,10 +82,11 @@ export class GameData {
 
   private gameStateService = resolveFromRegistry(GameStateService);
 
-  @observable private gameInfo: IStreamListener<GameInfo> = fromStream(empty(), dummyInfo);
-  @observable private gameRulesStream: IStreamListener<GameRules> = fromStream(empty(), dummyRules);
-  @observable private gameState: IStreamListener<VisibleState> = fromStream(empty(), dummyState);
-  @observable private metaData: IStreamListener<GameMetaData> = fromStream(empty(), dummyMetaData);
+  @observable private gameInfo: IStreamListener<GameInfo> = fromStream(EMPTY, dummyInfo);
+  @observable private gameRulesStream: IStreamListener<GameRules> = fromStream(EMPTY, dummyRules);
+  @observable private gameState: IStreamListener<VisibleState> = fromStream(EMPTY, dummyState);
+  @observable private metaData: IStreamListener<GameMetaData> = fromStream(EMPTY, dummyMetaData);
+  @observable private score: IStreamListener<Distribution> = fromStream(EMPTY, {});
 
   @observable public distances: Distances = {}
 
@@ -117,7 +119,7 @@ export class GameData {
   }
 
   @computed public get scorings() {
-    return this.gameState.current.players;
+    return this.score.current;
   }
 
   @computed public get worlds() {
@@ -171,6 +173,7 @@ export class GameData {
     this.gameInfo = fromStream(this.gameStateService.getGameInfoById(gameId), dummyInfo);
     this.gameRulesStream = fromStream(this.gameStateService.getGameRulesByGameId(gameId), dummyRules);
     this.metaData = fromStream(this.gameStateService.getGameMetaDataById(gameId), dummyMetaData);
+    this.score = fromStream(this.gameStateService.getGameScoreById(gameId), {});
     when(
       () => !!Object.values(this.metaData.current.drawingPositions).length,
       () => {

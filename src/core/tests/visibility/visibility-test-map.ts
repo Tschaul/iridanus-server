@@ -4,10 +4,8 @@ import { dummyReadyWorld, dummyLostWorld } from "../test-helper";
 export const visibilityTestMap: GameState = {
   players: {
     p1: {
-      influence: 0,
-      lastScoringTimestamp: 0,
       playerId: "p1",
-      score: 0
+      status: 'PLAYING'
     }
   },
   currentTimestamp: 0,

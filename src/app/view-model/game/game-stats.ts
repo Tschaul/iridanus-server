@@ -12,7 +12,6 @@ export interface Stats {
   ships: number;
   metal: number;
   fleetKeys: number;
-  influence: number;
 }
 
 export type StatType = 'NONE' | 'INDUSTRY' | 'METAL' | 'MINES' | 'POPULATION' | 'SHIPS' | 'FLEET_KEYS' | 'INFLUENCE' | 'ALL';
@@ -66,7 +65,6 @@ export class GameStats {
       population: 0,
       ships: 0,
       fleetKeys: 0,
-      influence: 0,
     }
 
     const currentPlayer = this.gameViewModel.selfPlayerId;
@@ -86,8 +84,6 @@ export class GameStats {
         stats.fleetKeys += 1;
       }
     })
-
-    stats.influence = this.gameData.scorings[currentPlayer]?.influence || 0;
 
     return stats;
   }

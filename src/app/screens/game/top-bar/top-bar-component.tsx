@@ -120,7 +120,6 @@ export class TopBar extends React.Component<{
       onMouseLeave: this.handleMouseLeaveStatsItem
     }
     return this.state.gameStartDuration ? <div style={{ color: selectedYellow }}>Game will start in {this.state.gameStartDuration}. Place your initial orders.</div> : <div>
-      <span {...mouseHandler} data-stat={'INFLUENCE'} className={classNames(classes.statsItem)}>{stats.influence}{symbol('influence')}</span>
       <span {...mouseHandler} data-stat={'POPULATION'} className={classNames(classes.statsItem)}>{stats.population}{symbol('population')}</span>
       <span {...mouseHandler} data-stat={'INDUSTRY'} className={classNames(classes.statsItem)}>{stats.industry}{symbol('industry')}</span>
 

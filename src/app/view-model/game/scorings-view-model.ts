@@ -5,7 +5,6 @@ import { InfoPanelViewModel } from "./info-panel-view-model";
 
 export interface ScoringDisplay {
   currentScore: number,
-  scoreDeltaPerWeek: number,
   id: string,
   color: string,
   finalScore: number,
@@ -30,26 +29,23 @@ export class ScoringsViewModel {
 
   @computed get gameEndScoreDisplay() {
     const gameEndingScore = this.gameData.gameRules.scoring.gameEndingScore;
-    const week = 7 * this.infoPanelViewModel.millisecondsPerDay;
-    return Math.round(gameEndingScore / week);
+    return gameEndingScore;
   }
 
   @computed public get scoringsDisplay() {
 
     const gameEndingScore = this.gameData.gameRules.scoring.gameEndingScore;
-    const week = 7 * this.infoPanelViewModel.millisecondsPerDay;
 
     const result: ScoringDisplay[] = [];
 
-    Object.values(this.gameData.scorings).forEach(scoring => {
-      const playerInfo = this.gameData.playerInfos[scoring.playerId];
-      const currentScore = scoring.score + (this.timestamp - scoring.lastScoringTimestamp) * scoring.influence;
+    Object.getOwnPropertyNames(this.gameData.scorings).forEach(playerId => {
+      const score = this.gameData.scorings[playerId];
+      const playerInfo = this.gameData.playerInfos[playerId];
       result.push({
         color: playerInfo.color,
-        id: scoring.playerId,
-        currentScore: Math.round(currentScore / week),
-        scoreDeltaPerWeek: scoring.influence,
-        finalScore: Math.round(gameEndingScore / week)
+        id: playerId,
+        currentScore: score,
+        finalScore: gameEndingScore
       })
     })
 

@@ -20,7 +20,6 @@ import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
 import { WorldStopGrowingEventQueue } from "./population/world-stop-growing";
 import { GameEndsEventQueue } from "./scoring/game-ends";
-import { PlayerChangesInfluenceEventQueue } from "./scoring/player-changes-influence";
 import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
 import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
 import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
@@ -44,7 +43,6 @@ export class CompleteEventQueue implements GameEventQueue {
     // TODO split into sub-queues
 
     gameEnds: GameEndsEventQueue,
-    playerChangesInfluence: PlayerChangesInfluenceEventQueue,
 
     arriveAtWorld: ArriveAtWorldEventQueue,
     beginWarp: BeginWarpEventQueue,
@@ -96,7 +94,6 @@ export class CompleteEventQueue implements GameEventQueue {
       looseFleet,
       // awaitCapture,
       gameEnds,
-      playerChangesInfluence,
       arriveAtWorld,
       beginWarp,
       endWarp,

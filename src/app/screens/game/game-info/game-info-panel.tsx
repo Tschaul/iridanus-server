@@ -148,7 +148,7 @@ export class GameInfoPanel extends React.Component<{
                   <span style={playerColStyle}>{scoring.id}</span>
                   <span style={barWrapperStyle}>
                     <span style={barStyle} />
-                    <span style={barContentStyle}>{scoring.currentScore}&thinsp;+&thinsp;{scoring.scoreDeltaPerWeek}&thinsp;⦀/w</span>
+                    <span style={barContentStyle}>{scoring.currentScore}</span>
                   </span>
                 </div>
               );

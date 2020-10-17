@@ -16,6 +16,8 @@ export function getGameDataProvider(registry: ContainerRegistry, subscription: G
       return container.get(GameListAllDataProvider) as DataProvider
     case 'GAME/STATE':
       return container.get(GameStateDataProvider) as DataProvider
+    case 'GAME/STATS':
+      return container.get(GameStateDataProvider) as DataProvider
     case 'GAME/INFO':
       return container.get(GameInfoDataProvider) as DataProvider
     case 'GAME/META_DATA':
@@ -28,6 +30,7 @@ export function getGameDataProvider(registry: ContainerRegistry, subscription: G
 }
 
 export function registerGameSetupDataProviders(container: Container) {
+  container.bind(GameStateDataProvider).toSelf();
   container.bind(GameStateDataProvider).toSelf();
   container.bind(GameInfoDataProvider).toSelf();
   container.bind(GameMetaDataDataProvider).toSelf();

@@ -17,7 +17,7 @@ import { Universe } from "../shared/model/v1/universe";
 import { Initializer } from "./infrastructure/initialisation/initializer";
 import { makeConfig } from "../core/setup/simple-config";
 import { makeGomeisaThreeRandom } from "../util/hex-map/gomeisa-three-random";
-import { PlayerStates } from "../shared/model/v1/scoring";
+import { PlayerStates } from "../shared/model/v1/player-state";
 import { NotificationHandler } from "../core/infrastructure/notification-handler";
 import { Environment } from "./environment/environment";
 import { NotificationMessageHandler } from "./messages/notification-message-handler";
@@ -162,10 +162,8 @@ export class GameRunner {
 
     players.forEach(playerId => {
       scorings[playerId] = {
-        influence: 0,
-        lastScoringTimestamp: 0,
         playerId,
-        score: 0
+        status: 'PLAYING'
       }
     })
 

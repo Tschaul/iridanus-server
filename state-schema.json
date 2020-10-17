@@ -466,26 +466,23 @@
             ],
             "type": "object"
         },
-        "PlayerState": {
+        "Player": {
             "properties": {
-                "influence": {
-                    "type": "number"
-                },
-                "lastScoringTimestamp": {
-                    "type": "number"
-                },
                 "playerId": {
                     "type": "string"
                 },
-                "score": {
-                    "type": "number"
+                "status": {
+                    "enum": [
+                        "DEFEATED",
+                        "PLAYING",
+                        "VICTORIOUS"
+                    ],
+                    "type": "string"
                 }
             },
             "required": [
-                "influence",
-                "lastScoringTimestamp",
                 "playerId",
-                "score"
+                "status"
             ],
             "type": "object"
         },
@@ -1113,7 +1110,7 @@
         },
         "players": {
             "additionalProperties": {
-                "$ref": "#/definitions/PlayerState"
+                "$ref": "#/definitions/Player"
             },
             "type": "object"
         },

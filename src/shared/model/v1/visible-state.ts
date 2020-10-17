@@ -1,7 +1,7 @@
 import { Gates } from "./universe";
 import { PopulationByPlayer, World, worldHasOwner, WorldWithOwner } from "./world";
 import { Fleet } from "./fleet";
-import { PlayerStates } from "./scoring";
+import { PlayerStates } from "./player-state";
 import { WorldType } from "./world-type";
 
 export interface VisibleState {

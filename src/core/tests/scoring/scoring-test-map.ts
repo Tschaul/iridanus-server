@@ -7,16 +7,12 @@ export const scoringTestMap: GameState = {
   gameEndTimestamp: 100000,
   players: {
     "p1": {
-      influence: 0,
-      lastScoringTimestamp: 0,
       playerId: "p1",
-      score: 0
+      status: 'PLAYING'
     },
     "p2": {
-      influence: 0,
-      lastScoringTimestamp: 0,
       playerId: "p1",
-      score: 0
+      status: 'PLAYING'
     },
   },
   universe: {

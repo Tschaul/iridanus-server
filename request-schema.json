@@ -161,6 +161,9 @@
                             "$ref": "#/definitions/GameRulesSubscription"
                         },
                         {
+                            "$ref": "#/definitions/GameStatsSubscription"
+                        },
+                        {
                             "$ref": "#/definitions/EnvironmentInfoSubscription"
                         },
                         {
@@ -331,6 +334,20 @@
                 "type": {
                     "enum": [
                         "GAME/STATE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "GameStatsSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/STATS"
                     ],
                     "type": "string"
                 }

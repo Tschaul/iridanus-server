@@ -2,38 +2,37 @@ import { GameEventQueue, GameEvent } from "../event";
 import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
 import { map } from "rxjs/operators";
-import { InfluenceProjector } from "../../projectors/influence-projector";
+import { StatsProjector } from "../../projectors/influence-projector";
 import { TimeProjector } from "../../projectors/time-projector";
-import { updateScoring } from "../../actions/udpate-influence";
 import { GameSetupProvider } from "../../game-setup-provider";
-import { Action } from "../../actions/action";
+import { PlayerProjector } from "../../projectors/player-projector";
+import { majorityHolder } from "../../../shared/math/distributions/distribution-helper";
+import { playerWins } from "../../actions/player/player-wins";
 
 @injectable()
 export class GameEndsEventQueue implements GameEventQueue {
   public upcomingEvent$: Observable<GameEvent | null>;
-  public gameEndingTimestamp$: Observable<number>;
+  public gameEndingTimestamp$: Observable<number | undefined>;
 
   constructor(
-    private influence: InfluenceProjector,
+    private stats: StatsProjector,
     private time: TimeProjector,
+    private players: PlayerProjector,
     private setup: GameSetupProvider) {
 
     this.gameEndingTimestamp$ = combineLatest([
-      this.influence.byPlayerId$,
+      this.stats.statsByPlayer$,
       this.time.gameEndTimestamp$
     ]).pipe(
-      map(([scorings, gameEndTimestamp]) => {
+      map(([{ population: populationByPlyer }, gameEndTimestamp]) => {
 
         let endGameTimestamp = gameEndTimestamp;
 
-        Object.values(scorings).forEach(scoring => {
-          if (scoring.influence > 0) {
-            const projectedEnd = scoring.lastScoringTimestamp + Math.round((setup.rules.scoring.gameEndingScore - scoring.score) / scoring.influence)
-            if (projectedEnd < endGameTimestamp) {
-              endGameTimestamp = projectedEnd;
-            }
-          }
-        })
+        if (Object.values(populationByPlyer).find(score => {
+          return score >= this.setup.rules.scoring.gameEndingScore
+        })) {
+          return undefined;
+        }
 
         return endGameTimestamp;
       })
@@ -41,28 +40,31 @@ export class GameEndsEventQueue implements GameEventQueue {
 
     this.upcomingEvent$ = combineLatest([
       this.gameEndingTimestamp$,
-      this.influence.byPlayerId$
+      this.stats.statsByPlayer$,
+      this.players.allPlayerIds$
     ]).pipe(
-      map(([timestamp, scorings]) => {
+      map(([gameEndTimestamp, { population }, allPlayerIds]) => {
         return {
-          notifications: (timestamp) =>  Object.values(scorings).map(it => {
+          notifications: (timestamp) => allPlayerIds.map(it => {
             return {
               type: 'GAME_ENDED',
-              playerId: it.playerId,
+              playerId: it,
               timestamp
             }
           }),
           endsGame: true,
-          timestamp,
+          timestamp: gameEndTimestamp,
           happen: () => {
 
-            const actions: Action[] = [];
+            const winner = majorityHolder(population);
 
-            Object.values(scorings).forEach(scoring => {
-              actions.push(updateScoring(scoring.playerId, scoring.influence, timestamp))
-            })
+            if (!winner) {
+              throw new Error("No player has any population and game ended.");
+            }
 
-            return actions;
+            return [
+              playerWins(winner)
+            ]
           }
         }
       })

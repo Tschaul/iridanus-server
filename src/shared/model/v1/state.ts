@@ -1,5 +1,5 @@
 import { Universe } from "./universe";
-import { PlayerStates } from "./scoring";
+import { PlayerStates } from "./player-state";
 
 export interface GameState {
     gameStartTimestamp: number;

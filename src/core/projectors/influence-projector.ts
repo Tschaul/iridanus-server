@@ -5,7 +5,8 @@ import { WorldProjector } from "./world-projector";
 import { FleetProjector } from "./fleet-projector";
 import { combineLatest, Observable } from "rxjs";
 import { worldHasOwner } from "../../shared/model/v1/world";
-import { PlayerStates } from "../../shared/model/v1/scoring";
+import { PlayerStates } from "../../shared/model/v1/player-state";
+import { PlayerProjector } from "./player-projector";
 
 type Stat = { [playerId: string]: number }
 
@@ -15,28 +16,31 @@ const incrementStat = (stat: Stat, id: string, value: number) => {
 }
 
 @injectable()
-export class InfluenceProjector {
+export class StatsProjector {
   constructor(
     private worlds: WorldProjector,
     private fleets: FleetProjector,
-    private store: ReadonlyStore,
+    private players: PlayerProjector
   ) { }
 
-  public byPlayerId$ = this.store.state$.pipe(
-    map(state => state.players),
-    shareReplay(1),
-  ) as Observable<PlayerStates>
-
-  private calculatedInfluenceForPlayers$ = combineLatest([
+  public statsByPlayer$ = combineLatest([
     this.worlds.byId$,
-    this.fleets.byId$
+    this.fleets.byId$,
+    this.players.allPlayerIds$
   ]).pipe(
     map(
-      ([worldsbyId, fleetsById]) => {
+      ([worldsbyId, fleetsById, allPlayerIds]) => {
 
         const population: Stat = {}
         const industry: Stat = {}
         const ships: Stat = {}
+        const metal: Stat = {}
+
+        allPlayerIds.forEach(id => {
+          population[id] = 0;
+          industry[id] = 0;
+          ships[id] = 0;
+        })
 
         Object.values(worldsbyId).forEach(world => {
           if (worldHasOwner(world)) {
@@ -46,44 +50,27 @@ export class InfluenceProjector {
             }
             incrementStat(population, world.ownerId, effectivePopulation)
             incrementStat(industry, world.ownerId, world.industry)
+            incrementStat(metal, world.ownerId, world.metal)
           }
         })
 
         Object.values(fleetsById).forEach(fleet => {
           incrementStat(ships, fleet.ownerId, fleet.ships)
+          if (fleet.status === 'TRANSFERING_CARGO') {
+            incrementStat(population, fleet.ownerId, fleet.cargoPopulation)
+            incrementStat(metal, fleet.ownerId, fleet.cargoMetal)
+          }
         })
 
-        const allPlayerIds = new Set([
-          ...Object.getOwnPropertyNames(population),
-          ...Object.getOwnPropertyNames(industry),
-          ...Object.getOwnPropertyNames(ships),
-        ])
-
-        const influence: Stat = {};
-
-        allPlayerIds.forEach(playerId => {
-          influence[playerId] = Math.max(0, (population[playerId] || 0) - (industry[playerId] || 0) - (ships[playerId] || 0))
-        })
-
-        return influence;
+        return {
+          population,
+          industry,
+          ships,
+          metal
+        };
       }
     ),
     shareReplay(1)
   )
 
-  public playerNeedsInfluenceUpdate$ = combineLatest([
-    this.byPlayerId$,
-    this.calculatedInfluenceForPlayers$
-  ]).pipe(
-    map(([scorings, calculatedInfluences]) => {
-
-      for (const playerId of Object.getOwnPropertyNames(scorings)) {
-        const influence = calculatedInfluences[playerId] || 0;
-        if (scorings[playerId].influence !== influence) {
-          return [playerId, influence]
-        }
-      }
-      return [null, null]
-    })
-  )
 }

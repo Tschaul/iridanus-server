@@ -3,7 +3,7 @@ import { GameRules } from "../../shared/model/v1/rules";
 export function makeConfig(millisecondsPerDay: number): GameRules {
   return {
     scoring: {
-      gameEndingScore: 3000 * millisecondsPerDay
+      gameEndingScore: 300,
     },
     capture: {
       populationConversionRate: 0.25 * millisecondsPerDay,

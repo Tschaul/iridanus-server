@@ -4,16 +4,12 @@ import { dummyReadyWorld } from '../test-helper';
 export const cargoTestMap: GameState = {
   players: {
     p1: {
-      influence: 0,
-      lastScoringTimestamp: 0,
-      playerId: 'p1',
-      score: 0
+      playerId: "p1",
+      status: 'PLAYING'
     },
     p2: {
-      influence: 0,
-      lastScoringTimestamp: 0,
       playerId: 'p2',
-      score: 0
+      status: 'PLAYING'
     }
   },
   currentTimestamp: 0,
