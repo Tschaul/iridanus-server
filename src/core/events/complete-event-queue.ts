@@ -32,6 +32,8 @@ import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
 import { CaptureWorldEventQueue } from "./capture/capture-world";
 import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 import { ConvertPopulationEventQueue } from "./capture/convert-population";
+import { PlayerGetsDefeatedEventQueue } from "./surrender/player-gets-defeated";
+import { PlayerSurrendersEventQueue } from "./surrender/player-surrenders";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -43,6 +45,9 @@ export class CompleteEventQueue implements GameEventQueue {
     // TODO split into sub-queues
 
     gameEnds: GameEndsEventQueue,
+
+    playerGetsDefeated: PlayerGetsDefeatedEventQueue,
+    playerSurrenders: PlayerSurrendersEventQueue,
 
     arriveAtWorld: ArriveAtWorldEventQueue,
     beginWarp: BeginWarpEventQueue,
@@ -86,6 +91,8 @@ export class CompleteEventQueue implements GameEventQueue {
   ) {
 
     const allEventQueues = [
+      playerGetsDefeated,
+      playerSurrenders,
       revealWorld,
       startCapturingWorld,
       captureWorld,

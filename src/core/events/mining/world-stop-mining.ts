@@ -7,6 +7,7 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { worldStopMining } from "../../actions/world/stop-mining";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { worldHasOwner } from "../../../shared/model/v1/world";
+import { worldShouldBeMining } from "./mining-helper";
 
 @injectable()
 export class WorldStopMiningEventQueue implements GameEventQueue {
@@ -26,7 +27,7 @@ export class WorldStopMiningEventQueue implements GameEventQueue {
         return worlds.find(world =>
           worldHasOwner(world)
           && world.miningStatus.type === 'MINING'
-          && world.metal >= setup.rules.mining.maximumMetal
+          && !worldShouldBeMining(world, setup.rules)
         )
       })
     )

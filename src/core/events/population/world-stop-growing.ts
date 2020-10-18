@@ -1,11 +1,11 @@
 import { GameEventQueue, GameEvent } from "../event";
-import { Observable, combineLatest } from "rxjs";
+import { Observable } from "rxjs";
 import { injectable } from "inversify";
-import { TimeProjector } from "../../projectors/time-projector";
 import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { worldStopGrowing } from "../../actions/world/stop-growing";
 import { totalPopulation, worldHasOwner } from "../../../shared/model/v1/world";
+import { totalGrowingPopulation } from "./growth-dealy-helper";
 
 @injectable()
 export class WorldStopGrowingEventQueue implements GameEventQueue {
@@ -13,7 +13,6 @@ export class WorldStopGrowingEventQueue implements GameEventQueue {
 
   constructor(
     private worlds: WorldProjector,
-    private time: TimeProjector
   ) {
 
     const stopGrowingWorld$ = this.worlds.byId$.pipe(
@@ -24,7 +23,10 @@ export class WorldStopGrowingEventQueue implements GameEventQueue {
         return worlds.find(world =>
           'populationGrowthStatus' in world
           && world.populationGrowthStatus.type === 'GROWING'
-          && totalPopulation(world) >= world.populationLimit
+          && (
+            totalPopulation(world) >= world.populationLimit
+            || totalGrowingPopulation(world) === 0
+          )
         )
       })
     )
@@ -35,7 +37,7 @@ export class WorldStopGrowingEventQueue implements GameEventQueue {
           return null;
         }
         return {
-          notifications:  (timestamp: number) => worldHasOwner(world) ? [{
+          notifications: (timestamp: number) => worldHasOwner(world) ? [{
             type: 'POPULATION_LIMIT_REACHED',
             worldId: world.id,
             playerId: world.ownerId,

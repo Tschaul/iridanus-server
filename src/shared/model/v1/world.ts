@@ -121,7 +121,6 @@ export type BuildingShipsStatus =
 
 export type BuildingShipsWorld = {
     type: 'BUILDING_SHIPS';
-    ownerId: string;
     readyTimestamp: number;
     amount: number;
     activeIndustry: number;

@@ -35,7 +35,7 @@ export function makeGomeisaThreeRandom(): GameMap {
 
     if (homeWorlds.includes(worldId)) {
       universe.worlds[worldId] = {
-        worldType: { type: 'REGULAR' },
+        worldType: { type: 'HOME', playerId: seats[worldId] },
         id: worldId,
         status: 'OWNED',
         ownerId: seats[worldId],

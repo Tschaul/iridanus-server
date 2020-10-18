@@ -48,6 +48,12 @@ export class LobbyService {
     })
   }
 
+  async surrenderGame(id: string): Promise<void> {
+    await this.connection.sendCommand({
+      type: 'ORDERS/SURRENDER',
+    }, id)
+  }
+
   async toggleSpectatorModeForGame(id: string): Promise<void> {
     await this.connection.sendCommand({
       type: 'GAME/TOGGLE_SPECTATOR',

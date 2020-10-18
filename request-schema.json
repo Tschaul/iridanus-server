@@ -102,6 +102,9 @@
                             "$ref": "#/definitions/UpdateFleetOrdersCommand"
                         },
                         {
+                            "$ref": "#/definitions/SurrenderGameCommand"
+                        },
+                        {
                             "$ref": "#/definitions/NotificationMarkAsReadCommand"
                         }
                     ]
@@ -554,6 +557,20 @@
                 "type": {
                     "enum": [
                         "STOP_CARGO_MISSION"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "SurrenderGameCommand": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "ORDERS/SURRENDER"
                     ],
                     "type": "string"
                 }

@@ -33,6 +33,14 @@ export class GameViewModel {
   topBarViewModel = new TopBarViewModel(this, this.gameData, this.gameOrders, this.gameStats);
   infoPanelViewModel = new InfoPanelViewModel(this, this.gameData, this.gameNotifications, this.selection);
   
+  @computed get playerStatus() {
+    if (this.selfIsSpecator) {
+      return 'SPECTATING'
+    } else {
+      return this.gameData.players[this.selfPlayerId]?.status
+    }
+  }
+
   @computed get selfIsSpecator(): boolean {
     return this.gameData.playerInfos[this.selfPlayerId] && this.gameData.playerInfos[this.selfPlayerId].isSpectator;
   }

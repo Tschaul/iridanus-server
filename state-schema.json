@@ -104,6 +104,24 @@
                         },
                         {
                             "properties": {
+                                "playerId": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "enum": [
+                                        "HOME"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "playerId",
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
                                 "type": {
                                     "enum": [
                                         "VOID"
@@ -468,6 +486,9 @@
         },
         "Player": {
             "properties": {
+                "hasSurrendered": {
+                    "type": "boolean"
+                },
                 "playerId": {
                     "type": "string"
                 },
@@ -740,9 +761,6 @@
                                                             "amount": {
                                                                 "type": "number"
                                                             },
-                                                            "ownerId": {
-                                                                "type": "string"
-                                                            },
                                                             "readyTimestamp": {
                                                                 "type": "number"
                                                             },
@@ -756,7 +774,6 @@
                                                         "required": [
                                                             "activeIndustry",
                                                             "amount",
-                                                            "ownerId",
                                                             "readyTimestamp",
                                                             "type"
                                                         ],

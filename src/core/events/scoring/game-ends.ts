@@ -22,9 +22,10 @@ export class GameEndsEventQueue implements GameEventQueue {
 
     this.gameEndingTimestamp$ = combineLatest([
       this.stats.statsByPlayer$,
-      this.time.gameEndTimestamp$
+      this.time.gameEndTimestamp$,
+      this.players.byId$
     ]).pipe(
-      map(([{ population: populationByPlyer }, gameEndTimestamp]) => {
+      map(([{ population: populationByPlyer }, gameEndTimestamp, playersById]) => {
 
         let endGameTimestamp = gameEndTimestamp;
 
@@ -34,6 +35,10 @@ export class GameEndsEventQueue implements GameEventQueue {
           return undefined;
         }
 
+        if (Object.values(playersById).filter(it => it.status === 'PLAYING').length === 1) {
+          return undefined
+        }
+
         return endGameTimestamp;
       })
     )
@@ -41,14 +46,14 @@ export class GameEndsEventQueue implements GameEventQueue {
     this.upcomingEvent$ = combineLatest([
       this.gameEndingTimestamp$,
       this.stats.statsByPlayer$,
-      this.players.allPlayerIds$
+      this.players.byId$
     ]).pipe(
-      map(([gameEndTimestamp, { population }, allPlayerIds]) => {
+      map(([gameEndTimestamp, { population }, playersById]) => {
         return {
-          notifications: (timestamp) => allPlayerIds.map(it => {
+          notifications: (timestamp) => Object.values(playersById).map(it => {
             return {
               type: 'GAME_ENDED',
-              playerId: it,
+              playerId: it.playerId,
               timestamp
             }
           }),

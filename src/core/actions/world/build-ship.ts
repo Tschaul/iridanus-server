@@ -19,7 +19,6 @@ export function buildShips(
           buildShipsStatus: {
             type: 'BUILDING_SHIPS',
             readyTimestamp: readyTimestamp,
-            ownerId: oldWorld.ownerId,
             amount: amount,
             activeIndustry: activeIndustry
           }

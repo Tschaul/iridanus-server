@@ -96,9 +96,10 @@ export class LobbyScreen extends React.Component<{
           )}
           <PanelDivider />
           <br />
-          {game.state === 'STARTED' && this.playerHasJoinedGame() && (
+          {game.state === 'STARTED' && this.playerHasJoinedGame() && [
+            <Button onClick={this.handleViewClick} spaceRight>SURRENDER</Button>,
             <Button onClick={this.handleViewClick} spaceRight>VIEW</Button>
-          )}
+          ]}
           <Button onClick={this.handleBackClick}>BACK</Button>
         </div>
       </Panel>
@@ -131,6 +132,13 @@ export class LobbyScreen extends React.Component<{
     this.props.vm.viewGame();
   }
 
+  @autobind
+  handleSurrenderGame() {
+    if (window.prompt("Do you really want to surrender in this game? Then type YES in capital letters into this box.") === 'YES') {
+      this.props.vm.surrenderGame();
+    }
+  }
+
   renderLobby() {
     return (
       <Panel panelClassName={classNames(classes.panel)} contentClassName={classNames(classes.panel)} fadeDirection="top" ref={elem => this.panel = elem}>
@@ -153,7 +161,7 @@ export class LobbyScreen extends React.Component<{
 
   @autobind
   handleCreateGameClick() {
-    if (window.confirm("Click ok to create a new game")) {
+    if (window.prompt("Do you want to create a new game? Then type YES in capital letters into this box.") === 'YES') {
       this.props.vm.createGame();
     }
   }

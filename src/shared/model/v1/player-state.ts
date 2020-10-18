@@ -1,6 +1,7 @@
 export interface Player {
   playerId: string,
-  status: 'PLAYING' | 'DEFEATED' | 'VICTORIOUS'
+  status: 'PLAYING' | 'DEFEATED' | 'VICTORIOUS',
+  hasSurrendered?: boolean
 }
 
 export type PlayerStates = {

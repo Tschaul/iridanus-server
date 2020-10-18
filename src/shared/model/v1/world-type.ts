@@ -1,5 +1,6 @@
 export type WorldType =
   RegularWorldType
+  | HomeWorldType
   | VoidWorldType
   | NebulaWorldType
   | LushWorldType
@@ -10,6 +11,11 @@ export type WorldType =
   | PopulatedWorldType
   | CreepWorldType
   | DoubleWorldType
+
+export type HomeWorldType = {
+  type: 'HOME',
+  playerId: string
+}
 
 export type RegularWorldType = {
   type: 'REGULAR'

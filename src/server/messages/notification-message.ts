@@ -36,6 +36,7 @@ function importance(notification: GameNotification): number {
   switch (notification.type) {
     case 'GAME_ENDED':
     case 'GAME_STARTED':
+    case 'HOME_WORLD_LOST':
       return 10;
     case 'WORLD_IS_UNDER_ATTACK':
     case 'WORLD_CAPTURED':

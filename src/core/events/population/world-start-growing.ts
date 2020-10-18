@@ -5,7 +5,7 @@ import { map } from "rxjs/operators";
 import { WorldProjector } from "../../projectors/world-projector";
 import { RandomNumberGenerator } from "../../infrastructure/random-number-generator";
 import { GameSetupProvider } from "../../game-setup-provider";
-import { calculatePopulationGrowthDelay } from "./growth-dealy-helper";
+import { calculatePopulationGrowthDelay, totalGrowingPopulation } from "./growth-dealy-helper";
 import { worldStartGrowing } from "../../actions/world/start-growing";
 import { totalPopulation, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
 
@@ -26,8 +26,7 @@ export class WorldStartGrowingEventQueue implements GameEventQueue {
         return worlds.find(world => {
           if (worldHasOwner(world)
             && !['VOID', 'NEBULA'].includes(world.worldType.type)
-            && world.ownerId !== '@natives'
-            && totalPopulation(world) > 0
+            && totalGrowingPopulation(world) > 0
             && totalPopulation(world) < world.populationLimit) {
             if (world.populationGrowthStatus.type === 'NOT_GROWING') {
               return true;

@@ -32,6 +32,8 @@ import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
 import { ContinueOrStopBuildingShipEventQueue } from "./building/continue-building-ship";
 import { ConvertPopulationEventQueue } from "./capture/convert-population";
+import { PlayerGetsDefeatedEventQueue } from "./surrender/player-gets-defeated";
+import { PlayerSurrendersEventQueue } from "./surrender/player-surrenders";
 
 export function registerEventQueues(container: Container) {
 
@@ -40,6 +42,9 @@ export function registerEventQueues(container: Container) {
   container.bind(GameStartsEventQueue).toSelf()
 
   container.bind(GameEndsEventQueue).toSelf();
+
+  container.bind(PlayerGetsDefeatedEventQueue).toSelf()
+  container.bind(PlayerSurrendersEventQueue).toSelf()
 
   container.bind(ArriveAtWorldEventQueue).toSelf();
   container.bind(BeginWarpEventQueue).toSelf();

@@ -11,4 +11,10 @@ export class PlayerProjector {
     distinctUntilChanged(),
     shareReplay(1)
   );
+
+  public byId$ = this.store.state$.pipe(
+    map(state => state.players),
+    distinctUntilChanged(),
+    shareReplay(1)
+  );
 }

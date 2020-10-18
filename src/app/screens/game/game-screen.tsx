@@ -1,5 +1,4 @@
 import React from "react";
-import { Panel } from "../../ui-components/panel/panel-component";
 import { GameStage } from "./game-stage/game-stage-component";
 import { GameViewModel } from "../../view-model/game/game-view-model";
 import { SelectedWorldPanel } from "./selected-world/selected-world-panel-component";
@@ -11,9 +10,10 @@ import { TopBar } from "./top-bar/top-bar-component";
 import { GameInfoPanel } from "./game-info/game-info-panel";
 
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Button } from "../../ui-components/button/button";
 import autobind from "autobind-decorator";
 import { observer } from "mobx-react";
+import { Panel } from "../../ui-components/panel/panel-component";
+import { Button } from "../../ui-components/button/button";
 
 const TOP_BAR_HEIGHT = 65;
 const RIGHT_PANEL_WIDTH = 400;
@@ -21,7 +21,6 @@ const RIGHT_PANEL_WIDTH = 400;
 const MIDDLE_PANEL_HEIGHT = 300;
 const BOTTOM_PANEL_HEIGHT = 300;
 const TOP_PANEL_HEIGHT = 300;
-
 
 const classes = createClasses({
   grid: {
@@ -65,8 +64,13 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
   }
 
   pinchzoom: HTMLDivElement | null;
+  panel: Panel | null;
 
-  async fadeOut() { }
+  async fadeOut() {
+    if (this.panel) {
+      await this.panel.fadeOut();
+    }
+  }
 
   componentDidMount() {
     this.props.vm.focus();
@@ -77,6 +81,65 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
   }
 
   render() {
+    switch (this.props.vm.playerStatus) {
+      case 'SPECTATING':
+      case 'PLAYING':
+        return this.renderGame();
+      case 'DEFEATED':
+        return this.renderPanel(false);
+      case 'VICTORIOUS':
+        return this.renderPanel(true);
+    }
+  }
+
+  renderPanel(won: boolean) {
+
+    const container: React.CSSProperties = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+      width: '100%'
+    }
+
+    const panelContentStyle: React.CSSProperties = {
+      display: 'flex',
+      justifyContent: 'stretch',
+      flexDirection: 'column'
+    }
+
+    const panelStyle: React.CSSProperties = {
+      width: '100%',
+      maxWidth: 500,
+      height: 250
+    }
+
+    const text = won
+      ? `YOU ARE VICTORIOUS`
+      : `YOU WERE DEFEATED`
+
+    return (
+      <div style={container}>
+        <Panel panelStyle={panelStyle} contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
+          <div style={{ flex: 1 }}>
+            {text}
+          </div>
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+              <Button onClick={this.handleBackToLobby}>BACK TO LOBBY</Button>
+            </div>
+          </div>
+        </Panel>
+      </div>
+    )
+  }
+
+  @autobind
+  private handleBackToLobby() {
+    this.props.vm.backToLobby();
+  }
+
+  renderGame() {
 
     switch (this.props.vm.screenMode) {
       case 'NONE':

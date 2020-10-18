@@ -26,7 +26,7 @@ export class BeginBuildingShipEventQueue implements GameEventQueue {
         const worlds = Object.values(worldsById);
 
         return worlds.find(world => {
-          if (worldHasOwner(world)) {
+          if (worldHasOwner(world) && !['@natives','@defeated'].includes(world.ownerId)) {
             const activeIndustry = Math.min(world.population[world.ownerId], world.industry)
             if (world.buildShipsStatus.type === 'NOT_BUILDING_SHIPS' && activeIndustry > 0 && world.metal >= shipsAmount) {
               return true

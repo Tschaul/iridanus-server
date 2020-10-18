@@ -15,6 +15,20 @@ export class WorldProjector {
     shareReplay(1)
   )
 
+  public homeWorldsByPlayerId$ = this.store.state$.pipe(
+    map(state => {
+      const result: {[p: string]: World} = {}
+      Object.values(state.universe.worlds).forEach(world => {
+        if (world.worldType.type === 'HOME') {
+          result[world.worldType.playerId] = world;
+        }
+      })
+      return result;
+    }),
+    distinctUntilChanged(),
+    shareReplay(1)
+  )
+
   public firstByStatusAndTimestamp<TWorldWithStatus extends World>(status: TWorldWithStatus["status"], orderBy: keyof TWorldWithStatus): Observable<TWorldWithStatus | null> {
     return this.byId$.pipe(
       map(worlds => {

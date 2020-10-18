@@ -122,6 +122,10 @@ export class GameData {
     return this.score.current;
   }
 
+  @computed public get players() {
+    return this.gameState.current.players;
+  }
+
   @computed public get worlds() {
     return this.gameState.current.universe.worlds;
   }

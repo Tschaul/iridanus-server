@@ -64,10 +64,8 @@ export class GameStageWorld extends React.Component<{
         return symbol('influence') + '+';
       case 'LUSH':
         return symbol('population') + '+';
-      case 'POPULATED':
-        return '';
-      case 'CREEP':
-        return '';
+      case 'HOME':
+        return '⌂';
       default:
         return '';
     }

@@ -10,7 +10,8 @@ export type GameNotification =
   | GameStartedNotification
   | GameEndedNotification
   | FleetCaputedNotification
-  | WorldCaputedNotification;
+  | WorldCaputedNotification
+  | HomeworldLostNotification;
 
 export type PersistedGameNotification = {
   markedAsRead: boolean,
@@ -29,6 +30,10 @@ export interface GameStartedNotification extends NotificationBase {
 
 export interface GameEndedNotification extends NotificationBase {
   type: 'GAME_ENDED',
+}
+
+export interface HomeworldLostNotification extends NotificationBase {
+  type: 'HOME_WORLD_LOST',
 }
 
 export interface FleetAwaitingOrdersNotification extends NotificationBase {

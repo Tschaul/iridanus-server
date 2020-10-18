@@ -81,6 +81,13 @@ export class LobbyViewModel {
     await this.lobbyService.readyForGame(this.selectedGameId);
   }
 
+  public async surrenderGame() {
+    if (!this.selectedGameId) {
+      return
+    }
+    await this.lobbyService.surrenderGame(this.selectedGameId);
+  }
+
   public async toggleSpecatatorMode() {
     if (!this.selectedGameId) {
       return
