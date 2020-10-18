@@ -8,6 +8,7 @@ import { GameMetaDataDataProvider } from "./game-meta-data-provider";
 import { GameNotificationsDataProvider } from "./game-notifications-data-provider";
 import { GameSubscription } from "../../../../shared/messages/subscriptions/game-subscriptions";
 import { GameRulesDataProvider } from "./game-rules-data-provider";
+import { GameStatsDataProvider } from "./game-stats-data-provider";
 
 export function getGameDataProvider(registry: ContainerRegistry, subscription: GameSubscription, gameId: string | null | undefined): DataProvider {
   const container = registry.getContainerByGameId(gameId);
@@ -17,7 +18,7 @@ export function getGameDataProvider(registry: ContainerRegistry, subscription: G
     case 'GAME/STATE':
       return container.get(GameStateDataProvider) as DataProvider
     case 'GAME/STATS':
-      return container.get(GameStateDataProvider) as DataProvider
+      return container.get(GameStatsDataProvider) as DataProvider
     case 'GAME/INFO':
       return container.get(GameInfoDataProvider) as DataProvider
     case 'GAME/META_DATA':
@@ -31,7 +32,7 @@ export function getGameDataProvider(registry: ContainerRegistry, subscription: G
 
 export function registerGameSetupDataProviders(container: Container) {
   container.bind(GameStateDataProvider).toSelf();
-  container.bind(GameStateDataProvider).toSelf();
+  container.bind(GameStatsDataProvider).toSelf();
   container.bind(GameInfoDataProvider).toSelf();
   container.bind(GameMetaDataDataProvider).toSelf();
   container.bind(GameNotificationsDataProvider).toSelf();

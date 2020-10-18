@@ -82,13 +82,14 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
 
   render() {
     switch (this.props.vm.playerStatus) {
-      case 'SPECTATING':
-      case 'PLAYING':
-        return this.renderGame();
       case 'DEFEATED':
         return this.renderPanel(false);
       case 'VICTORIOUS':
         return this.renderPanel(true);
+      case 'SPECTATING':
+      case 'PLAYING':
+      default:
+        return this.renderGame();
     }
   }
 

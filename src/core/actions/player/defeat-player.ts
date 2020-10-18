@@ -9,11 +9,11 @@ export function defeatPlayer(defeatedPlayerId: string): Action {
       return produce(state, draft => {
         draft.players[defeatedPlayerId].status = 'DEFEATED'
         Object.getOwnPropertyNames(draft.universe.worlds).forEach(worldId => {
-          const world =  draft.universe.worlds[worldId];
-          if (world.status === 'OWNED' &&  world.ownerId ===  defeatedPlayerId) {
+          const world = draft.universe.worlds[worldId];
+          if (world.status === 'OWNED' && world.ownerId === defeatedPlayerId) {
             world.ownerId = '@defeated'
-            world.population['@defeated'] = world.population[world.ownerId] ?? 0;
-            delete world.population[world.ownerId];
+            world.population['@defeated'] = world.population[defeatedPlayerId] ?? 0;
+            delete world.population[defeatedPlayerId];
             world.miningStatus = { type: 'NOT_MINING' };
             world.populationGrowthStatus = { type: 'NOT_GROWING' };
             world.populationConversionStatus = { type: 'NOT_BEING_CAPTURED' };
@@ -21,8 +21,8 @@ export function defeatPlayer(defeatedPlayerId: string): Action {
           }
         })
         Object.getOwnPropertyNames(draft.universe.fleets).forEach(fleetId => {
-          const fleet =  draft.universe.fleets[fleetId];
-          if (fleet.ownerId ===  defeatedPlayerId) {
+          const fleet = draft.universe.fleets[fleetId];
+          if (fleet.ownerId === defeatedPlayerId) {
             fleet.ownerId = '@defeated'
           }
         })

@@ -97,7 +97,7 @@ export class LobbyScreen extends React.Component<{
           <PanelDivider />
           <br />
           {game.state === 'STARTED' && this.playerHasJoinedGame() && [
-            <Button onClick={this.handleViewClick} spaceRight>SURRENDER</Button>,
+            <Button onClick={this.handleSurrenderGame} spaceRight>SURRENDER</Button>,
             <Button onClick={this.handleViewClick} spaceRight>VIEW</Button>
           ]}
           <Button onClick={this.handleBackClick}>BACK</Button>

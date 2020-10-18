@@ -12,7 +12,7 @@ export class TelegramConnection {
 
   constructor(
     private userRepository: UserRepository,
-    environment: Environment,
+    private environment: Environment,
   ) {
 
     this.enabled = !!environment.telegramBotToken;
@@ -59,7 +59,19 @@ export class TelegramConnection {
 
       const chatId = user.telegram.chatId;
 
-      await this.bot.sendMessage(chatId, message, {parse_mode: 'Markdown', disable_web_page_preview: true});
+      const reply_markup = this.environment.baseUrl.indexOf('localhost') === -1 
+        ? { inline_keyboard: [[{ text: 'Visit Iridanus', url: this.environment.baseUrl}]]}
+        : undefined
+
+      await this.bot.sendMessage(
+        chatId,
+        message,
+        {
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true,
+          reply_markup
+        }
+      );
     }
   }
 

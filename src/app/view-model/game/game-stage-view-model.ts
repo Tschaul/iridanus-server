@@ -63,7 +63,7 @@ export class GameStageViewModel {
   @computed get fleetsByWorldId() {
     return this.gameData.fleetsByWorldId
   }
-  
+
   @computed get selectedFleet() {
     return this.selection.selectedFleet;
   }
@@ -119,6 +119,9 @@ export class GameStageViewModel {
     return Array.from(gatesSet).map(([keyFrom, keyTo]) => {
       const positionFrom = this.drawingPositons[keyFrom];
       const positionTo = this.drawingPositons[keyTo];
+      if (!positionFrom || !positionTo) {
+        throw new Error('no display potision for ' + JSON.stringify([keyFrom, keyTo]))
+      }
       return {
         xFrom: positionFrom.x,
         yFrom: positionFrom.y,

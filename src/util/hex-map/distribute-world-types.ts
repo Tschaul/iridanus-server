@@ -18,10 +18,6 @@ export function distributeWorldTypes(universe: Universe) {
         const world1 = universe.worlds[id1];
         const world2 = universe.worlds[id2];
         const temp = (charge(world1) * charge(world2) / (distances[id1][id2] * distances[id1][id2]))
-        if (isNaN(temp)) {
-          console.log(charge(world1), charge(world2), distances[id1][id2], world1, world2)
-          throw new Error("BOOM");
-        }
         return acc2 + temp;
       }, 0)
     }, 0)
@@ -32,7 +28,7 @@ export function distributeWorldTypes(universe: Universe) {
   let counter = 0;
   let currentPotential = potential();
 
-  console.log({ counter, currentPotential })
+  // console.log({ counter, currentPotential })
 
   while (counter < maxCount) {
     counter++;

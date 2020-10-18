@@ -41,12 +41,17 @@ export class ScoringsViewModel {
     Object.getOwnPropertyNames(this.gameData.scorings).forEach(playerId => {
       const score = this.gameData.scorings[playerId];
       const playerInfo = this.gameData.playerInfos[playerId];
-      result.push({
-        color: playerInfo.color,
-        id: playerId,
-        currentScore: score,
-        finalScore: gameEndingScore
-      })
+      if (playerInfo) {
+
+        result.push({
+          color: playerInfo.color,
+          id: playerId,
+          currentScore: score,
+          finalScore: gameEndingScore
+        })
+      } else {
+        console.log('no playerinfo for ' + playerId)
+      }
     })
 
     return result;

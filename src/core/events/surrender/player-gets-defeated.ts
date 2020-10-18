@@ -26,7 +26,7 @@ export class PlayerGetsDefeatedEventQueue implements GameEventQueue {
 
         const player = Object.values(playersById).find(it => {
           const homeWorld = homeWorldsByPlayerId[it.playerId];
-          return homeWorld && (!worldHasOwner(homeWorld) || homeWorld.ownerId !== it.playerId)
+          return it.status === 'PLAYING' && homeWorld && (!worldHasOwner(homeWorld) || homeWorld.ownerId !== it.playerId)
         });
 
         return player ?? null;

@@ -152,7 +152,7 @@ export class GameRunner {
 
     const currentTimestamp = this.clock.getTimestamp();
     const gameStartTimestamp = currentTimestamp + this.environment.millisecondsPerDay * 1;
-    const gameEndTimestamp = gameStartTimestamp + this.environment.millisecondsPerDay * 8 * 7;
+    const gameEndTimestamp = gameStartTimestamp + this.environment.millisecondsPerDay * 6 * 7;
 
     const players = Object.values(gameInfo.players)
       .filter(player => !player.isSpectator)
@@ -187,6 +187,9 @@ export class GameRunner {
               delete world.population[seat];
               world.ownerId = player;
               world.worldHasBeenDiscovered = true;
+              if (world.worldType.type === 'HOME') {
+                world.worldType.playerId = player
+              }
             }
           }
         })

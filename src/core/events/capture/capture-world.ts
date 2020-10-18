@@ -34,8 +34,6 @@ export class CaptureWorldEventQueue implements GameEventQueue {
 
           const newOwnerId = absoluteMajorityHolder(world.population) as string;
 
-          console.log({newOwnerId, population: world.population})
-
           return {
             notifications: (timestamp) => [{
               type: 'WORLD_CAPTURED',
