@@ -186,6 +186,7 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
               <OrderEditor
                 vm={this.props.vm.orderEditorViewModel}
               />
+              <div style={{height: '4em'}}></div>
             </div>
           </div>
         </div>]
