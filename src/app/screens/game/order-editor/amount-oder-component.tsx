@@ -66,10 +66,8 @@ export class AmountOrderEditor extends React.Component<AmountOrderEditorProps, {
   symbol() {
     switch (this.props.order.type) {
       case 'BUILD_SHIPS':
-        return symbol('ships');
       case 'BUILD_INDUSTRY':
       case 'SCRAP_SHIPS_FOR_INDUSTRY':
-        return symbol('industry');
     }
   }
 

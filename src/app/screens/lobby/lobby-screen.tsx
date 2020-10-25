@@ -14,7 +14,7 @@ import classNames from 'classnames';
 
 const classes = createClasses({
   row: {
-    transition: "color 0.3s",
+    transition: "color 0.3s, fill 0.3s",
     cursor: 'pointer',
     color: screenWhite,
     "&:hover": {

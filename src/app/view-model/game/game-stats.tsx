@@ -1,9 +1,11 @@
+import React from 'react';
 import { GameData } from "./game-data";
 import { observable, reaction, computed } from "mobx";
 import { GameViewModel } from "./game-view-model";
 import { visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
 import { WorldHints, WorldHint } from "./world-hints";
 import { BaseWorld } from "../../../shared/model/v1/world";
+import { IconHtml } from "../../ui-components/icons/icon-html-component";
 
 export interface Stats {
   population: number;
@@ -90,12 +92,11 @@ export class GameStats {
 
   private symbolForProperty(prop: string) {
     switch (prop) {
-      case 'population': return ' P'
-      case 'industry': return ' I'
+      case 'population': return [<span>&thinsp;</span>, <IconHtml type="population" />]
+      case 'industry': return [<span>&thinsp;</span>, <IconHtml type="industry" />]
       case 'mines': return ' M'
-      case 'metal': return ' ▮'
-      case 'ships': return ' ►'
-      case 'fleetKeys': return ' ◈'
+      case 'metal': return [<span>&thinsp;</span>, <IconHtml type="metal" />]
+      case 'ships': return [<span>&thinsp;</span>, <IconHtml type="ships" />]
       case 'influence': return ' ⦀'
       default: return ''
     }
@@ -114,7 +115,7 @@ export class GameStats {
         if (hintText) {
           hints.push({
             type: 'WORLD',
-            hint: hintText + this.symbolForProperty(property),
+            hint: [hintText, this.symbolForProperty(property)],
             worldId: world.id
           })
         }
@@ -155,7 +156,7 @@ export class GameStats {
 
         hints.push({
           type: 'WORLD',
-          hint: value + this.symbolForProperty(property),
+          hint: [value, this.symbolForProperty(property)],
           worldId: world.id
         })
       }
@@ -186,7 +187,7 @@ export class GameStats {
           if (value > 0) {
             hints.push({
               type: 'GATE',
-              hint: value + this.symbolForProperty(property),
+              hint: [value, this.symbolForProperty(property)],
               worldId1,
               worldId2
             })
@@ -213,7 +214,7 @@ export class GameStats {
       if (value > 0) {
         hints.push({
           type: 'WORLD',
-          hint: value + this.symbolForProperty('fleetKey'),
+          hint: [value, this.symbolForProperty('fleetKey')],
           worldId: world.id
         })
       }
@@ -227,7 +228,7 @@ export class GameStats {
           let value = fleets.length;
           hints.push({
             type: 'GATE',
-            hint: value + this.symbolForProperty('fleetKey'),
+            hint: [value, this.symbolForProperty('fleetKey')],
             worldId1,
             worldId2
           })
@@ -261,7 +262,7 @@ export class GameStats {
 
         hints.push({
           type: 'WORLD',
-          hint: value + this.symbolForProperty('influence'),
+          hint: [value, this.symbolForProperty('influence')],
           worldId: world.id
         })
       }
@@ -278,7 +279,7 @@ export class GameStats {
           })
           hints.push({
             type: 'GATE',
-            hint: value + this.symbolForProperty('influence'),
+            hint: [value, this.symbolForProperty('influence')],
             worldId1,
             worldId2
           })

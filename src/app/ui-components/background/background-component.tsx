@@ -92,6 +92,7 @@ export class Background extends React.Component<{
       mixBlendMode: 'hard-light',
       zIndex: 3,
       color: screenWhite,
+      fill: screenWhite,
       width: '100%',
       height: '100%',
       position: 'absolute'

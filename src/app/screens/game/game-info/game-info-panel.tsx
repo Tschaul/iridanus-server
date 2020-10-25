@@ -16,7 +16,7 @@ import { UpdateFleetOrdersExecutor } from "../../../../server/commands/executors
 
 const classes = createClasses({
   tab: {
-    transition: 'color 0.3s',
+    transition: 'color 0.3s, fill 0.3s',
     cursor: 'pointer',
     "&:hover": {
       color: hoverYellow

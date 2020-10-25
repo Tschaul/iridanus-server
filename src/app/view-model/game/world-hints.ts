@@ -1,19 +1,20 @@
 import { observable } from "mobx";
 
+
 export type WorldHint = {
   type: 'WORLD'
   worldId: string;
-  hint: string;
+  hint: any;
 } | {
   type: 'GATE'
   worldId1: string;
   worldId2: string;
-  hint: string;
+  hint: any;
 }
 
 export class WorldHints {
-  @observable private worldHintsById = new Map<string, string>();
-  @observable private gateHintsById = new Map<string, string>();
+  @observable private worldHintsById = new Map<string, any>();
+  @observable private gateHintsById = new Map<string, any>();
 
   showHints(hints: WorldHint[]) {
     this.clearHints();
@@ -37,11 +38,11 @@ export class WorldHints {
     this.gateHintsById.clear()
   }
 
-  getHintForWorld(id: string): string | null {
+  getHintForWorld(id: string) {
     return this.worldHintsById.get(id) || null
   }
 
-  getHintForGate(id1: string, id2: string): string | null {
+  getHintForGate(id1: string, id2: string) {
     const key = this.makeGateKey(id1, id2);
     return this.gateHintsById.get(key) || null
   }

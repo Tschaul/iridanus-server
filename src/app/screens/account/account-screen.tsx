@@ -15,7 +15,7 @@ import { AccountViewModel } from '../../view-model/account/account-view-model';
 
 const classes = createClasses({
   row: {
-    transition: "color 0.3s",
+    transition: "color 0.3s, fill 0.3s",
     cursor: 'pointer',
     color: screenWhite,
     "&:hover": {

@@ -4,6 +4,7 @@ import { WorldToDisplay } from '../../../view-model/game/game-stage-view-model';
 import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
 import { symbol } from '../helper/symbols';
 import { PlayersViewModel } from '../../../view-model/game/player-infos-view-model';
+import { IconSvg, IconType } from '../../../ui-components/icons/icon-svg-component';
 
 @observer
 export class GameStageWorld extends React.Component<{
@@ -29,46 +30,80 @@ export class GameStageWorld extends React.Component<{
         fill={color}
         opacity={opacity}
       ></circle>,
-      <text
-        x={world.x}
-        y={world.y}
-        dominantBaseline="middle"
-        textAnchor="middle"
-        fill={symbolColor}
-        fontSize={16}
-        opacity={opacity}
-        style={{ transform: "translateY(1px)" }}
-      >{this.getWorldSymbol(world)}</text>
+      this.getWorldSymbol(world, symbolColor, opacity)
     ])
   }
 
-
-
-  private getWorldSymbol(world: VisibleWorld) {
+  private getWorldSymbol(world: WorldToDisplay, color: string, opacity: number) {
     switch (world.worldType.type) {
       case 'UNKOWN':
-        return '?'
-      case 'VOID':
-        return ' ';
+        return this.renderTextWorldIcon('?', world, color, opacity)
       case 'NEBULA':
-        return '≋';
+        return this.renderTextWorldIcon('≋', world, color, opacity);
       case 'MINING':
-        return symbol('metal') + '+';
+        return this.renderSvgWorldIcon('metal', world, color, opacity);
       case 'DOUBLE':
-        return '2x';
+        return this.renderTextWorldIcon('2x', world, color, opacity);
       case 'DEFENSIVE':
-        return '⛨';
+        return this.renderSvgWorldIcon('shield', world, color, opacity);
       case 'INDUSTRIAL':
-        return symbol('industry') + '+';
+        return this.renderSvgWorldIcon('industry', world, color, opacity);
       case 'INSPIRING':
-        return symbol('influence') + '+';
+        return this.renderTextWorldIcon(symbol('influence') + '+', world, color, opacity);
       case 'LUSH':
-        return symbol('population') + '+';
+        return this.renderSvgWorldIcon('population', world, color, opacity);
       case 'HOME':
-        return '⌂';
+        return this.renderSvgWorldIcon('home', world, color, opacity, true);
+      case 'VOID':
       default:
-        return '';
+        return undefined;
     }
+  }
+
+  renderTextWorldIcon(text: string, world: WorldToDisplay, color: string, opacity: number) {
+    return <text
+      x={world.x}
+      y={world.y}
+      dominantBaseline="middle"
+      textAnchor="middle"
+      fill={color}
+      fontSize={16}
+      opacity={opacity}
+      style={{ transform: "translateY(1px)" }}
+    >{text}</text>
+  }
+
+  renderSvgWorldIcon(type: IconType, world: WorldToDisplay, color: string, opacity: number, hideBoost: boolean = false) {
+
+    const boost = hideBoost ? [] : [<text
+      x={world.x + 6}
+      y={world.y + 0.5}
+      dominantBaseline="middle"
+      textAnchor="middle"
+      fill={color}
+      fontSize={10}
+      opacity={opacity}
+      style={{ transform: "translateY(1px)" }}
+    >⌃</text>, <text
+      x={world.x + 6}
+      y={world.y + 4.5}
+      dominantBaseline="middle"
+      textAnchor="middle"
+      fill={color}
+      fontSize={10}
+      opacity={opacity}
+      style={{ transform: "translateY(1px)" }}
+    >⌃</text>]
+
+    return [...boost,
+    <IconSvg
+      type={type}
+      x={world.x - (hideBoost ? 0 : 2)}
+      y={world.y}
+      color={color}
+      size={10}
+    />
+    ]
   }
 
   getColorForWorld(world: VisibleWorld) {

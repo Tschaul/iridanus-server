@@ -3,7 +3,7 @@ import { TooltipContext } from "./tooltip-overlay.component";
 
 export class StaticTooltip extends React.Component<{
   svg?: boolean,
-  content: string | null,
+  content: any,
 }> {
   static contextType = TooltipContext;
   declare context: React.ContextType<typeof TooltipContext>

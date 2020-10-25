@@ -14,6 +14,8 @@ import { pathOfFleetInTransit } from '../../../../shared/model/v1/fleet';
 import { PopulationByPlayer, World } from '../../../../shared/model/v1/world';
 import { GameStageWorld } from './game-stage-world-component';
 import { PopulationStats } from '../shared/population-stats-component';
+import { IconSvg } from '../../../ui-components/icons/icon-svg-component';
+import { IconHtml } from '../../../ui-components/icons/icon-html-component';
 
 
 @observer
@@ -105,21 +107,21 @@ export class GameStageForeground extends React.Component<{
                   style={{ cursor: 'pointer' }}
                 />
               )}
-              <text
+              <g
                 key={fleet.id}
-                x={world1Pos.x}
-                y={world1Pos.y}
-                dominantBaseline="middle"
-                textAnchor="middle"
-                fill={this.props.vm.players.getColorForPlayer(fleet.ownerId)}
-                fontSize={22}
                 data-world-id1={id1}
                 data-world-id2={id2}
                 data-fleet-id={fleet.id}
                 onClick={this.handleGateClick}
                 onContextMenu={this.handleGateRightClick}
                 cursor='pointer'
-              >►</text>
+              ><IconSvg
+                  type="ships"
+                  x={world1Pos.x}
+                  y={world1Pos.y}
+                  size={14}
+                  color={this.props.vm.players.getColorForPlayer(fleet.ownerId)}
+                /></g>
             </g>
           );
         })}
@@ -213,20 +215,20 @@ export class GameStageForeground extends React.Component<{
                     style={{ cursor: 'pointer' }}
                   />
                 )}
-                <text
+                <g
                   key={fleet.id}
-                  x={world.x + FLEET_DISTANCE * pos.x}
-                  y={world.y + FLEET_DISTANCE * pos.y}
-                  dominantBaseline="middle"
-                  textAnchor="middle"
-                  fill={this.props.vm.players.getColorForPlayer(fleet.ownerId)}
-                  fontSize={22}
                   style={{ transform: "translateY(1px)", cursor: 'pointer' }}
                   data-world-id={world.id}
                   data-fleet-id={fleet.id}
                   onClick={this.handleWorldClick}
                   onContextMenu={this.handleWorldRightClick}
-                >►</text>
+                ><IconSvg
+                    type="ships"
+                    x={world.x + FLEET_DISTANCE * pos.x}
+                    y={world.y + FLEET_DISTANCE * pos.y}
+                    size={14}
+                    color={this.props.vm.players.getColorForPlayer(fleet.ownerId)}
+                  /></g>
               </g>
             );
           })}
@@ -280,15 +282,15 @@ export class GameStageForeground extends React.Component<{
     } else if (world.status === 'FOG_OF_WAR') {
       return <span>
         <PopulationStats population={world.population} playerInfos={this.props.vm.players}></PopulationStats>
-      /{world.populationLimit} P {world.industry}
+      /{world.populationLimit} <IconHtml type="population" /> {world.industry} <IconHtml type="industry" />
       </span>;
     }
     return <span>
       {world.status === 'OWNED' ? <PopulationStats population={world.population} playerInfos={this.props.vm.players}></PopulationStats> : '0'}
-      /{world.populationLimit} P {world.industry} I {world.metal} ▮
+      /{world.populationLimit} <IconHtml type="population" /> {world.industry} <IconHtml type="industry" /> {world.metal} <IconHtml type="metal" />
     </span>;
 
   }
 
-  
+
 }

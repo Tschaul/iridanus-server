@@ -13,13 +13,15 @@ import { getDisplayDuration } from "../../../ui-components/display-duration";
 import { Subscription } from "rxjs";
 import { reaction, IReactionDisposer } from "mobx";
 import { symbol } from "../helper/symbols";
+import { IconHtml } from "../../../ui-components/icons/icon-html-component";
 
 const classes = createClasses({
   statsItem: {
-    transition: 'color 0.3s',
+    transition: 'color 0.3s, fill 0.3s',
     marginLeft: '0.5em',
     "&:hover": {
-      color: hoverYellow
+      color: hoverYellow,
+      fill: hoverYellow
     }
   }
 })
@@ -120,11 +122,11 @@ export class TopBar extends React.Component<{
       onMouseLeave: this.handleMouseLeaveStatsItem
     }
     return this.state.gameStartDuration ? <div style={{ color: selectedYellow }}>Game will start in {this.state.gameStartDuration}. Place your initial orders.</div> : <div>
-      <span {...mouseHandler} data-stat={'POPULATION'} className={classNames(classes.statsItem)}>{stats.population}{symbol('population')}</span>
-      <span {...mouseHandler} data-stat={'INDUSTRY'} className={classNames(classes.statsItem)}>{stats.industry}{symbol('industry')}</span>
+      <span {...mouseHandler} data-stat={'POPULATION'} className={classNames(classes.statsItem)}>{stats.population}<IconHtml type="population"></IconHtml></span>
+      <span {...mouseHandler} data-stat={'INDUSTRY'} className={classNames(classes.statsItem)}>{stats.industry}<IconHtml type="industry"></IconHtml></span>
 
-      <span {...mouseHandler} data-stat={'METAL'} className={classNames(classes.statsItem)}>{stats.metal}{symbol('metal')}</span>
-      <span {...mouseHandler} data-stat={'SHIPS'} className={classNames(classes.statsItem)}>{stats.ships}{symbol('ships')}</span>
+      <span {...mouseHandler} data-stat={'METAL'} className={classNames(classes.statsItem)}>{stats.metal}<IconHtml type="metal"></IconHtml></span>
+      <span {...mouseHandler} data-stat={'SHIPS'} className={classNames(classes.statsItem)}>{stats.ships}<IconHtml type="ships"></IconHtml></span>
     </div>;
   }
 

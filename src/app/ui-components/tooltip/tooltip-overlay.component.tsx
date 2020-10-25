@@ -189,6 +189,7 @@ class TooltipItem extends React.Component<{
     const tooltipStyle: React.CSSProperties = {
       position: 'fixed',
       color: screenWhite,
+      fill: screenWhite,
       backgroundColor: overlayBackground,
       margin: '1em',
       padding: '0.25em 0.5em',
