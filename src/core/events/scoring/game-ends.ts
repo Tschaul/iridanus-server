@@ -2,7 +2,7 @@ import { GameEventQueue, GameEvent } from "../event";
 import { Observable, combineLatest } from "rxjs";
 import { injectable } from "inversify";
 import { map } from "rxjs/operators";
-import { StatsProjector } from "../../projectors/influence-projector";
+import { StatsProjector } from "../../projectors/stats-projector";
 import { TimeProjector } from "../../projectors/time-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { PlayerProjector } from "../../projectors/player-projector";

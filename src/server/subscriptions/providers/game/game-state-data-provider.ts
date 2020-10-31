@@ -36,6 +36,21 @@ export class GameStateDataProvider implements DataProvider {
           return EMPTY;
         }
 
+        if (subscription.timestamp) {
+          if (!playerInfo.isSpectator && gameInfo.state !== 'ENDED') {
+            return EMPTY;
+          }
+
+          return this.gameRepository.getGameHistoryEntry(this.setup.gameId, subscription.timestamp).pipe(
+            map(state => {
+              return {
+                type: 'GAME/STATE' as 'GAME/STATE',
+                state
+              }
+            })
+          )
+        }
+
         if (playerInfo.isSpectator) {
           return this.store.state$.pipe(
             map(state => {

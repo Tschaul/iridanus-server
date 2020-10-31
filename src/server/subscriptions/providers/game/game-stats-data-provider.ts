@@ -7,7 +7,7 @@ import { GameRepository } from "../../../repositories/games/games-repository";
 import { GameSetupProvider } from "../../../../core/game-setup-provider";
 import { GameStatsSubscription } from "../../../../shared/messages/subscriptions/game-subscriptions";
 import { GameStatsSubscriptionResult } from "../../../../shared/messages/subscriptions/game-subscription-results";
-import { StatsProjector } from "../../../../core/projectors/influence-projector";
+import { StatsProjector } from "../../../../core/projectors/stats-projector";
 
 @injectable()
 export class GameStatsDataProvider implements DataProvider {

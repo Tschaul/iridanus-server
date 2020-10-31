@@ -16,9 +16,10 @@ export class GameStateService {
     private connection: SocketConnection
   ) { }
 
-  getGameStateById(gameId: string) {
+  getGameStateById(gameId: string, timestamp?: number) {
     return this.connection.subscribe<GameStateSubscription, GameStateSubscriptionResult>({
-      type: 'GAME/STATE'
+      type: 'GAME/STATE',
+      timestamp
     }, gameId).pipe(
       map(result => result.state)
     ) as Observable<VisibleState>

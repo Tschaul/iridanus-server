@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { DataHandleRegistry } from "../data-handle-registry";
-import { Observable, combineLatest, from, BehaviorSubject, ReplaySubject, NEVER, merge } from "rxjs";
+import { Observable, combineLatest, from, BehaviorSubject, ReplaySubject, NEVER, merge, of, EMPTY } from "rxjs";
 import { GameInfoSchema, GameStateSchema, GameHistorySchema, GameLogSchema, GameMetaDataSchema, GameNotificationsSchema } from "./schema/v1";
 import { take, switchMap, concatMap, map, first, tap, mergeMap } from "rxjs/operators";
 import { Initializer } from "../../infrastructure/initialisation/initializer";
@@ -301,6 +301,33 @@ export class GameRepository {
         info.state = 'ENDED';
       }
     })
+  }
+
+  public getGameHistoryEntry(gameId: string, timestamp: number) {
+    const history$ = from(this.handleForGameHistoryById(gameId)).pipe(switchMap(it => it.asObservable()));
+    return history$.pipe(
+      first(),
+      switchMap(history => {
+        const timestamps = Object.getOwnPropertyNames(history.stateHistory).map(it => parseInt(it)).sort();
+        const matchingTimestamp = timestamps.findIndex(it => it > timestamp) - 1;
+        const item = history.stateHistory[matchingTimestamp];
+        if (item) {
+          return of(item);
+        } else {
+          return EMPTY;
+        }
+      })
+    )
+  }
+
+  public getGameHistory(gameId: string) {
+    const history$ = from(this.handleForGameHistoryById(gameId)).pipe(switchMap(it => it.asObservable()));
+    return history$.pipe(
+      first(),
+      map(history => {
+        return history.stateHistory
+      })
+    )
   }
 }
 

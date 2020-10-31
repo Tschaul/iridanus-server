@@ -5,9 +5,22 @@ Server for Iridanus
 
 # TODOS
 
-- world modifiers
+- better resolution on ios
+- add worldId to deploy to world order
+- tofu in ios
+- mark selected fleet in game stage
+- population in stats does not count cargo
+- nerf creep
+- ETA for transfering cargo ships
+- buttons bigger
+- close sidebar when selecting world or gate in mobile view
+- icon buttons -> no icons (e.g. deploy to world)
+- in map generator: repulsion between worlds of same type
+- in map generator: draw types from bag/deck?
+- enemy ships shown as idle
+- random idle notifications
+
 - CTRL to select multiple fleets
-- remove player from game when home world is captured by other player. all ships become creep and population becomes natives
 
 # Bugs
 

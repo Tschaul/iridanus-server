@@ -3,6 +3,7 @@ import { VisibleState } from "../../model/v1/visible-state";
 import { PersistedGameNotification } from "../../model/v1/notification";
 import { GameRules } from "../../model/v1/rules";
 import { Distribution } from "../../math/distributions/distribution-helper";
+import { GameAnalytics } from "../../model/v1/game-analytics";
 
 export type GameSubscriptionResult = GameListAllSubscriptionResult
   | GameStateSubscriptionResult
@@ -10,7 +11,8 @@ export type GameSubscriptionResult = GameListAllSubscriptionResult
   | GameMetaDataSubscriptionResult
   | GameNotificationsSubscriptionResult
   | GameRulesSubscriptionResult
-  | GameStatsSubscriptionResult;
+  | GameStatsSubscriptionResult
+  | GameAnalyticsSubscriptionResult;
 
 export interface GameListAllSubscriptionResult {
   type: 'GAME/LIST_ALL',
@@ -20,6 +22,11 @@ export interface GameListAllSubscriptionResult {
 export interface GameStateSubscriptionResult {
   type: 'GAME/STATE',
   state: VisibleState
+}
+
+export interface GameAnalyticsSubscriptionResult {
+  type: 'GAME/ANALYTICS',
+  analytics: GameAnalytics
 }
 
 export interface GameStatsSubscriptionResult {

@@ -5,7 +5,7 @@ import { TimeProjector } from "./time-projector";
 import { CombatProjector } from "./combat-projector";
 import { GatesProjector } from "./gates-projector";
 import { VisibilityProjector } from "./visibility-projector";
-import { StatsProjector } from "./influence-projector";
+import { StatsProjector } from "./stats-projector";
 import { CargoProjector } from "./cargo-projector";
 import { PlayerProjector } from "./player-projector";
 import { ConversionProjector } from "./conversion-projector";

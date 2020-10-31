@@ -13,6 +13,7 @@ import { Distances } from "../../../shared/model/v1/distances";
 import { floydWarshall } from "../../../shared/math/path-finding/floydWarshall";
 import { reactionToObservable } from "../../../shared/util/reactionToObservable";
 import { Distribution } from "../../../shared/math/distributions/distribution-helper";
+import { switchMap } from "rxjs/operators";
 
 export type FleetByTwoWorlds = {
   [worldId1: string]: {
@@ -87,6 +88,8 @@ export class GameData {
   @observable private gameState: IStreamListener<VisibleState> = fromStream(EMPTY, dummyState);
   @observable private metaData: IStreamListener<GameMetaData> = fromStream(EMPTY, dummyMetaData);
   @observable private score: IStreamListener<Distribution> = fromStream(EMPTY, {});
+
+  @observable public timestamp: number | null = null;
 
   @observable public distances: Distances = {}
 
@@ -181,7 +184,12 @@ export class GameData {
     when(
       () => !!Object.values(this.metaData.current.drawingPositions).length,
       () => {
-        this.gameState = fromStream(this.gameStateService.getGameStateById(gameId), dummyState);
+        this.gameState = fromStream(
+          reactionToObservable(() => this.timestamp).pipe(
+            switchMap(timestamp => this.gameStateService.getGameStateById(gameId, timestamp || undefined))
+          ),
+          dummyState
+        );
       }
     )
     when(
