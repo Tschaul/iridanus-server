@@ -38,6 +38,10 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
 
         const fleet = waitingFleets.find(fleet => {
 
+          if (!metalPotential[fleet.ownerId]) {
+            return false;
+          }
+
           const worldFrom = worlds[fleet.fromWorldId];
           const worldTo = worlds[fleet.toWorldId];
 
