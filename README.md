@@ -16,8 +16,8 @@ Server for Iridanus
 - icon buttons -> no icons (e.g. deploy to world)
 - in map generator: repulsion between worlds of same type
 - in map generator: draw types from bag/deck?
-- enemy ships shown as idle
-- random idle notifications
+- bug: enemy ships shown as idle
+- bug: random idle notifications
 - handle errors in game runner
 - display active industry in selected world view
 - dont migrate population that is needed for industry

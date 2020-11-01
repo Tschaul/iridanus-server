@@ -114,7 +114,7 @@ export class TopBar extends React.Component<{
       </div>
       {this.renderStats(stats)}
       <div style={{ flex: 1 }}></div>
-      {this.props.vm.fixedTimeDisplay ?? <div>[{this.props.vm.fixedTimeDisplay}]</div>}
+      {this.props.vm.fixedTimeDisplay && <div>[{this.props.vm.fixedTimeDisplay}]</div>}
       <div />
     </Panel>
   }

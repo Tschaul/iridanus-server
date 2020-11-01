@@ -35,7 +35,7 @@ export class GameViewModel {
   infoPanelViewModel = new InfoPanelViewModel(this, this.gameData, this.gameNotifications, this.selection);
   analyticsViewModel = new AnalyticsViewModel(this, this.clock, this.gameData);
   
-  @observable analyticsPanelIsOpen = true;
+  @observable analyticsPanelIsOpen = false;
 
   @computed get playerStatus() {
     if (this.gameData.playerInfos[this.selfPlayerId] && this.gameData.playerInfos[this.selfPlayerId].isSpectator) {
