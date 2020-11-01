@@ -54,12 +54,24 @@ export class GameStage extends React.Component<{
     this.props.vm.setAltKeyState(e.altKey);
   }
 
+  @autobind
+  detectKeys(e: KeyboardEvent) {
+    if (e.key === 'ArrowRight') {
+      this.props.vm.forwardInTime()
+    }
+    if (e.key === 'ArrowLeft') {
+      this.props.vm.backwardInTime()
+    }
+  }
+
   componentDidMount(): void {
 
     window.addEventListener('resize', this.updateStateFromElement);
-    window.addEventListener('keydown', this.updateModifierKeyStates)
-    window.addEventListener('keyup', this.updateModifierKeyStates)
+    window.addEventListener('keydown', this.updateModifierKeyStates);
+    window.addEventListener('keyup', this.updateModifierKeyStates);
 
+    window.addEventListener('keydown', this.detectKeys);
+    
     this.updateStateFromElement()
   }
 

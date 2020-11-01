@@ -105,8 +105,8 @@ export class SelectedWorldPanel extends React.Component<{
             </HoverTooltip>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div className={classes.colRight}><PopulationStats population={population} playerInfos={this.props.vm.players}></PopulationStats>/{world.populationLimit}&thinsp;<IconHtml type="population"/></div>
-            <div className={classes.colRight}>{world.industry}&thinsp;<IconHtml type="industry"/></div>
+            <div className={classes.colRight}><PopulationStats population={population} playerInfos={this.props.vm.players}></PopulationStats>/{world.populationLimit}&thinsp;<IconHtml type="population" /></div>
+            <div className={classes.colRight}>{world.industry}&thinsp;<IconHtml type="industry" /></div>
             {'metal' in world && world.metal !== 0 && <div className={classes.colRight}>{world.metal}&thinsp;{symbol('metal')}</div>}
             {world.mines !== 0 && <div className={classes.colRight}>{world.mines}&thinsp;M</div>}
             {visibleWorldhasOwner(world) && world.miningStatus?.type === 'MINING' && (
@@ -118,14 +118,14 @@ export class SelectedWorldPanel extends React.Component<{
             )}
             {visibleWorldhasOwner(world) && world.populationGrowthStatus?.type === 'GROWING' && (
               <HoverTooltip content={'Growing'}>
-                <span className={classes.colRight}><IconHtml type="population"/>&thinsp;+</span>
+                <span className={classes.colRight}><IconHtml type="population" />&thinsp;+</span>
               </HoverTooltip>
             )}
             {visibleWorldhasOwner(world) && world.buildShipsStatus?.type === 'BUILDING_SHIPS' && (
               <HoverTooltip content$={this.getDisplayDuration(world.buildShipsStatus.readyTimestamp).pipe(map(duration => {
                 return `Builing ships ${duration}`
               }))}>
-                <span className={classes.colRight} ><IconHtml type="ships"/>&thinsp;+</span>
+                <span className={classes.colRight} ><IconHtml type="ships" />&thinsp;+</span>
               </HoverTooltip>
             )}
             {visibleWorldhasOwner(world) && world.populationConversionStatus?.type === 'BEING_CAPTURED' && (
@@ -155,9 +155,9 @@ export class SelectedWorldPanel extends React.Component<{
     return (
       <div className={classNames([classes.row, { selected }])} key={fleet.id} data-fleet-id={fleet.id} onClick={this.handleRowClick}>
         <div style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>◆</div>
-        <div className={classes.col}>{fleet.ships}&thinsp;<IconHtml type="ships"/></div>
+        <div className={classes.col}>{fleet.ships}&thinsp;<IconHtml type="ships" /></div>
         {fleet.status === 'TRANSFERING_CARGO' && <div className={classes.col}>{fleet.cargoMetal}&thinsp;{symbol('metal')}</div>}
-        {fleet.status === 'TRANSFERING_CARGO' && <div className={classes.col}>{fleet.cargoPopulation}&thinsp;<IconHtml type="population"/></div>}
+        {fleet.status === 'TRANSFERING_CARGO' && <div className={classes.col}>{fleet.cargoPopulation}&thinsp;<IconHtml type="population" /></div>}
         <div>
           <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             <span className={classes.col}> {this.fleetStatusIcon(fleet.status)} </span>
@@ -209,6 +209,8 @@ export class SelectedWorldPanel extends React.Component<{
     switch (item.status) {
       case 'ARRIVING':
         return item.readyTimestamp
+      case 'TRANSFERING_CARGO':
+        return item.arrivingTimestamp
       case 'LEAVING':
         return item.warpingTimestamp;
       case 'WARPING':

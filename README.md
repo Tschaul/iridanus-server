@@ -11,7 +11,6 @@ Server for Iridanus
 - mark selected fleet in game stage
 - population in stats does not count cargo
 - nerf creep
-- ETA for transfering cargo ships
 - buttons bigger
 - close sidebar when selecting world or gate in mobile view
 - icon buttons -> no icons (e.g. deploy to world)
@@ -20,10 +19,11 @@ Server for Iridanus
 - enemy ships shown as idle
 - random idle notifications
 - handle errors in game runner
-- duplicate files before writing to disk. afterwards delete duplicate
-- store game history in seperate files (one per timestamp)
+- display active industry in selected world view
+- dont migrate population that is needed for industry
 
 - CTRL to select multiple fleets
+- store game history in seperate files (one per timestamp)
 
 # Bugs
 

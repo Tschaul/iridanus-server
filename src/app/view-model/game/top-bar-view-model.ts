@@ -3,10 +3,12 @@ import { GameStats, StatType } from "./game-stats";
 import { observable, computed } from "mobx";
 import { GameViewModel } from "./game-view-model";
 import { GameData } from "./game-data";
+import { GameClock } from "./clock";
 
 export class TopBarViewModel {
   constructor(
     private gameViewModel: GameViewModel,
+    private clock: GameClock,
     private gameData: GameData,
     private gameOrders: GameOrders,
     private gameStats: GameStats
@@ -35,6 +37,14 @@ export class TopBarViewModel {
 
   @computed get totalStats() {
     return this.gameStats.totalStats
+  }
+
+  @computed get fixedTimeDisplay(): string | null {
+    const time = this.clock.fixedTimestamp;
+    if (!time) {
+      return null
+    }
+    return new Date(time).toLocaleString()
   }
 
   public saveOrderDrafts() {

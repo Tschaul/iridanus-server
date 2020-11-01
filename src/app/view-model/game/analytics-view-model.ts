@@ -14,8 +14,12 @@ export class AnalyticsViewModel {
 
   private gameStateService = resolveFromRegistry(GameStateService);
 
-  constructor(private gameViewModel: GameViewModel, private clock: GameClock) {
+  constructor(private gameViewModel: GameViewModel, private clock: GameClock, private gameData: GameData) {
 
+  }
+
+  @computed get playerInfos() {
+    return this.gameData.playerInfos
   }
 
   @computed get populationData() {
@@ -32,6 +36,24 @@ export class AnalyticsViewModel {
       return {
         timestamp: item.timestamp,
         ...item.ships
+      }
+    })
+  }
+
+  @computed get metalData() {
+    return this.analytics.current.curve.map(item => {
+      return {
+        timestamp: item.timestamp,
+        ...item.metal
+      }
+    })
+  }
+
+  @computed get industryData() {
+    return this.analytics.current.curve.map(item => {
+      return {
+        timestamp: item.timestamp,
+        ...item.industry
       }
     })
   }

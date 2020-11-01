@@ -1,4 +1,4 @@
-import { mkdir, readdir, Dirent, readFile, writeFile, exists } from 'fs';
+import { mkdir, readdir, Dirent, readFile, writeFile, exists, rename, unlink } from 'fs';
 import { dirname, join } from 'path'
 import { injectable } from 'inversify';
 import { Environment } from '../environment/environment';
@@ -6,6 +6,7 @@ import produce from "immer";
 import { ReplaySubject, Observable, Subject, concat, forkJoin, combineLatest } from 'rxjs';
 import { take, switchMap, filter, first, map, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { Queue } from '../infrastructure/queue/queue';
+import { makeId } from '../../app/client/make-id';
 
 @injectable()
 export class DataHandleRegistry {
@@ -212,9 +213,22 @@ function readFilePromise(dir: string): Promise<string> {
   })
 }
 
-function writeFilePromise(dir: string, data: any): Promise<void> {
-  return new Promise((resolve, reject) => {
-    writeFile(dir, data, 'utf8', (error) => {
+async function writeFilePromise(dir: string, data: any): Promise<void> {
+
+  const temp = dirname(dir) + '/temp_' +makeId() + '.json'
+
+  await new Promise((resolve, reject) => {
+    writeFile(temp, data, 'utf8', (error) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve();
+      }
+    })
+  })
+
+  await new Promise((resolve, reject) => {
+    rename(temp, dir, (error) => {
       if (error) {
         reject(error)
       } else {

@@ -93,41 +93,50 @@ export class AnalyticsPanel extends React.Component<{
 
     return (
       <div style={flexContainerStyle}>
-        {this.renderChart()}
+        {this.renderCharts()}
       </div>
     )
   }
 
-  renderChart() {
+  renderCharts() {
     const [min, max] = this.props.vm.timestampRange
     return (
       <Panel panelClassName={classNames(classes.panel)} contentClassName={classNames(classes.panelContent)} fadeDirection="top" ref={elem => this.panel = elem}>
         <div>
-          <LineChart
-            onClick={this.handeClick}
-            width={500}
-            height={300}
-            data={this.props.vm.shipsData}
-            margin={{
-              top: 5, right: 30, left: 20, bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" fill="darkgrey" />
-            <XAxis
-              tickFormatter={this.formatTick}
-              type="number"
-              dataKey="timestamp"
-              stroke={screenWhite}
-              domain={[min, max]}
-            />
-            <YAxis stroke={screenWhite} />
-            <Line type="monotone" dataKey="tschaul" stroke="red" dot={false} strokeWidth={3} />
-            <Line type="monotone" dataKey="zabea" stroke="blue" dot={false} strokeWidth={3} />
-          </LineChart>
+          {this.renderChart('Population', this.props.vm.populationData, false)}
+          {this.renderChart('Industry', this.props.vm.industryData, false)}
+          {this.renderChart('Metal', this.props.vm.metalData, false)}
+          {this.renderChart('Ships', this.props.vm.shipsData, true)}
         </div>
         <Button onClick={this.handeClose}>CLOSE</Button>
       </Panel>
     )
+  }
+
+  renderChart(label: string, data: any, isLast: boolean) {
+    return <LineChart
+      onClick={this.handeClick}
+      width={500}
+      height={150}
+      data={data}
+      margin={{
+        top: 5, right: 30, left: 20, bottom: 5,
+      }}
+    >
+      <CartesianGrid strokeDasharray="3 3" fill="darkgrey" />
+      <XAxis
+        tickFormatter={this.formatTick}
+        type="number"
+        dataKey="timestamp"
+        stroke={screenWhite}
+        domain={['dataMin', 'dataMax']}
+        hide={!isLast}
+      />
+      <YAxis stroke={screenWhite} label={{ value: label, angle: -90, position: 'insideBottomLeft' }}/>
+      {Object.values(this.props.vm.playerInfos).map(player => {
+        return <Line type="monotone" dataKey={player.id} stroke={player.color} dot={false} strokeWidth={3} />
+      })}
+    </LineChart>
   }
 
   @autobind

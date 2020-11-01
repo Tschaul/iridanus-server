@@ -10,6 +10,8 @@ import { GameNotifications } from "./game-notifications";
 import { GameClock } from "./clock";
 import { OrderEditorViewModel } from "./order-editor-view-model";
 import { PlayersViewModel } from "./player-infos-view-model";
+import { ServerEnvironment } from "../server-environment";
+import { EnvironmentInfo } from "../../../shared/messages/subscriptions/environment-subscription-results";
 
 
 const STAGE_OFFSET = 75;
@@ -46,7 +48,8 @@ export class GameStageViewModel {
     private gameNotifcations: GameNotifications,
     private orderEditor: OrderEditorViewModel,
     private clock: GameClock,
-    private playersViewModel: PlayersViewModel
+    private playersViewModel: PlayersViewModel,
+    private environment: ServerEnvironment
   ) { }
 
   @computed get players() {
@@ -182,14 +185,6 @@ export class GameStageViewModel {
   private calculateTransitPosition(fleet: FleetInTransit): number {
     const now = this.clock.now;
     const warpDelay = this.gameData.gameRules.warping.warpToWorldDelay;
-    const loc = (t: any) => new Date(t).toLocaleString()
-    console.log({
-      now: loc(now),
-      warpDelay,
-      arriving: loc((fleet as any).arrivingTimestamp),
-      delta:  ((fleet as any).arrivingTimestamp - now) / warpDelay,
-      fleet
-    })
     switch (fleet.status) {
       case 'TRANSFERING_CARGO':
         return 1 - (fleet.arrivingTimestamp - now) / warpDelay;
@@ -210,5 +205,17 @@ export class GameStageViewModel {
 
   public setAltKeyState(state: boolean) {
     this.orderEditor.appendOrders = state;
+  }
+
+  public forwardInTime() {
+    if (this.clock.fixedTimestamp) {
+      this.clock.fixedTimestamp += this.environment.environmentInfo.millisecondsPerDay / 8
+    }
+  }
+
+  public backwardInTime() {
+    if (this.clock.fixedTimestamp) {
+      this.clock.fixedTimestamp -= this.environment.environmentInfo.millisecondsPerDay / 8
+    }
   }
 }
