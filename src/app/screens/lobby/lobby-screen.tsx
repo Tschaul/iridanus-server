@@ -98,6 +98,8 @@ export class LobbyScreen extends React.Component<{
           <br />
           {game.state === 'STARTED' && this.playerHasJoinedGame() && [
             <Button onClick={this.handleSurrenderGame} spaceRight>SURRENDER</Button>,
+          ]}
+          {game.state !== 'PROPOSED' && this.playerHasJoinedGame() && [
             <Button onClick={this.handleViewClick} spaceRight>VIEW</Button>
           ]}
           <Button onClick={this.handleBackClick}>BACK</Button>

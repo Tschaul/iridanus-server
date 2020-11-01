@@ -42,7 +42,7 @@ export class EndTransferingCargoEventQueue implements GameEventQueue {
 
               const world = worldsById[fleet.toWorldId]
 
-              if (worldHasOwner(world) && world.ownerId !== fleet.ownerId) {
+              if (worldHasOwner(world) && world.ownerId !== fleet.ownerId && fleet.ownerId !== '@defeated') {
 
                 const arrivingTimestamp = fleet.arrivingTimestamp + this.setup.rules.warping.warpToWorldDelay;
 

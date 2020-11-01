@@ -18,6 +18,7 @@ import { registerGlobalInfrastructure } from './infrastructure/register-infrastr
 import { registerCoreInfrastructure } from '../core/infrastructure/register-core-infrastructure';
 import { registerMessages, registerGameMailHandler } from './messages/register-messages';
 import { Environment } from './environment/environment';
+import { makeConfig } from '../core/setup/simple-config';
 
 @injectable()
 export class ContainerRegistry {
@@ -74,6 +75,10 @@ export class ContainerRegistry {
       const setup =  container.get(GameSetupProvider);
 
       setup.gameId = gameId;
+
+      const env = container.get(Environment);
+
+      setup.rules = makeConfig(env.millisecondsPerDay);
 
       registerGameCommandExecutors(container);
       registerEventQueues(container);

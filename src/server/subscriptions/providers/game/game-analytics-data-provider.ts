@@ -11,6 +11,7 @@ import { GameSetupProvider } from "../../../../core/game-setup-provider";
 import { AnalyticsCurveItem } from "../../../../shared/model/v1/game-analytics";
 import { StatsProjector } from "../../../../core/projectors/stats-projector";
 import deepEqual from "deep-equal";
+import { Environment } from "../../../environment/environment";
 
 @injectable()
 export class GameAnalyticsDataProvider implements DataProvider {
@@ -21,7 +22,8 @@ export class GameAnalyticsDataProvider implements DataProvider {
     private store: ReadonlyStore,
     private gameRepository: GameRepository,
     private setup: GameSetupProvider,
-    private projector: StatsProjector
+    private projector: StatsProjector,
+    private environment: Environment
   ) { }
 
   getObservable(subscription: GameStateSubscription, playerId: string): Observable<GameAnalyticsSubscriptionResult> {
@@ -48,20 +50,26 @@ export class GameAnalyticsDataProvider implements DataProvider {
           first(),
           map(history => {
 
-            const timestamps = Object.getOwnPropertyNames(history).map(it => parseInt(it)).sort();
+            const timestamps = Object.getOwnPropertyNames(history).sort((a,b) => {
+              return parseFloat(b) - parseFloat(a)
+            }) as unknown as number[];
 
             const curve: AnalyticsCurveItem[] = [];
 
-            const lastStats: any | null = null;
+            let lastStats: any | null = null;
+            // let lastTimestamp: number | null = null;
 
             timestamps.forEach((timestamp) => {
               const state = history[timestamp];
 
-              const newStats = this.projector.extractStats(Object.getOwnPropertyNames(state.players), state.universe.worlds, state.universe.fleets)
+              const playerIds = Object.getOwnPropertyNames(state.players).filter(it => !it.startsWith('@'));
+
+              const newStats = this.projector.extractStats(playerIds, state.universe.worlds, state.universe.fleets)
 
               if (!deepEqual(lastStats, newStats)) {
+                lastStats = newStats;
                 curve.push({
-                  timestamp,
+                  timestamp: parseInt(timestamp as unknown as string),
                   ...newStats
                 })
               }

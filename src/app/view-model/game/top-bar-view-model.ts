@@ -22,7 +22,7 @@ export class TopBarViewModel {
     return this.gameViewModel.gameId;
   }
   @computed get selfIsSpectator(): boolean {
-    return this.gameViewModel.selfIsSpecator
+    return this.gameViewModel.isReplayMode
   }
 
   @computed public get isConnected() {
@@ -48,6 +48,10 @@ export class TopBarViewModel {
   public backToLobby(){
     this.gameOrders.saveOrderDrafts();
     this.gameViewModel.backToLobby();
+  }
+
+  public openAnalyticsPanel() {
+    this.gameViewModel.analyticsPanelIsOpen = true;
   }
 
 }

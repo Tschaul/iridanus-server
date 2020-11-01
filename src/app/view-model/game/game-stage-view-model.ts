@@ -182,6 +182,14 @@ export class GameStageViewModel {
   private calculateTransitPosition(fleet: FleetInTransit): number {
     const now = this.clock.now;
     const warpDelay = this.gameData.gameRules.warping.warpToWorldDelay;
+    const loc = (t: any) => new Date(t).toLocaleString()
+    console.log({
+      now: loc(now),
+      warpDelay,
+      arriving: loc((fleet as any).arrivingTimestamp),
+      delta:  ((fleet as any).arrivingTimestamp - now) / warpDelay,
+      fleet
+    })
     switch (fleet.status) {
       case 'TRANSFERING_CARGO':
         return 1 - (fleet.arrivingTimestamp - now) / warpDelay;

@@ -1,6 +1,6 @@
 import { Observable, from, EMPTY } from "rxjs";
 import { injectable } from "inversify";
-import { map, switchMap, first } from "rxjs/operators";
+import { map, switchMap, first, filter } from "rxjs/operators";
 import { DataProvider } from "../data-provider";
 import { VisibilityProjector } from "../../../../core/projectors/visibility-projector";
 import { GameStateSubscription } from "../../../../shared/messages/subscriptions/game-subscriptions";
@@ -8,6 +8,7 @@ import { GameStateSubscriptionResult } from "../../../../shared/messages/subscri
 import { ReadonlyStore } from "../../../../core/store";
 import { GameRepository } from "../../../repositories/games/games-repository";
 import { GameSetupProvider } from "../../../../core/game-setup-provider";
+import { GameState } from "../../../../shared/model/v1/state";
 
 @injectable()
 export class GameStateDataProvider implements DataProvider {
@@ -49,6 +50,18 @@ export class GameStateDataProvider implements DataProvider {
               }
             })
           )
+        }
+
+        if (gameInfo.state === 'ENDED') {
+          return from(this.gameRepository.getGameState(this.setup.gameId)).pipe(
+            filter(it => !!it),
+            map(state => {
+              return {
+                type: 'GAME/STATE' as 'GAME/STATE',
+                state: state as GameState
+              }
+            })
+          );
         }
 
         if (playerInfo.isSpectator) {

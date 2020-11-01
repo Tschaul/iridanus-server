@@ -43,7 +43,7 @@ export class OrderEditorViewModel {
   }
 
   @computed get selectedWorldOrFleetIsVisibleToUser() {
-    if (this.gameViewModel.selfIsSpecator) {
+    if (this.gameViewModel.isReplayMode) {
       return true;
     }
     if (this.selection.selectedFleet) {
@@ -58,7 +58,7 @@ export class OrderEditorViewModel {
   }
 
   @computed get selfIsSpectator(): boolean {
-    return this.gameViewModel.selfIsSpecator
+    return this.gameViewModel.isReplayMode
   }
 
   @computed get orders(): FleetOrder[] {

@@ -167,6 +167,9 @@
                             "$ref": "#/definitions/GameStatsSubscription"
                         },
                         {
+                            "$ref": "#/definitions/GameAnalyticsSubscription"
+                        },
+                        {
                             "$ref": "#/definitions/EnvironmentInfoSubscription"
                         },
                         {
@@ -276,6 +279,20 @@
             ],
             "type": "object"
         },
+        "GameAnalyticsSubscription": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GAME/ANALYTICS"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "GameInfoSubscription": {
             "properties": {
                 "type": {
@@ -334,6 +351,9 @@
         },
         "GameStateSubscription": {
             "properties": {
+                "timestamp": {
+                    "type": "number"
+                },
                 "type": {
                     "enum": [
                         "GAME/STATE"

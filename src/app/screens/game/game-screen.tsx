@@ -14,6 +14,7 @@ import autobind from "autobind-decorator";
 import { observer } from "mobx-react";
 import { Panel } from "../../ui-components/panel/panel-component";
 import { Button } from "../../ui-components/button/button";
+import { AnalyticsPanel } from "./analytics-panel/analytics-panel-components";
 
 const TOP_BAR_HEIGHT = 65;
 const RIGHT_PANEL_WIDTH = 400;
@@ -23,6 +24,15 @@ const BOTTOM_PANEL_HEIGHT = 300;
 const TOP_PANEL_HEIGHT = 300;
 
 const classes = createClasses({
+  analytics: {
+    display: 'flex',
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    placeContent: 'center'
+  },
   grid: {
     display: 'grid',
     height: '100%',
@@ -81,63 +91,16 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
   }
 
   render() {
-    switch (this.props.vm.playerStatus) {
-      case 'DEFEATED':
-        return this.renderPanel(false);
-      case 'VICTORIOUS':
-        return this.renderPanel(true);
-      case 'SPECTATING':
-      case 'PLAYING':
-      default:
-        return this.renderGame();
-    }
+    return <div>
+      {this.renderGame()}
+      {this.props.vm.analyticsPanelIsOpen && this.renderAnalytics()}
+    </div>;
   }
 
-  renderPanel(won: boolean) {
-
-    const container: React.CSSProperties = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100%',
-      width: '100%'
-    }
-
-    const panelContentStyle: React.CSSProperties = {
-      display: 'flex',
-      justifyContent: 'stretch',
-      flexDirection: 'column'
-    }
-
-    const panelStyle: React.CSSProperties = {
-      width: '100%',
-      maxWidth: 500,
-      height: 250
-    }
-
-    const text = won
-      ? `YOU ARE VICTORIOUS`
-      : `YOU WERE DEFEATED`
-
-    return (
-      <div style={container}>
-        <Panel panelStyle={panelStyle} contentStyle={panelContentStyle} ref={elem => this.panel = elem} fadeDirection="top">
-          <div style={{ flex: 1 }}>
-            {text}
-          </div>
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <Button onClick={this.handleBackToLobby}>BACK TO LOBBY</Button>
-            </div>
-          </div>
-        </Panel>
-      </div>
-    )
-  }
-
-  @autobind
-  private handleBackToLobby() {
-    this.props.vm.backToLobby();
+  renderAnalytics() {
+    return <div className={classNames(classes.analytics)}>
+      <AnalyticsPanel vm={this.props.vm.analyticsViewModel} />
+    </div>
   }
 
   renderGame() {
@@ -186,7 +149,7 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
               <OrderEditor
                 vm={this.props.vm.orderEditorViewModel}
               />
-              <div style={{height: '4em'}}></div>
+              <div style={{ height: '4em' }}></div>
             </div>
           </div>
         </div>]

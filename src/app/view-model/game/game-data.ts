@@ -14,6 +14,7 @@ import { floydWarshall } from "../../../shared/math/path-finding/floydWarshall";
 import { reactionToObservable } from "../../../shared/util/reactionToObservable";
 import { Distribution } from "../../../shared/math/distributions/distribution-helper";
 import { switchMap } from "rxjs/operators";
+import { GameClock } from "./clock";
 
 export type FleetByTwoWorlds = {
   [worldId1: string]: {
@@ -88,8 +89,6 @@ export class GameData {
   @observable private gameState: IStreamListener<VisibleState> = fromStream(EMPTY, dummyState);
   @observable private metaData: IStreamListener<GameMetaData> = fromStream(EMPTY, dummyMetaData);
   @observable private score: IStreamListener<Distribution> = fromStream(EMPTY, {});
-
-  @observable public timestamp: number | null = null;
 
   @observable public distances: Distances = {}
 
@@ -171,7 +170,7 @@ export class GameData {
     return result;
   }
 
-  constructor(private gameViewModel: GameViewModel) {
+  constructor(private gameViewModel: GameViewModel, private clock: GameClock) {
 
   }
 
@@ -185,7 +184,7 @@ export class GameData {
       () => !!Object.values(this.metaData.current.drawingPositions).length,
       () => {
         this.gameState = fromStream(
-          reactionToObservable(() => this.timestamp).pipe(
+          reactionToObservable(() => this.clock.fixedTimestamp).pipe(
             switchMap(timestamp => this.gameStateService.getGameStateById(gameId, timestamp || undefined))
           ),
           dummyState

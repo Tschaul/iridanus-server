@@ -13,12 +13,13 @@ import { GameNotifications } from "./game-notifications";
 import { InfoPanelViewModel } from "./info-panel-view-model";
 import { GameClock } from "./clock";
 import { PlayersViewModel } from "./player-infos-view-model";
+import { AnalyticsViewModel } from "./analytics-view-model";
 
 
 export class GameViewModel {
 
   clock = new GameClock();
-  gameData = new GameData(this);
+  gameData = new GameData(this, this.clock);
   gameNotifications = new GameNotifications(this);
   gameOrders = new GameOrders(this, this.gameData);
   selection = new GameStageSelection(this.gameData, this.gameOrders);
@@ -32,17 +33,20 @@ export class GameViewModel {
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection, this.players, this.clock);
   topBarViewModel = new TopBarViewModel(this, this.gameData, this.gameOrders, this.gameStats);
   infoPanelViewModel = new InfoPanelViewModel(this, this.gameData, this.gameNotifications, this.selection);
+  analyticsViewModel = new AnalyticsViewModel(this, this.clock);
   
+  @observable analyticsPanelIsOpen = true;
+
   @computed get playerStatus() {
-    if (this.selfIsSpecator) {
+    if (this.gameData.playerInfos[this.selfPlayerId] && this.gameData.playerInfos[this.selfPlayerId].isSpectator) {
       return 'SPECTATING'
     } else {
       return this.gameData.players[this.selfPlayerId]?.status
     }
   }
 
-  @computed get selfIsSpecator(): boolean {
-    return this.gameData.playerInfos[this.selfPlayerId] && this.gameData.playerInfos[this.selfPlayerId].isSpectator;
+  @computed get isReplayMode(): boolean {
+    return !!this.clock.fixedTimestamp || this.playerStatus !== 'PLAYING';
   }
 
   @computed public get gameId() {

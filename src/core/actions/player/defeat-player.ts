@@ -24,6 +24,13 @@ export function defeatPlayer(defeatedPlayerId: string): Action {
           const fleet = draft.universe.fleets[fleetId];
           if (fleet.ownerId === defeatedPlayerId) {
             fleet.ownerId = '@defeated'
+            if (['TRANSFERING_CARGO', 'WAITING_FOR_CARGO'].includes(fleet.status)) {
+              fleet.orders = [{
+                type: 'STOP_CARGO_MISSION'
+              }]
+            } else {
+              fleet.orders = []
+            }
           }
         })
       })

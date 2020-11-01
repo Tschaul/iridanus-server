@@ -8,9 +8,12 @@ const millisecondsPerHour = 60 * millisecondsPerMinute;
 const millisecondsPerDay = 24 * millisecondsPerHour;
 const millisecondsPerWeek = 7 * millisecondsPerDay;
 
-export function getDisplayDuration(endTimestamp: number) {
+export function getDisplayDuration(endTimestamp: number, now: number | null = null) {
   if (!endTimestamp) {
     return of(null);
+  }
+  if (now) {
+    return of(displayDuration(endTimestamp - now))
   }
   return interval(30 * 1000).pipe(
     map(() => {

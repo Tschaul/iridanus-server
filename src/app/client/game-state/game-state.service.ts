@@ -4,10 +4,11 @@ import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { GameInfo, GameMetaData } from "../../../shared/model/v1/game-info";
 import { VisibleState } from "../../../shared/model/v1/visible-state";
-import { GameStateSubscription, GameInfoSubscription, GameMetaDataSubscription, GameRulesSubscription, GameStatsSubscription } from "../../../shared/messages/subscriptions/game-subscriptions";
-import { GameStateSubscriptionResult, GameInfoSubscriptionResult, GameMetaDataSubscriptionResult, GameRulesSubscriptionResult, GameStatsSubscriptionResult } from "../../../shared/messages/subscriptions/game-subscription-results";
+import { GameStateSubscription, GameInfoSubscription, GameMetaDataSubscription, GameRulesSubscription, GameStatsSubscription, GameAnalyticsSubscription } from "../../../shared/messages/subscriptions/game-subscriptions";
+import { GameStateSubscriptionResult, GameInfoSubscriptionResult, GameMetaDataSubscriptionResult, GameRulesSubscriptionResult, GameStatsSubscriptionResult, GameAnalyticsSubscriptionResult } from "../../../shared/messages/subscriptions/game-subscription-results";
 import { GameRules } from "../../../shared/model/v1/rules";
 import { Distribution } from "../../../shared/math/distributions/distribution-helper";
+import { GameAnalytics } from "../../../shared/model/v1/game-analytics";
 
 @injectable()
 export class GameStateService {
@@ -55,5 +56,13 @@ export class GameStateService {
     }, gameId).pipe(
       map(result => result.data)
     ) as Observable<GameMetaData>
+  }
+
+  getGameAnalyticsById(gameId: string) {
+    return this.connection.subscribe<GameAnalyticsSubscription, GameAnalyticsSubscriptionResult>({
+      type: 'GAME/ANALYTICS'
+    }, gameId).pipe(
+      map(result => result.analytics)
+    ) as Observable<GameAnalytics>
   }
 }

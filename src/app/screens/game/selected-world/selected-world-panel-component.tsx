@@ -13,7 +13,6 @@ import classNames from 'classnames'
 import { createClasses, StyleSheet } from "../../../ui-components/setup-jss";
 import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
-import { getDisplayDuration } from "../../../ui-components/display-duration";
 import { map } from "rxjs/operators";
 import { of, Observable } from "rxjs";
 import { symbol } from "../helper/symbols";
@@ -111,7 +110,7 @@ export class SelectedWorldPanel extends React.Component<{
             {'metal' in world && world.metal !== 0 && <div className={classes.colRight}>{world.metal}&thinsp;{symbol('metal')}</div>}
             {world.mines !== 0 && <div className={classes.colRight}>{world.mines}&thinsp;M</div>}
             {visibleWorldhasOwner(world) && world.miningStatus?.type === 'MINING' && (
-              <HoverTooltip content$={getDisplayDuration(world.miningStatus.nextMetalMinedTimestamp).pipe(map(duration => {
+              <HoverTooltip content$={this.getDisplayDuration(world.miningStatus.nextMetalMinedTimestamp).pipe(map(duration => {
                 return `Mining ${duration}`
               }))}>
                 <span className={classes.colRight}>{symbol('metal')}&thinsp;+</span>
@@ -123,7 +122,7 @@ export class SelectedWorldPanel extends React.Component<{
               </HoverTooltip>
             )}
             {visibleWorldhasOwner(world) && world.buildShipsStatus?.type === 'BUILDING_SHIPS' && (
-              <HoverTooltip content$={getDisplayDuration(world.buildShipsStatus.readyTimestamp).pipe(map(duration => {
+              <HoverTooltip content$={this.getDisplayDuration(world.buildShipsStatus.readyTimestamp).pipe(map(duration => {
                 return `Builing ships ${duration}`
               }))}>
                 <span className={classes.colRight} ><IconHtml type="ships"/>&thinsp;+</span>
@@ -198,7 +197,7 @@ export class SelectedWorldPanel extends React.Component<{
   private getStatusTooltip(item: World | Fleet): Observable<string> {
     const doneTimestamp = this.getDoneTimestamp(item);
     if (doneTimestamp) {
-      return getDisplayDuration(doneTimestamp).pipe(map(duration => {
+      return this.getDisplayDuration(doneTimestamp).pipe(map(duration => {
         return `${item.status} ${duration}`
       }))
     } else {
@@ -217,6 +216,11 @@ export class SelectedWorldPanel extends React.Component<{
       default:
         return null;
     }
+  }
+
+  @autobind
+  private getDisplayDuration(timestamp: number): Observable<string | null> {
+    return this.props.vm.getDisplayDuration(timestamp)
   }
 
   @autobind

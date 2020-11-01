@@ -308,9 +308,12 @@ export class GameRepository {
     return history$.pipe(
       first(),
       switchMap(history => {
-        const timestamps = Object.getOwnPropertyNames(history.stateHistory).map(it => parseInt(it)).sort();
-        const matchingTimestamp = timestamps.findIndex(it => it > timestamp) - 1;
-        const item = history.stateHistory[matchingTimestamp];
+        const timestamps = Object.getOwnPropertyNames(history.stateHistory).sort((a,b) => {
+          return parseFloat(a) - parseFloat(b)
+        });
+        const matchingTimestampIndex = timestamps.findIndex(it => parseFloat(it) > timestamp) - 1;
+        const matchingTimestamp = timestamps[matchingTimestampIndex];
+        const item = history.stateHistory[matchingTimestamp as unknown as number];
         if (item) {
           return of(item);
         } else {

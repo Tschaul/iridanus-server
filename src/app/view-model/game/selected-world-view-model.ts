@@ -8,6 +8,8 @@ import { GameStageSelection } from "./stage-selection";
 import { visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
 import { PlayersViewModel } from "./player-infos-view-model";
 import { GameClock } from "./clock";
+import { interval, Observable, of } from "rxjs";
+import { getDisplayDuration } from "../../ui-components/display-duration";
 
 export class SelectedWorldViewModel {
 
@@ -82,5 +84,9 @@ export class SelectedWorldViewModel {
 
   public showDamageStatusForFleet(fleet: Fleet) {
     return (this.clock.now - fleet.lastDamageTimestamp) < this.gameData.gameRules.combat.meanFiringInterval;
+  }
+
+  public getDisplayDuration(endTimestamp: number): Observable<string | null> {
+    return getDisplayDuration(endTimestamp, this.clock.fixedTimestamp)
   }
 }

@@ -19,6 +19,9 @@ Server for Iridanus
 - in map generator: draw types from bag/deck?
 - enemy ships shown as idle
 - random idle notifications
+- handle errors in game runner
+- duplicate files before writing to disk. afterwards delete duplicate
+- store game history in seperate files (one per timestamp)
 
 - CTRL to select multiple fleets
 

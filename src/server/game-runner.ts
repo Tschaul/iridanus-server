@@ -94,8 +94,6 @@ export class GameRunner {
     const notificationHandler = container.get(NotificationHandler);
     const notificationMailer = container.get(NotificationMessageHandler);
 
-    setup.rules = makeConfig(this.environment.millisecondsPerDay);
-
     const currentState = await this.gameRepository.getGameState(gameInfo.id);
 
     if (!currentState) {

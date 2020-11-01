@@ -81,7 +81,10 @@ export class TopBar extends React.Component<{
       <div style={{ display: 'flex', flex: 1 }}>
         {this.props.vm.selfIsSpectator ? (
           [
-            <span>SPECTATOR</span>,
+            <Button
+              style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+              onClick={this.handleOpenAnalytics}
+            >🢐🢐</Button>,
             <Button
               style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
               onClick={this.handleBackToLobby}
@@ -138,6 +141,11 @@ export class TopBar extends React.Component<{
   @autobind
   public handleBackToLobby() {
     this.props.vm.backToLobby();
+  }
+
+  @autobind
+  public handleOpenAnalytics() {
+    this.props.vm.openAnalyticsPanel();
   }
 
   @autobind
