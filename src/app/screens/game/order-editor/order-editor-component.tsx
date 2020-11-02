@@ -14,8 +14,6 @@ import { WarpOrderEditor } from "./warp-order-component";
 import { hoverYellow } from "../../../ui-components/colors/colors";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
 import { Scroll } from "../../../ui-components/scroll-area/scroll-component";
-import { AmountOrderEditor } from "./amount-oder-component";
-import { symbol } from "../helper/symbols";
 import { IconHtml } from "../../../ui-components/icons/icon-html-component";
 
 const classes = createClasses({
@@ -114,10 +112,10 @@ export class OrderEditor extends React.Component<{
         </Scroll>
       </div>,
       ...(this.props.vm.selfIsSpectator ? [] : [(<div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: "0.5em" }} key="c">
-        <HoverTooltip content="Warp to world"><Button tight onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
-        <HoverTooltip content="Start cargo mission"><Button tight onClick={this.handleNewStartCargoMissionOrder}>⇄</Button></HoverTooltip>
-        <HoverTooltip content="Split fleet"><Button tight onClick={this.handleNewSplitFleetOrder}>✂</Button></HoverTooltip>
-        <HoverTooltip content="Deploy as industry"><Button tight onClick={this.handlenewDeployToWorldOrder}><IconHtml type="industry"/>🡓</Button></HoverTooltip>
+        <HoverTooltip content="Warp to world"><Button style={{width: 56}} onClick={this.handleNewWarpOrder}>➠</Button></HoverTooltip>
+        <HoverTooltip content="Start cargo mission"><Button style={{width: 56}} onClick={this.handleNewStartCargoMissionOrder}>⇄</Button></HoverTooltip>
+        <HoverTooltip content="Split fleet"><Button style={{width: 56}} onClick={this.handleNewSplitFleetOrder}>✂</Button></HoverTooltip>
+        <HoverTooltip content="Deploy as industry"><Button style={{width: 56}} onClick={this.handlenewDeployToWorldOrder}><IconHtml type="industry"/>+</Button></HoverTooltip>
       </div>)])
     ])
   }

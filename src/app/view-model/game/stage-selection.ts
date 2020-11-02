@@ -3,6 +3,7 @@ import { GameData } from "./game-data";
 import { GameOrders } from "./game-orders";
 import { VisibleWorld } from "../../../shared/model/v1/visible-state";
 import { World } from "../../../shared/model/v1/world";
+import { GameViewModel } from "./game-view-model";
 
 export type GameStageMode = {
   type: 'NORMAL'
@@ -45,6 +46,11 @@ export class GameStageSelection {
       id2
     }
     this.selectedFleetdId = null;
+    const fleets = this.gameData.fleetsInTransitByBothWorlds[id1][id2] ?? [];
+    const firstOwnFleet = fleets.find(it => it.ownerId === this.gameViewModel.selfPlayerId)
+    if (firstOwnFleet) {
+      this.selectedFleetdId = firstOwnFleet.id;
+    }
   }
 
   selectWorld(id: string | null) {
@@ -55,17 +61,23 @@ export class GameStageSelection {
       this.mode = { type: 'NORMAL' }
       return;
     }
+    this.selectedFleetdId = null;
     if (id) {
       this.stageSelection = {
         type: 'WORLD',
         id
+      }
+      const fleets = this.gameData.fleetsByWorldId[id] ?? [];
+      const firstOwnFleet = fleets.find(it => it.ownerId === this.gameViewModel.selfPlayerId)
+      if (firstOwnFleet) {
+        this.selectedFleetdId = firstOwnFleet.id;
       }
     } else {
       this.stageSelection = {
         type: 'NONE',
       }
     }
-    this.selectedFleetdId = null;
+    
   }
 
   @observable public mode: GameStageMode = { type: 'NORMAL' };
@@ -76,6 +88,7 @@ export class GameStageSelection {
       description,
       callback
     }
+    this.gameViewModel.sideMenuIsOpen = false;
   }
 
   public requestGateTargetSelection(description: string, callback: (world1Id: string, world2Id: string) => void) {
@@ -84,9 +97,11 @@ export class GameStageSelection {
       description,
       callback
     }
+    this.gameViewModel.sideMenuIsOpen = false;
   }
 
   constructor(
+    private gameViewModel: GameViewModel,
     private gameData: GameData,
     private gameOrders: GameOrders
   ) {

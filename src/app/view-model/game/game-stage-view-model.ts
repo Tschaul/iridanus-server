@@ -12,6 +12,7 @@ import { OrderEditorViewModel } from "./order-editor-view-model";
 import { PlayersViewModel } from "./player-infos-view-model";
 import { ServerEnvironment } from "../server-environment";
 import { EnvironmentInfo } from "../../../shared/messages/subscriptions/environment-subscription-results";
+import { GameViewModel } from "./game-view-model";
 
 
 const STAGE_OFFSET = 75;
@@ -42,6 +43,7 @@ export class GameStageViewModel {
   }
 
   constructor(
+    private gameViewModel: GameViewModel,
     private gameData: GameData,
     private selection: GameStageSelection,
     private worldHints: WorldHints,
@@ -51,6 +53,10 @@ export class GameStageViewModel {
     private playersViewModel: PlayersViewModel,
     private environment: ServerEnvironment
   ) { }
+
+  @computed get selfPlayerId() {
+    return this.gameViewModel.selfPlayerId
+  }
 
   @computed get players() {
     return this.playersViewModel;

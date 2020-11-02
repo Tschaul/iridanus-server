@@ -15,7 +15,6 @@ import { PanelDivider } from "../../../ui-components/panel/panel-divider";
 import { HoverTooltip } from "../../../ui-components/tooltip/hover-tooltip.component";
 import { map } from "rxjs/operators";
 import { of, Observable } from "rxjs";
-import { symbol } from "../helper/symbols";
 import { visibleWorldhasOwner } from "../../../../shared/model/v1/visible-state";
 import { PopulationStats } from "../shared/population-stats-component";
 import { WorldType } from "../../../../shared/model/v1/world-type";
@@ -105,27 +104,27 @@ export class SelectedWorldPanel extends React.Component<{
             </HoverTooltip>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div className={classes.colRight}><PopulationStats population={population} playerInfos={this.props.vm.players}></PopulationStats>/{world.populationLimit}&thinsp;<IconHtml type="population" /></div>
-            <div className={classes.colRight}>{world.industry}&thinsp;<IconHtml type="industry" /></div>
-            {'metal' in world && world.metal !== 0 && <div className={classes.colRight}>{world.metal}&thinsp;{symbol('metal')}</div>}
-            {world.mines !== 0 && <div className={classes.colRight}>{world.mines}&thinsp;M</div>}
+            <div className={classes.colRight}><PopulationStats population={population} playerInfos={this.props.vm.players}></PopulationStats>/{world.populationLimit}<IconHtml type="population" /></div>
+            <div className={classes.colRight}>{world.industry}<IconHtml type="industry" /></div>
+            {'metal' in world && world.metal !== 0 && <div className={classes.colRight}>{world.metal}<IconHtml type="metal" /></div>}
+            {world.mines !== 0 && <div className={classes.colRight}>{world.mines}M</div>}
             {visibleWorldhasOwner(world) && world.miningStatus?.type === 'MINING' && (
               <HoverTooltip content$={this.getDisplayDuration(world.miningStatus.nextMetalMinedTimestamp).pipe(map(duration => {
                 return `Mining ${duration}`
               }))}>
-                <span className={classes.colRight}>{symbol('metal')}&thinsp;+</span>
+                <span className={classes.colRight}><IconHtml type="metal" />+</span>
               </HoverTooltip>
             )}
             {visibleWorldhasOwner(world) && world.populationGrowthStatus?.type === 'GROWING' && (
               <HoverTooltip content={'Growing'}>
-                <span className={classes.colRight}><IconHtml type="population" />&thinsp;+</span>
+                <span className={classes.colRight}><IconHtml type="population" />+</span>
               </HoverTooltip>
             )}
             {visibleWorldhasOwner(world) && world.buildShipsStatus?.type === 'BUILDING_SHIPS' && (
               <HoverTooltip content$={this.getDisplayDuration(world.buildShipsStatus.readyTimestamp).pipe(map(duration => {
                 return `Builing ships ${duration}`
               }))}>
-                <span className={classes.colRight} ><IconHtml type="ships" />&thinsp;+</span>
+                <span className={classes.colRight} ><IconHtml type="ships" />+</span>
               </HoverTooltip>
             )}
             {visibleWorldhasOwner(world) && world.populationConversionStatus?.type === 'BEING_CAPTURED' && (
@@ -148,16 +147,15 @@ export class SelectedWorldPanel extends React.Component<{
 
   renderFleetRow(fleet: Fleet, owner: PlayerInfo | null) {
     const selected = this.props.vm.isWorldOrFleetSelected(false, fleet);
-    const topIcon = selected ? '☒' : '☐';
 
     const color = owner ? owner.color : screenWhite;
 
     return (
       <div className={classNames([classes.row, { selected }])} key={fleet.id} data-fleet-id={fleet.id} onClick={this.handleRowClick}>
         <div style={{ color, width: '1em', display: 'inline-block', textAlign: 'center' }}>◆</div>
-        <div className={classes.col}>{fleet.ships}&thinsp;<IconHtml type="ships" /></div>
-        {fleet.status === 'TRANSFERING_CARGO' && <div className={classes.col}>{fleet.cargoMetal}&thinsp;{symbol('metal')}</div>}
-        {fleet.status === 'TRANSFERING_CARGO' && <div className={classes.col}>{fleet.cargoPopulation}&thinsp;<IconHtml type="population" /></div>}
+        <div className={classes.col}>{fleet.ships}<IconHtml type="ships" /></div>
+        {fleet.status === 'TRANSFERING_CARGO' && <div className={classes.col}>{fleet.cargoMetal}<IconHtml type="metal" /></div>}
+        {fleet.status === 'TRANSFERING_CARGO' && <div className={classes.col}>{fleet.cargoPopulation}<IconHtml type="population" /></div>}
         <div>
           <HoverTooltip content$={this.getStatusTooltip(fleet)}>
             <span className={classes.col}> {this.fleetStatusIcon(fleet.status)} </span>
@@ -241,11 +239,11 @@ export class SelectedWorldPanel extends React.Component<{
 
   fleetStatusIcon(status: Fleet['status']) {
     switch (status) {
-      case 'WAITING_FOR_CARGO': return '⏾'
+      case 'WAITING_FOR_CARGO': return 'zZz'
       case 'TRANSFERING_CARGO': return '⇄'
-      case 'ARRIVING': return '🠰';
-      case 'WARPING': return '🠲';
-      case 'LEAVING': return '🠲';
+      case 'ARRIVING': return '➠';
+      case 'WARPING': return '➠';
+      case 'LEAVING': return '➠';
       default: return ' ';
     }
   }

@@ -22,20 +22,21 @@ export class GameViewModel {
   gameData = new GameData(this, this.clock);
   gameNotifications = new GameNotifications(this);
   gameOrders = new GameOrders(this, this.gameData);
-  selection = new GameStageSelection(this.gameData, this.gameOrders);
+  selection = new GameStageSelection(this, this.gameData, this.gameOrders);
   worldHints = new WorldHints();
   gameStats = new GameStats(this, this.gameData, this.worldHints);
   players = new PlayersViewModel(this.gameData);
 
   orderEditorViewModel = new OrderEditorViewModel(this, this.gameOrders, this.selection, this.worldHints, this.gameData);
 
-  gameStageViewModel = new GameStageViewModel(this.gameData, this.selection, this.worldHints, this.gameNotifications, this.orderEditorViewModel, this.clock, this.players, this.mainViewModel.environment);
+  gameStageViewModel = new GameStageViewModel(this, this.gameData, this.selection, this.worldHints, this.gameNotifications, this.orderEditorViewModel, this.clock, this.players, this.mainViewModel.environment);
   selectedWorldViewModel = new SelectedWorldViewModel(this.gameData, this.selection, this.players, this.clock);
   topBarViewModel = new TopBarViewModel(this, this.clock, this.gameData, this.gameOrders, this.gameStats);
   infoPanelViewModel = new InfoPanelViewModel(this, this.gameData, this.gameNotifications, this.selection);
   analyticsViewModel = new AnalyticsViewModel(this, this.clock, this.gameData);
   
   @observable analyticsPanelIsOpen = false;
+  @observable sideMenuIsOpen = false;
 
   @computed get playerStatus() {
     if (this.gameData.playerInfos[this.selfPlayerId] && this.gameData.playerInfos[this.selfPlayerId].isSpectator) {

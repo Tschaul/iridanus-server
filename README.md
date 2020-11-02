@@ -5,25 +5,19 @@ Server for Iridanus
 
 # TODOS
 
-- better resolution on ios
 - add worldId to deploy to world order
-- tofu in ios
-- mark selected fleet in game stage
 - population in stats does not count cargo
 - nerf creep
-- buttons bigger
-- close sidebar when selecting world or gate in mobile view
-- icon buttons -> no icons (e.g. deploy to world)
 - in map generator: repulsion between worlds of same type
 - in map generator: draw types from bag/deck?
-- bug: enemy ships shown as idle
 - bug: random idle notifications
 - handle errors in game runner
 - display active industry in selected world view
 - dont migrate population that is needed for industry
 
-- CTRL to select multiple fleets
+- CTRL to select multiple fleets / button to toggle mutliple selection mode
 - store game history in seperate files (one per timestamp)
+- better star background (more relastic size and color distribution)
 
 # Bugs
 

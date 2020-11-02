@@ -12,7 +12,6 @@ import { hoverYellow, errorRed, selectedYellow } from "../../../ui-components/co
 import { getDisplayDuration } from "../../../ui-components/display-duration";
 import { Subscription } from "rxjs";
 import { reaction, IReactionDisposer } from "mobx";
-import { symbol } from "../helper/symbols";
 import { IconHtml } from "../../../ui-components/icons/icon-html-component";
 
 const classes = createClasses({
@@ -82,11 +81,11 @@ export class TopBar extends React.Component<{
         {this.props.vm.selfIsSpectator ? (
           [
             <Button
-              style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+              style={{ transform: 'translateY(-0.25em)', width: '3em' }}
               onClick={this.handleOpenAnalytics}
             >🢐🢐</Button>,
             <Button
-              style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+              style={{ transform: 'translateY(-0.25em)', width: '3em' }}
               onClick={this.handleBackToLobby}
               spaceLeft
             >⏎</Button>
@@ -95,18 +94,18 @@ export class TopBar extends React.Component<{
             [
               <Button
                 disabled={this.props.vm.updatedOrdersCount === 0}
-                style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+                style={{ transform: 'translateY(-0.25em)', width: '3em' }}
                 onClick={this.handleSaveOrders}
                 spaceRight
               >✓</Button>,
               <Button
-                style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+                style={{ transform: 'translateY(-0.25em)', width: '3em' }}
                 onClick={this.handleBackToLobby}
                 spaceRight
               >⏎</Button>,
               <div style={{ flex: 1 }}></div>,
               this.props.onToggleBurgerButton && <Button
-                style={{ transform: 'translateY(-0.25em)', fontSize: 16, width: '3em' }}
+                style={{ transform: 'translateY(-0.25em)', width: '3em' }}
                 onClick={this.props.onToggleBurgerButton}
               >≡</Button>
             ]

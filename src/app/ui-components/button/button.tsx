@@ -8,6 +8,7 @@ const classes = createClasses({
     transition: "background-color 0.3s",
     cursor: 'pointer',
     color: 'rgba(114, 130, 135, 029)',
+    fill: 'rgba(114, 130, 135, 029)',
     backgroundColor: screenWhite,
     padding: '0.25em 0.5em',
     borderRadius: '0.5em',

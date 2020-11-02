@@ -2,7 +2,6 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { WorldToDisplay } from '../../../view-model/game/game-stage-view-model';
 import { VisibleWorld, visibleWorldhasOwner } from '../../../../shared/model/v1/visible-state';
-import { symbol } from '../helper/symbols';
 import { PlayersViewModel } from '../../../view-model/game/player-infos-view-model';
 import { IconSvg, IconType } from '../../../ui-components/icons/icon-svg-component';
 
@@ -49,7 +48,7 @@ export class GameStageWorld extends React.Component<{
       case 'INDUSTRIAL':
         return this.renderSvgWorldIcon('industry', world, color, opacity);
       case 'INSPIRING':
-        return this.renderTextWorldIcon(symbol('influence') + '+', world, color, opacity);
+        return this.renderTextWorldIcon('★+', world, color, opacity);
       case 'LUSH':
         return this.renderSvgWorldIcon('population', world, color, opacity);
       case 'HOME':

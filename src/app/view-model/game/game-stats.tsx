@@ -92,11 +92,11 @@ export class GameStats {
 
   private symbolForProperty(prop: string) {
     switch (prop) {
-      case 'population': return [<span>&thinsp;</span>, <IconHtml type="population" />]
-      case 'industry': return [<span>&thinsp;</span>, <IconHtml type="industry" />]
+      case 'population': return [<IconHtml type="population" />]
+      case 'industry': return [<IconHtml type="industry" />]
       case 'mines': return ' M'
-      case 'metal': return [<span>&thinsp;</span>, <IconHtml type="metal" />]
-      case 'ships': return [<span>&thinsp;</span>, <IconHtml type="ships" />]
+      case 'metal': return [<IconHtml type="metal" />]
+      case 'ships': return [<IconHtml type="ships" />]
       case 'influence': return ' ⦀'
       default: return ''
     }

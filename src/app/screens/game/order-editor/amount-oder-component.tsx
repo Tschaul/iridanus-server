@@ -3,7 +3,6 @@ import { observer } from "mobx-react";
 import autobind from "autobind-decorator";
 import { WrappedObservable } from "../../helper/wrap-observable";
 import { Input } from "../../../ui-components/input/input-component";
-import { symbol } from "../helper/symbols";
 
 export type AmountOrderEditorOrder = {
   type: string,

@@ -84,18 +84,20 @@ export class GameStageForeground extends React.Component<{
 
           const rel = mul(parallel, WORLD_OUTER_RADIUS + relPos * (dist - 2 * WORLD_OUTER_RADIUS))
 
-          const idle = fleet.status === 'WAITING_FOR_CARGO';
+          const idle = fleet.status === 'WAITING_FOR_CARGO' && fleet.ownerId === this.props.vm.selfPlayerId;
+          const selected = fleet.id === this.props.vm.selectedFleet?.id;
+
           return (
             <g key={fleet.id}
               transform={`translate(${rel.x},${rel.y})`}
             >
-              {idle && (
+              {(idle || selected) && (
                 <circle
                   cx={world1Pos.x}
                   cy={world1Pos.y}
                   r={FLEET_OUTER_RADIUS}
                   opacity="1"
-                  stroke={screenWhiteRaw.fade(0.5).toString()}
+                  stroke={selected ? selectedYellow : screenWhiteRaw.fade(0.5).toString()}
                   fill="none"
                   strokeWidth="3"
                   strokeDasharray="5,5"
@@ -131,9 +133,9 @@ export class GameStageForeground extends React.Component<{
 
   private renderWorlds(): React.ReactNode {
     return this.props.vm.worldsToDisplay.map(world => {
-      const color = this.props.vm.players.getColorForWorld(world);
       const fleets = this.props.vm.fleetsByWorldId[world.id] || [];
       const selected = this.props.vm.selectedWorld && this.props.vm.selectedWorld.id === world.id;
+      const fleetSelectionActive = selected && !!(this.props.vm.selectedFleet?.id)
       const hint = this.props.vm.hintForWorld(world.id);
 
       const positions = distributeOnCircle(fleets.length);
@@ -154,7 +156,7 @@ export class GameStageForeground extends React.Component<{
                   cx={world.x}
                   cy={world.y}
                   r={WORLD_OUTER_RADIUS}
-                  opacity="1"
+                  opacity={fleetSelectionActive ? 0.5 : 1}
                   stroke={selectedYellow}
                   fill="none"
                   strokeWidth="3"
@@ -194,17 +196,18 @@ export class GameStageForeground extends React.Component<{
             </StaticTooltip>
           </HoverTooltip>
           {fleets.map((fleet, index) => {
-            const idle = fleet.status === 'READY' && !fleet.orders.length
+            const idle = fleet.status === 'READY' && !fleet.orders.length && fleet.ownerId === this.props.vm.selfPlayerId
+            const selected = fleet.id === this.props.vm.selectedFleet?.id;
             const pos = positions[index]
             return (
               <g key={fleet.id}>
-                {idle && (
+                {(idle || selected) && (
                   <circle
                     cx={world.x + FLEET_DISTANCE * pos.x}
                     cy={world.y + FLEET_DISTANCE * pos.y}
                     r={FLEET_OUTER_RADIUS}
                     opacity="1"
-                    stroke={screenWhiteRaw.fade(0.5).toString()}
+                    stroke={selected ? selectedYellow : screenWhiteRaw.fade(0.5).toString()}
                     fill="none"
                     strokeWidth="3"
                     strokeDasharray="5,5"
@@ -282,12 +285,12 @@ export class GameStageForeground extends React.Component<{
     } else if (world.status === 'FOG_OF_WAR') {
       return <span>
         <PopulationStats population={world.population} playerInfos={this.props.vm.players}></PopulationStats>
-      /{world.populationLimit} <IconHtml type="population" /> {world.industry} <IconHtml type="industry" />
+      /{world.populationLimit}<IconHtml type="population" /> {world.industry}<IconHtml type="industry" />
       </span>;
     }
     return <span>
       {world.status === 'OWNED' ? <PopulationStats population={world.population} playerInfos={this.props.vm.players}></PopulationStats> : '0'}
-      /{world.populationLimit} <IconHtml type="population" /> {world.industry} <IconHtml type="industry" /> {world.metal} <IconHtml type="metal" />
+      /{world.populationLimit}<IconHtml type="population" /> {world.industry}<IconHtml type="industry" /> {world.metal}<IconHtml type="metal" />
     </span>;
 
   }

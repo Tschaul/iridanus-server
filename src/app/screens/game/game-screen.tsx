@@ -67,11 +67,7 @@ const classes = createClasses({
 });
 
 @observer
-export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsOpen: boolean }> implements HasExitAnimation {
-
-  state = {
-    menuIsOpen: true
-  }
+export class GameScreen extends React.Component<{ vm: GameViewModel }> implements HasExitAnimation {
 
   pinchzoom: HTMLDivElement | null;
   panel: Panel | null;
@@ -132,7 +128,7 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
           </div>
 
           <div style={{
-            transform: `translateX(${this.state.menuIsOpen ? 0 : width}px)`,
+            transform: `translateX(${this.props.vm.sideMenuIsOpen ? 0 : width}px)`,
             transition: 'transform 400ms',
             position: 'relative',
             height: height - 70,
@@ -183,8 +179,6 @@ export class GameScreen extends React.Component<{ vm: GameViewModel }, { menuIsO
 
   @autobind
   private handleToggleMenu() {
-    this.setState({
-      menuIsOpen: !this.state.menuIsOpen
-    })
+    this.props.vm.sideMenuIsOpen = !this.props.vm.sideMenuIsOpen;
   }
 }
