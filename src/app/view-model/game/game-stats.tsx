@@ -84,6 +84,10 @@ export class GameStats {
       if (fleet.ownerId === currentPlayer) {
         stats.ships += fleet.ships;
         stats.fleetKeys += 1;
+        if (fleet.status === 'TRANSFERING_CARGO') {
+          stats.metal += fleet.cargoMetal
+          stats.population += fleet.cargoPopulation
+        }
       }
     })
 

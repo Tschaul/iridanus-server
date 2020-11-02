@@ -6,7 +6,6 @@ Server for Iridanus
 # TODOS
 
 - add worldId to deploy to world order
-- population in stats does not count cargo
 - nerf creep
 - in map generator: repulsion between worlds of same type
 - in map generator: draw types from bag/deck?
