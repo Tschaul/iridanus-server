@@ -14,6 +14,7 @@ describe("deploy ships to world", () => {
 
       draft.universe.fleets["f1"].orders.push({
         type: 'DEPLOY_TO_WORLD',
+        worldId: 'w1'
       })
     });
     

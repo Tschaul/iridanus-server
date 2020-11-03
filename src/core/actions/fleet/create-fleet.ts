@@ -26,7 +26,8 @@ export function createFleet(
           ownerId,
           status: 'READY',
           ships,
-          lastDamageTimestamp: 0
+          lastDamageTimestamp: 0,
+          idleNotificationSent: false
         }
 
         draft.universe.fleets[fleetId] = fleet;

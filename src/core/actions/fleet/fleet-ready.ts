@@ -19,7 +19,8 @@ export function fleetReady(
           currentWorldId,
           status: 'READY',
           combatStatus: 'AT_PEACE',
-          ownerId: oldFleet.ownerId
+          ownerId: oldFleet.ownerId,
+          idleNotificationSent: false
         }
       })
     }

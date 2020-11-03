@@ -1,10 +1,10 @@
 import { Gates, Universe } from "../../shared/model/v1/universe";
 import { makeHexCoordinates, getRank } from "./make-hex-coordinates";
 import { Vec2 } from "../../shared/math/vec2";
-import { LostWorld, ReadyWorld } from "../../shared/model/v1/world";
+import { LostWorld } from "../../shared/model/v1/world";
 import { DrawingPositions } from "../../shared/model/v1/drawing-positions";
 import { GameMap } from "../../shared/model/v1/game-map";
-import { choseWorldType } from "./chose-world-type";
+import { WorldTypeBag } from "./chose-world-type";
 import { distributeWorldTypes } from "./distribute-world-types";
 import { applyWorldTypes } from "./apply-world-types";
 
@@ -25,6 +25,7 @@ export function makeGomeisaThreeRandom(): GameMap {
     gates
   }
 
+  const worldTypeBag = new WorldTypeBag(Object.getOwnPropertyNames(worldPositions).length)
 
   const drawingPositions: DrawingPositions = {};
 
@@ -68,7 +69,7 @@ export function makeGomeisaThreeRandom(): GameMap {
         }
       })
     } else {
-      universe.worlds[worldId] = makeWorld(worldId);
+      universe.worlds[worldId] = makeWorld(worldId, worldTypeBag);
     }
 
   })
@@ -83,7 +84,7 @@ export function makeGomeisaThreeRandom(): GameMap {
   }
 }
 
-function makeWorld(id: string): LostWorld {
+function makeWorld(id: string, bag: WorldTypeBag): LostWorld {
 
   const rank = getRank(id);
 
@@ -98,7 +99,7 @@ function makeWorld(id: string): LostWorld {
   const populationLimit = Math.max(populationLimitRandom + populationLimitStatic, metal + industry)
 
   const world: LostWorld = {
-    worldType: choseWorldType(Math.random()),
+    worldType: bag.next(),
     id,
     industry,
     metal: metal,

@@ -17,8 +17,12 @@ export function distributeWorldTypes(universe: Universe) {
         }
         const world1 = universe.worlds[id1];
         const world2 = universe.worlds[id2];
-        const temp = (charge(world1) * charge(world2) / (distances[id1][id2] * distances[id1][id2]))
-        return acc2 + temp;
+        const goodBadPotential = (charge(world1) * charge(world2) / (distances[id1][id2] * distances[id1][id2]))
+        let sameTypePotential = 0;
+        if (world1.worldType.type === world2.worldType.type) {
+          sameTypePotential = 1 / (distances[id1][id2] * distances[id1][id2])
+        }
+        return acc2 + goodBadPotential;
       }, 0)
     }, 0)
   }

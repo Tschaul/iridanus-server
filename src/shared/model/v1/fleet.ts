@@ -48,7 +48,7 @@ export interface ReadyFleetBase extends BaseFleet {
     status: 'READY'
     currentWorldId: string;
     ownerId: string;
-    idleNotificationSent?: boolean;
+    idleNotificationSent: boolean;
 }
 
 export type ReadyFleet = ReadyFleetBase & FleetWithCombatStatus;
@@ -104,5 +104,5 @@ export interface WaitingForCargoFleet extends BaseFleet {
     ownerId: string;
     fromWorldId: string,
     toWorldId: string,
-    idleNotificationSent?: boolean;
+    idleNotificationSent: boolean;
 }

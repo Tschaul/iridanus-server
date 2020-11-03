@@ -5,10 +5,6 @@ Server for Iridanus
 
 # TODOS
 
-- add worldId to deploy to world order
-- nerf creep
-- in map generator: repulsion between worlds of same type
-- in map generator: draw types from bag/deck?
 - bug: random idle notifications
 - handle errors in game runner
 - display active industry in selected world view

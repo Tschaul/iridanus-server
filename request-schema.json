@@ -258,10 +258,14 @@
                         "DEPLOY_TO_WORLD"
                     ],
                     "type": "string"
+                },
+                "worldId": {
+                    "type": "string"
                 }
             },
             "required": [
-                "type"
+                "type",
+                "worldId"
             ],
             "type": "object"
         },

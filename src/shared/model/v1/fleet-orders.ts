@@ -25,4 +25,5 @@ export interface SplitFleetOrder {
 
 export interface DeployToWorldOrder {
   type: 'DEPLOY_TO_WORLD',
+  worldId: string
 }

@@ -17,7 +17,8 @@ export const splitTestMap: GameState = {
         ownerId: "p1",
         ships: 10,
         integrity: 1,
-        lastDamageTimestamp: 0
+        lastDamageTimestamp: 0,
+        idleNotificationSent: false
       }
     },
     worlds: {

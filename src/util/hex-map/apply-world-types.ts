@@ -47,7 +47,7 @@ export function applyWorldTypes(universe: Universe) {
             integrity: 1,
             orders: [],
             ownerId: '@creep',
-            ships: 5,
+            ships: 3,
             idleNotificationSent: true,
             lastDamageTimestamp: 0
           }

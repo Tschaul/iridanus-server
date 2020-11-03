@@ -33,7 +33,7 @@ export class FleetDeploysToWorldEventQueue implements GameEventQueue {
 
               const world = worldsById[fleet.currentWorldId];
 
-              if (!worldHasOwner(world) || world.ownerId !== fleet.ownerId || ['VOID', 'NEBULA'].includes(world.worldType.type)) {
+              if (!worldHasOwner(world) || world.ownerId !== fleet.ownerId || order?.worldId !== fleet.currentWorldId || ['VOID', 'NEBULA'].includes(world.worldType.type)) {
                 return [
                   popFleetOrder(fleet.id)
                 ]

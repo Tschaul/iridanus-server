@@ -20,6 +20,7 @@ export function waitForCargo(
           toWorldId,
           status: 'WAITING_FOR_CARGO',
           ownerId: oldFleet.ownerId,
+          idleNotificationSent: false
         }
       })
     }

@@ -178,8 +178,10 @@ export class OrderEditorViewModel {
 
   public newDeployToWorldOrder() {
     const fleet = this.selection.selectedFleet!;
+    const worldId = this.projectedLastWorld(fleet);
     const order: DeployToWorldOrder = {
       type: 'DEPLOY_TO_WORLD',
+      worldId
     }
     this.setOrAppendFleetOrder(fleet.id, order);
   }
