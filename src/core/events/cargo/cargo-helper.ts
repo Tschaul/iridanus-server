@@ -52,12 +52,13 @@ function populationCargoAmount(
   const worldToPopulation = worldHasOwner(worldTo) ? worldTo.population[playerId] ?? 0 : 0;
 
   if (worldFromPopulation > (worldToPopulation + 1) && worldFromPopulation > 1) {
-    return Math.min(
+    return Math.max(0, Math.min(
       Math.round((worldFromPopulation - worldToPopulation - 1) / 2),
       ships,
       worldFromPopulation - 1,
-      worldTo.populationLimit - worldToPopulation
-    )
+      worldFromPopulation - worldFrom.industry,
+      worldTo.populationLimit - worldToPopulation,
+    ))
   } else {
     return 0;
   }

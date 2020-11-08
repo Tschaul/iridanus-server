@@ -5,12 +5,8 @@ Server for Iridanus
 
 # TODOS
 
-- bug: random idle notifications
-- handle errors in game runner
-- display active industry in selected world view
-- dont migrate population that is needed for industry
-
 - CTRL to select multiple fleets / button to toggle mutliple selection mode
+- rally orders at world that are given to every fleet that is built
 - store game history in seperate files (one per timestamp)
 - better star background (more relastic size and color distribution)
 
@@ -18,20 +14,11 @@ Server for Iridanus
 
 # Further Improvements
 
-- replay with timeline. During game only with own vision. After game with full vision.
 - skipping time in dev mode
 - help: context based links into docs
 - chose color in game lobby
-- telegram bot to send notifications
-- mobile friendly UI
-
-# Victory condition
-
-first palyer to reach a certain population wins.
 
 # Some Ideas
-
-- divide population by player. Ships in orbit have dominance  and convert population one by one. If no ships present. Population with majority converts the rest over time. World is owned by player if he has the absolute majority.
 
 - 4 classes of ships: freighter for cargo and building industry, and three sizes of military fleets with one, two or three slots for upgrades. Upgrades would be chosable in ship designer from those bought with research/developement.
 
@@ -43,7 +30,7 @@ first palyer to reach a certain population wins.
 
 - you can only have as many ships + industry as you have population
 
-- instead of spell casting upgrades, the particular upgrade enables you to build a 'big ship' (a.k.a death start, juggernaut) at a world, which can cast the spell.
+- instead of spell casting upgrades, the particular upgrade enables you to build a 'big ship' (a.k.a deathstar, juggernaut) at a world, which can cast the spell.
 
 ## Research
 

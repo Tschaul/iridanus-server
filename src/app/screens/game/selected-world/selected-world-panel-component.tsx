@@ -96,6 +96,13 @@ export class SelectedWorldPanel extends React.Component<{
     }
     else {
       const population: PopulationByPlayer = world.status === 'LOST' ? {} : world.population;
+
+      const owningPlayerPopulation = world.status === 'LOST' ? 0 : (world.population[world.ownerId ?? ''] ?? 0)
+
+      const activeIndustry = owningPlayerPopulation < world.industry
+        ? `${owningPlayerPopulation}/`
+        : ''
+
       return (
         <div>
           <div style={{ display: 'flex' }}>
@@ -105,7 +112,7 @@ export class SelectedWorldPanel extends React.Component<{
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div className={classes.colRight}><PopulationStats population={population} playerInfos={this.props.vm.players}></PopulationStats>/{world.populationLimit}<IconHtml type="population" /></div>
-            <div className={classes.colRight}>{world.industry}<IconHtml type="industry" /></div>
+            <div className={classes.colRight}>{activeIndustry}{world.industry}<IconHtml type="industry" /></div>
             {'metal' in world && world.metal !== 0 && <div className={classes.colRight}>{world.metal}<IconHtml type="metal" /></div>}
             {world.mines !== 0 && <div className={classes.colRight}>{world.mines}M</div>}
             {visibleWorldhasOwner(world) && world.miningStatus?.type === 'MINING' && (
