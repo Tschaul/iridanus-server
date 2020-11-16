@@ -152,7 +152,7 @@ export class GameStageViewModel {
       for (const key2 of Object.getOwnPropertyNames(warpingFleetsMap[key1])) {
         const world1Vec = this.drawingPositons[key1];
         const world2Vec = this.drawingPositons[key2];
-        const fleets = warpingFleetsMap[key1][key2];
+        const fleets = warpingFleetsMap?.[key1]?.[key2] ?? [];
         // const fleetOwners = [...new Set(fleets.map(fleet => fleet.ownerId))];
         result.push([key1, world1Vec, key2, world2Vec, fleets.map(fleet => {
           const transitPosition = this.calculateTransitPosition(fleet);
