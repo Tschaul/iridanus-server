@@ -99,6 +99,12 @@ export class TopBar extends React.Component<{
                 spaceRight
               >✓</Button>,
               <Button
+                disabled={this.props.vm.updatedOrdersCount === 0}
+                style={{ transform: 'translateY(-0.25em)', width: '3em' }}
+                onClick={this.handleClearOrders}
+                spaceRight
+              >X</Button>,
+              <Button
                 style={{ transform: 'translateY(-0.25em)', width: '3em' }}
                 onClick={this.handleBackToLobby}
                 spaceRight
@@ -136,6 +142,11 @@ export class TopBar extends React.Component<{
   @autobind
   public handleSaveOrders() {
     this.props.vm.saveOrderDrafts();
+  }
+
+  @autobind
+  public handleClearOrders() {
+    this.props.vm.clearOrderDrafts();
   }
 
   @autobind

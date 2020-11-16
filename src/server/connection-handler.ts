@@ -10,6 +10,8 @@ import { Initializer } from "./infrastructure/initialisation/initializer";
 import { Queue } from "./infrastructure/queue/queue";
 import { Subject } from "rxjs";
 import { RequestMessageValidator } from "./infrastructure/validation/request-message-validator";
+import { Command } from "../shared/messages/commands/commands";
+import { makeId } from "../app/client/make-id";
 
 export class ConnectionHandler {
 
@@ -22,6 +24,8 @@ export class ConnectionHandler {
   private initializer: Initializer;
   private hasBeenDisposed$$: Subject<never>;
   private requestMessageValidator: RequestMessageValidator;
+  private lastWillCommands: Command[] = []
+  private lastWillGameId: string | null = null;
 
   constructor(private containerRegistry: ContainerRegistry, private sendfn: (reponse: ResponseMessage) => void) {
     this.subscriptionHandler = containerRegistry.globalContainer.get(SubscriptionHandler);
@@ -47,6 +51,15 @@ export class ConnectionHandler {
   }
 
   dispose() {
+    this.sendfn = () => {};
+    this.lastWillCommands.forEach(command => {
+      this.handleMessage({
+        type: 'COMMAND',
+        command,
+        commandId: makeId(),
+        gameId: this.lastWillGameId ?? undefined
+      })
+    })
     this.hasBeenDisposed$$.next();
     this.hasBeenDisposed$$.complete();
   }
@@ -116,6 +129,9 @@ export class ConnectionHandler {
             (data: any) => this.sendfn(data),
           ));
           break;
+        case 'LAST_WILL':
+            this.lastWillCommands = message.commands;
+            this.lastWillGameId = message.gameId ?? null;
         default:
           break;
       }

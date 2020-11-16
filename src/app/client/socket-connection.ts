@@ -95,6 +95,15 @@ export class SocketConnection {
     })
   }
 
+  public setLastWill(commands: Command[], gameId?: string): Promise<void> {
+    this.send({
+      type: 'LAST_WILL',
+      commands,
+      gameId
+    })
+    return Promise.resolve()
+  }
+
   public subscribe<TSubscriptionResponse, TSubscriptionResult>(subscription: TSubscriptionResponse, gameId: string | null = null): Observable<TSubscriptionResult> {
 
     return new Observable((observer: any) => {

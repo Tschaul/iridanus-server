@@ -13,6 +13,10 @@ export type RequestMessage = {
   commandId: string,
   gameId?: string | null,
 } | {
+  type: 'LAST_WILL',
+  commands: Command[],
+  gameId?: string | null,
+} | {
   type: 'BEGIN_SUBSCRIPTION'
   subscription: Subscription,
   id: string,

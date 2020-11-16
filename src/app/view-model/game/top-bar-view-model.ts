@@ -51,6 +51,10 @@ export class TopBarViewModel {
     this.gameOrders.saveOrderDrafts();
   }
 
+  public clearOrderDrafts() {
+    this.gameOrders.clearOrderDrafts();
+  }
+
   public highlightStat(type: StatType) {
     this.gameStats.highlightedStat = type;
   }

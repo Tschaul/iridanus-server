@@ -134,6 +134,70 @@
         },
         {
             "properties": {
+                "commands": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/SignUpUserCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/ConfirmEmailAddressCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/SendPasswordResetTokenCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/ResetPasswordCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/RemoveAuthTokenCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/CreateGameCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/JoinGameCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/ReadyForGameCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/ToggleSpectatorForGameCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/UpdateFleetOrdersCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/SurrenderGameCommand"
+                            },
+                            {
+                                "$ref": "#/definitions/NotificationMarkAsReadCommand"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "gameId": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "type": {
+                    "enum": [
+                        "LAST_WILL"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "commands",
+                "type"
+            ],
+            "type": "object"
+        },
+        {
+            "properties": {
                 "gameId": {
                     "type": [
                         "null",
