@@ -46,7 +46,7 @@ export class GameStageSelection {
       id2
     }
     this.selectedFleetdId = null;
-    const fleets = this.gameData.fleetsInTransitByBothWorlds[id1][id2] ?? [];
+    const fleets = this.gameData.fleetsInTransitByBothWorlds?.[id1]?.[id2] ?? [];
     const firstOwnFleet = fleets.find(it => it.ownerId === this.gameViewModel.selfPlayerId)
     if (firstOwnFleet) {
       this.selectedFleetdId = firstOwnFleet.id;
