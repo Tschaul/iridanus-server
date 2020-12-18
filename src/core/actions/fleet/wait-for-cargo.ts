@@ -5,19 +5,19 @@ import { updateFleet } from "./update-fleet";
 
 export function waitForCargo(
   fleetId: string,
-  toWorldId: string,
-  fromWorldId: string,
+  currentWorldId: string,
+  cargoRoute: string[]
 ): Action {
   return {
-    describe: () => `WaitingForCargo ${JSON.stringify({ fleetId, toWorldId })}`,
+    describe: () => `WaitingForCargo ${JSON.stringify({ fleetId, currentWorldId })}`,
     apply: (state: GameState) => {
 
       return updateFleet<ReadyFleet | TransferingCargoFleet, WaitingForCargoFleet>(state, fleetId, (oldFleet) => {
 
         return {
           ...baseFleet(oldFleet),
-          fromWorldId,
-          toWorldId,
+          currentWorldId,
+          cargoRoute,
           status: 'WAITING_FOR_CARGO',
           ownerId: oldFleet.ownerId,
           idleNotificationSent: false

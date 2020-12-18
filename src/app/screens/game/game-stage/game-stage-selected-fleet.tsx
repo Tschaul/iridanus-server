@@ -46,10 +46,6 @@ export class GameStageSelectedFleet extends React.Component<{
       return fleet.toWorldId
     }
 
-    if (fleet.status === 'WAITING_FOR_CARGO') {
-      return fleet.fromWorldId
-    }
-
     assertNever(fleet);
   }
 
@@ -65,13 +61,22 @@ export class GameStageSelectedFleet extends React.Component<{
       })
     }
 
-    const path =  warpOrders.map(it => it.targetWorldId);
+    const path = warpOrders.map(it => it.targetWorldId);
 
-    const lastOrder =  fleet.orders[fleet.orders.length -1];
+    const lastOrder = fleet.orders[fleet.orders.length - 1];
 
     if (lastOrder && lastOrder.type === 'START_CARGO_MISSION') {
       const lastWorld = path.length ? path[path.length - 1] : currentWorldId;
-      path.push(lastOrder.otherWorldId, lastWorld)
+      const route = lastOrder.cargoRoute;
+
+      const initialPosition = lastOrder.cargoRoute.indexOf(lastWorld)
+
+      // [1,2,3,4] becomes [1,2,3,4,3,2]
+      const wrappedRoute = route.concat(route.slice(0).reverse().slice(1, -1))
+
+      for (let i = 0; i < wrappedRoute.length; i++) {
+        path.push(wrappedRoute[(i + initialPosition + 1) % wrappedRoute.length])
+      }
     }
 
     const result = [];
@@ -111,9 +116,9 @@ export class GameStageSelectedFleet extends React.Component<{
   }
 
   renderCurrentWarpingPath(fleet: Fleet) {
-    if (!fleetIsAtWorld(fleet) && fleet.status !== 'WAITING_FOR_CARGO') {
+    if (!fleetIsAtWorld(fleet)) {
 
-      const [w1,w2] = pathOfFleetInTransit(fleet);
+      const [w1, w2] = pathOfFleetInTransit(fleet);
 
       const originWorldPos = this.props.vm.drawingPositons[w1];
       const targetWorldPos = this.props.vm.drawingPositons[w2];

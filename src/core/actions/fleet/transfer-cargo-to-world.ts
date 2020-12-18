@@ -1,6 +1,6 @@
 import { Action } from "../action";
 import { GameState } from "../../../shared/model/v1/state";
-import { baseFleet, TransferingCargoFleet, ReadyFleet } from "../../../shared/model/v1/fleet";
+import { baseFleet, TransferingCargoFleet, ReadyFleet, fleetIsAtWorld } from "../../../shared/model/v1/fleet";
 import { updateFleet } from "./update-fleet";
 
 export function transferCargoToWorld(
@@ -8,7 +8,8 @@ export function transferCargoToWorld(
   arrivingTimestamp: number,
   cargoMetal: number,
   cargoPopulation: number,
-  toWorldId: string
+  toWorldId: string,
+  cargoRoute: string[]
 ): Action {
   return {
     describe: () => `TransferingCargoToWorld ${JSON.stringify({ fleetId, toWorldId, arrivingTimestamp, cargoMetal, cargoPopulation })}`,
@@ -16,9 +17,9 @@ export function transferCargoToWorld(
 
       return updateFleet<ReadyFleet | TransferingCargoFleet, TransferingCargoFleet>(state, fleetId, (oldFleet) => {
 
-        const fromWorldId = oldFleet.status === 'READY'
+        const fromWorldId = fleetIsAtWorld(oldFleet)
           ? oldFleet.currentWorldId
-          : oldFleet.fromWorldId;
+          : oldFleet.toWorldId;
 
         return {
           ...baseFleet(oldFleet),
@@ -28,7 +29,8 @@ export function transferCargoToWorld(
           arrivingTimestamp: arrivingTimestamp,
           ownerId: oldFleet.ownerId,
           cargoMetal,
-          cargoPopulation
+          cargoPopulation,
+          cargoRoute
         }
       })
     }

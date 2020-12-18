@@ -30,7 +30,6 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
     ]).pipe(
       map(([waitingFleets, worlds, playersAtWorld]) => {
 
-
         const otherPlayerAtWorld = (worldId: string, ownerId: string) => {
           return playersAtWorld[worldId]
             && playersAtWorld[worldId].length
@@ -42,14 +41,11 @@ export class StopCargoMissionEventQueue implements GameEventQueue {
             return true;
           }
 
-          const fromWorld = worlds[fleet.fromWorldId];
-          const toWorld = worlds[fleet.toWorldId];
-
-          return (worldHasOwner(fromWorld) && fromWorld.ownerId !== fleet.ownerId)
-            || (worldHasOwner(toWorld) && toWorld.ownerId !== fleet.ownerId)
-            || !!fleet.orders.length
-            || otherPlayerAtWorld(fleet.fromWorldId, fleet.ownerId)
-            || otherPlayerAtWorld(fleet.toWorldId, fleet.ownerId)
+          return !!fleet.orders.length
+            || fleet.cargoRoute.some(worldId => {
+              const world = worlds[worldId];
+              return (worldHasOwner(world) && world.ownerId !== fleet.ownerId) || otherPlayerAtWorld(worldId, fleet.ownerId)
+            })
 
         }) ?? null
 

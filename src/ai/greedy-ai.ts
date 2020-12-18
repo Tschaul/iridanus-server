@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { distinctUntilChanged, filter, map } from "rxjs/operators";
 import { GameSetupProvider } from "../core/game-setup-provider";
 import { Store } from "../core/store";
-import { floydWarshall } from "../shared/math/path-finding/floydWarshall";
+import { floydWarshallGates } from "../shared/math/path-finding/floydWarshall";
 import { Fleet, fleetIsAtWorld } from "../shared/model/v1/fleet";
 import { GameState } from "../shared/model/v1/state";
 import { worldHasOwner } from "../shared/model/v1/world";
@@ -40,7 +40,7 @@ export class GreedyAi implements Ai {
     const rules = this.config.rules;
     const worlds = Object.values(gameMap.universe.worlds);
     const fleets = Object.values(gameMap.universe.fleets);
-    const distances = floydWarshall(gameMap.universe.gates);
+    const distances = floydWarshallGates(gameMap.universe.gates);
     const now = 0
 
     const timeFrame = rules.warping.warpToWorldDelay * 12;
@@ -182,10 +182,8 @@ function nextWorldId(fleet: Fleet, now: number): [string, number] {
   } else {
     if (fleet.status === 'WARPING') {
       return [fleet.targetWorldId, fleet.arrivingTimestamp - now]
-    } else if (fleet.status === 'TRANSFERING_CARGO') {
-      return [fleet.toWorldId, fleet.arrivingTimestamp - now]
     } else {
-      return [fleet.fromWorldId, 0]
+      return [fleet.toWorldId, fleet.arrivingTimestamp - now]
     }
   }
 }

@@ -7,7 +7,7 @@ import { WorldHints } from "./world-hints";
 import { visibleWorldhasOwner } from "../../../shared/model/v1/visible-state";
 import { Fleet } from "../../../shared/model/v1/fleet";
 import { GameData } from "./game-data";
-import { findPathFromWorldToGate, findPathFromWorldToWorld } from "../../../shared/math/path-finding/findPath";
+import { findPathFromWorldToOneOfTwoWorlds, findPathFromWorldToWorld } from "../../../shared/math/path-finding/findPath";
 
 export class OrderEditorViewModel {
 
@@ -98,7 +98,7 @@ export class OrderEditorViewModel {
         this.gameOrders.clearFleetOrders(fleet.id);
       }
       if (
-        (fleet.status === 'WAITING_FOR_CARGO' && fleet.fromWorldId === worldId)
+        (fleet.status === 'WAITING_FOR_CARGO' && fleet.currentWorldId === worldId)
         || (fleet.status === 'TRANSFERING_CARGO' && fleet.toWorldId === worldId)
       ) {
         const stopOrder: StopCargoMissionOrder = {
@@ -118,11 +118,11 @@ export class OrderEditorViewModel {
 
   public newStartCargoMissionOrder() {
     this.selection.requestGateTargetSelection('Select gate target!', (world1Id, world2Id) => {
-      this.startCargoMissionAtGate(world1Id, world2Id);
+      this.startCargoMissionBetweenWorlds(world1Id, world2Id);
     })
   }
 
-  public startCargoMissionAtGate(world1Id: string, world2Id: string) {
+  public startCargoMissionBetweenWorlds(world1Id: string, world2Id: string) {
     const fleet = this.selection.selectedFleet;
     if (fleet) {
       if (!this.appendOrders) {
@@ -131,7 +131,7 @@ export class OrderEditorViewModel {
 
       const startWorld = this.projectedLastWorld(fleet);
 
-      const path = findPathFromWorldToGate(startWorld, [world1Id, world2Id], this.gameData.gates, this.gameData.distances)
+      const path = findPathFromWorldToOneOfTwoWorlds(startWorld, [world1Id, world2Id], this.gameData.gates, this.gameData.distances)
 
       this.addOrderForPath(path, fleet.id)
 
@@ -139,9 +139,13 @@ export class OrderEditorViewModel {
 
       const otherWorldId = lastWorldId === world1Id ? world2Id : world1Id;
 
+      const routePath = findPathFromWorldToWorld(lastWorldId, otherWorldId, this.gameData.gates, this.gameData.distances)
+
+      const route = routePath.map(it => it[0]).concat(routePath.slice(-1).map(it => it[1]))
+
       const warpOrder: StartCargoMissionOrder = {
         type: 'START_CARGO_MISSION',
-        otherWorldId: otherWorldId
+        cargoRoute: route
       };
 
       this.gameOrders.addFleetOrder(fleet.id, warpOrder);
@@ -227,7 +231,7 @@ export class OrderEditorViewModel {
     }
 
     if (fleet.status === 'WAITING_FOR_CARGO') {
-      return fleet.fromWorldId
+      return fleet.currentWorldId
     }
 
     return fleet.currentWorldId;

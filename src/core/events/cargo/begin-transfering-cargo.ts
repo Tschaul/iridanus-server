@@ -13,6 +13,7 @@ import { giveOrTakeWorldMetal } from "../../actions/world/give-or-take-metal";
 import { giveOrTakeWorldPopulation } from "../../actions/world/give-or-take-population";
 import { transferCargoToWorld } from "../../actions/fleet/transfer-cargo-to-world";
 import { World, worldHasOwner, WorldWithOwner } from "../../../shared/model/v1/world";
+import { finalDestinationOfRoute, firstDestinationOfRoute } from "./cargo-route-helpers";
 
 @injectable()
 export class BeginTransferingCargoEventQueue implements GameEventQueue {
@@ -42,16 +43,8 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
             return false;
           }
 
-          const worldFrom = worlds[fleet.fromWorldId];
-          const worldTo = worlds[fleet.toWorldId];
-
-          if (
-            fleet.orders.length
-            || (worldHasOwner(worldFrom) && worldFrom.ownerId !== fleet.ownerId)
-            || (worldHasOwner(worldTo) && worldTo.ownerId !== fleet.ownerId)
-          ) {
-            return false;
-          }
+          const worldFrom = worlds[fleet.currentWorldId]
+          const worldTo = worlds[finalDestinationOfRoute(fleet.currentWorldId, fleet.cargoRoute)]
 
           const cargo = cargoAmounts(
             worldFrom,
@@ -79,9 +72,12 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
           return {
             happen: (timestamp: number) => {
 
+              const worldFrom = worlds[fleet.currentWorldId]
+              const worldTo = worlds[finalDestinationOfRoute(fleet.currentWorldId, fleet.cargoRoute)]
+
               const cargo = cargoAmounts(
-                worlds[fleet.fromWorldId],
-                worlds[fleet.toWorldId],
+                worldFrom,
+                worldTo,
                 metalPotential[fleet.ownerId],
                 fleet.ships,
                 fleet.ownerId
@@ -89,12 +85,12 @@ export class BeginTransferingCargoEventQueue implements GameEventQueue {
 
               const arrivingTimestamp = timestamp + this.setup.rules.warping.warpToWorldDelay
 
-              
+              const nextWorldId = firstDestinationOfRoute(fleet.currentWorldId, fleet.cargoRoute)
 
               return [
-                giveOrTakeWorldMetal(fleet.fromWorldId, -1 * cargo.metal),
-                giveOrTakeWorldPopulation(fleet.fromWorldId, -1 * cargo.population, fleet.ownerId),
-                transferCargoToWorld(fleet.id, arrivingTimestamp, cargo.metal, cargo.population, fleet.toWorldId)
+                giveOrTakeWorldMetal(fleet.currentWorldId, -1 * cargo.metal),
+                giveOrTakeWorldPopulation(fleet.currentWorldId, -1 * cargo.population, fleet.ownerId),
+                transferCargoToWorld(fleet.id, arrivingTimestamp, cargo.metal, cargo.population, nextWorldId, fleet.cargoRoute)
               ]
             }
           }

@@ -12,11 +12,9 @@ export function fleetReady(
 
       return updateFleet<FleetAtWorld | WaitingForCargoFleet, ReadyFleet>(state, fleetId, (oldFleet) => {
 
-        const currentWorldId = oldFleet.status === 'WAITING_FOR_CARGO' ? oldFleet.fromWorldId : oldFleet.currentWorldId
-
         return {
           ...baseFleet(oldFleet),
-          currentWorldId,
+          currentWorldId: oldFleet.currentWorldId,
           status: 'READY',
           combatStatus: 'AT_PEACE',
           ownerId: oldFleet.ownerId,

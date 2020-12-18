@@ -592,8 +592,11 @@
         },
         "StartCargoMissionOrder": {
             "properties": {
-                "otherWorldId": {
-                    "type": "string"
+                "cargoRoute": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "type": {
                     "enum": [
@@ -603,7 +606,7 @@
                 }
             },
             "required": [
-                "otherWorldId",
+                "cargoRoute",
                 "type"
             ],
             "type": "object"
@@ -632,6 +635,12 @@
                 },
                 "cargoPopulation": {
                     "type": "number"
+                },
+                "cargoRoute": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "fromWorldId": {
                     "type": "string"
@@ -687,6 +696,7 @@
                 "arrivingTimestamp",
                 "cargoMetal",
                 "cargoPopulation",
+                "cargoRoute",
                 "fromWorldId",
                 "id",
                 "integrity",
@@ -731,10 +741,10 @@
                                 "$ref": "#/definitions/ArrivingFleet"
                             },
                             {
-                                "$ref": "#/definitions/WarpingFleet"
+                                "$ref": "#/definitions/WaitingForCargoFleet"
                             },
                             {
-                                "$ref": "#/definitions/WaitingForCargoFleet"
+                                "$ref": "#/definitions/WarpingFleet"
                             },
                             {
                                 "$ref": "#/definitions/TransferingCargoFleet"
@@ -905,7 +915,13 @@
         },
         "WaitingForCargoFleet": {
             "properties": {
-                "fromWorldId": {
+                "cargoRoute": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "currentWorldId": {
                     "type": "string"
                 },
                 "id": {
@@ -953,13 +969,11 @@
                         "WAITING_FOR_CARGO"
                     ],
                     "type": "string"
-                },
-                "toWorldId": {
-                    "type": "string"
                 }
             },
             "required": [
-                "fromWorldId",
+                "cargoRoute",
+                "currentWorldId",
                 "id",
                 "idleNotificationSent",
                 "integrity",
@@ -967,8 +981,7 @@
                 "orders",
                 "ownerId",
                 "ships",
-                "status",
-                "toWorldId"
+                "status"
             ],
             "type": "object"
         },

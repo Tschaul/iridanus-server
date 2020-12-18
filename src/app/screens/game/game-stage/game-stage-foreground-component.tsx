@@ -84,14 +84,13 @@ export class GameStageForeground extends React.Component<{
 
           const rel = mul(parallel, WORLD_OUTER_RADIUS + relPos * (dist - 2 * WORLD_OUTER_RADIUS))
 
-          const idle = fleet.status === 'WAITING_FOR_CARGO' && fleet.ownerId === this.props.vm.selfPlayerId;
           const selected = fleet.id === this.props.vm.selectedFleet?.id;
 
           return (
             <g key={fleet.id}
               transform={`translate(${rel.x},${rel.y})`}
             >
-              {(idle || selected) && (
+              {(selected) && (
                 <circle
                   cx={world1Pos.x}
                   cy={world1Pos.y}

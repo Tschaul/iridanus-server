@@ -2,7 +2,7 @@
 import * as solver from "javascript-lp-solver";
 import { IModel } from "./solver";
 import { aiTestMap } from "./sandbox-data";
-import { floydWarshall } from "../shared/math/path-finding/floydWarshall";
+import { floydWarshallGates } from "../shared/math/path-finding/floydWarshall";
 import { Fleet, fleetIsAtWorld } from "../shared/model/v1/fleet";
 import { makeConfig } from "../core/setup/simple-config";
 import { generatePotential } from "../shared/math/path-finding/potential";
@@ -85,7 +85,7 @@ const playerId = 'p1'
 const config = makeConfig(1000)
 const worlds = Object.values(gameMap.universe.worlds);
 const fleets = Object.values(gameMap.universe.fleets);
-const distances = floydWarshall(gameMap.universe.gates);
+const distances = floydWarshallGates(gameMap.universe.gates);
 const now = 0
 
 const timeFrame = config.warping.warpToWorldDelay * 12;
@@ -216,10 +216,8 @@ function nextWorldId(fleet: Fleet, now: number): [string, number] {
   } else {
     if (fleet.status === 'WARPING') {
       return [fleet.targetWorldId, fleet.arrivingTimestamp - now]
-    } else if (fleet.status === 'TRANSFERING_CARGO') {
-      return [fleet.toWorldId, fleet.arrivingTimestamp - now]
     } else {
-      return [fleet.fromWorldId, 0]
+      return [fleet.toWorldId, fleet.arrivingTimestamp - now]
     }
   }
 }

@@ -6,7 +6,12 @@ Server for Iridanus
 # TODOS
 
 - CTRL to select multiple fleets / button to toggle mutliple selection mode
+- cargo orders over multiple hops
 - rally orders at world that are given to every fleet that is built
+- faster capturing with bigger majority (delta_t ~ -1 * (dominance_rel - 1) / dominance_rel)
+- chat / direct messages in game
+- diplomacy / conditional fire orders
+- command points
 - store game history in seperate files (one per timestamp)
 - better star background (more relastic size and color distribution)
 
@@ -19,6 +24,12 @@ Server for Iridanus
 - chose color in game lobby
 
 # Some Ideas
+
+- command points: regenerate (capacitor charge curve) to a maximum equal to population count over 1 to 2 weeks. can be spent on buffs per ship:
+    - speed: fleet warps faster
+    - aggressive: more damage
+    - defensive: takes less damage
+    - convincing: capture worlds faster/easier
 
 - 4 classes of ships: freighter for cargo and building industry, and three sizes of military fleets with one, two or three slots for upgrades. Upgrades would be chosable in ship designer from those bought with research/developement.
 

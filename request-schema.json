@@ -624,8 +624,11 @@
         },
         "StartCargoMissionOrder": {
             "properties": {
-                "otherWorldId": {
-                    "type": "string"
+                "cargoRoute": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "type": {
                     "enum": [
@@ -635,7 +638,7 @@
                 }
             },
             "required": [
-                "otherWorldId",
+                "cargoRoute",
                 "type"
             ],
             "type": "object"

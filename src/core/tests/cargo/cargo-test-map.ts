@@ -34,6 +34,7 @@ export const cargoTestMap: GameState = {
       "w1": {
         ...dummyReadyWorld,
         id: "w1",
+        population: { p1: 10 },
         ownerId: "p1",
         industry: 10,
         metal: 0,
@@ -42,14 +43,23 @@ export const cargoTestMap: GameState = {
         ...dummyReadyWorld,
         id: "w2",
         ownerId: "p1",
-        population: { p1: 5 },
+        population: { p1: 2 },
+        metal: 10,
+        industry: 0
+      },
+      "w3": {
+        ...dummyReadyWorld,
+        id: "w3",
+        ownerId: "p1",
+        population: { p1: 2 },
         metal: 10,
         industry: 0
       }
     },
     gates: {
       "w1": ["w2"],
-      "w2": ["w1",]
+      "w2": ["w1","w3"],
+      "w3": ["w2"]
     }
   }
 }

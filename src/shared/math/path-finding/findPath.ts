@@ -42,7 +42,7 @@ export function findPathFromGateToWorld(fromIds: [string, string], toId: string,
   return findPathFromWorldToWorld(fromId, toId, gates, dist);
 }
 
-export function findPathFromWorldToGate(fromId: string, toIds: [string, string], gates: Gates, dist: Distances): Array<[string, string]> {
+export function findPathFromWorldToOneOfTwoWorlds(fromId: string, toIds: [string, string], gates: Gates, dist: Distances): Array<[string, string]> {
   const toId = dist[fromId][toIds[0]] < dist[fromId][toIds[1]]
     ? toIds[0] : toIds[1]
 

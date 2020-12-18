@@ -14,6 +14,7 @@ import { transferCargoToWorld } from "../../actions/fleet/transfer-cargo-to-worl
 import { GameSetupProvider } from "../../game-setup-provider";
 import { Action } from "../../actions/action";
 import { captureWorld } from "../../actions/world/capture";
+import { arrivesAtEndpoint, nextDestinationOfRoute } from "./cargo-route-helpers";
 
 @injectable()
 export class EndTransferingCargoEventQueue implements GameEventQueue {
@@ -47,24 +48,38 @@ export class EndTransferingCargoEventQueue implements GameEventQueue {
                 const arrivingTimestamp = fleet.arrivingTimestamp + this.setup.rules.warping.warpToWorldDelay;
 
                 return [
-                  transferCargoToWorld(fleet.id, arrivingTimestamp, fleet.cargoMetal, fleet.cargoPopulation, fleet.fromWorldId)
+                  transferCargoToWorld(fleet.id, arrivingTimestamp, fleet.cargoMetal, fleet.cargoPopulation, fleet.fromWorldId, fleet.cargoRoute)
                 ]
               }
 
-              let captureAction: Action[] = []
+              if (arrivesAtEndpoint(fleet.fromWorldId, fleet.toWorldId, fleet.cargoRoute)) {
 
-              if (!worldHasOwner(world) && fleet.cargoPopulation > 0) {
-                captureAction = [
-                  captureWorld(world.id, fleet.ownerId)
+                let captureAction: Action[] = []
+
+                if (!worldHasOwner(world) && fleet.cargoPopulation > 0) {
+                  captureAction = [
+                    captureWorld(world.id, fleet.ownerId)
+                  ]
+                }
+
+                return [
+                  ...captureAction,
+                  giveOrTakeWorldMetal(fleet.toWorldId, fleet.cargoMetal),
+                  giveOrTakeWorldPopulation(fleet.toWorldId, fleet.cargoPopulation, fleet.ownerId),
+                  waitForCargo(fleet.id, fleet.toWorldId, fleet.cargoRoute),
                 ]
+              } else {
+
+                const nextWorldId = nextDestinationOfRoute(fleet.fromWorldId, fleet.toWorldId, fleet.cargoRoute)
+
+                const arrivingTimestamp = fleet.arrivingTimestamp + this.setup.rules.warping.warpToWorldDelay;
+
+                return [
+                  transferCargoToWorld(fleet.id, arrivingTimestamp, fleet.cargoMetal, fleet.cargoPopulation, nextWorldId, fleet.cargoRoute)
+                ]
+
               }
 
-              return [
-                ...captureAction,
-                giveOrTakeWorldMetal(fleet.toWorldId, fleet.cargoMetal),
-                giveOrTakeWorldPopulation(fleet.toWorldId, fleet.cargoPopulation, fleet.ownerId),
-                waitForCargo(fleet.id, fleet.fromWorldId, fleet.toWorldId),
-              ]
             }
           }
         }

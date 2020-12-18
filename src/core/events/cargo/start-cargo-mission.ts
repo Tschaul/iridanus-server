@@ -13,6 +13,7 @@ import { WorldProjector } from "../../projectors/world-projector";
 import { GameSetupProvider } from "../../game-setup-provider";
 import { worldHasOwner } from "../../../shared/model/v1/world";
 import { waitForCargo } from "../../actions/fleet/wait-for-cargo";
+import { firstDestinationOfRoute, verifyRouteExists } from "./cargo-route-helpers";
 
 @injectable()
 export class StartCargoMissionEventQueue implements GameEventQueue {
@@ -41,22 +42,25 @@ export class StartCargoMissionEventQueue implements GameEventQueue {
         } else {
           return {
             happen: () => {
-              if (!gates[fleet.currentWorldId].includes(order.otherWorldId)) {
+
+              if (!verifyRouteExists(order.cargoRoute, gates)) {
                 return [
                   popFleetOrder(fleet.id)
                 ]
               }
 
-              const otherWorld = worlds[order.otherWorldId];
-
-              if (worldHasOwner(otherWorld) && otherWorld.ownerId !== fleet.ownerId) {
+              if (order.cargoRoute.some(worldId => {
+                const otherWorld = worlds[worldId];
+                return worldHasOwner(otherWorld) && otherWorld.ownerId !== fleet.ownerId
+              })) {
                 return [
                   popFleetOrder(fleet.id)
                 ]
               }
+
               return [
                 popFleetOrder(fleet.id),
-                waitForCargo(fleet.id, order.otherWorldId, fleet.currentWorldId)
+                waitForCargo(fleet.id, fleet.currentWorldId, order.cargoRoute)
               ]
             }
           }

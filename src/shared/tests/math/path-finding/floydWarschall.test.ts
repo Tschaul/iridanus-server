@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { floydWarshall } from "../../../math/path-finding/floydWarshall"
+import { floydWarshallGates } from "../../../math/path-finding/floydWarshall"
 
 describe("floydWarshall", () => {
 
@@ -14,7 +14,7 @@ describe("floydWarshall", () => {
       e: ['a', 'd'],
     }
 
-    const result = floydWarshall(gates);
+    const result = floydWarshallGates(gates);
 
     expect(result).to.deep.equal({
       a: { a: 0, b: 1, c: 2, d: 2, e: 1 },

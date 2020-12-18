@@ -196,8 +196,6 @@ export class GameStageViewModel {
         return 1 - (fleet.arrivingTimestamp - now) / warpDelay;
       case 'WARPING':
         return 1 - (fleet.arrivingTimestamp - now) / warpDelay;
-      case 'WAITING_FOR_CARGO':
-        return 0;
     }
   }
 
@@ -206,7 +204,7 @@ export class GameStageViewModel {
   }
 
   public sendFleetToGate(world1Id: string, world2Id: string) {
-    this.orderEditor.startCargoMissionAtGate(world1Id, world2Id)
+    this.orderEditor.startCargoMissionBetweenWorlds(world1Id, world2Id)
   }
 
   public setAltKeyState(state: boolean) {

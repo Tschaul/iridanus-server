@@ -12,7 +12,7 @@ export interface WarpOrder {
 
 export interface StartCargoMissionOrder {
   type: 'START_CARGO_MISSION',
-  otherWorldId: string;
+  cargoRoute: string[];
 }
 
 export interface StopCargoMissionOrder {

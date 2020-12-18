@@ -1,7 +1,7 @@
 import { Gates } from "../../model/v1/universe";
 import { Distances } from "../../model/v1/distances";
 
-export function floydWarshall(gates: Gates): Distances {
+export function floydWarshallGates(gates: Gates): Distances {
 
   const dist: Distances = {}
 
@@ -32,4 +32,39 @@ export function floydWarshall(gates: Gates): Distances {
 
   return dist;
 
+}
+
+export function floydWarshallDistances(distRaw: Distances) {
+  const dist: Distances = {}
+
+  const allWorlds = Object.getOwnPropertyNames(distRaw);
+
+  for (const fromId of allWorlds) {
+    dist[fromId] = {}
+    for (const toId of allWorlds) {
+      if (fromId === toId) {
+        dist[fromId][toId] = 0;
+      }  else {
+        dist[fromId][toId] = distRaw[fromId]?.[toId] ?? Infinity;
+      }
+    }
+  }
+
+  floydWarshallInternal(dist)
+  return dist;
+}
+
+function floydWarshallInternal(dist: Distances) {
+
+  const allWorlds = Object.getOwnPropertyNames(dist);
+
+  for (const overId of allWorlds) {
+    for (const fromId of allWorlds) {
+      for (const toId of allWorlds) {
+        if (dist[fromId][toId] > dist[fromId][overId] + dist[overId][toId]) {
+          dist[fromId][toId] = dist[fromId][overId] + dist[overId][toId]
+        }
+      }
+    }
+  }
 }

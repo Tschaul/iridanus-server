@@ -7,11 +7,11 @@ export type Fleet =
 export type FleetAtWorld =
     ReadyFleet
     | LeavingFleet
-    | ArrivingFleet;
+    | ArrivingFleet
+    | WaitingForCargoFleet ;
 
 export type FleetInTransit = 
     WarpingFleet 
-    | WaitingForCargoFleet 
     | TransferingCargoFleet;
 
 export function pathOfFleetInTransit(fleet: FleetInTransit): [string, string] {
@@ -23,7 +23,7 @@ export function pathOfFleetInTransit(fleet: FleetInTransit): [string, string] {
 }
 
 export function fleetIsAtWorld(fleet: Fleet): fleet is FleetAtWorld {
-    return !['TRANSFERING_CARGO', 'WAITING_FOR_CARGO', 'WARPING'].includes(fleet.status);
+    return !['TRANSFERING_CARGO', 'WARPING'].includes(fleet.status);
 }
 
 export function baseFleet(fleet: Fleet): BaseFleet {
@@ -94,15 +94,16 @@ export interface TransferingCargoFleet extends BaseFleet {
     cargoMetal: number;
     cargoPopulation: number;
     ownerId: string;
-    fromWorldId: string,
-    toWorldId: string,
-    arrivingTimestamp: number
+    fromWorldId: string;
+    toWorldId: string;
+    arrivingTimestamp: number;
+    cargoRoute: string[];
 }
 
 export interface WaitingForCargoFleet extends BaseFleet {
     status: 'WAITING_FOR_CARGO';
     ownerId: string;
-    fromWorldId: string,
-    toWorldId: string,
+    currentWorldId: string;
+    cargoRoute: string[];
     idleNotificationSent: boolean;
 }

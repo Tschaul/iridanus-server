@@ -1,10 +1,10 @@
-import { floydWarshall } from "../../shared/math/path-finding/floydWarshall";
+import { floydWarshallGates } from "../../shared/math/path-finding/floydWarshall";
 import { Universe } from "../../shared/model/v1/universe";
 import { World } from "../../shared/model/v1/world";
 
 export function distributeWorldTypes(universe: Universe) {
 
-  const distances = floydWarshall(universe.gates);
+  const distances = floydWarshallGates(universe.gates);
 
   const lostWorldIds = Object.values(universe.worlds).filter(it => it.status === 'LOST').map(it => it.id);
   const allWorldIds = Object.values(universe.worlds).map(it => it.id);

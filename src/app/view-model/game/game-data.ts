@@ -10,7 +10,7 @@ import { FleetAtWorld, fleetIsAtWorld, FleetInTransit, pathOfFleetInTransit } fr
 import { VisibleState } from "../../../shared/model/v1/visible-state";
 import { GameRules } from "../../../shared/model/v1/rules";
 import { Distances } from "../../../shared/model/v1/distances";
-import { floydWarshall } from "../../../shared/math/path-finding/floydWarshall";
+import { floydWarshallGates } from "../../../shared/math/path-finding/floydWarshall";
 import { reactionToObservable } from "../../../shared/util/reactionToObservable";
 import { Distribution } from "../../../shared/math/distributions/distribution-helper";
 import { switchMap } from "rxjs/operators";
@@ -200,7 +200,7 @@ export class GameData {
 
     this.subscription = reactionToObservable(() => this.gameState.current.universe.gates, { deepEqual: true })
       .subscribe(gates => {
-        this.distances = floydWarshall(gates)
+        this.distances = floydWarshallGates(gates)
       })
   }
 
