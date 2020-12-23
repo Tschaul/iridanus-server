@@ -29,6 +29,8 @@ import { ScoringSystem } from "./scoring/scoring.system";
 import { FleetGroupingSystem } from "./fleet-grouping/fleet-grouping.system";
 import { SurrenderSystem } from "./surrender/surrender.system";
 import { WarpingSystem } from "./warping/warping.system";
+import { DeploySystem } from "./deploy/deploy.system";
+import { GameSetupProvider } from "../game-setup-provider";
 
 @injectable()
 export class CompleteEventQueue implements GameEventQueue {
@@ -36,6 +38,7 @@ export class CompleteEventQueue implements GameEventQueue {
   upcomingEvent$: Observable<GameEvent | null>;
 
   constructor(
+    setup: GameSetupProvider,
     scoringSystem: ScoringSystem,
     surrenderSystem: SurrenderSystem,
     warpingSystem: WarpingSystem,
@@ -45,25 +48,25 @@ export class CompleteEventQueue implements GameEventQueue {
     populationSystem: PopulationSystem,
     captureSystem: CaptureSystem,
     cargoSystem: CargoSystem,
-    notifySyste: NotifySystem,
+    notifySystem: NotifySystem,
     fleetGroupingSystem: FleetGroupingSystem,
-    fleetDeploysToWorld: FleetDeploysToWorldEventQueue
+    deploySystem: DeploySystem
   ) {
 
     const allEventQueues = [
-      surrenderSystem.queue,
-      captureSystem.queue,
-      scoringSystem.queue,
-      warpingSystem.queue,
-      buildingSystem.queue,
-      combatSystem.queue,
-      miningSystem.queue,
-      populationSystem.queue,
-      cargoSystem.queue,
-      notifySyste.queue,
-      fleetGroupingSystem.queue,
-      fleetDeploysToWorld
-    ]
+      surrenderSystem,
+      captureSystem,
+      scoringSystem,
+      warpingSystem,
+      buildingSystem,
+      combatSystem,
+      miningSystem,
+      populationSystem,
+      cargoSystem,
+      notifySystem,
+      fleetGroupingSystem,
+      deploySystem
+    ].filter(it => setup.activeSystems.includes(it.key)).map(it => it.queue)
 
     this.upcomingEvent$ = combineEventQueues(allEventQueues)
 

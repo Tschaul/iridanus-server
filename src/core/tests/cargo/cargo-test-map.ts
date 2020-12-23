@@ -36,7 +36,7 @@ export const cargoTestMap: GameState = {
         id: "w1",
         population: { p1: 10 },
         ownerId: "p1",
-        industry: 10,
+        industry: 5,
         metal: 0,
       },
       "w2": {

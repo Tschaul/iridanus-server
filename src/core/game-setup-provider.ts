@@ -5,20 +5,20 @@ import { GameState } from "../shared/model/v1/state";
 @injectable()
 export class GameSetupProvider {
 
-  private configInternal: GameRules;
+  private rulesInternal: GameRules;
 
   public get rules(): GameRules {
-    if (!this.configInternal) {
+    if (!this.rulesInternal) {
       throw new Error('Game config is not set yet.')
     }
-    return this.configInternal;
+    return this.rulesInternal;
   }
 
   public set rules(value: GameRules) {
-    if (this.configInternal) {
+    if (this.rulesInternal) {
       throw new Error('Game config is allready set.')
     }
-    this.configInternal = value;
+    this.rulesInternal = value;
   }
 
   private initialStateInternal: GameState;
@@ -51,6 +51,22 @@ export class GameSetupProvider {
       throw new Error('Game ID is allready set.')
     }
     this.gameIdInternal = value;
+  }
+
+  private activeSystemsInternal: string[];
+
+  public get activeSystems(): string[] {
+    if (!this.activeSystemsInternal) {
+      throw new Error('Active systems are not set yet.')
+    }
+    return this.activeSystemsInternal;
+  }
+
+  public set activeSystems(value: string[]) {
+    if (this.activeSystemsInternal) {
+      throw new Error('Active systems are allready set.')
+    }
+    this.activeSystemsInternal = value;
   }
 
   public endGameLoopWhenNoEventIsQueued: boolean = false;

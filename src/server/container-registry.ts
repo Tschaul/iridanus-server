@@ -19,6 +19,18 @@ import { registerCoreInfrastructure } from '../core/infrastructure/register-core
 import { registerMessages, registerGameMailHandler } from './messages/register-messages';
 import { Environment } from './environment/environment';
 import { makeConfig } from '../core/setup/simple-config';
+import { BUILDING_SYSTEM_KEY } from '../core/events/building/building.system';
+import { CAPTURE_SYSTEM_KEY } from '../core/events/capture/capture.system';
+import { CARGO_SYSTEM_KEY } from '../core/events/cargo/cargo.system';
+import { COMBAT_SYSTEM_KEY } from '../core/events/combat/combat.system';
+import { DEPLOY_SYSTEM_KEY } from '../core/events/deploy/deploy.system';
+import { FLEET_GROUPING_SYSTEM_KEY } from '../core/events/fleet-grouping/fleet-grouping.system';
+import { MINING_SYSTEM_KEY } from '../core/events/mining/mining.system';
+import { NOTIFY_SYSTEM_KEY } from '../core/events/notification/notification.system';
+import { POPULATION_SYSTEM_KEY } from '../core/events/population/population.system';
+import { SCORING_SYSTEM_KEY } from '../core/events/scoring/scoring.system';
+import { SURRENDER_SYSTEM_KEY } from '../core/events/surrender/surrender.system';
+import { WARPING_SYSTEM_KEY } from '../core/events/warping/warping.system';
 
 @injectable()
 export class ContainerRegistry {
@@ -79,6 +91,21 @@ export class ContainerRegistry {
       const env = container.get(Environment);
 
       setup.rules = makeConfig(env.millisecondsPerDay);
+
+      setup.activeSystems = [
+        BUILDING_SYSTEM_KEY,
+        CAPTURE_SYSTEM_KEY,
+        CARGO_SYSTEM_KEY,
+        COMBAT_SYSTEM_KEY,
+        DEPLOY_SYSTEM_KEY,
+        FLEET_GROUPING_SYSTEM_KEY,
+        MINING_SYSTEM_KEY,
+        NOTIFY_SYSTEM_KEY,
+        POPULATION_SYSTEM_KEY,
+        SCORING_SYSTEM_KEY,
+        SURRENDER_SYSTEM_KEY,
+        WARPING_SYSTEM_KEY,
+      ]
 
       registerGameCommandExecutors(container);
       registerEventQueues(container);

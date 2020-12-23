@@ -16,10 +16,22 @@ import { GameStateValidator } from '../infrastructure/game- state-message-valida
 import { GameRules } from '../../shared/model/v1/rules';
 import { ReadyWorld, LostWorld, WorldWithOwner } from '../../shared/model/v1/world';
 import { NotificationHandler } from '../infrastructure/notification-handler';
+import { BUILDING_SYSTEM_KEY } from '../events/building/building.system';
+import { CAPTURE_SYSTEM_KEY } from '../events/capture/capture.system';
+import { CARGO_SYSTEM_KEY } from '../events/cargo/cargo.system';
+import { COMBAT_SYSTEM_KEY } from '../events/combat/combat.system';
+import { DEPLOY_SYSTEM_KEY } from '../events/deploy/deploy.system';
+import { FLEET_GROUPING_SYSTEM_KEY } from '../events/fleet-grouping/fleet-grouping.system';
+import { MINING_SYSTEM_KEY } from '../events/mining/mining.system';
+import { NOTIFY_SYSTEM_KEY } from '../events/notification/notification.system';
+import { POPULATION_SYSTEM_KEY } from '../events/population/population.system';
+import { SCORING_SYSTEM_KEY } from '../events/scoring/scoring.system';
+import { SURRENDER_SYSTEM_KEY } from '../events/surrender/surrender.system';
+import { WARPING_SYSTEM_KEY } from '../events/warping/warping.system';
 
 let totalTime = 0;
 
-export async function runMap(testMap: GameState, options?: {
+export async function runMap(testMap: GameState, activeSystems: string[], options?: {
   watcher?: null | ((state: GameState) => string | number | boolean),
   rules?: GameRules
 }): Promise<GameState> {
@@ -45,6 +57,8 @@ export async function runMap(testMap: GameState, options?: {
   setup.initialState = testMap;
   setup.endGameLoopWhenNoEventIsQueued = true;
   setup.awaitClock = false;
+
+  setup.activeSystems = activeSystems; 
 
   registerEventQueues(container);
   registerProjectors(container);
@@ -76,7 +90,7 @@ export async function runMap(testMap: GameState, options?: {
 
   totalTime += duration;
 
-  console.log(`TIMING: this test: ${(duration/1000).toFixed(2)}  total: ${(totalTime/1000).toFixed(2)}`)
+  console.log(`TIMING: this test: ${(duration / 1000).toFixed(2)}  total: ${(totalTime / 1000).toFixed(2)}`)
 
   return result;
 }

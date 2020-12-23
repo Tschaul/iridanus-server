@@ -4,6 +4,8 @@ import { expect } from 'chai';
 import produce from "immer";
 import { runMap } from "../test-helper";
 import { totalPopulation, World, WorldWithOwner } from "../../../shared/model/v1/world";
+import { CARGO_SYSTEM_KEY } from "../../events/cargo/cargo.system";
+import { NO_SCORING_SYSTEM_KEY } from "../../events/scoring/scoring.system";
 
 describe("cargo", () => {
 
@@ -17,7 +19,10 @@ describe("cargo", () => {
       })
     });
 
-    const state = await runMap(map);
+    const state = await runMap(map, [
+      CARGO_SYSTEM_KEY,
+      NO_SCORING_SYSTEM_KEY
+    ]);
 
     expect((state.universe.worlds["w2"] as World).metal)
       .to.be.lessThan(cargoTestMap.universe.worlds["w2"].metal)
@@ -36,7 +41,10 @@ describe("cargo", () => {
       })
     });
 
-    const state = await runMap(map);
+    const state = await runMap(map, [
+      CARGO_SYSTEM_KEY,
+      NO_SCORING_SYSTEM_KEY
+    ]);
 
     expect((state.universe.worlds["w3"] as World).metal)
       .to.be.lessThan(cargoTestMap.universe.worlds["w3"].metal)

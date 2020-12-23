@@ -1,9 +1,11 @@
-import { Container } from "inversify";
+import { Container, injectable } from "inversify";
 import { combineEventQueues, GameEventQueue } from "../event";
 import { GameSystem } from "../game-system";
 import { FleetDeploysToWorldEventQueue } from "./fleet-deploys-to-world";
 
 export const DEPLOY_SYSTEM_KEY = "DEPLOY";
+
+@injectable()
 export class DeploySystem implements GameSystem {
 
     constructor(

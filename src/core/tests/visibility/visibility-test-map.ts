@@ -6,6 +6,10 @@ export const visibilityTestMap: GameState = {
     p1: {
       playerId: "p1",
       status: 'PLAYING'
+    },
+    p2: {
+      playerId: "p2",
+      status: 'PLAYING'
     }
   },
   currentTimestamp: 0,
@@ -29,6 +33,7 @@ export const visibilityTestMap: GameState = {
     worlds: {
       "w1": {
         ...dummyReadyWorld,
+        population: { p1: 10 },
         id: "w1",
         ownerId: "p1",
       },
@@ -43,7 +48,7 @@ export const visibilityTestMap: GameState = {
     },
     gates: {
       "w1": ["w2"],
-      "w2": ["w1","w3"],
+      "w2": ["w1", "w3"],
       "w3": ["w2"]
     }
   }

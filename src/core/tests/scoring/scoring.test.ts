@@ -3,6 +3,7 @@ import produce from "immer";
 import { runMap } from "../test-helper";
 import { expect } from "chai";
 import { WorldWithOwner } from "../../../shared/model/v1/world";
+import { SCORING_SYSTEM_KEY } from "../../events/scoring/scoring.system";
 
 describe("scoring", () => {
 
@@ -12,7 +13,9 @@ describe("scoring", () => {
       draft.gameEndTimestamp = 10000
     });
 
-    const state = await runMap(playedMap);
+    const state = await runMap(playedMap, [
+      SCORING_SYSTEM_KEY
+    ]);
 
     expect(state.currentTimestamp).to.equal(state.gameEndTimestamp);
 
@@ -24,7 +27,9 @@ describe("scoring", () => {
       (draft.universe.worlds["w1"] as WorldWithOwner).population['p1'] = 100;
     });
 
-    const state = await runMap(playedMap);
+    const state = await runMap(playedMap, [
+      SCORING_SYSTEM_KEY
+    ]);
 
     expect(state.currentTimestamp).not.to.equal(state.gameEndTimestamp);
 
