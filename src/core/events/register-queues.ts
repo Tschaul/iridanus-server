@@ -14,7 +14,7 @@ import { TickEventQueue } from "./tick";
 import { WorldStartMiningEventQueue } from "./mining/world-start-mining";
 import { WorldMinesMetalEventQueue } from "./mining/world-mines-metal";
 import { WorldStopMiningEventQueue } from "./mining/world-stop-mining";
-import { DiscoverWorldEventQueue } from "./discover-notification/notify-world-discovered";
+import { DiscoverWorldEventQueue } from "./notification/notify-world-discovered";
 import { LooseFleetEventQueue } from "./combat/loose-fleet";
 import { WorldStartGrowingEventQueue } from "./population/world-start-growing";
 import { WorldPopulationGrowsEventQueue } from "./population/world-population-grows";
@@ -23,72 +23,48 @@ import { StartCapturingWorldEventQueue } from "./capture/start-capturing-world";
 import { StopCapturingWorldEventQueue } from "./capture/stop-capturing-world";
 import { GameEndsEventQueue } from "./scoring/game-ends";
 import { GameStartsEventQueue } from "./start/game-starts";
-import { NotifyFleetIdleEventQueue } from "./idle-notification/notify-fleet-idle";
+import { NotifyFleetIdleEventQueue } from "./notification/notify-fleet-idle";
 import { StartCargoMissionEventQueue } from "./cargo/start-cargo-mission";
 import { BeginTransferingCargoEventQueue } from "./cargo/begin-transfering-cargo";
 import { StopCargoMissionEventQueue } from "./cargo/stop-cargo-mission";
 import { EndTransferingCargoEventQueue } from "./cargo/end-transfering-cargo";
-import { FleetSplitsEventQueue } from "./split-fleet/fleet-splits";
+import { FleetSplitsEventQueue } from "./fleet-grouping/fleet-splits";
 import { FleetDeploysToWorldEventQueue } from "./deploy/fleet-deploys-to-world";
 import { ContinueOrStopBuildingShipEventQueue } from "./building/continue-building-ship";
 import { ConvertPopulationEventQueue } from "./capture/convert-population";
 import { PlayerGetsDefeatedEventQueue } from "./surrender/player-gets-defeated";
 import { PlayerSurrendersEventQueue } from "./surrender/player-surrenders";
+import { registerBuildSystem } from "./building/building.system";
+import { registerCaptureSystem } from "./capture/capture.system";
+import { registerCombatSystem } from "./combat/combat.system";
+import { registerCargoSystem } from "./cargo/cargo.system";
+import { registerNotifySystem } from "./notification/notification.system";
+import { registerMiningSystem } from "./mining/mining.system";
+import { registerPopulationSystem } from "./population/population.system";
+import { registerSurrenderSystem } from "./surrender/surrender.system";
+import { registerFleetGroupingSystem } from "./fleet-grouping/fleet-grouping.system";
+import { registerWarpingSystem } from "./warping/warping.system";
+import { registerScoringSystem } from "./scoring/scoring.system";
+import { registerDeploySystem } from "./deploy/deploy.system";
 
 export function registerEventQueues(container: Container) {
 
-  // TODO split into sub registries
-
   container.bind(GameStartsEventQueue).toSelf()
-
-  container.bind(GameEndsEventQueue).toSelf();
-
-  container.bind(PlayerGetsDefeatedEventQueue).toSelf()
-  container.bind(PlayerSurrendersEventQueue).toSelf()
-
-  container.bind(ArriveAtWorldEventQueue).toSelf();
-  container.bind(BeginWarpEventQueue).toSelf();
-  container.bind(EndWarpEventQueue).toSelf();
-  container.bind(LeaveWorldEventQueue).toSelf();
-
-  container.bind(BeginBuildingShipEventQueue).toSelf();
-  container.bind(ContinueOrStopBuildingShipEventQueue).toSelf();
-  container.bind(EndBuildShipsEventQueue).toSelf();
-
-  container.bind(FleetStartFiringEventQueue).toSelf();
-  container.bind(FleetFireEventQueue).toSelf();
-  container.bind(FleetStopFiringEventQueue).toSelf();
-
-  container.bind(WorldStartMiningEventQueue).toSelf();
-  container.bind(WorldMinesMetalEventQueue).toSelf();
-  container.bind(WorldStopMiningEventQueue).toSelf();
-
-  container.bind(WorldStartGrowingEventQueue).toSelf();
-  container.bind(WorldPopulationGrowsEventQueue).toSelf();
-  container.bind(WorldStopGrowingEventQueue).toSelf();
-
-  container.bind(StartCapturingWorldEventQueue).toSelf();
-  container.bind(CaptureWorldEventQueue).toSelf();
-  container.bind(StopCapturingWorldEventQueue).toSelf();
-  container.bind(ConvertPopulationEventQueue).toSelf();
-
-  container.bind(LooseFleetEventQueue).toSelf();
-
-  container.bind(DiscoverWorldEventQueue).toSelf();
-
   container.bind(TickEventQueue).toSelf();
 
-  container.bind(NotifyFleetIdleEventQueue).toSelf();
-
-  container.bind(StartCargoMissionEventQueue).toSelf();
-  container.bind(StopCargoMissionEventQueue).toSelf();
-  container.bind(BeginTransferingCargoEventQueue).toSelf();
-  container.bind(EndTransferingCargoEventQueue).toSelf();
-
-  container.bind(FleetSplitsEventQueue).toSelf();
-  container.bind(FleetDeploysToWorldEventQueue).toSelf();
+  registerCargoSystem(container);
+  registerSurrenderSystem(container);
+  registerWarpingSystem(container);
+  registerBuildSystem(container);
+  registerCombatSystem(container);
+  registerMiningSystem(container);
+  registerPopulationSystem(container);
+  registerCaptureSystem(container);
+  registerNotifySystem(container);
+  registerScoringSystem(container);
+  registerFleetGroupingSystem(container);
+  registerDeploySystem(container);
 
   container.bind(CompleteEventQueue).toSelf();
-
 
 }
