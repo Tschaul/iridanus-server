@@ -76,7 +76,7 @@
     "react-dom": "^16.11.0",
     "react-scrollbar": "^0.5.6",
     "react-zoom-pan-pinch": "^1.6.1",
-    "recharts": "^1.8.5",
+    "recharts": "^2.1.14",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "ts-node": "^8.4.1",
