@@ -69,7 +69,7 @@
     "mobx": "^5.15.1",
     "mobx-react": "^6.1.4",
     "mobx-utils": "^5.5.2",
-    "mocha": "^6.2.2",
+    "mocha": "^6.2.3",
     "node-telegram-bot-api": "^0.50.0",
     "nodemailer": "^6.6.1",
     "react": "^16.11.0",
