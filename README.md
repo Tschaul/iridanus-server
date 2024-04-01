@@ -5,13 +5,13 @@ Server for Iridanus
 
 # TODOS
 
+
 - CTRL to select multiple fleets / button to toggle mutliple selection mode
-- cargo orders over multiple hops
 - rally orders at world that are given to every fleet that is built
 - faster capturing with bigger majority (delta_t ~ -1 * (dominance_rel - 1) / dominance_rel)
 - chat / direct messages in game
 - diplomacy / conditional fire orders
-- command points
+- command points: see below
 - store game history in seperate files (one per timestamp)
 - better star background (more relastic size and color distribution)
 
@@ -25,6 +25,9 @@ Server for Iridanus
 
 # Some Ideas
 
+- instead of artifacts worlds as landmarks: new resource: artifacts which spawn at all worlds like metal, special worlds have more of it. artifacts are transported like metal to the home world. Every artifacts brought home unlocks one research point. technologies (see below) can be purchased with research points. When spent artifacts stay at the home world so they can be gathered again by an onther player when the home world is captured. Win condition: the player that possesses a majority of all artifacts wins the game.
+OR: artifacts can not be transporeted. "research" is given by artifacts times populations at each world. Researching tech duration is inversly proportional to research. Win condition is the same.
+
 - command points: regenerate (capacitor charge curve) to a maximum equal to population count over 1 to 2 weeks. can be spent on buffs per ship:
     - speed: fleet warps faster
     - aggressive: more damage
@@ -37,7 +40,7 @@ Server for Iridanus
 
 - no more arriving and leaving delay. Explicit 'retreat' order needed to leave a fight which takes some time during which the fleets gets double damage.
 
-- ships warp twice as fast and cargo capacity ist reduced to half. This should make it more attractive to send ships to the enemy side to scout and harrass.
+- ships warp twice as fast and cargo capacity is reduced to half. This should make it more attractive to send ships to the enemy side to scout and harrass.
 
 - you can only have as many ships + industry as you have population
 
